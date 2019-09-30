@@ -1,0 +1,374 @@
+{
+  "semantics": [
+    {
+      "label": "Heading"
+    },
+    {
+      "label": "Task description",
+      "default": "",
+      "font": {}
+    },
+    {
+      "widgets": [
+        {
+          "label": "Default"
+        }
+      ],
+      "label": "Dialogs",
+      "entity": "dialog",
+      "field": {
+        "label": "Question",
+        "fields": [
+          {
+            "font": {},
+            "label": "Text",
+            "description": "Hint for the front of the card"
+          },
+          {
+            "font": {},
+            "label": "Answer",
+            "description": "Optional hint for the back of the card"
+          },
+          {
+            "label": "Image for front of card",
+            "description": "Optional image for the front of the card. This image will be also displayed on the back of the card if no back card image is provided."
+          },
+          {
+            "label": "Alternative text for the image on front of card"
+          },
+          {
+            "label": "Image for back of card",
+            "description": "Optional image for the back of card."
+          },
+          {
+            "label": "Alternative text for the image on back of card"
+          },
+          {
+            "label": "Audio files"
+          },
+          {
+            "label": "Tips",
+            "fields": [
+              {
+                "label": "Tip for text",
+                "description": "Tip for the front of the card"
+              },
+              {
+                "label": "Tip for answer",
+                "description": "Tip for the back of the card"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "Behavioural settings.",
+      "description": "These options will let you control how the task behaves.",
+      "fields": [
+        {
+          "label": "Select Mode",
+          "description": "Free browsing is the default mode. In Match mode the user will have to pair the front and the back side of cards. In Self Correction mode, they will be able to guess the other side of the cards and confirm if they got it correct or not.",
+          "default": "normal",
+          "options": [
+            {
+              "label": "Free browsing"
+            },
+            {
+              "label": "Match"
+            },
+            {
+              "label": "Self Correction"
+            }
+          ]
+        },
+        {
+          "label": "Enable \"Retry\" button"
+        },
+        {
+          "label": "Scale the text to fit inside the card",
+          "description": "Unchecking this option will make the card adapt its size to the size of the text"
+        },
+        {
+          "label": "Cards Background color",
+          "description": "The color of the cards background. Default is transparent rgba(0, 0, 0, 0).",
+          "default": "rgba(0, 0, 0, 0)",
+          "spectrum": {}
+        },
+        {
+          "label": "Cards Order",
+          "description": "Select the order of cards displayed to the user. If \"Random\", and the option below is enabled, the user will be able to select <b>the number of cards</b> picked from the cards pool.",
+          "default": "normal",
+          "options": [
+            {
+              "label": "Normal order"
+            },
+            {
+              "label": "Random order"
+            },
+            {
+              "label": "User's choice"
+            }
+          ]
+        },
+        {
+          "label": "Select number of cards displayed",
+          "description": "Allow user to select the number of cards drawn from the pool",
+          "showWhen": {
+            "rules": [
+              {}
+            ]
+          }
+        },
+        {
+          "label": "Display which side first?",
+          "description": "Select how the cards will be displayed. This option is mostly useful if the front of the cards is not really a question",
+          "default": "frontFirst",
+          "showWhen": {
+            "rules": [
+              {}
+            ]
+          },
+          "options": [
+            {
+              "label": "Display front side first (normal display)"
+            },
+            {
+              "label": "Display back side first (reverse display)"
+            },
+            {
+              "label": "User's choice"
+            }
+          ]
+        },
+        {
+          "label": "Maximum Score",
+          "description": "Maximum score to give the user upon finishing this activity. Set this field to 0 (zero) is no score is given.",
+          "showWhen": {
+            "rules": [
+              {}
+            ]
+          }
+        },
+        {
+          "label": "Penalty percentage",
+          "description": "Each extra round (in Self-correction mode) or each wrong match (in Match mode) will cost the user this percentage of the maximum score. Enter 0 for NO penalty. Maximum penalty is 50(%). Do NOT enter the % sign in the box.",
+          "showWhen": {
+            "rules": [
+              {}
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "<span style=\"position: absolute;top: -40px;left: 0px;\">Tutorial and Examples: <a href=\"http://www.rezeau.org/drupal/\" target=\"_blank\" rel=\"noopener\">Papi Jo's Drupal test site</a></span>",
+      "description": "<span style=\"color: white;margin-top: -20px;display: table-caption;font-size: large;\">&#9608;</span>"
+    },
+    {
+      "label": "Text for the turn button",
+      "default": "Turn"
+    },
+    {
+      "label": "Text for the next button",
+      "default": "Next"
+    },
+    {
+      "label": "Text for the previous button",
+      "default": "Previous"
+    },
+    {
+      "label": "Text for the retry button",
+      "default": "Retry"
+    },
+    {
+      "label": "Text for the \"correct answer\" button",
+      "default": "I got it right!"
+    },
+    {
+      "label": "Text for the \"incorrect answer\" button",
+      "default": "I got it wrong"
+    },
+    {
+      "label": "Text for \"Round\" message below cards and on the summary screen",
+      "description": "@round will be replaced by the number of the current round",
+      "default": "Round @round"
+    },
+    {
+      "label": "Text for \"round(s)\" message on the summary screen",
+      "description": "@rounds will be replaced by the total number of rounds",
+      "default": "@rounds round(s)"
+    },
+    {
+      "label": "Text for \"Cards left\" message",
+      "description": "@number will be replaced by the number of cards left in this round",
+      "default": "Cards left: @number"
+    },
+    {
+      "label": "Text for the \"next round\" button",
+      "description": "@round will be replaced by the round number",
+      "default": "Proceed to round @round"
+    },
+    {
+      "label": "Text for the \"Match\" button",
+      "description": "Used in Match mode to label the button which the user will press to indicate a potential match",
+      "default": "Match"
+    },
+    {
+      "label": "Text for the \"Correct match\" message",
+      "description": "Used in Match mode",
+      "default": "That's a match!"
+    },
+    {
+      "label": "Text for the \"Incorrect match\" message",
+      "description": "Used in Match mode",
+      "default": "That's NOT a match!"
+    },
+    {
+      "label": "Text for the current number of Correct / Incorrect matches message",
+      "description": "@correct and @incorrect will be replaced by the current number of correct/incorrect matches",
+      "default": "Matches correct: @correct | incorrect: @incorrect"
+    },
+    {
+      "label": "Label for the number of correct matches in the Summary",
+      "description": "Used at the end of a Match mode session",
+      "default": "Correct matches:"
+    },
+    {
+      "label": "Label for the number of incorrect matches in the Summary",
+      "description": "Used at the end of a Match mode session",
+      "default": "Incorrect matches:"
+    },
+    {
+      "label": "Feedback message used in the Summary",
+      "description": "Used at the end of a Match mode session",
+      "default": "Well done!"
+    },
+    {
+      "label": "Text for the \"show summary\" button to the Final Page",
+      "description": "Used in Self-correction mode",
+      "default": "Final summary"
+    },
+    {
+      "label": "Title text for the summary page for each round",
+      "description": "Used in Self-correction mode",
+      "default": "Summary"
+    },
+    {
+      "label": "Text for \"Cards you got right:\"",
+      "description": "Used in Self-correction mode",
+      "default": "Cards you got right:"
+    },
+    {
+      "label": "Text for \"Cards you got wrong:\"",
+      "description": "Used in Self-correction mode",
+      "default": "Cards you got wrong:"
+    },
+    {
+      "label": "Text for \"Overall Score\"",
+      "description": "Used in Match and Self-correction modes",
+      "default": "Overall Score"
+    },
+    {
+      "label": "Text for \"Cards completed\"",
+      "description": "Used in Self-correction mode",
+      "default": "Cards you have completed learning:"
+    },
+    {
+      "label": "Text for \"Selected Cards\"",
+      "description": "This number will be displayed if the user did not select ALL the cards available in the stack.",
+      "default": "Number of cards you selected from the pool:"
+    },
+    {
+      "label": "Text for \"Completed rounds:\"",
+      "description": "Used in Self-correction mode",
+      "default": "Completed rounds:"
+    },
+    {
+      "label": "Message when all cards have been learned",
+      "description": "Used in Self-correction mode. @cards will be replaced by the number of all cards in the pool.",
+      "default": "Well done! You got all @cards cards correct!"
+    },
+    {
+      "label": "Self-correction mode score explanation if a penalty percent has been set.",
+      "description": "Used in Self-correction mode. @penalty will be replaced by the penalty percentage applied",
+      "default": "Each extra round cost you a penalty of @penalty%."
+    },
+    {
+      "label": "Match mode score explanation if a penalty percent has been set.",
+      "description": "Used in Match mode @penalty will be replaced by the penalty percentage applied",
+      "default": "Each incorrect match cost you a penalty of @penalty%."
+    },
+    {
+      "label": "Progress text",
+      "description": "Available variables are @card and @total.",
+      "default": "Card @card of @total"
+    },
+    {
+      "label": "Label for card text",
+      "description": "Used for accessibility by assistive technologies",
+      "default": "Card front"
+    },
+    {
+      "label": "Label for card back",
+      "description": "Used for accessibility by assistive technologies",
+      "default": "Card back"
+    },
+    {
+      "label": "Label for the show tip button",
+      "default": "Show tip"
+    },
+    {
+      "label": "Audio not supported message",
+      "default": "Your browser does not support this audio"
+    },
+    {
+      "label": "Display the cards in random order?",
+      "description": "Ask the user if they want to display the cards in random order.",
+      "default": "Display the cards in random order?"
+    },
+    {
+      "label": "Current order notice",
+      "description": "Shows the user which order they have selected to display the cards (normal or random).",
+      "default": "Current Cards Order mode = "
+    },
+    {
+      "label": "Normal order label",
+      "default": "Normal"
+    },
+    {
+      "label": "Random order label",
+      "default": "Random"
+    },
+    {
+      "label": "Yes",
+      "default": "Yes"
+    },
+    {
+      "label": "No",
+      "default": "No"
+    },
+    {
+      "label": "Number of Cards",
+      "description": "If the cards are displayed in random order, ask the user how many cards they want.",
+      "default": "How many cards do you want?"
+    },
+    {
+      "label": "All Cards",
+      "default": "all the cards"
+    },
+    {
+      "label": "Textual representation of the score explanation button",
+      "default": "Show score explanation"
+    },
+    {
+      "label": "Notice to ask the user if they want to switch from the current way that the side of the cards is displayed first to the reverse side.",
+      "description": "@side will be replaced by the reverse side.",
+      "default": "Switch the current display mode of card sides to @side?"
+    },
+    {
+      "label": "Label used to tell the user which side of the cards is currently displayed first.",
+      "default": "Current display mode: First Side = "
+    }
+  ]
+}

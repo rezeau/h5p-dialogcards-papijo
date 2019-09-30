@@ -1,0 +1,359 @@
+{
+  "semantics": [
+    {
+      "label": "En-tête"
+    },
+    {
+      "label": "Consigne",
+      "default": "",
+      "font": {}
+    },
+    {
+      "widgets": [
+        {
+          "label": "Default"
+        }
+      ],
+      "label": "Dialogs",
+      "entity": "dialog",
+      "field": {
+        "label": "Question",
+        "fields": [
+          {
+            "font": {},
+            "label": "Question",
+            "description": "Texte pour la face avant de la carte"
+          },
+          {
+            "font": {},
+            "label": "Réponse",
+            "description": "Texte facultatif pour le dos de la carte"
+          },
+          {
+            "label": "Image pour la face avant de la carte",
+            "description": "Image facultative pour la face avant de la carte. Cette image sera également affichée au dos de la carte si aucune image n'est ajoutée pour le dos ci-dessous."
+          },                
+          {
+            "label": "Texte alternatif pour l'image de la face avant"
+          },
+          {
+            "label": "Image pour le dos de la carte",
+            "description": "Image facultative pour le dos de la carte."
+          },
+          {
+            "label": "Texte alternatif pour l'image du dos de la carte"
+          },
+          {
+            "label": "Fichiers audio"
+          },
+          {
+            "label": "Indices",
+            "fields": [
+              {
+                "label": "Indice pour la face avant",
+                "description": "Indice pour la face avant de la carte"
+              },
+              {
+                "label": "Indice pour le dos",
+                "description": "Indice pour le dos de la carte"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "Options générales",
+      "description": "Ces options vous permettent de paramétrer le déroulement de l'exercice.",
+      "fields": [
+        {
+          "label": "Mode",
+          "description": "La Navigation libre est le mode par défaut. En mode Appariement, l'utilisateur devra apparier le recto et le verso des cartes. En mode Autocorrection, il pourra deviner l'autre côté des cartes et confirmer s'il l'avait deviné ou non.",
+          "default": "normal",
+          "options": [
+            {
+              "label": "Navigation libre"
+            },
+            {
+              "label": "Appariement"
+            },
+            {
+              "label": "Autocorrection"
+            }
+          ]
+        },
+        {
+          "label": "Activer le bouton \"Recommencer\""
+        },
+        {
+          "label": "Mettre à l'échelle le texte afin de l'adapter à la taille de la carte",
+          "description": "Si cette option est décochée, la taille de la carte sera adaptée au texte placé à l'intérieur"
+        },
+        {
+          "label": "Couleur d'arrière-plan des cartes",
+          "description": "Couleur d'arrière-plan des cartes. Par défaut cet arrière-plan est transparent rgba(0, 0, 0, 0).",                           
+          "default": "rgba(0, 0, 0, 0)",
+          "spectrum": {
+            "togglePaletteMoreText": "Voir plus",
+            "togglePaletteLessText": "Voir moins",                    
+            "chooseText": "Choisir cette couleur",
+            "cancelText": "Annuler"
+          }
+        },
+        {
+          "label": "Ordre des cartes",
+          "description": "Choisissez l'ordre d'affichage des cartes pour l'utilisateur. Si vous mettez \"Au choix de l'utilisateur\" et que celui-ci choisit l'ordre aléatoire, il pourra également choisir le <b>nombre de cartes</b> tirées du paquet.",
+          "default": "normal",
+          "options": [
+            {
+              "label": "Ordre normal"
+            },
+            {
+              "label": "Tirage aléatoire"
+            },
+            {
+              "label": "Au choix de l'utilisateur"
+            }
+          ]
+        },
+        {
+          "label": "Sélectionner le nombre de cartes affichées",
+          "description": "Permet à l'utilisateur de choisir le nombre de cartes tirées dans le paquet de cartes."
+        },
+        {
+          "label": "Afficher quel côté en premier ?",
+          "description": "Sélectionnez le mode d'affichage des cartes. Cette option est surtout utile si le recto des cartes n'est pas vraiment une question.",
+          "default": "frontFirst",
+          "options": [
+            {
+              "label": "Afficher d'abord la face avant (affichage normal)"
+            },
+            {
+              "label": "Afficher d'abord le dos (affichage inversé)"
+            },
+            {
+              "label": "Au choix de l'utilisateur"
+            }
+          ]
+        },
+        {
+          "label": "Score maximum",
+          "description": "Score maximum à attribuer à l'utilisateur à la fin de l'activité. Laissez ce champ à 0 (zéro) pour n'attribuer aucun score."          
+        },
+        {
+          "label": "Pourcentage de pénalité",
+          "description": "Chaque tour supplémentaire (en mode autocorrection) ou appariement incorrect (en mode appariement) coûtera à l'utilisateur ce pourcentage du score maximum. Entrez 0 pour AUCUNE pénalité. La pénalité maximale est de 50(%). N'inscrivez PAS le signe % dans la case."
+        }
+      ]
+    },
+    {
+      "label": "<span style=\"position: absolute;top: -40px;\">Tutoriel et exemples : <a href=\"http://www.rezeau.org/drupal/fr\" target=\"_blank\" rel=\"noopener\">Site de test Drupal de Papi Jo</a></span>",
+      "description": "<span style=\"color: white;margin-top: -20px;display: table-caption;font-size: large;\">&#9608;</span>"
+    },
+    {
+      "label": "Texte pour le bouton \"Retourner\"",
+      "default": "Retourner"
+    },
+    {
+      "label": "Texte pour le bouton \"Suivant\"",
+      "default": "Suivant"
+    },
+    {
+      "label": "Texte pour le bouton \"Précédent\"",
+      "default": "Précédent"
+    },
+    {
+      "label": "Texte pour le bouton \"Recommencer\"",
+      "default": "Recommencer"
+    },
+    {
+      "label": "Texte pour le bouton \"Réponse correcte\"",
+      "default": "J'ai eu bon!"
+    },
+    {
+      "label": "Texte pour le bouton \"Réponse incorrecte\"",
+      "default": "J'ai eu faux"
+    },
+    {
+      "label": "Texte pour le message \"Tour\" en dessous des cartes et sur le résumé",
+      "description": "@round sera remplacé par le numéro du tour actuel",
+      "default": "Tour n° @round"
+    },
+    {
+      "label": "Texte pour le message \"tour(s)\" sur le résumé final",      
+      "description": "@round sera remplacé par le nombre total de tours",
+      "default": "@rounds tour(s)"
+    },
+    {
+      "label": "Texte pour le message \"Cartes restantes\"",
+      "description": "@number sera remplacé par le nombre de cartes restantes pour ce tour",
+      "default": "Cartes restantes: @number"
+    },
+    {
+      "label": "Texte pour le bouton \"Tour suivant\"",
+      "description": "@round sera remplacé par le numéro du tour",
+      "default": "Procéder au tour @round"
+    },
+    {
+      "label": "Texte pour le bouton \"Correspondance\"",
+      "description": "Utilisé en mode Appariement pour étiqueter le bouton que l'utilisateur devra cliquer pour indiquer un appariement potentiel",
+      "default": "Correspondance"
+    },
+    {
+      "label": "Texte pour le message \"Appariement correct\"",
+      "description": "Utilisé en mode Appariement",
+      "default": "C'est bien une correspondance !"
+    },
+    {
+      "label": "Texte pour le message \"Appariement incorrect\"",
+      "description": "Utilisé en mode Appariement",
+      "default": "Ce n'est pas une correspondance !"
+    },
+    {
+      "label": "Texte pour le message indiquant le nombre actuel d'appariements corrects/incorrects",
+      "description": "@correct et @incorrect seront remplacés par les nombres d'appariements corrects/incorrects",
+      "default": "Appariements corrects : @correct | incorrects : @incorrect"
+    },
+    {
+      "label": "Etiquette pour le nombre d'appariements corrects dans la page de bilan",
+      "description": "Utilisé à la fin d'une session en mode Appariement",
+      "default": "Appariements corrects :"
+    },
+    {
+      "label": "Etiquette pour le nombre d'appariements incorrects dans la page de bilan",
+      "description": "Utilisé à la fin d'une session en mode Appariement",
+      "default": "Appariements incorrects :"
+    },
+    {
+      "label": "Message final de feedback usilisé dans la page de bilan",
+      "description": "Utilisé à la fin d'une session en mode Appariement",
+      "default": "Bravo !"
+    },
+    {
+      "label": "Texte pour le bouton \"Résumé final\"",
+      "description": "Utilisé en mode Autocorrection",
+      "default": "Résumé final"
+    },
+    {
+      "label": "Texte de titre de la page de résumé pour chaque tour",
+      "description": "Utilisé en mode Autocorrection",
+      "default": "Résumé"
+    },
+    {
+      "label": "Texte pour \"Cartes correctes:\"",
+      "description": "Utilisé en mode Autocorrection",
+      "default": "Cartes correctes:"
+    },
+    {
+      "label": "Texte pour \"Cartes incorrectes:\"",
+      "description": "Utilisé en mode Autocorrection",
+      "default": "Cartes incorrectes:"
+    },
+    {
+      "label": "Texte pour \"Score global\"",
+      "description": "Utilisé en modes Appariement et Autocorrection",
+      "default": "Score global"
+    },
+    {
+      "label": "Texte pour \"Cartes trouvées\"",
+      "description": "Utilisé en mode Autocorrection",
+      "default": "Cartes que vous avez trouvées :"
+    },
+    {
+      "label": "Texte pour \"Cartes sélectionnées\"",
+      "description": "Ce nombre sera affiché si l'utilisateur n'a pas choisi de tirer TOUTES les disponibles dans le paquet.",
+      "default": "Nombre de cartes que vous avez tirées du paquet :"
+    },
+    {
+      "label": "Texte pour \"Tours achevés :\"",
+      "description": "Utilisé en mode Autocorrection",
+      "default": "Tours achevés :"
+    },
+    {
+      "label": "Message affiché lorsque toutes les cartes ont été apprises",
+      "description": "Utilisé en mode Autocorrection. @cards sera remplacé par le nombre total de cartes trouvées.",
+      "default": "Bravo ! Vous avez réussi à trouver les @cards cartes !"
+    },
+    {
+      "label": "Explication du score lorsqu'un pourcentage de pénalité a été appliqué.",
+      "description": "Utilisé en mode Autocorrection. @penalty sera remplacé par le pourcentage de pénalité appliqué.",
+      "default": "Chaque tour supplémentaire vous a coûté une pénalité de @penalty%."
+    },
+    {
+      "label": "Explication du score lorsqu'un pourcentage de pénalité a été appliqué.",
+      "description": "Utilisé en mode Appariement. @penalty sera remplacé par le pourcentage de pénalité appliqué.",
+      "default": "Chaque appariement incorrect vous a coûté une pénalité de @penalty%."
+    },
+    {
+      "label": "Texte de progression",
+      "description": "Les variables disponibles sont @card et @total.",
+      "default": "Carte @card sur @total"
+    },
+    {
+      "label": "Etiquette pour le devant de la carte",
+      "description": "Est utilisée par les technologies d'assistance pour plus d'accessibilité",
+      "default": "la face avant de la carte (recto)"
+    },
+    {
+      "label": "Etiquette pour le dos de la carte",
+      "description": "Est utilisée par les technologies d'assistance pour plus d'accessibilité",
+      "default": "le dos de la carte (verso)"
+    },
+    {
+      "label": "Etiquette pour montrer le bouton Indice",
+      "default": "Montrer l'indice"
+    },
+    {
+      "label": "Message L'audio n'est pas supporté",
+      "default": "Votre navigateur ne supporte pas ce fichier audio"
+    },
+    {
+      "label": "Afficher les cartes en ordre aléatoire ?",
+      "description": "Demander à l'utilisateur s'il veut afficher les cartes en ordre aléatoire.",
+      "default": "Afficher les cartes en ordre aléatoire ?"
+    },
+    {
+      "label": "Notification de l'ordre des cartes actuel",
+      "description": "Indique à l'utilisateur l'ordre dans lequel il a choisi d'afficher les cartes (normal ou aléatoire).",
+      "default": "Ordre des cartes actuel = "
+    },
+    {
+      "label": "Etiquette pour l'ordre normal",
+      "default": "Normal"
+    },
+    {
+      "label": "Etiquette pour l'ordre aléatoire",
+      "default": "Aléatoire"
+    },
+    {
+      "label": "Oui",
+      "default": "Oui"
+    },
+    {
+      "label": "Non",
+      "default": "Non"
+    },
+    {
+      "label": "Nombre de cartes",
+      "description": "Si les cartes sont affichées en ordre aléatoire, demander à l'utilisateur combien de cartes il veut.",
+      "default": "Combien de cartes voulez-vous ?"
+    },
+    {
+      "label": "Toutes les cartes",
+      "default": "Toutes les cartes"
+    },
+    {
+      "label": "Représentation textuelle du bouton expliquant le score",
+      "default": "Expliquer le score"
+    },
+    {
+      "label": "Demander à l'utilisateur s'il souhaite inverser l'ordre d'affichage du côté des cartes.",       
+      "description": "@side sera remplacé par le côté opposé au côté actuel.",
+      "default": "Inverser l'affichage actuel pour afficher en premier @side ?"      
+    },
+    {
+      "label": "Etiquette pour indiquer à l'utilisateur quel côté des cartes est affiché en premier actuellement.",      
+      "default": "Mode d'affichage actuel : Côté affiché en premier = "      
+    }
+  ]
+}
