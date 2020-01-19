@@ -44,7 +44,10 @@
             "label": "Alternative text for the image on back of card"
           },
           {
-            "label": "Audio files"
+            "label": "Audio files for the front of the card"
+          },
+          {
+            "label": "Audio files for the back of the card"
           },
           {
             "label": "Tips",

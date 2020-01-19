@@ -138,7 +138,14 @@
         {
           "name": "audio",
           "type": "audio",
-          "label": "Audio files",
+          "label": "Audio files for the front of the card",
+          "importance": "low",
+          "optional": true
+        },
+        {
+          "name": "audio2",
+          "type": "audio",
+          "label": "Audio files for the back of the card",
           "importance": "low",
           "optional": true
         },

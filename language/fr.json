@@ -44,7 +44,10 @@
             "label": "Texte alternatif pour l'image du dos de la carte"
           },
           {
-            "label": "Fichiers audio"
+            "label": "Fichiers audio pour la face avant de la carte"
+          },
+          {
+            "label": "Fichiers audio pour le dos de la carte"
           },
           {
             "label": "Indices",
