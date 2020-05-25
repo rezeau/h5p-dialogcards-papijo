@@ -2377,9 +2377,8 @@ C.prototype.matchCards = function ($card) {
     self.taskFinished = false;
     self.dialogs = self.params.dialogs;
     self.nbCards = self.params.dialogs.length;
-    this.nbCardsInCurrentRound = self.nbCards;
+    this.nbCardsInCurrentRound = self.nbCards; 
     self.cardOrder = -1;
-    this.cardsOrderMode = 'normal'
     self.cardSizeDetermined = [];
     self.cardsLeftInStack = self.nbCards;
 
