@@ -234,6 +234,10 @@
   display: none;
 }
 
+.h5p-dialogcards .h5p-dialogcards-noMatch {
+  display: none;
+}
+
 .h5p-dialogcards .h5p-dialogcards-collapse {
   -webkit-transform: scale(0,1);
   -ms-transform: scale(0,1);

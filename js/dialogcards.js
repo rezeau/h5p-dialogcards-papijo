@@ -1291,11 +1291,25 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       self.stopAudio($leftCard.index());
     }
     var $nextCard = self.$current.nextAll('.h5p-dialogcards-cardwrap').eq(0);
+    // if matchIt & noMatch go to next card
+    $ccc = $($nextCard).attr("class").split(/\s+/);
+        console.log($ccc)
+        // TODO review this pb of loop !
+        while ($nextCard.hasClass('h5p-dialogcards-noMatch')) {
+          $nextCard = self.$current.nextAll('.h5p-dialogcards-cardwrap').eq(1);
+          if (!$nextCard.length) {
+            console.log('break');
+            break;
+          } 
+        }
+        
     if ($nextCard.length) {
+      
       self.$current.removeClass('h5p-dialogcards-current h5p-dialogcards-match-right').addClass('h5p-dialogcards-previous');
       self.$current = $nextCard.addClass('h5p-dialogcards-current');
       if (this.matchIt) {
         self.$current.addClass('h5p-dialogcards-match-right');
+      
       }
       self.setCardFocus(self.$current);
       // If matchIt, all cards are loaded upon init, this is needed.
@@ -1319,18 +1333,34 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
   C.prototype.nextCardLeft = function () {
     var self = this;
-
     var x = Math.floor((Math.random() * (self.dialogs.length)) );
-    $leftCard = self.$currentLeft;
+    //$leftCard = self.$currentLeft;                            
     self.$currentLeft.removeClass('h5p-dialogcards-gotitdone');
-    var $nextCardLeft = self.$currentLeft.nextAll('.h5p-dialogcards-cardwrap-left').eq(x);
-
+    var $nextCardLeft = self.$currentLeft.nextAll('.h5p-dialogcards-cardwrap-left').eq(0);
+    // if matchIt & noMatch go to next card
+    if ($nextCardLeft.length) {
+    console.log('x = ' + x + ' $nextCardLeft.length = ' + $nextCardLeft.length)
+      $ccc = $($nextCardLeft).attr("class").split(/\s+/);
+        console.log($ccc)
+        // TODO review this pb of loop !
+        while ($nextCardLeft.hasClass('h5p-dialogcards-noMatch')) {
+          $nextCardLeft = self.$current.nextAll('.h5p-dialogcards-cardwrap').eq(x);
+          if (!$nextCardLeft.length) {
+            console.log('break');
+            break;
+          } 
+        }
+    }
     if ($nextCardLeft.length) {
       self.$currentLeft = $nextCardLeft.addClass('h5p-dialogcards-current-left');
       self.$currentLeft.removeClass('h5p-dialogcards-disabled');
       self.resize();
     } else {
+    console.log('x = ' + x + ' $nextCardLeft.length = ' + $nextCardLeft.length)
+    
       var $prevCardLeft = self.$currentLeft.prevAll('.h5p-dialogcards-cardwrap-left').eq(x);
+      $ccc = $($nextCardLeft).attr("class").split(/\s+/);
+        console.log($ccc)
       while (!$prevCardLeft.length) {
         y = Math.round(Math.random());
         if (y === 0) {
@@ -1400,6 +1430,13 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (!$nextCard.length) {
       $nextCard.addClass('h5p-dialogcards-disabled');
     }
+    // if matchIt & noMatch go to next card
+    $ccc = $($prevCard).attr("class").split(/\s+/);
+        console.log($ccc)
+        // TODO review this pb of loop !
+        while ($prevCard.hasClass('h5p-dialogcards-noMatch')) {
+          $prevCard = self.$current.prevAll('.h5p-dialogcards-cardwrap').eq(1); 
+        }
     if ($prevCard.length) {
       self.stopAudio(self.$current.index());
       self.$current.removeClass('h5p-dialogcards-current');
@@ -2290,7 +2327,6 @@ C.prototype.matchCards = function ($card) {
     var $leftCard = self.$currentLeft;
     var indexLeft = ($leftCard.index() - 1) / 2;
     
-    
     // De-activate all buttons during the Timeout.
     $correctButton = $card.find('.h5p-dialogcards-match.correct');
     $incorrectButton = $card.find('.h5p-dialogcards-match.incorrect');
@@ -2335,15 +2371,34 @@ C.prototype.matchCards = function ($card) {
         var $card = $(this).removeClass('h5p-dialogcards-previous');
       });
     } else {
-      this.incorrect++;
-      self.updateNavigation();
+      // TODO JR : IF NOT A MATCH disable left card and matching right card
+      this.incorrect++;      
+      
+            
+      // Find the matching right card from stack of cards
+      var $cards = self.$inner.find('.h5p-dialogcards-cardwrap');
+      $cards.each(function (index) {
+        if (index === indexLeft) {
+          $matchingRightCard = $(this);
+          return false; // break
+        }
+      });
+      $matchingRightCard.addClass('h5p-dialogcards-noMatch');
+      
       $matchButton.addClass('h5p-dialogcards-disabled');
       $incorrectButton.toggleClass('h5p-dialogcards-disabled');
+      
       setTimeout(function() {
+        $leftCard.addClass('h5p-dialogcards-noMatch');
         $incorrectButton.toggleClass('h5p-dialogcards-disabled');
         self.$next.toggleClass('h5p-dialogcards-inactive');
         self.$prev.toggleClass('h5p-dialogcards-inactive');
+        $matchButton.removeClass('h5p-dialogcards-disabled');
+        self.nextCardLeft(); // ???
+        self.updateNavigation();   // line 1228
       }, delayInMilliseconds);
+      
+      
     }
 
     // No cards left in stack. End game.
