@@ -359,6 +359,11 @@
       "default": "Display the cards in random order?"
     },
     {
+      "label": "Display the cards on the right in random order?",
+      "description": "Ask the user if they want to display the cards on the right in random order. Note: the cards on the left are always randomized.",
+      "default": "Display the cards on the right in random order?"
+    },
+    {
       "label": "Current order notice",
       "description": "Shows the user which order they have selected to display the cards (normal or random).",
       "default": "Current Cards Order mode = "

@@ -349,6 +349,11 @@
       "default": "Afficher les cartes en ordre aléatoire ?"
     },
     {
+      "label": "Afficher les cartes à droite en ordre aléatoire ?",
+      "description": "Demander à l'utilisateur s'il veut afficher les cartes à droite en ordre aléatoire. Notez que les cartes à gauche sont TOUJOURS en ordre aléatoire.",
+      "default": "Afficher les cartes à droite en ordre aléatoire ?"
+    },
+    {
       "label": "Notification de l'ordre des cartes actuel",
       "description": "Indique à l'utilisateur l'ordre dans lequel il a choisi d'afficher les cartes (normal ou aléatoire).",
       "default": "Ordre des cartes actuel = "

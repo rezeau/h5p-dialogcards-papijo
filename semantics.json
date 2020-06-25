@@ -759,6 +759,15 @@
     "common": true
   },
   {
+    "name": "randomizeRightCardsQuestion",
+    "type": "text",
+    "label": "Display the cards on the right in random order?",
+    "importance": "low",
+    "description": "Ask the user if they want to display the cards on the right in random order. Note: the cards on the left are always randomized.",
+    "default": "Display the cards on the right in random order?",
+    "common": true
+  },
+  {
     "name": "currentOrderNotice",
     "label": "Current order notice",
     "type": "text",
