@@ -840,5 +840,29 @@
     "default": "Current display mode: First Side = ",
     "importance": "low",
     "common": true
+  },
+  {
+    "name": "currentRightOrderNotice",
+    "type": "text",
+    "label": "Label used to tell the user the order in which the cards on the right are currently displayed.",
+    "default": "Current Order mode of Cards on the right = ",
+    "importance": "low",
+    "common": true
+  },
+  {
+    "name": "reverseLeftSide",
+    "type": "text",
+    "label": "Notice to ask the user if they want to switch from the current way that the side of the cards is displayed on the left to the reverse side.",
+    "default": "Switch the current display mode of Left card side to @side?",
+    "importance": "low",
+    "common": true
+  },
+  {
+    "name": "currentLeftSideNotice",
+    "type": "text",
+    "label": "Label used to tell the user which side of the cards is currently displayed on the left.",
+    "default": "Current display mode: Left card = ",
+    "importance": "low",
+    "common": true
   }
 ]

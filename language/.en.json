@@ -71,7 +71,7 @@
       "fields": [
         {
           "label": "Select Mode",
-          "description": "Free browsing is the default mode. In Match mode the user will have to pair the front and the back side of cards. In Self Correction mode, they will be able to guess the other side of the cards and confirm if they got it correct or not.",
+          "description": "\"Free browsing\" is the default mode. In \"Match\" mode the user will have to pair the front and the back side of cards. In \"Self Correction\" mode, they will be able to guess the other side of the cards and confirm if they got it correct or not. \"Match with Repetition\" is a combination of the \"Match\" and \"Self Correction\" modes.",
           "default": "normal",
           "options": [
             {
@@ -79,6 +79,9 @@
             },
             {
               "label": "Match"
+            },
+            {
+              "label": "Match with Repetition"
             },
             {
               "label": "Self Correction"
@@ -97,6 +100,10 @@
           "description": "The color of the cards background. Default is transparent rgba(0, 0, 0, 0).",
           "default": "rgba(0, 0, 0, 0)",
           "spectrum": {}
+        },
+        {
+          "label": "Hide front card images",
+          "description": "Check this option if you want to hide potential front card images on cards with 2 images."
         },
         {
           "label": "Cards Order",
@@ -138,6 +145,27 @@
             },
             {
               "label": "Display back side first (reverse display)"
+            },
+            {
+              "label": "User's choice"
+            }
+          ]
+        },
+        {
+          "label": "Display which side on the left?",
+          "description": "Select which side of the cards will be displayed on the left",
+          "default": "frontLeft",
+          "showWhen": {
+            "rules": [
+              {}
+            ]
+          },
+          "options": [
+            {
+              "label": "Display the front side on the left"
+            },
+            {
+              "label": "Display the back side on the left"
             },
             {
               "label": "User's choice"
@@ -293,8 +321,8 @@
       "default": "Well done! You got all @cards cards correct!"
     },
     {
-      "label": "Self-correction mode score explanation if a penalty percent has been set.",
-      "description": "Used in Self-correction mode. @penalty will be replaced by the penalty percentage applied",
+      "label": "Score explanation for self-correction and Match with Repetition modes IF a penalty percent has been set.",
+      "description": "Used in Self-correction AND Match with Repetition modes. @penalty will be replaced by the penalty percentage applied",
       "default": "Each extra round cost you a penalty of @penalty%."
     },
     {
@@ -372,6 +400,18 @@
     {
       "label": "Label used to tell the user which side of the cards is currently displayed first.",
       "default": "Current display mode: First Side = "
+    },
+    {
+      "label": "Label used to tell the user the order in which the cards on the right are currently displayed.",
+      "default": "Current Order mode of Cards on the right = "
+    },
+    {
+      "label": "Notice to ask the user if they want to switch from the current way that the side of the cards is displayed on the left to the reverse side.",
+      "default": "Switch the current display mode of Left card side to @side?"
+    },
+    {
+      "label": "Label used to tell the user which side of the cards is currently displayed on the left.",
+      "default": "Current display mode: Left card = "
     }
   ]
 }

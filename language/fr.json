@@ -71,7 +71,7 @@
       "fields": [
         {
           "label": "Mode",
-          "description": "La Navigation libre est le mode par défaut. En mode Appariement, l'utilisateur devra apparier le recto et le verso des cartes. En mode Autocorrection, il pourra deviner l'autre côté des cartes et confirmer s'il l'avait deviné ou non.",
+          "description": "La Navigation libre est le mode par défaut. En mode Appariement, l'utilisateur devra apparier le recto et le verso des cartes. En mode Autocorrection, il pourra deviner l'autre côté des cartes et confirmer s'il l'avait deviné ou non. Appariement avec répétition est une combinaison des modes Appariement et Autocorrection.",
           "default": "normal",
           "options": [
             {
@@ -79,6 +79,9 @@
             },
             {
               "label": "Appariement"
+            },
+            {
+              "label": "Appariement avec Répétition"
             },
             {
               "label": "Autocorrection"
@@ -104,6 +107,10 @@
           }
         },
         {
+          "label": "Cacher les images du recto des cartes",
+          "description": "Cochez cette option si vous souhaitez cacher d'éventuelles images au recto des cartes avec 2 images."
+        },
+        {
           "label": "Ordre des cartes",
           "description": "Choisissez l'ordre d'affichage des cartes pour l'utilisateur. Si vous mettez \"Au choix de l'utilisateur\" et que celui-ci choisit l'ordre aléatoire, il pourra également choisir le <b>nombre de cartes</b> tirées du paquet.",
           "default": "normal",
@@ -121,7 +128,12 @@
         },
         {
           "label": "Sélectionner le nombre de cartes affichées",
-          "description": "Permet à l'utilisateur de choisir le nombre de cartes tirées dans le paquet de cartes."
+          "description": "Permet à l'utilisateur de choisir le nombre de cartes tirées dans le paquet de cartes.",
+          "showWhen": {
+            "rules": [
+              {}
+            ]
+          }
         },
         {
           "label": "Afficher quel côté en premier ?",
@@ -133,6 +145,27 @@
             },
             {
               "label": "Afficher d'abord le dos (affichage inversé)"
+            },
+            {
+              "label": "Au choix de l'utilisateur"
+            }
+          ]
+        },
+        {
+          "label": "Afficher quel côté sur la gauche ?",
+          "description": "Sélectionnez le côté des cartes qui sera affiché à gauche",
+          "default": "frontLeft",
+          "showWhen": {
+            "rules": [
+              {}
+            ]
+          },
+          "options": [
+            {
+              "label": "Afficher le recto à gauche"
+            },
+            {
+              "label": "Afficher le verso à gauche"
             },
             {
               "label": "Au choix de l'utilisateur"
@@ -357,6 +390,18 @@
     {
       "label": "Etiquette pour indiquer à l'utilisateur quel côté des cartes est affiché en premier actuellement.",      
       "default": "Mode d'affichage actuel : Côté affiché en premier = "      
+    },
+    {
+      "label": "Étiquette utilisée pour indiquer à l'utilisateur l'ordre dans lequel les cartes de droite sont actuellement affichées.",
+      "default": "Ordre actuel des cartes sur la droite = "
+    },
+    {
+      "label": "Demander à l'utilisateur s'il veut passer du côté des cartes actuellement affiché à gauche au côté opposé.",
+      "default": "Inverser l'affichage actuel pour afficher à gauche le côté @side?"
+    },
+    {
+      "label": "Etiquette pour indiquer à l'utilisateur quel côté des cartes est affiché actuellement à gauche.",
+      "default": "Affichage actuel : Carde de gauche = "
     }
   ]
 }
