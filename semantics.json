@@ -189,7 +189,7 @@
         "type": "select",
         "label": "Select Mode",
         "importance": "low",
-        "description": "Free browsing is the default mode. In Match mode the user will have to pair the front and the back side of cards. In Self Correction mode, they will be able to guess the other side of the cards and confirm if they got it correct or not.",
+        "description": "\"Free browsing\" is the default mode. In \"Match\" mode the user will have to pair the front and the back side of cards. In \"Self Correction\" mode, they will be able to guess the other side of the cards and confirm if they got it correct or not. \"Match with Repetition\" is a combination of the \"Match\" and \"Self Correction\" modes.",
         "default": "normal",
         "options": [
           {
@@ -199,6 +199,10 @@
           {
             "value": "matchMode",
             "label": "Match"
+          },
+          {
+            "value": "matchRepetition",
+            "label": "Match with Repetition"
           },
           {
             "value": "selfCorrectionMode",
@@ -283,6 +287,14 @@
         }
       },
       {
+        "name": "hideFrontImage",
+        "type": "boolean",
+        "label": "Hide front card images",
+        "importance": "low",
+        "description": "Check this option if you want to hide potential front card images on cards with 2 images.",
+        "default": false        
+      },
+      {
         "name": "cardsOrderChoice",
         "type": "select",
         "label": "Cards Order",
@@ -359,6 +371,40 @@
         ]
       },
       {
+        "name": "leftSideChoice",
+        "type": "select",
+        "label": "Display which side on the left?",
+        "importance": "low",
+        "description": "Select which side of the cards will be displayed on the left",
+        "default": "frontLeft",
+        "widget": "showWhen",
+        "showWhen": {
+          "rules": [
+            {
+              "field": "playMode",
+              "equals": [
+                "matchMode",
+                "matchRepetition"
+              ]
+            }
+          ]
+        },
+        "options": [
+          {
+            "value": "frontLeft",
+            "label": "Display the front side on the left"
+          },
+          {
+            "value": "backLeft",
+            "label": "Display the back side on the left"
+          },
+          {
+            "value": "user",
+            "label": "User's choice"
+          }
+        ]
+      },
+      {
         "name": "maxScore",
         "type": "number",
         "label": "Maximum Score",
@@ -375,7 +421,8 @@
               "field": "playMode",
               "equals": [
                 "selfCorrectionMode",
-                "matchMode"
+                "matchMode",
+                "matchRepetition"
               ]
             }
           ]
@@ -398,7 +445,8 @@
               "field": "playMode",
               "equals": [
                 "selfCorrectionMode",
-                "matchMode"
+                "matchMode",
+                "matchRepetition"
               ]
             }
           ]
@@ -643,8 +691,8 @@
   {
     "name": "explainScoreGotIt",
     "type": "text",
-    "label": "Self-correction mode score explanation if a penalty percent has been set.",
-    "description": "Used in Self-correction mode. @penalty will be replaced by the penalty percentage applied",
+    "label": "Score explanation for self-correction and Match with Repetition modes IF a penalty percent has been set.",
+    "description": "Used in Self-correction AND Match with Repetition modes. @penalty will be replaced by the penalty percentage applied",
     "importance": "low",
     "default": "Each extra round cost you a penalty of @penalty%.",
     "common": true

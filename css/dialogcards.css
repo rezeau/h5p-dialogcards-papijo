@@ -478,6 +478,10 @@
   text-decoration: none solid rgb(153, 153, 153);
 }
 
+.h5p-dialogcards .h5p-dialogcards-round.repetition {
+  margin-left: 3em;
+}
+
 .h5p-dialogcards .h5p-dialogcards-cards-left {
   float: right;
   margin-right: 1.5em;
@@ -485,8 +489,14 @@
   font-weight: 400;
   text-decoration: none solid rgb(153, 153, 153);
 }
+
+.h5p-dialogcards .h5p-dialogcards-cards-left.repetition{
+  margin-right: 3em;
+}
+
+
 .h5p-dialogcards-hide {
-  visibility: hidden;
+  visibility: hidden!important;
 }
 .h5p-dialogcards .h5p-joubelui-button.h5p-dialogcards-button-hidden {
   visibility: hidden;
@@ -661,3 +671,7 @@
   color:white;
   background-color:#2f4f4f; ;
 }                                                                                  
+
+.h5p-dialogcards .h5p-dialogcards-noMatch {
+  display: none;
+}
