@@ -417,7 +417,7 @@
     },
     {
       "label": "Etiquette pour indiquer à l'utilisateur quel côté des cartes est affiché actuellement à gauche.",
-      "default": "Affichage actuel : Carde de gauche = "
+      "default": "Affichage actuel : Carte de gauche = "
     }
   ]
 }
