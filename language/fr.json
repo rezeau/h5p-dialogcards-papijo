@@ -96,8 +96,19 @@
           "description": "Si cette option est décochée, la taille de la carte sera adaptée au texte placé à l'intérieur"
         },
         {
-          "label": "Couleur d'arrière-plan des cartes",
-          "description": "Couleur d'arrière-plan des cartes. Par défaut cet arrière-plan est transparent rgba(0, 0, 0, 0).",                           
+          "label": "Couleur d'arrière-plan des cartes (Recto)",
+          "description": "Couleur d'arrière-plan du recto des cartes. Par défaut cet arrière-plan est transparent rgba(0, 0, 0, 0).",                           
+          "default": "rgba(0, 0, 0, 0)",
+          "spectrum": {
+            "togglePaletteMoreText": "Voir plus",
+            "togglePaletteLessText": "Voir moins",                    
+            "chooseText": "Choisir cette couleur",
+            "cancelText": "Annuler"
+          }
+        },
+        {
+          "label": "Couleur d'arrière-plan des cartes (Verso)",
+          "description": "Couleur d'arrière-plan du verso des cartes. Par défaut cet arrière-plan est transparent rgba(0, 0, 0, 0). En cas de défaut, la couleur de la face avant sera utilisée pour les deux faces.",                           
           "default": "rgba(0, 0, 0, 0)",
           "spectrum": {
             "togglePaletteMoreText": "Voir plus",

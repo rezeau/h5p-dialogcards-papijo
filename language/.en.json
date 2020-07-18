@@ -96,8 +96,14 @@
           "description": "Unchecking this option will make the card adapt its size to the size of the text"
         },
         {
-          "label": "Cards Background color",
-          "description": "The color of the cards background. Default is transparent rgba(0, 0, 0, 0).",
+          "label": "Cards Background color (Front Side)",
+          "description": "The color of the front side of the cards background. Default is transparent rgba(0, 0, 0, 0).",
+          "default": "rgba(0, 0, 0, 0)",
+          "spectrum": {}
+        },
+        {
+          "label": "Cards Background color (Back Side)",
+          "description": "The color of the back side of the cards background. Default is transparent rgba(0, 0, 0, 0). If Default then the Front side colour will be used for both sides.",
           "default": "rgba(0, 0, 0, 0)",
           "spectrum": {}
         },
