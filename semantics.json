@@ -41,6 +41,15 @@
     }
   },
   {
+    "name": "enableCategories",
+    "type": "boolean",
+    "label": "Enable Categories in Dialogs?",
+    "description": "Add a 'Categories' field in the Dialogs/Cards?",
+    "importance": "medium",
+    "default": false,
+    "optional": true
+  },
+  {
     "name": "dialogs",
     "type": "list",
     "importance": "high",
@@ -172,10 +181,27 @@
               "description": "Tip for the back of the card"
             }
           ]
+        },
+        {
+          "name": "itemCategories",
+          "type": "text",
+          "label": "Card Category/ies",
+          "importance": "low",
+          "optional": true,
+          "description": "Optional. Category item(s) that this card belongs to. Enter the item name(s) separated by a comma and no space.",          
+          "widget": "showWhen",
+          "showWhen": {
+            "rules": [
+              {
+                "field": "../../enableCategories",
+                "equals": true
+              }
+            ]
+          }
         }
       ]
     }
-  },
+  },   
   {
     "name": "behaviour",
     "type": "group",
@@ -185,12 +211,96 @@
     "optional": true,
     "fields": [      
       {
+      "name": "theFilter",
+      "type": "list",
+      "importance": "low",
+      "optional": true,
+      "label": "Categories Filtering",
+      "entity": "Filter",
+      "min": 0,
+      "defaultNum": 0,
+      "max": 1,          
+      "widget": "showWhen",
+      "showWhen": {
+        "rules": [
+          {
+            "field": "../enableCategories",
+            "equals": true
+          }
+        ]
+      },
+      "field": {
+        "name": "catfilter",
+        "type": "group",
+        "expanded": false,
+        "label": "The filter",
+        "importance": "low",
+        "fields": [
+          {
+            "name": "Filter by these categories",
+            "type": "text",
+            "optional": true
+          },
+          {
+            "name": "options",
+            "type": "group",
+            "expanded": false,
+            "label": "Filtering Options",
+            "importance": "low",
+            "fields": [
+              {
+                "name": "filterCondition",
+                "type": "select",
+                "label": "AND / OR",
+                "importance": "low",
+                "default": "AND",
+                "optional": true,
+                "description": "Use this if ",
+                "options": [
+                    {
+                      "value": "AND",
+                      "label": "AND"
+                    },
+                    {
+                      "value": "OR",
+                      "label": "OR"
+                    }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "filterByCategories",
+            "type": "select",
+            "label": "Filter by Categories",
+            "importance": "low",
+            "description": "Filter by Categories.",
+            "default": "noFilter",
+            "options": [
+              {
+                "value": "noFilter",
+                "label": "Do not filter"
+              },
+              {
+                "value": "authorFilter",
+                "label": "Use the filter defined above"
+              },
+              {
+                "value": "userFilter",
+                "label": "Filter defined by User"
+              }
+            ]
+          }  
+      ]
+    }
+  },
+      {
         "name": "playMode",
         "type": "select",
         "label": "Select Mode",
         "importance": "low",
         "description": "\"Free browsing\" is the default mode. In \"Match\" mode the user will have to pair the front and the back side of cards. In \"Self Correction\" mode, they will be able to guess the other side of the cards and confirm if they got it correct or not. \"Match with Repetition\" is a combination of the \"Match\" and \"Self Correction\" modes.",
-        "default": "normal",
+        "default": "normalMode",
         "options": [
           {
             "value": "normalMode",
