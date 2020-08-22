@@ -9,13 +9,17 @@
       "font": {}
     },
     {
+      "label": "Activer les catégories dans les cartes ?",
+      "description": "Ajouter un champ 'Catégories' dans les fiches des dialogues/cartes ?"
+    },
+    {
       "widgets": [
         {
           "label": "Default"
         }
       ],
-      "label": "Dialogs",
-      "entity": "dialog",
+      "label": "Cartes",
+      "entity": "une carte",
       "field": {
         "label": "Question",
         "fields": [
@@ -61,6 +65,15 @@
                 "description": "Indice pour le dos de la carte"
               }
             ]
+          },
+          {
+            "label": "Catégorie(s) de cette carte",
+            "description": "Optionnel. Catégorie(s) à laquelle/auxquelles cette carte appartient. Saisissez le(s) nom(s) de la ou des catégories, séparé(s) par une virgule et sans espace.",
+            "showWhen": {
+              "rules": [
+                {}
+              ]
+            }
           }
         ]
       }
@@ -69,6 +82,66 @@
       "label": "Options générales",
       "description": "Ces options vous permettent de paramétrer le déroulement de l'exercice.",
       "fields": [
+        {
+          "label": "Filtres sur les catégories",
+          "entity": "un filtre",
+          "description": "Vous pouvez créer ici plusieurs filtres pour filtrer les cartes selon la catégorie à laquelle elles appartiennent.",
+          "widgets": [
+            {
+              "label": "Default"
+            }
+          ],
+          "showWhen": {
+            "rules": [
+              {}
+            ]
+          },
+          "field": {
+            "label": "Cliquez pour créer les paramètres de ce filtre",
+            "fields": [
+              {
+              "label": "Liste des catégories à utiliser dans ce filtre"
+              },
+              {
+                "label": "Opérateur booléen",
+                "default": "AND",
+                "description": "Sélectionnez l'opérateur booléen qui doit traiter la liste de filtres définie ci-dessus. La valeur par défaut est AND.",
+                "options": [
+                  {
+                    "label": "AND"
+                  },
+                  {
+                    "label": "OR"
+                  },
+                  {
+                    "label": "NOT"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "label": "Filtrer par catégories",
+          "description": "Choisissez comment les cartes seront filtrées. Pas de filtrage / Premier (ou unique) filtre défini ci-dessus. / Si plusieurs filtres ont été définis, permettre à l'utilisateur de sélectionner un filtre au moment de l'exécution.",
+          "default": "noFilter",
+          "showWhen": {
+            "rules": [
+              {}
+            ]
+          },
+          "options": [
+            {
+              "label": "Ne pas filtrer les cartes"
+            },
+            {
+              "label": "Utilisez le PREMIER filtre défini ci-dessus"
+            },
+            {
+              "label": "Filtre sélectionné par l'utilisateur"
+            }
+          ]
+        },
         {
           "label": "Mode",
           "description": "La Navigation libre est le mode par défaut. En mode Appariement, l'utilisateur devra apparier le recto et le verso des cartes. En mode Autocorrection, il pourra deviner l'autre côté des cartes et confirmer s'il l'avait deviné ou non. Appariement avec répétition est une combinaison des modes Appariement et Autocorrection.",
@@ -418,6 +491,14 @@
     {
       "label": "Etiquette pour indiquer à l'utilisateur quel côté des cartes est affiché actuellement à gauche.",
       "default": "Affichage actuel : Carte de gauche = "
+    },
+    {
+      "label": "Étiquette utilisée pour indiquer à l'utilisateur quel filtre est actuellement utilisé pour filtrer les cartes (le cas échéant).",
+      "default": "Filtre actuel = "
+    },
+    {
+      "label": "Demander à l'utilisateur de choisir un filtre parmi ceux disponibles.",
+      "default": "Choisissez un filtre"
     }
   ]
 }

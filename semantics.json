@@ -208,99 +208,108 @@
     "label": "Behavioural settings.",
     "importance": "low",
     "description": "These options will let you control how the task behaves.",
-    "optional": true,
+    "optional": false,
     "fields": [      
       {
-      "name": "theFilter",
-      "type": "list",
-      "importance": "low",
-      "optional": true,
-      "label": "Categories Filtering",
-      "entity": "Filter",
-      "min": 0,
-      "defaultNum": 0,
-      "max": 1,          
-      "widget": "showWhen",
-      "showWhen": {
-        "rules": [
-          {
-            "field": "../enableCategories",
-            "equals": true
-          }
-        ]
-      },
-      "field": {
+        "name": "catFilters",
+        "type": "list",
+        "importance": "low",
+        "optional": true,
+        "label": "Categories Filtering",
+        "entity": "Filter",
+        "min": 0,
+        "defaultNum": 0,
+    "description": "Explain how filtering works here...",
+    "widgets": [
+      {
+        "name": "VerticalTabs",
+        "label": "Default"
+      }
+    ],          
+        "widget": "showWhen",
+        "showWhen": {
+          "rules": [
+            {
+              "field": "../enableCategories",
+              "equals": true
+            }
+          ]
+        },
+        "field": {
         "name": "catfilter",
         "type": "group",
         "expanded": false,
-        "label": "The filter",
+        "label": "Click to set this filter parameters",
         "importance": "low",
         "fields": [
           {
-            "name": "Filter by these categories",
-            "type": "text",
-            "optional": true
-          },
+            "name": "filterList",
+            "label": "List of the category/ies to use in this filter",
+            "type": "text"
+          },          
           {
-            "name": "options",
-            "type": "group",
-            "expanded": false,
-            "label": "Filtering Options",
-            "importance": "low",
-            "fields": [
-              {
-                "name": "filterCondition",
-                "type": "select",
-                "label": "AND / OR",
-                "importance": "low",
-                "default": "AND",
-                "optional": true,
-                "description": "Use this if ",
-                "options": [
-                    {
-                      "value": "AND",
-                      "label": "AND"
-                    },
-                    {
-                      "value": "OR",
-                      "label": "OR"
-                    }
-                ]
-              }
-            ]
-          },
-          {
-            "name": "filterByCategories",
+            "name": "filterOperator",
             "type": "select",
-            "label": "Filter by Categories",
+            "label": "Filter Boolean operator",
             "importance": "low",
-            "description": "Filter by Categories.",
-            "default": "noFilter",
+            "default": "AND",
+            "description": "Select the boolean operator to operate upon the filter list defined above. Default is AND.",
             "options": [
-              {
-                "value": "noFilter",
-                "label": "Do not filter"
-              },
-              {
-                "value": "authorFilter",
-                "label": "Use the filter defined above"
-              },
-              {
-                "value": "userFilter",
-                "label": "Filter defined by User"
-              }
-            ]
-          }  
-      ]
-    }
-  },
+                {
+                  "value": "AND",
+                  "label": "AND"
+                },
+                {
+                  "value": "OR",
+                  "label": "OR"
+                },
+                {
+                  "value": "NOT",
+                  "label": "NOT"
+                }
+              ]
+            }  
+          ]
+        }
+      },
+      {
+        "name": "filterByCategories",
+        "type": "select",
+        "label": "Filter by Categories",
+        "importance": "low",
+        "description": "Select how the cards will be filtered. No filtering / First (or unique) filter defined above. / If more than one filter has been defined, enable user to select a filter at runtime.",
+        "default": "noFilter",          
+        "widget": "showWhen",
+        "showWhen": {
+          "rules": [
+            {
+              "field": "../enableCategories",
+              "equals": true
+            }
+          ]
+        },                   
+        "options": [
+          {
+            "value": "noFilter",
+            "label": "Do not filter"
+          },
+          {
+            "value": "authorFilter",
+            "label": "Use the FIRST filter defined above"
+          },
+          {
+            "value": "userFilter",
+            "label": "Filter selected by User"
+          }
+        ]
+      },
       {
         "name": "playMode",
         "type": "select",
         "label": "Select Mode",
         "importance": "low",
         "description": "\"Free browsing\" is the default mode. In \"Match\" mode the user will have to pair the front and the back side of cards. In \"Self Correction\" mode, they will be able to guess the other side of the cards and confirm if they got it correct or not. \"Match with Repetition\" is a combination of the \"Match\" and \"Self Correction\" modes.",
-        "default": "normalMode",
+        "default": "normalMode", 
         "options": [
           {
             "value": "normalMode",
@@ -1041,6 +1050,22 @@
     "type": "text",
     "label": "Label used to tell the user which side of the cards is currently displayed on the left.",
     "default": "Current display mode: Left card = ",
+    "importance": "low",
+    "common": true
+  },
+  {
+    "name": "currentFilterNotice",
+    "type": "text",
+    "label": "Label used to tell the user which filter is currently used to filter the cards (if any).",
+    "default": "Current Filter = ",
+    "importance": "low",
+    "common": true
+  },
+  {
+    "name": "selectFilter",
+    "type": "text",
+    "label": "Notice to ask the user to select one of the available filters.",
+    "default": "Select a filter for the cards to be displayed",
     "importance": "low",
     "common": true
   }

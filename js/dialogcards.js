@@ -68,7 +68,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       currentRightOrderNotice: "Current Order mode of Cards on the right = ",
       reverseLeftSide: 'Switch the current display mode of Left card side to @side?',
       currentLeftSideNotice: "Current display mode: Left card = ",
-      
+      currentFilterNotice: "Current Filter = ",
+      selectFilter: "Select a filter for the cards to be displayed",      
       normalOrder: "Normal",
       randomOrder: "Random",
       categories: [
@@ -104,7 +105,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         backgroundColor: undefined,
         backgroundColorBack: undefined,
         hideFrontImage: false,
-        filterByCategories: 'authorFilter'
+        filterByCategories: 'noFilter'
       }
     }, params);
 
@@ -125,7 +126,25 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.cardsOrderChoice = self.params.behaviour.cardsOrderChoice;
     this.cardsOrderMode = this.cardsOrderChoice;
     this.enableCardsNumber = self.params.behaviour.enableCardsNumber;
-    this.filterByCategories = self.params.behaviour.filterByCategories;
+    
+    // IF categories filters enabled!!!
+    if (self.params.enableCategories && self.params.behaviour.catFilters) {
+      this.catFilters = self.params.behaviour.catFilters;
+      // Remove potential filters with empty filterList
+      for (i = 0; i < this.catFilters.length; i++) {
+        if (this.catFilters[i]["filterList"] == undefined) {
+          this.catFilters.splice(i, 1);
+          i--;  
+        }
+      }
+      if (!$.isEmptyObject(this.catFilters)) {
+        this.filterByCategories = self.params.behaviour.filterByCategories;
+        // Default list and operator in author filter.
+        this.filterList = self.params.behaviour.catFilters[0]["filterList"];
+        this.filterOperator = self.params.behaviour.catFilters[0]["filterOperator"];
+      }
+    }
+
     this.userSelectedCategory ='';
     if (this.cardsOrderMode == 'normal') {
       this.enableCardsNumber = false;
@@ -173,51 +192,15 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       this.leftSideMode = undefined
     } 
           
-    // Copy parameters for further use if save content state.
-    //console.log (JSON.stringify(self.params.dialogs, null, "  "));
+    // Copy parameters for further use if save content state.    
     self.dialogs = self.copy(self.params.dialogs);
-    
     this.noFilterMessage = '';
-    if (self.params.categoriesFilter !== undefined && this.filterByCategories == 'authorFilter') {
-      var catFilter = self.params.categoriesFilter;
-      console.log ('catFilter = ' + catFilter);
-      var catFilterLength = catFilter.split(',').length;
-      //console.log ('self.params.filterCondition = ' + self.params.filterCondition);
-      //console.log('catFilter.length = ' + catFilter.split(',').length)
-      // if categories not empty
-      var catDialogs = []  
-      for (var i = 0; i < self.dialogs.length; i++) {
-        if (self.dialogs[i].itemCategories !== undefined) {
-          itemCats = self.dialogs[i].itemCategories.split(',');
-          var isSelected = 0; 
-          for (var j = 0; j < itemCats.length; j++) {
-            //console.log('itemCats[j] = ' + itemCats[j])      
-            if (catFilter.includes(itemCats[j])) {
-              //console.log ('OK self.dialogs[i].text =  '+ self.dialogs[i].text);
-              isSelected++;                    
-            }
-          }
-          //console.log('j = ' + j + ' isSelected = '+ isSelected)
-          if (isSelected == catFilterLength || (self.params.filterCondition == "OR" && isSelected !== 0)) {
-            catDialogs[i] = self.dialogs[i]
-          }
-        } 
-      }
-      //console.log (JSON.stringify(catDialogs, null, "  "));
-      var filtered = catDialogs.filter(function (el) {
-        return el != null;
-      });
-       
-      //console.log (JSON.stringify(self.dialogs, null, "  "));
-      if (!filtered.length) {
-        this.noFilterMessage = "ERROR! categories filter returned an empty result. No filter will be applied."
-      } else {
-        self.params.dialogs = filtered;
-        self.dialogs = self.copy(self.params.dialogs);
-      }
+    if (self.params.enableCategories && this.filterList !== undefined && this.filterByCategories == 'authorFilter') {
+      self.applyFilter(this.filterList, this.filterOperator, false);
+      this.currentFilter = self.makeCurrentFilterName(this.filterList, this.filterOperator);
     }
     
-    //self.dialogs = self.copy(self.params.dialogs);
+    // todo ?
     self.nbCards = self.dialogs.length;
     this.cardsLeftInStack = this.nbCardsSelected;
     this.nbCardsInCurrentRound = self.nbCards;
@@ -331,10 +314,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       this.existsCardOrder = false;
     }
     
-    // Create cardOrder and cardNumber buttons only on first instanciation for logged in user.
-    
+    // Create filterCard, cardOrder and cardNumber buttons only on first instanciation for logged in user.
     if (this.filterByCategories == 'userFilter') {
-       self.createFilterCards().appendTo(self.$inner);
+       self.createFilterCards().appendTo(self.$inner);       
     } else if (this.cardsOrderChoice == 'user' && this.cardOrder === undefined) {
         self.createOrder().appendTo(self.$inner);
     } else if (this.enableCardsNumber && this.nbCardsSelected === undefined && self.nbCards > 5) {
@@ -345,8 +327,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         self.createcardsSideChoice().appendTo(self.$inner);       
     } else {
         self.attachContinue();
-    };
-        
+    };    
   };
 
   /**
@@ -359,6 +340,10 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     // Section to show the Display cards options if different from "normal".
     var text = '';
     var order = '';
+    if (this.currentFilter !== undefined) {
+      var filterNotice = self.params.currentFilterNotice;      
+      text+= filterNotice + ' ' + this.currentFilter + '<br>';
+    }
     if (this.cardsOrderChoice == 'user') {
       var orderNotice = self.params.currentOrderNotice; 
       if (this.matchIt) {
@@ -409,8 +394,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (self.params.behaviour.scaleTextNotCard) {
       self.$inner.addClass('h5p-text-scaling');
     }
-    //console.log ('412 *****' + JSON.stringify(self.dialogs, null, "  "));
-    self.nbCards = self.dialogs.length;
     self.initCards(self.dialogs)
       .appendTo(self.$inner);
 
@@ -470,11 +453,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           self.gotItCorrect($(this).parents('.h5p-dialogcards-cardwrap'));
         } else {
           this.incorrect--;
-          //self.gotItIncorrect($(this).parents('.h5p-dialogcards-cardwrap'));
           self.gotItIncorrect();
         }
     }
-    
   };
 
 
@@ -649,7 +630,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    */
   C.prototype.createNumberCards = function () {
     var self = this;
-    var numCards = self.params.dialogs.length;
+    // todo ?
+    //var numCards = self.params.dialogs.length;
+    var numCards = self.dialogs.length;
     var $numberCards = $('<div>', {
       'class': 'h5p-dialogcards-number h5p-dialogcards-options',
       'html': self.params.numCardsQuestion
@@ -674,7 +657,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           'html': i,
           'id': 'dc-number-' + i
         }).click(function () {
-            self.nbCards = this.title;        
+            self.nbCards = this.title;
+            this.nbCards = this.title;                                
             if (self.matchIt) {
               if (self.leftSideChoice == 'user' && !this.reverse) {
                 $( '.h5p-dialogcards-number', self.$inner ).remove();
@@ -715,9 +699,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
             };
           }
         }).appendTo($optionButtons);
-
     return $numberCards;
   };
+
 
   /**
    * Create filterCards option request
@@ -726,54 +710,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    */
   C.prototype.createFilterCards = function () {
     var self = this;
-    console.log('createFilterCards');
-    // build the full list of categories from the cards itemCategories field
-    var catList = '';
-    for (var i = 0; i < self.dialogs.length; i++) {
-      if (self.dialogs[i].itemCategories !== undefined) {
-      //console.log ('self.dialogs[i].itemCategories = ' + self.dialogs[i].itemCategories);
-        //catDialogs[i] = self.dialogs[i].itemCategories.split(',');
-        catList += self.dialogs[i].itemCategories.split(',');
-        catList += ','
-      }
-    }
-    console.log (JSON.stringify(catList, null, "  "));
-    
-    // Remove duplicates from list    
-    /*
-    catList = catList.split(',').filter(function(item,i,allItems) {
-      return i == allItems.indexOf(item);
-    }).join(',');
-    */
-    
-    // Remove trailing comma
-    catList = catList.substring(0, catList.length - 1);
-    
-    
-    //console.log (catList + ' ' + numCats);
-    catList = catList.split(',');
-    items = catList;
-    console.log (JSON.stringify(catList, null, "  "));
-    catList.sort(function (a, b) {
-      return a.localeCompare(b); //using String.prototype.localCompare()
-    });
-    
-    var counts = {};
-      catList.forEach(function(x) { counts[x] = (counts[x] || 0)+1; 
-    });
-    console.log (JSON.stringify(counts, null, "  "));
-    catList = counts;
-    
-    
-    
-    catList['All Categories'] = 7;
-    var numCats = Object.keys(catList).length;
-    console.log ('numCats = ' + numCats + ' ' + JSON.stringify(catList, null, "  "));
-    
-    
     var $filterCards = $('<div>', {
       'class': 'h5p-dialogcards-categories h5p-dialogcards-options',
-      'html': 'Select one card category'
+      'html': self.params.selectFilter
     });
     
     var $optionButtons = $('<div>', {
@@ -781,36 +720,48 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }).appendTo($filterCards);
     
     var $class = '';
-    // todo retrieve description from categories list fields
-    var i = 0;
-    $.each(catList, function(key, value) {
-      if (i == numCats - 1) {
+    self.nofilter = false;
+    for (var i = 0; i < this.catFilters.length + 1; i++) {
+      if (i < this.catFilters.length) {
+        var filterList = this.catFilters[i]["filterList"];
+        var filterOperator = this.catFilters[i]["filterOperator"]
+        var numCardsInCats = self.applyFilter(filterList, filterOperator, true);
+        var catName = self.makeCurrentFilterName(filterList, filterOperator);
+      } else {
+        catName = self.params.allCards; 
         $class = 'h5p-dialogcards-allCategories-button';
+        numCardsInCats = self.params.dialogs.length;
       }
-      
-      self.$button = JoubelUI.createButton({
-          'class': $class,
-          'title': key + ' (' + value + ')',
-          'html': key + ' (' + value + ')',
-          'id': key
-        }).click(function () {
-            $( '.h5p-dialogcards-categories', self.$inner ).remove();
-            self.userSelectedCategory = this.id;
-            if (self.userSelectedCategory !== 'All Categories') {
-              self.applyFilter(self.userSelectedCategory);
-            }        
-            if (self.cardsOrderChoice == 'user' && this.cardOrder === undefined) {
-              self.createOrder().appendTo(self.$inner);
-            } else {
-              self.attachContinue();
-            }
+      if (numCardsInCats) {
+        self.$button = JoubelUI.createButton({
+            'class': $class,
+            'title': catName,
+            'html': catName + ' (' + numCardsInCats + ')',
+            'id': i,
+            'filterList': filterList,
+            'filterOperator': filterOperator
+          }).click(function () {
+              $( '.h5p-dialogcards-categories', self.$inner ).remove();
+              if (this.id < i - 1) {
+                self.applyFilter(self.catFilters[this.id]["filterList"], self.catFilters[this.id]["filterOperator"]);
+                self.currentFilter = this.title;
+              }
+              if (self.cardsOrderChoice == 'user' && self.cardOrder === undefined) {
+                self.createOrder().appendTo(self.$inner);
+              } else  if (self.enableCardsNumber && self.nbCardsSelected === undefined && self.nbCards > 5) {
+                self.createNumberCards().appendTo(self.$inner);
+              }  else if (self.matchIt && self.leftSideChoice == 'user' && self.leftSideMode == 'user') {
+                self.createleftSideChoice().appendTo(self.$inner)
+              } else if (!self.matchIt && self.cardsSideChoice == 'user' && self.cardsSideMode == 'user') {
+                  self.createcardsSideChoice().appendTo(self.$inner);       
+              } else {
+                  self.attachContinue();
+              }
           }).appendTo($optionButtons);
-      i++;
-    });
-      
+      }
+    };
     return $filterCards;
   };
-
 
   /**
    * Create footer/navigation line
@@ -993,7 +944,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    * @returns {*|jQuery|HTMLElement} Card wrapper set
    */
   C.prototype.initCards = function (cards) {
-  
     // Reversed cards array to be used in these options.    
     if (this.reverse) {
       for (var i = 0; i < cards.length; i++) {
@@ -1029,7 +979,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
     
     var self = this;
-    console.log ('self.userSelectedCategory = ' + self.userSelectedCategory);
     var loaded = 0;
     var existsCardOrder = true;
     if ($.isEmptyObject(this.cardOrder)) {
@@ -1056,6 +1005,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       }
 
       // Retrieve cards objects from the first index
+      // TODO bug with categories
       var randomCards = [];
       for (var i = 0; i < self.nbCards; i++) {
         randomCards[i] = cardOrdering[i][0];
@@ -3124,6 +3074,7 @@ C.prototype.matchCardsRepetition = function ($card) {
    */
 
   C.prototype.resetTask = function () {
+  // todo reset filters if any
     self = this;
     self.answered = false;
     this.cardsLeft = self.params.dialogs.length;
@@ -3131,7 +3082,8 @@ C.prototype.matchCardsRepetition = function ($card) {
     this.correct = 0;
     this.incorrect = 0;
     this.$current = undefined;
-    self.dialogs = self.copy(self.params.dialogs);
+    //self.dialogs = self.copy(self.params.dialogs);
+    self.dialogs = self.params.dialogs;
     self.getCurrentState();
     
     if (this.repetition) {
@@ -3154,7 +3106,10 @@ C.prototype.matchCardsRepetition = function ($card) {
     self.cardOrder = -1;
     self.cardSizeDetermined = [];
     self.cardsLeftInStack = self.nbCards;
-    if (this.cardsOrderChoice == 'user') {
+    if (this.filterByCategories == 'userFilter') {
+      self.nbCardsSelected = undefined;
+      self.createFilterCards().appendTo(self.$inner);       
+    } else if (this.cardsOrderChoice == 'user') {
       self.createOrder().appendTo(self.$inner);
     } else if (this.enableCardsNumber && self.nbCards > 5) {
       self.createNumberCards()
@@ -3377,34 +3332,67 @@ C.prototype.matchCardsRepetition = function ($card) {
     return bObject;
   };
   
-  C.prototype.applyFilter = function(selectedCategory) {
-  console.log('selectedCategory = ' + selectedCategory)
+  C.prototype.applyFilter = function(filterList, filterOperator, dryRun = false) {
     var self = this;
-    var catDialogs = []  
+    var filterListLength = filterList.split(',').length;
+    var catDialogs = [];
+    var isSelected = 0;
+    var notSelected = 0;
+    var numCardsInCats = 0;
+    
     for (var i = 0; i < self.dialogs.length; i++) {
       if (self.dialogs[i].itemCategories !== undefined) {
         itemCats = self.dialogs[i].itemCategories.split(',');
-        var isSelected = 0; 
-        for (var j = 0; j < itemCats.length; j++) {
-          //console.log('itemCats[j] = ' + itemCats[j])      
-          if (itemCats[j] == selectedCategory) {
-            //console.log ('OK self.dialogs[i].text =  '+ self.dialogs[i].text);
-            isSelected++;
-            catDialogs[i] = self.dialogs[i];                    
+        isSelected = 0;
+        notSelected = 0; 
+        for (var j = 0; j < itemCats.length; j++) {      
+          if (filterOperator == 'AND' || filterOperator == 'OR') {
+            if (filterList.includes(itemCats[j])) {
+              isSelected++;                    
+            }        
+          } else { // filterOperator == 'NOT'
+             if (filterList.includes(itemCats[j])) {
+              notSelected++;                    
+            } 
           }
         }
-        
+        if (isSelected == filterListLength 
+          || (filterOperator == "OR" && isSelected !== 0)
+          || (filterOperator == "NOT" && notSelected == 0)
+          ) 
+        {
+          if (dryRun) {
+            numCardsInCats ++;
+          } else {
+            catDialogs[i] = self.dialogs[i];
+          }
+        }
       } 
     }
-    //console.log (JSON.stringify(catDialogs, null, "  "));
+    if (dryRun) {
+      return numCardsInCats;
+    }
     var filtered = catDialogs.filter(function (el) {
       return el != null;
     });
-    self.params.dialogs = filtered;
-    self.dialogs = self.copy(self.params.dialogs);
-    //console.log (JSON.stringify(self.dialogs, null, "  "));      
+    if (!filtered.length) {
+      this.noFilterMessage = "ERROR! categories filter returned an empty result. No filter will be applied."
+    } else {
+      //self.params.dialogs = filtered;
+      //self.dialogs = self.copy(self.params.dialogs);
+      self.dialogs = filtered;
+      this.nbCards = self.dialogs.length;
+    }      
   };
   
+  C.prototype.makeCurrentFilterName = function(catList, catOperator) {
+    if (catOperator == 'AND' || catOperator == 'OR' ) {
+        filterName = catList.replace(/,/g, " " + catOperator + " ");
+      } else if (catOperator == 'NOT') {
+        filterName = "NOT " + catList.replace(/,/g, " " + catOperator + " ");
+      } 
+      return filterName;  
+  };
   
   C.SCALEINTERVAL = 0.2;
   C.MAXSCALE = 16;
