@@ -689,3 +689,6 @@
 .h5p-dialogcards .h5p-dialogcards-allCategories-button:hover {
   background: darkgreen;
 }
+.h5p-dialogcards .h5p-dialogcards-options .h5p-joubelui-button:first-child {
+  margin-left: 0.5em;
+}

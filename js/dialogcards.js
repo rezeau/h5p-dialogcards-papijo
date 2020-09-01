@@ -69,7 +69,11 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       reverseLeftSide: 'Switch the current display mode of Left card side to @side?',
       currentLeftSideNotice: "Current display mode: Left card = ",
       currentFilterNotice: "Current Filter = ",
-      selectFilter: "Select a filter for the cards to be displayed",      
+      selectFilter: "Select a filter for the cards to be displayed",
+      noFilter: "No filter",
+      boolean_AND: "AND",
+      boolean_OR: "OR",
+      boolean_NOT: "NOT",      
       normalOrder: "Normal",
       randomOrder: "Random",
       categories: [
@@ -139,9 +143,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       }
       if (!$.isEmptyObject(this.catFilters)) {
         this.filterByCategories = self.params.behaviour.filterByCategories;
-        // Default list and operator in author filter.
-        this.filterList = self.params.behaviour.catFilters[0]["filterList"];
-        this.filterOperator = self.params.behaviour.catFilters[0]["filterOperator"];
       }
     }
 
@@ -149,21 +150,24 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (this.cardsOrderMode == 'normal') {
       this.enableCardsNumber = false;
     }
-    this.cardsSideChoice = self.params.behaviour.cardsSideChoice;    
-    this.cardsSideMode = this.cardsSideChoice;
-    this.leftSideChoice = self.params.behaviour.leftSideChoice;    
-    this.leftSideMode = this.leftSideChoice;
-    
     this.matchCorrect = null;
     this.existsCardOrder = false;
-    this.playMode = self.params.behaviour.playMode;
     this.repetition = false;
-    
     this.hideFrontImage = self.params.behaviour.hideFrontImage;
+    
+    this.playMode = self.params.behaviour.playMode;
     
     if (this.playMode == 'matchRepetition') {
       this.playMode = 'matchMode';
       this.repetition = true;      
+    }
+    
+    if (this.playMode == 'matchMode') {
+      this.leftSideChoice = self.params.behaviour.leftSideChoice;    
+      this.leftSideMode = this.leftSideChoice;
+    } else {
+      this.cardsSideChoice = self.params.behaviour.cardsSideChoice;    
+      this.cardsSideMode = this.cardsSideChoice;
     }
     
     if (this.playMode == 'matchMode') {      
@@ -183,24 +187,24 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       this.enableGotIt = true;
       self.enableGotIt = true;
     }
-    // Just in case they were previously selected in the options...    
-    if (this.matchIt) {
-      this.cardsSideChoice = undefined;
-      this.cardsSideMode = undefined;
-      this.nbtries = 0;
-    } else {
-      this.leftSideMode = undefined
-    } 
+    
+    // Used in the retry() function to determine if the options screen must be displayed upon re-trying the activity.
+    if (this.cardsOrderChoice == 'user' || this.cardsSideChoice == 'user' 
+      || this.leftSideChoice == 'user' || this.enableCardsNumber 
+      || this.filterByCategories == 'userFilter') {
+      this.userChoice = true;
+      }
           
     // Copy parameters for further use if save content state.    
     self.dialogs = self.copy(self.params.dialogs);
-    this.noFilterMessage = '';
-    if (self.params.enableCategories && this.filterList !== undefined && this.filterByCategories == 'authorFilter') {
+    this.noFilterMessage = '';    
+    if (self.params.enableCategories && this.filterByCategories == 'authorFilter') {
+      this.filterList = self.params.behaviour.catFilters[0]["filterList"];
+      this.filterOperator = self.params.behaviour.catFilters[0]["filterOperator"];
       self.applyFilter(this.filterList, this.filterOperator, false);
       this.currentFilter = self.makeCurrentFilterName(this.filterList, this.filterOperator);
     }
     
-    // todo ?
     self.nbCards = self.dialogs.length;
     this.cardsLeftInStack = this.nbCardsSelected;
     this.nbCardsInCurrentRound = self.nbCards;
@@ -234,6 +238,18 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       }
       if (this.contentData.previousState.incorrect !== undefined) {
         this.incorrect = this.contentData.previousState.incorrect;
+      }
+      if (this.contentData.previousState.filterByCategories !== undefined) {
+        this.filterByCategories = this.contentData.previousState.filterByCategories;
+      }
+      if (this.contentData.previousState.currentFilter !== undefined) {
+        this.currentFilter = this.contentData.previousState.currentFilter;
+      }
+      if (this.contentData.previousState.filterList !== undefined) {
+        this.filterList = this.contentData.previousState.filterList;
+      }
+      if (this.contentData.previousState.filterOperator !== undefined) {
+        this.filterOperator = this.contentData.previousState.filterOperator;
       }
       if (this.contentData.previousState.cardsOrderChoice !== undefined) {
         this.cardsOrderChoice = this.contentData.previousState.cardsOrderChoice;
@@ -277,7 +293,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         this.lastCorrect = this.contentData.previousState.lastCorrect;
       }
       this.taskFinished = (contentData.previousState.taskFinished !== undefined ? contentData.previousState.taskFinished : false);
-     
+      
     }
     
   }
@@ -291,7 +307,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    */
   C.prototype.attach = function ($container) {
     var self = this;
-    
     self.$inner = $container
       .addClass('h5p-dialogcards')
       .append($('' + 
@@ -307,7 +322,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       return;
     }
     
-    
     if (!$.isEmptyObject(this.cardOrder)) {
       this.existsCardOrder = true;
     } else {
@@ -315,7 +329,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
     
     // Create filterCard, cardOrder and cardNumber buttons only on first instanciation for logged in user.
-    if (this.filterByCategories == 'userFilter') {
+    if (this.filterByCategories == 'userFilter' && this.currentFilter === undefined) {
        self.createFilterCards().appendTo(self.$inner);       
     } else if (this.cardsOrderChoice == 'user' && this.cardOrder === undefined) {
         self.createOrder().appendTo(self.$inner);
@@ -394,6 +408,11 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (self.params.behaviour.scaleTextNotCard) {
       self.$inner.addClass('h5p-text-scaling');
     }
+
+    if (this.contentData.previousState && this.filterList !== undefined) {
+      self.applyFilter(this.filterList, this.filterOperator, false);
+    }
+    
     self.initCards(self.dialogs)
       .appendTo(self.$inner);
 
@@ -438,6 +457,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     self.on('resize', self.resize);
     self.trigger('resize');
     self.getCurrentState();
+    
     
     // we are refreshing from a "next round" screen, so... reset everything to get there    
     if (this.repetition && this.cardsLeft == 0) {
@@ -710,6 +730,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    */
   C.prototype.createFilterCards = function () {
     var self = this;
+    // Init params    
     var $filterCards = $('<div>', {
       'class': 'h5p-dialogcards-categories h5p-dialogcards-options',
       'html': self.params.selectFilter
@@ -721,17 +742,25 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     
     var $class = '';
     self.nofilter = false;
+    catNames = [];
     for (var i = 0; i < this.catFilters.length + 1; i++) {
       if (i < this.catFilters.length) {
         var filterList = this.catFilters[i]["filterList"];
         var filterOperator = this.catFilters[i]["filterOperator"]
         var numCardsInCats = self.applyFilter(filterList, filterOperator, true);
         var catName = self.makeCurrentFilterName(filterList, filterOperator);
+        // Prevent duplicate filters in list!
+        if (catNames.includes(catName)) {
+          continue;
+        }
+        catNames.push(catName);
       } else {
-        catName = self.params.allCards; 
+        catName = self.params.noFilter; 
         $class = 'h5p-dialogcards-allCategories-button';
         numCardsInCats = self.params.dialogs.length;
       }
+      this.filterList = undefined;
+      this.filterOperator = undefined;
       if (numCardsInCats) {
         self.$button = JoubelUI.createButton({
             'class': $class,
@@ -743,10 +772,14 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           }).click(function () {
               $( '.h5p-dialogcards-categories', self.$inner ).remove();
               if (this.id < i - 1) {
-                self.applyFilter(self.catFilters[this.id]["filterList"], self.catFilters[this.id]["filterOperator"]);
+                self.filterList = self.catFilters[this.id]["filterList"];
+                self.filterOperator = self.catFilters[this.id]["filterOperator"];
+                self.applyFilter(self.filterList, self.filterOperator);
                 self.currentFilter = this.title;
+              } else {
+                self.currentFilter = self.params.noFilter;
               }
-              if (self.cardsOrderChoice == 'user' && self.cardOrder === undefined) {
+              if (self.cardsOrderChoice == 'user' && self.cardOrder == undefined) {
                 self.createOrder().appendTo(self.$inner);
               } else  if (self.enableCardsNumber && self.nbCardsSelected === undefined && self.nbCards > 5) {
                 self.createNumberCards().appendTo(self.$inner);
@@ -2170,10 +2203,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     $( '.h5p-dialogcards-options', self.$inner).remove();
     var $optionsText = self.$inner.find('.h5p-dialogcards-options');
     $optionsText.html('');
-    if (!this.enableGotIt 
-      && (this.cardsOrderChoice == 'user' || this.cardsSideChoice == 'user' 
-      || this.leftSideChoice == 'user' || this.enableCardsNumber)
-      ) {
+    if (!this.enableGotIt && this.userChoice) {
       this.taskFinished = true;
       var $cards = self.$inner.find('.h5p-dialogcards-cardwrap');
       $cards.each(function (index) {
@@ -3074,7 +3104,6 @@ C.prototype.matchCardsRepetition = function ($card) {
    */
 
   C.prototype.resetTask = function () {
-  // todo reset filters if any
     self = this;
     self.answered = false;
     this.cardsLeft = self.params.dialogs.length;
@@ -3102,10 +3131,22 @@ C.prototype.matchCardsRepetition = function ($card) {
     self.taskFinished = false;
     self.dialogs = self.params.dialogs;
     self.nbCards = self.params.dialogs.length;
-    this.nbCardsInCurrentRound = self.nbCards; 
-    self.cardOrder = -1;
+    this.nbCardsInCurrentRound = self.nbCards;
+    this.cardsSideChoice = self.params.behaviour.cardsSideChoice;
+    this.cardsOrderChoice = self.params.behaviour.cardsOrderChoice;
+    this.cardsOrderMode = this.cardsOrderChoice; 
+    this.cardOrder = undefined;
     self.cardSizeDetermined = [];
     self.cardsLeftInStack = self.nbCards;
+    // Categories filter determined by author, reset filter and re-start at zero (first card).
+    if (self.params.enableCategories && this.filterList !== undefined && this.filterByCategories == 'authorFilter') {
+      self.applyFilter(this.filterList, this.filterOperator, false);
+      this.currentFilter = self.makeCurrentFilterName(this.filterList, this.filterOperator);
+      this.progress = 0;
+    }
+    this.filterList = undefined;
+    this.filterOperator = undefined;
+    
     if (this.filterByCategories == 'userFilter') {
       self.nbCardsSelected = undefined;
       self.createFilterCards().appendTo(self.$inner);       
@@ -3115,8 +3156,7 @@ C.prototype.matchCardsRepetition = function ($card) {
       self.createNumberCards()
         .appendTo(self.$inner);
     } else {
-      // Create cardsSideChoice buttons only on first instanciation for logged in user.
-      if (!this.matchIt && this.cardsSideChoice == 'user') {
+      if (!this.matchIt && this.cardsSideChoice == 'user') {      
           self.createcardsSideChoice().appendTo(self.$inner);                  
       } else if (this.matchIt && this.leftSideChoice == 'user') {
           self.createleftSideChoice().appendTo(self.$inner)
@@ -3297,6 +3337,12 @@ C.prototype.matchCardsRepetition = function ($card) {
     if (this.playMode == 'selfCorrectionMode') {
       state.lastCorrect = !this.endOfStack;
     }    
+    if (this.filterByCategories) {
+      state.filterByCategories = this.filterByCategories;
+      state.filterList = this.filterList;
+      state.filterOperator = this.filterOperator;
+      state.currentFilter = this.currentFilter;
+    }
     state.currentRound = this.currentRound;
     state.correct = this.correct;
     state.incorrect = this.incorrect;
@@ -3305,7 +3351,7 @@ C.prototype.matchCardsRepetition = function ($card) {
     state.nbCardsLeft = this.cardsLeft;
     state.order = this.cardOrder;
     state.noMatchCards = this.noMatchCards;
-    state.cardsOrderChoice = this.cardsOrderMode;
+    state.cardsOrderChoice = this.cardsOrderChoice;
     state.cardsOrderMode = this.cardsOrderMode;
     state.enableCardsNumber = this.enableCardsNumber;
     state.cardsSideChoice = this.cardsSideChoice;
@@ -3339,7 +3385,6 @@ C.prototype.matchCardsRepetition = function ($card) {
     var isSelected = 0;
     var notSelected = 0;
     var numCardsInCats = 0;
-    
     for (var i = 0; i < self.dialogs.length; i++) {
       if (self.dialogs[i].itemCategories !== undefined) {
         itemCats = self.dialogs[i].itemCategories.split(',');
@@ -3378,19 +3423,21 @@ C.prototype.matchCardsRepetition = function ($card) {
     if (!filtered.length) {
       this.noFilterMessage = "ERROR! categories filter returned an empty result. No filter will be applied."
     } else {
-      //self.params.dialogs = filtered;
-      //self.dialogs = self.copy(self.params.dialogs);
-      self.dialogs = filtered;
+      this.dialogs = filtered;
       this.nbCards = self.dialogs.length;
+      return filtered;
     }      
   };
   
   C.prototype.makeCurrentFilterName = function(catList, catOperator) {
-    if (catOperator == 'AND' || catOperator == 'OR' ) {
-        filterName = catList.replace(/,/g, " " + catOperator + " ");
-      } else if (catOperator == 'NOT') {
-        filterName = "NOT " + catList.replace(/,/g, " " + catOperator + " ");
-      } 
+    var self = this;
+    if (catOperator == 'AND') {
+      filterName = catList.replace(/,/g, " " + self.params.boolean_AND + " ");
+    } else if (catOperator == 'OR' ) {
+      filterName = catList.replace(/,/g, " " + self.params.boolean_OR + " ");
+    } else if (catOperator == 'NOT') {
+      filterName = self.params.boolean_NOT + ' ' + catList.replace(/,/g, " " + self.params.boolean_NOT + " ");
+    } 
       return filterName;  
   };
   

@@ -105,16 +105,16 @@
               {
                 "label": "Opérateur booléen",
                 "default": "AND",
-                "description": "Sélectionnez l'opérateur booléen qui doit traiter la liste de filtres définie ci-dessus. La valeur par défaut est AND.",
+                "description": "Sélectionnez l'opérateur booléen qui doit traiter la liste de filtres définie ci-dessus. La valeur par défaut est ET. L'opérateur ET limitera le choix aux cartes qui appartiennent à TOUTES les catégories énumérées dans ce filtre. L'opérateur OU élargira le choix à toutes les cartes qui appartiennent à au moins UNE catégorie. L'opérateur SAUF exclura toutes les cartes appartenant à toute catégorie énumérée dans le filtre.",
                 "options": [
                   {
-                    "label": "AND"
+                    "label": "ET"
                   },
                   {
-                    "label": "OR"
+                    "label": "OU"
                   },
                   {
-                    "label": "NOT"
+                    "label": "SAUF"
                   }
                 ]
               }
@@ -499,6 +499,22 @@
     {
       "label": "Demander à l'utilisateur de choisir un filtre parmi ceux disponibles.",
       "default": "Choisissez un filtre"
+    },
+    {
+      "label": "Étiquette utilisée pour indiquer à l'utilisateur que les cartes ne sont pas filtrées",
+      "default": "Aucun filtre"
+    },
+    {
+      "label": "Nom de l'opérateur booléen AND",
+      "default": "ET"
+    },
+    {
+      "label": "Nom de l'opérateur booléen OU",
+      "default": "OU"
+    },
+    {
+      "label": "Nom de l'opérateur booléen NOT",
+      "default": "SAUF"
     }
   ]
 }
