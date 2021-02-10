@@ -131,6 +131,10 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.cardsOrderMode = this.cardsOrderChoice;
     this.enableCardsNumber = self.params.behaviour.enableCardsNumber;
     
+    // JR DEV for adrian
+    this.imagesOnly = false;
+    this.imagesOnly = true;
+    
     // IF categories filters enabled!!!
     if (self.params.enableCategories && self.params.behaviour.catFilters) {
       this.catFilters = self.params.behaviour.catFilters;
@@ -1242,6 +1246,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       self.createCardImage(card, setCardSizeCallback, isLeft = false)
         .appendTo($cardContent);
     }
+        
     var $cardTextWrapper = $('<div>', {
       'class': 'h5p-dialogcards-card-text-wrapper'
     }).appendTo($cardContent);
@@ -1249,8 +1254,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     var $cardTextInner = $('<div>', {
       'class': 'h5p-dialogcards-card-text-inner'
     }).appendTo($cardTextWrapper);
-
-    var $cardTextInnerContent = $('<div>', {
+    
+        var $cardTextInnerContent = $('<div>', {
       'class': 'h5p-dialogcards-card-text-inner-content'
     }).appendTo($cardTextInner);
     
@@ -1272,11 +1277,18 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
     if (!card.text || !card.text.length) {
       $cardText.addClass('hide');
-    }
-
-    self.createCardFooter()
-      .appendTo($cardTextWrapper);
-
+    }                               
+    
+    if (!this.imagesOnly) {
+      self.createCardFooter()
+        .appendTo($cardTextWrapper);
+    } else {
+      $cardTextWrapper.addClass('hide');
+      self.createCardFooter()
+        .appendTo($cardContent)
+        .addClass('spacer');   
+    } 
+    
     return $cardContent;
   };
   
@@ -1441,7 +1453,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (this.enableGotIt) {
       this.$buttonIncorrect = H5P.JoubelUI.createButton({
         'class': 'h5p-dialogcards-answer-button',
-        'html': this.params.incorrectAnswer
+        'html': this.params.incorrectAnswer 
       }).click(function () {
           self.gotItIncorrect();
       }).addClass('incorrect')
@@ -1466,7 +1478,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       }).click(function () {
         self.turnCard($(this).parents('.h5p-dialogcards-cardwrap'));
       }).attr('tabindex', 1)
-        .appendTo($cardFooter);
+        .appendTo($cardFooter);        
     } else {
       this.$buttonMatch = H5P.JoubelUI.createButton({
         'class': 'h5p-dialogcards-button-match',
@@ -2298,6 +2310,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     self.resizeOverflowingText();
     self.setCardFocus(self.$current);
     self.$current.find('.h5p-dialogcards-answer-button-off').removeClass('h5p-dialogcards-disabled');
+    if (this.imagesOnly) {
+          self.$current.find('.h5p-dialogcards-card-text-wrapper').addClass('hide');
+        }
     self.resetButtons('restart');
   };
 
@@ -2385,6 +2400,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    */
   C.prototype.resize = function () {
     var self = this;
+    element = self.$footer;
+    var $content = $('.h5p-dialogcards-card-content', this);
+    var $text = $('.h5p-dialogcards-card-text-inner-content', $content);
     var maxHeight = 0;
     self.updateImageSize();
     if (!self.params.behaviour.scaleTextNotCard) {
@@ -2409,9 +2427,13 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     });
     var relativeMaxHeight = maxHeight / parseFloat(self.$cardwrapperSet.css('font-size'));
     self.$cardwrapperSet.css('height', relativeMaxHeight + 'em');
+    
     self.scaleToFitHeight();
     if (!this.$retry) {
       self.truncateRetryButton();
+    }
+    if (this.playMode == 'selfCorrectionMode') {
+      self.truncateAnswerButtons();
     }
     self.resizeOverflowingText();
   };
@@ -2653,13 +2675,51 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     var retryWidth = self.$retry.get(0).getBoundingClientRect().width +
         parseFloat(self.$retry.css('margin-left')) + parseFloat(self.$retry.css('margin-right'));
     var retryWidthPercentage = retryWidth / self.$retry.parent().get(0).getBoundingClientRect().width;
-
     // Truncate button
     if (retryWidthPercentage > maxWidthPercentages) {
       self.$retry.addClass('truncated');
       self.$retry.html('');
     }
   };
+
+  /**
+   * Truncate "got it right/wrong" buttons if width is small, e.g. on smartphones.
+   * This will simply enable or disable their HTML text.
+   */
+  C.prototype.truncateAnswerButtons = function () {
+    var self = this;
+    // Reset html text
+    var $answerButtonCorrect = self.$inner.find('.h5p-dialogcards-answer-button.correct');
+    var $answerButtonCorrectOff = self.$inner.find('.h5p-dialogcards-answer-button-off.h5p-joubelui-button.correct');
+    $answerButtonCorrect.html(this.params.correctAnswer);
+    $answerButtonCorrectOff.html(this.params.correctAnswer);
+    
+    var $answerButtonInCorrect = self.$inner.find('.h5p-dialogcards-answer-button.incorrect');
+    var $answerButtonInCorrectOff = self.$inner.find('.h5p-dialogcards-answer-button-off.h5p-joubelui-button.incorrect');
+    $answerButtonInCorrect.html(this.params.incorrectAnswer);
+    $answerButtonInCorrectOff.html(this.params.incorrectAnswer);
+    
+    // Truncate button
+    var w = $(window).width();
+    // TODO revise this truncation system
+    /*
+    var $footerWidth = $answerButtonCorrect.parent()[0].getBoundingClientRect().width;
+    console.log ('window width = ' + w + ' $footerWidth = ' + $footerWidth);
+    var $card = self.$current.find('.h5p-dialogcards-card-content');
+    console.log ('card width = ' + $card.get(0).getBoundingClientRect().width);
+    */
+    // Supposed to be a smartphone
+    
+    if (w < 400) {
+      //setTimeout(function () {
+        $answerButtonCorrect.html('');
+        $answerButtonCorrectOff.html('');
+        $answerButtonInCorrect.html('');
+        $answerButtonInCorrectOff.html('');
+      //}, 100);
+    } 
+  };
+
 
   /**
    * Task is finished.
@@ -3170,7 +3230,7 @@ C.prototype.matchCardsRepetition = function ($card) {
    * Used with repetition modes: gotIt & Match with repetition if task not completed.
    */
 
-  C.prototype.resetButtons = function (type) { 
+  C.prototype.resetButtons = function (type) {
     var self = this;
     $card = self.$current;
     $card.removeClass('h5p-dialogcards-match-right');
@@ -3186,6 +3246,12 @@ C.prototype.matchCardsRepetition = function ($card) {
     } else if (type == 'retry button' || type == 'finished button') {
       // Disable answer buttons, turn button, Hide card text button and Enable the Retry button
       if ($gotIt || this.repetition) {
+        if (this.imagesOnly) {
+          $el = $card.find('.h5p-dialogcards-card-text-wrapper'); 
+          $el.removeClass('hide').addClass('imagesonly');
+          var w = $el.parent().width();
+          $el.width(w);
+        }
         $card.find('.h5p-dialogcards-turn').addClass('h5p-dialogcards-disabled');
         $card.find('.h5p-dialogcards-image-wrapper').addClass('h5p-dialogcards-hide');
         $card.find('.joubel-tip-container').addClass('h5p-dialogcards-hide');
@@ -3240,8 +3306,7 @@ C.prototype.matchCardsRepetition = function ($card) {
         $card.find('.h5p-dialogcards-card-text').removeClass('hide');
                   
         if (type == 'retry button') {
-        
-        this.cardsLeft = 0;        
+          this.cardsLeft = 0;        
           var retryRound = this.currentRound + 1;
           this.$retry.html(this.params.nextRound.replace('@round', this.currentRound + 1));
         } else {

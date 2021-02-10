@@ -139,7 +139,8 @@
   transform: translate(-50%, -50%);
 }
 
-.h5p-dialogcards .h5p-audio-inner.hide {
+.h5p-dialogcards .h5p-audio-inner.hide,
+.h5p-dialogcards .h5p-dialogcards-card-text-wrapper.hide {
   display: none;
 }
 
@@ -691,4 +692,12 @@
 }
 .h5p-dialogcards .h5p-dialogcards-options .h5p-joubelui-button:first-child {
   margin-left: 0.5em;
+}
+.h5p-dialogcards .spacer {
+  margin-top: 1em;
+}
+
+.h5p-dialogcards .h5p-dialogcards-card-text-wrapper.imagesonly {
+  position: absolute;
+  top: 10px;
 }
