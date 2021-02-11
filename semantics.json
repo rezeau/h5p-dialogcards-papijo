@@ -330,6 +330,15 @@
         ]
       },
       {
+        "name": "noTextOnCards",
+        "type": "boolean",
+        "label": "Do not use text?",
+        "description": "Check this box if you only use only images and audio on front and back of cards, no text.",
+        "importance": "medium",
+        "default": false,
+        "optional": true
+      },
+      {
         "name": "enableRetry",
         "type": "boolean",
         "label": "Enable \"Retry\" button",

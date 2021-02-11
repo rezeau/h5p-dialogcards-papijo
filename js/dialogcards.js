@@ -98,6 +98,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       ],
       behaviour: {
         enableRetry: true,
+        noTextOnCards: false,
         scaleTextNotCard: false,
         playMode: 'normalMode',
         cardsOrderChoice: 'user',
@@ -130,10 +131,26 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.cardsOrderChoice = self.params.behaviour.cardsOrderChoice;
     this.cardsOrderMode = this.cardsOrderChoice;
     this.enableCardsNumber = self.params.behaviour.enableCardsNumber;
+    this.noText = self.params.behaviour.noTextOnCards; 
     
-    // JR DEV for adrian
-    this.imagesOnly = false;
-    this.imagesOnly = true;
+    
+    // Remove potential cards without front AND back images. Just in case!
+    if (this.noText) {
+      for (i = 0; i < self.params.dialogs.length; i++) {
+        if (self.params.dialogs[i]['image'] == undefined || self.params.dialogs[i]['image2'] == undefined) {
+          self.params.dialogs.splice(i, 1);
+        i--;  
+        }
+      }
+    }
+    this.hasAudio = false;
+    for (i = 0; i < self.params.dialogs.length; i++) {
+    console.log ('i = ' + i);
+      if (self.params.dialogs[i]['audio'] !== undefined) {
+        this.hasAudio = true;
+        break;
+      }
+    }
     
     // IF categories filters enabled!!!
     if (self.params.enableCategories && self.params.behaviour.catFilters) {
@@ -966,10 +983,19 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (tips !== undefined && tips[side] !== undefined) {
       var tip = tips[side].trim();
       if (tip.length) {
-        $card.find('.h5p-dialogcards-card-text-wrapper .h5p-dialogcards-card-text-inner')
-          .after(JoubelUI.createTip(tip, {
-            tipLabel: self.params.tipButtonLabel
-          }));
+        if (!this.noText) {
+          $card.find('.h5p-dialogcards-card-text-wrapper .h5p-dialogcards-card-text-inner')
+            .after(JoubelUI.createTip(tip, {
+              tipLabel: self.params.tipButtonLabel
+            }));
+        } else {
+          $card.find('.h5p-dialogcards-image-wrapper')            
+            .append(JoubelUI.createTip(tip, {
+              tipLabel: self.params.tipButtonLabel,
+              addclass: 'joubel-tip-notext'
+            }));
+            $card.find('.joubel-tip-container').addClass('noText');
+          }
       }
     }
   };
@@ -1259,11 +1285,13 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       'class': 'h5p-dialogcards-card-text-inner-content'
     }).appendTo($cardTextInner);
     
-    self.createCardAudio(card)
+    if (this.hasAudio) {
+      self.createCardAudio(card)
         .appendTo($cardTextInnerContent);
     
-    self.createCardAudio2(card)
+      self.createCardAudio2(card)
       .appendTo($cardTextInnerContent);
+    }
 
     var $cardText = $('<div>', {
       'class': 'h5p-dialogcards-card-text'
@@ -1278,12 +1306,18 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (!card.text || !card.text.length) {
       $cardText.addClass('hide');
     }                               
-    
-    if (!this.imagesOnly) {
+    console.log('1299 self.params.noTextOnCards = ' + self.params.noTextOnCards);
+    if (!this.noText) {
       self.createCardFooter()
         .appendTo($cardTextWrapper);
     } else {
       $cardTextWrapper.addClass('hide');
+      if (this.hasAudio) {
+        self.createCardAudio(card)
+          .appendTo($cardContent);
+        self.createCardAudio2(card)
+          .appendTo($cardContent);
+      }
       self.createCardFooter()
         .appendTo($cardContent)
         .addClass('spacer');   
@@ -1628,8 +1662,12 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
   C.prototype.createCardAudio = function (card) {
     var self = this;
     var audio = null;
+    var audioClass = 'h5p-dialogcards-audio-wrapper'; 
+    if (this.noText) {
+      audioClass += ' spacer' 
+    }
     var $audioWrapper = $('<div>', {
-      'class': 'h5p-dialogcards-audio-wrapper'
+      'class': audioClass
     });              
     if (card.audio !== undefined) {
       var audioDefaults = {
@@ -1656,8 +1694,12 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
   C.prototype.createCardAudio2 = function (card) { 
     var self = this;
     var audio2 = null;
+    var audioClass = 'h5p-dialogcards-audio-wrapper2 hide'; 
+    if (this.noText) {
+      audioClass += ' spacer' 
+    };
     var $audioWrapper2 = $('<div>', {
-      'class': 'h5p-dialogcards-audio-wrapper2 hide'
+      'class': audioClass
     });
     if (card.audio2 !== undefined) {
       var audioDefaults = {
@@ -2209,6 +2251,10 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    */
   C.prototype.retry = function () {
     var self = this;
+    // To hide the summary text upon retrying
+    if (this.noText) {
+      $card.find('.h5p-dialogcards-card-text-wrapper').addClass('hide');
+    }
     // In case a dark background was set for the cards.
     $card.find('.h5p-dialogcards-card-content').removeClass('h5p-dialogcards-summary-screen');
     self.stopAudio(self.$current.index());
@@ -2310,9 +2356,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     self.resizeOverflowingText();
     self.setCardFocus(self.$current);
     self.$current.find('.h5p-dialogcards-answer-button-off').removeClass('h5p-dialogcards-disabled');
-    if (this.imagesOnly) {
-          self.$current.find('.h5p-dialogcards-card-text-wrapper').addClass('hide');
-        }
     self.resetButtons('restart');
   };
 
@@ -2700,7 +2743,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     $answerButtonInCorrectOff.html(this.params.incorrectAnswer);
     
     // Truncate button
-    var w = $(window).width();
+    
     // TODO revise this truncation system
     /*
     var $footerWidth = $answerButtonCorrect.parent()[0].getBoundingClientRect().width;
@@ -2709,14 +2752,12 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     console.log ('card width = ' + $card.get(0).getBoundingClientRect().width);
     */
     // Supposed to be a smartphone
-    
+    var w = $(window).width();
     if (w < 400) {
-      //setTimeout(function () {
         $answerButtonCorrect.html('');
         $answerButtonCorrectOff.html('');
         $answerButtonInCorrect.html('');
         $answerButtonInCorrectOff.html('');
-      //}, 100);
     } 
   };
 
@@ -3246,9 +3287,9 @@ C.prototype.matchCardsRepetition = function ($card) {
     } else if (type == 'retry button' || type == 'finished button') {
       // Disable answer buttons, turn button, Hide card text button and Enable the Retry button
       if ($gotIt || this.repetition) {
-        if (this.imagesOnly) {
-          $el = $card.find('.h5p-dialogcards-card-text-wrapper'); 
-          $el.removeClass('hide').addClass('imagesonly');
+        if (this.noText) {
+          $el = $card.find('.h5p-dialogcards-card-text-wrapper');
+          $el.removeClass('hide').addClass('noText');
           var w = $el.parent().width();
           $el.width(w);
         }

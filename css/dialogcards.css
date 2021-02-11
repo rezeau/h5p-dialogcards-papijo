@@ -693,11 +693,18 @@
 .h5p-dialogcards .h5p-dialogcards-options .h5p-joubelui-button:first-child {
   margin-left: 0.5em;
 }
-.h5p-dialogcards .spacer {
-  margin-top: 1em;
+.h5p-dialogcards .h5p-dialogcards-card-footer-enablegotit.spacer {
+  margin-top: 2em;
+}
+.h5p-dialogcards .h5p-dialogcards-audio-wrapper.spacer {
+  margin-top: 0.4em;
 }
 
-.h5p-dialogcards .h5p-dialogcards-card-text-wrapper.imagesonly {
+.h5p-dialogcards .joubel-tip-container.noText {  
+  top: 95%;
+}
+
+.h5p-dialogcards .h5p-dialogcards-card-text-wrapper.noText {
   position: absolute;
-  top: 10px;
+  top: 25%;
 }
