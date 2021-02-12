@@ -85,7 +85,7 @@
         {
           "label": "Categories Filtering",
           "entity": "Filter",
-          "description": "Explain how filtering works here...",
+          "description": "Create one or more filters to be used to filter the cards displayed to the end user. Use the Card Categories entered for the cards above.",
           "widgets": [
             {
               "label": "Default"
@@ -105,7 +105,7 @@
               {
                 "label": "Filter Boolean operator",
                 "default": "AND",
-                "description": "Select the boolean operator to operate upon the filter list defined above. Default is AND.",
+                "description": "Select the Boolean operator to process the list of filters defined above. The default value is AND. The AND operator will limit the choice to cards that belong to ALL the categories listed in this filter. The OR operator will expand the choice to all cards that belong to at least ONE category. The NOT operator will exclude all cards belonging to any category listed in the filter.",
                 "options": [
                   {
                     "label": "AND"
@@ -160,6 +160,10 @@
               "label": "Self Correction"
             }
           ]
+        },
+        {
+          "label": "Do not use text?",
+          "description": "Check this box if you only use only images and audio on front and back of cards, no text."
         },
         {
           "label": "Enable \"Retry\" button"
@@ -504,6 +508,22 @@
     {
       "label": "Notice to ask the user to select one of the available filters.",
       "default": "Select a filter for the cards to be displayed"
+    },
+    {
+      "label": "Label used to tell the user that they selected to NOT filter the cards.",
+      "default": "No Filter"
+    },
+    {
+      "label": "Boolean operator AND used to filter cards by categories",
+      "default": "AND"
+    },
+    {
+      "label": "Boolean operator OR used to filter cards by categories",
+      "default": "OR"
+    },
+    {
+      "label": "Boolean operator NOT used to filter cards by categories",
+      "default": "NOT"
     }
   ]
 }

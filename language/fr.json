@@ -162,6 +162,10 @@
           ]
         },
         {
+          "label": "Cacher les textes?",
+          "description": "Cochez cette case si vous n'utilisez que des images ou du son au recto et au verso des cartes, pas de texte."
+        },
+        {
           "label": "Activer le bouton \"Recommencer\""
         },
         {

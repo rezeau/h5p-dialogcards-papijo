@@ -145,7 +145,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
     this.hasAudio = false;
     for (i = 0; i < self.params.dialogs.length; i++) {
-    console.log ('i = ' + i);
       if (self.params.dialogs[i]['audio'] !== undefined) {
         this.hasAudio = true;
         break;
@@ -1285,7 +1284,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       'class': 'h5p-dialogcards-card-text-inner-content'
     }).appendTo($cardTextInner);
     
-    if (this.hasAudio) {
+    if (this.hasAudio && !this.noText) {
       self.createCardAudio(card)
         .appendTo($cardTextInnerContent);
     
@@ -1306,7 +1305,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (!card.text || !card.text.length) {
       $cardText.addClass('hide');
     }                               
-    console.log('1299 self.params.noTextOnCards = ' + self.params.noTextOnCards);
+    
     if (!this.noText) {
       self.createCardFooter()
         .appendTo($cardTextWrapper);
@@ -2747,9 +2746,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     // TODO revise this truncation system
     /*
     var $footerWidth = $answerButtonCorrect.parent()[0].getBoundingClientRect().width;
-    console.log ('window width = ' + w + ' $footerWidth = ' + $footerWidth);
     var $card = self.$current.find('.h5p-dialogcards-card-content');
-    console.log ('card width = ' + $card.get(0).getBoundingClientRect().width);
     */
     // Supposed to be a smartphone
     var w = $(window).width();

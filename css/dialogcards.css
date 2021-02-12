@@ -693,10 +693,13 @@
 .h5p-dialogcards .h5p-dialogcards-options .h5p-joubelui-button:first-child {
   margin-left: 0.5em;
 }
-.h5p-dialogcards .h5p-dialogcards-card-footer-enablegotit.spacer {
-  margin-top: 2em;
+.h5p-dialogcards .h5p-dialogcards-card-footer-enablegotit.spacer,
+.h5p-dialogcards .h5p-dialogcards-card-footer.spacer {
+  margin-top: 1em;
 }
-.h5p-dialogcards .h5p-dialogcards-audio-wrapper.spacer {
+
+.h5p-dialogcards .h5p-dialogcards-audio-wrapper.spacer,
+.h5p-dialogcards .h5p-dialogcards-audio-wrapper2.spacer {
   margin-top: 0.4em;
 }
 
