@@ -1422,11 +1422,25 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
 
     // Dummy cardfooter to get a "correct" left card height if too much text...
-    if (self.params.behaviour.scaleTextNotCard == false) {
-      var $cardFooterLeft = $('<div>', {
-        'class': 'h5p-dialogcards-card-footer'
-      }).appendTo($cardTextWrapper);
-    }
+
+    if (!this.noText) {
+     if (self.params.behaviour.scaleTextNotCard == false) {
+       var $cardFooterLeft = $('<div>', {
+          'class': 'h5p-dialogcards-card-footer'
+        }).appendTo($cardTextWrapper);
+      }
+    } else {
+      $cardTextWrapper.addClass('hide');
+      if (this.hasAudio) {
+        self.createCardAudio(card)
+          .appendTo($cardContent);
+        self.createCardAudio2(card)
+          .appendTo($cardContent);
+      }
+       var $cardFooterLeft = $('<div>', {
+          'class': 'h5p-dialogcards-card-footer spacer'
+        }).appendTo($cardContent);
+    } 
     
     // Restore original card data!
     if (this.leftSideMode == 'backLeft') {      
