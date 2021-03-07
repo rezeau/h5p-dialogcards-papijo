@@ -108,7 +108,6 @@
   flex-direction: column;                
 }
 
-
 .h5p-dialogcards .h5p-dialogcards-card-footer {
   height: 2.25em;
   text-align: center;
@@ -710,4 +709,9 @@
 .h5p-dialogcards .h5p-dialogcards-card-text-wrapper.noText {
   position: absolute;
   top: 25%;
+}
+
+.h5p-dialogcards .h5p-dialogcards-card-text-wrapper.audioOnly {
+  position: absolute;
+  top: -35%;
 }
