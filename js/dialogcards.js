@@ -1151,7 +1151,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       // If matchIt, all cards are loaded upon init, this is needed.
       if (!this.matchIt) {
         if (i >= initLoad) {
-          break; // DEV remove break to load all cards for testing.
+          //break; // DEV remove break to load all cards for testing. REMOVED this because causes problem with cards with different heights JR 07 MARCH 2021
         }
       }
       // Set current card index
