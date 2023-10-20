@@ -1,7 +1,7 @@
-H5P Dialogue Cards
+H5P Dialogue Cards Papi Jo
 ==========
-
-Makes it possible to create learning tasks for your site visitors.
+This is a fork of the official version of the H5P Dialogue Cards content by "papi Jo"
+Tutorial, examples and more details on the papi Jo Drupal test site at  http://www.rezeau.org/drupal/
 
 ## License
 
