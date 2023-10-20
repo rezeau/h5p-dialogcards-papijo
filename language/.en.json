@@ -1,0 +1,499 @@
+{
+  "semantics": [
+    {
+      "label": "Tutorial and Examples: <a href=\"http://www.rezeau.org/drupal/\" target=\"_blank\" rel=\"noopener\">Papi Jo's Drupal test site</a></span>",
+      "description": "<span style=\"color: white;margin-top: -20px;display: table-caption;font-size: large;\">&#9608;</span>"
+    },
+    {
+      "label": "Heading"
+    },
+    {
+      "label": "Task description",
+      "default": ""
+    },
+    {
+      "label": "Enable Categories in Cards?",
+      "description": "Add a 'Categories' field in the Cards?"
+    },
+    {
+      "label": "Enable Subtitles in Cards?",
+      "description": "Add a 'Subtitle' field in the Cards?"
+    },
+    {
+      "widgets": [
+        {
+          "label": "Default"
+        }
+      ],
+      "label": "Cards",
+      "entity": "card",
+      "field": {
+        "label": "Question",
+        "fields": [
+          {
+            "label": "Text",
+            "description": "Hint for the front of the card"
+          },
+          {
+            "label": "Answer",
+            "description": "Optional hint for the back of the card"
+          },
+          {
+            "label": "Images",
+            "fields": [
+              {
+                "label": "Image for front of card",
+                "description": "Optional image for the front of the card. This image will be also displayed on the back of the card if no back card image is provided."
+              },
+              {
+                "label": "Alternative text for the image on front of card"
+              },
+              {
+                "label": "Image for back of card",
+                "description": "Optional image for the back of card."
+              },
+              {
+                "label": "Alternative text for the image on back of card"
+              }
+            ]
+          },
+          {
+            "label": "Audio media",
+            "fields": [
+              {
+                "label": "Audio file(s) for the front of the card",
+                "description": "Audio files for the front of the card"
+              },
+              {
+                "label": "Audio file(s) for the back of the card",
+                "description": "Audio files for the back of the card"
+              }
+            ]
+          },
+          {
+            "label": "Tips",
+            "fields": [
+              {
+                "label": "Tip for text",
+                "description": "Tip for the front of the card"
+              },
+              {
+                "label": "Tip for answer",
+                "description": "Tip for the back of the card"
+              }
+            ]
+          },
+          {
+            "label": "Card Category/ies",
+            "description": "Optional. Category item(s) that this card belongs to. Enter the item name(s) separated by a comma and no space."
+          },
+          {
+            "label": "Subtitle for this card",
+            "description": "Subtitle for this card when the 'Free browsing with cards side by side' mode is enabled. Max characters = 80."
+          }
+        ]
+      }
+    },
+    {
+      "label": "Behavioural settings.",
+      "description": "These options will let you control how the task behaves.",
+      "fields": [
+        {
+          "label": "Categories Filtering",
+          "entity": "Filter",
+          "description": "Create one or more filters to be used to filter the cards displayed to the end user. Use the Card Categories entered for the cards above.",
+          "widgets": [
+            {
+              "label": "Default"
+            }
+          ],
+          "field": {
+            "label": "Click to set this filter parameters",
+            "fields": [
+              {
+                "label": "List of the category/ies to use in this filter"
+              },
+              {
+                "label": "Filter Boolean operator",
+                "description": "Select the Boolean operator to process the list of filters defined above. The default value is AND. The AND operator will limit the choice to cards that belong to ALL the categories listed in this filter. The OR operator will expand the choice to all cards that belong to at least ONE category. The NOT operator will exclude all cards belonging to any category listed in the filter.",
+                "options": [
+                  {
+                    "label": "AND"
+                  },
+                  {
+                    "label": "OR"
+                  },
+                  {
+                    "label": "NOT"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "label": "Filter by Categories",
+          "description": "Select how the cards will be filtered. No filtering / First (or unique) filter defined above. / If more than one filter has been defined, enable user to select a filter at runtime.",
+          "options": [
+            {
+              "label": "Do not filter"
+            },
+            {
+              "label": "Use the FIRST filter defined above"
+            },
+            {
+              "label": "Filter selected by User"
+            }
+          ]
+        },
+        {
+          "label": "Select Mode",
+          "description": "\"Free browsing\" is the default mode. Free browsing side by side mode: If you have enabled sub-titles, they will be displayed below the cards. In \"Match\" mode the user will have to pair the front and the back side of cards. In \"Self Correction\" mode, they will be able to guess the other side of the cards and confirm if they got it correct or not. \"Match with Repetition\" is a combination of the \"Match\" and \"Self Correction\" modes.",
+          "options": [
+            {
+              "label": "Free browsing"
+            },
+            {
+              "label": "Free browsing side by side"
+            },
+            {
+              "label": "Match"
+            },
+            {
+              "label": "Match with Repetition"
+            },
+            {
+              "label": "Self Correction"
+            }
+          ]
+        },
+        {
+          "label": "Do not use text?",
+          "description": "Check this box if you only use only images and audio on front and back of cards, no text."
+        },
+        {
+          "label": "Enable \"Retry\" button"
+        },
+        {
+          "label": "Scale the text to fit inside the card",
+          "description": "Unchecking this option will make the card adapt its size to the size of the text"
+        },
+        {
+          "label": "Cards Background color (Front Side)",
+          "description": "The color of the front side of the cards background. Default is transparent rgba(0, 0, 0, 0)."
+        },
+        {
+          "label": "Cards Background color (Back Side)",
+          "description": "The color of the back side of the cards background. Default is transparent rgba(0, 0, 0, 0). If Default then the Front side colour will be used for both sides."
+        },
+        {
+          "label": "Do not duplicate front images to back of cards",
+          "description": "Check this option if you do not want front card images duplicated automatically to the back of cards."
+        },
+        {
+          "label": "Cards Order",
+          "description": "Select the order of cards displayed to the user. If \"Random\", and the option below is enabled, the user will be able to select <b>the number of cards</b> picked from the cards pool.",
+          "options": [
+            {
+              "label": "Normal order"
+            },
+            {
+              "label": "Random order"
+            },
+            {
+              "label": "User's choice"
+            }
+          ]
+        },
+        {
+          "label": "Select number of cards displayed",
+          "description": "Allow user to select the number of cards drawn from the pool"
+        },
+        {
+          "label": "Display which side first?",
+          "description": "Select how the cards will be displayed. This option is mostly useful if the front of the cards is not really a question",
+          "options": [
+            {
+              "label": "Display front side first (normal display)"
+            },
+            {
+              "label": "Display back side first (reverse display)"
+            },
+            {
+              "label": "User's choice"
+            }
+          ]
+        },
+        {
+          "label": "Display which side on the left?",
+          "description": "Select which side of the cards will be displayed on the left",
+          "options": [
+            {
+              "label": "Display the front side on the left"
+            },
+            {
+              "label": "Display the back side on the left"
+            },
+            {
+              "label": "User's choice"
+            }
+          ]
+        },
+        {
+          "label": "Penalty percentage",
+          "description": "Each extra round (in Self-correction or Match with Repetition modes) will cost the user this percentage of the maximum score. Enter 0 for NO penalty. Maximum penalty is 50(%). Do NOT enter the % sign in the box."
+        },
+        {
+          "label": "Pass percentage",
+          "description": "This setting is the percentage of the total score required for getting result.success in xAPI statements (e.g. in Moodle etc)."
+        }
+      ]
+    },
+    {
+      "label": "Text for the turn button",
+      "default": "Turn"
+    },
+    {
+      "label": "Text for the next button",
+      "default": "Next"
+    },
+    {
+      "label": "Text for the previous button",
+      "default": "Previous"
+    },
+    {
+      "label": "Text for the retry button",
+      "default": "Retry"
+    },
+    {
+      "label": "Text for the \"correct answer\" button",
+      "default": "I got it right!"
+    },
+    {
+      "label": "Text for the \"incorrect answer\" button",
+      "default": "I got it wrong"
+    },
+    {
+      "label": "Text for \"Round\" message below cards and on the summary screen",
+      "description": "@round will be replaced by the number of the current round",
+      "default": "Round @round"
+    },
+    {
+      "label": "Text for \"round(s)\" message on the summary screen",
+      "description": "@rounds will be replaced by the total number of rounds",
+      "default": "@rounds round(s)"
+    },
+    {
+      "label": "Text for \"Cards left\" message",
+      "description": "@number will be replaced by the number of cards left in this round",
+      "default": "Cards left: @number"
+    },
+    {
+      "label": "Text for the \"next round\" button",
+      "description": "@round will be replaced by the round number",
+      "default": "Proceed to round @round"
+    },
+    {
+      "label": "Text for the \"Match\" button",
+      "description": "Used in Match mode to label the button which the user will press to indicate a potential match",
+      "default": "Match"
+    },
+    {
+      "label": "Text for the \"Correct match\" message",
+      "description": "Used in Match mode",
+      "default": "That's a match!"
+    },
+    {
+      "label": "Text for the \"Incorrect match\" message",
+      "description": "Used in Match mode",
+      "default": "That's NOT a match!"
+    },
+    {
+      "label": "Text for the current number of Correct / Incorrect matches message",
+      "description": "@correct and @incorrect will be replaced by the current number of correct/incorrect matches",
+      "default": "Matches correct: @correct | incorrect: @incorrect"
+    },
+    {
+      "label": "Label for the number of correct matches in the Summary",
+      "description": "Used at the end of a Match mode session",
+      "default": "Correct matches:"
+    },
+    {
+      "label": "Label for the number of incorrect matches in the Summary",
+      "description": "Used at the end of a Match mode session",
+      "default": "Incorrect matches:"
+    },
+    {
+      "label": "Feedback message used in the Summary",
+      "description": "Used at the end of a Match mode session",
+      "default": "Well done!"
+    },
+    {
+      "label": "Text for the \"show summary\" button to the Final Page",
+      "description": "Used in Self-correction mode",
+      "default": "Final summary"
+    },
+    {
+      "label": "Title text for the summary page for each round",
+      "description": "Used in Self-correction mode",
+      "default": "Summary"
+    },
+    {
+      "label": "Text for \"Cards you got right:\"",
+      "description": "Used in Self-correction mode",
+      "default": "Cards you got right:"
+    },
+    {
+      "label": "Text for \"Cards you got wrong:\"",
+      "description": "Used in Self-correction mode",
+      "default": "Cards you got wrong:"
+    },
+    {
+      "label": "Text for \"Overall Score\"",
+      "description": "Used in Match and Self-correction modes",
+      "default": "Overall Score"
+    },
+    {
+      "label": "Text for \"Cards completed\"",
+      "description": "Used in Self-correction mode",
+      "default": "Cards you have completed learning:"
+    },
+    {
+      "label": "Text for \"Selected Cards\"",
+      "description": "This number will be displayed if the user did not select ALL the cards available in the stack.",
+      "default": "Number of cards you selected from the pool:"
+    },
+    {
+      "label": "Text for \"Completed rounds:\"",
+      "description": "Used in Self-correction mode",
+      "default": "Completed rounds:"
+    },
+    {
+      "label": "Message when all cards have been learned",
+      "description": "Used in Self-correction mode. @cards will be replaced by the number of all cards in the pool.",
+      "default": "Well done! You got all @cards cards correct!"
+    },
+    {
+      "label": "Score explanation for self-correction and Match with Repetition modes IF a penalty percent has been set.",
+      "description": "Used in Self-correction AND Match with Repetition modes. @penalty will be replaced by the penalty percentage applied",
+      "default": "Each extra round cost you a penalty of @penalty%."
+    },
+    {
+      "label": "Match mode score explanation.",
+      "description": "Used in Match mode if maximum score not reached.",
+      "default": "Each incorrect match cost you a penalty of 1 point."
+    },
+    {
+      "label": "Progress text",
+      "description": "Available variables are @card and @total.",
+      "default": "Card @card of @total"
+    },
+    {
+      "label": "Label for card text",
+      "description": "Used for accessibility by assistive technologies",
+      "default": "Card front"
+    },
+    {
+      "label": "Label for card back",
+      "description": "Used for accessibility by assistive technologies",
+      "default": "Card back"
+    },
+    {
+      "label": "Label for the show tip button",
+      "default": "Show tip"
+    },
+    {
+      "label": "Audio not supported message",
+      "default": "Your browser does not support this audio"
+    },
+    {
+      "label": "Display the cards in random order?",
+      "description": "Ask the user if they want to display the cards in random order.",
+      "default": "Display the cards in random order?"
+    },
+    {
+      "label": "Display the cards on the right in random order?",
+      "description": "Ask the user if they want to display the cards on the right in random order. Note: the cards on the left are always randomized.",
+      "default": "Display the cards on the right in random order?"
+    },
+    {
+      "label": "Current order notice",
+      "description": "Shows the user which order they have selected to display the cards (normal or random).",
+      "default": "Current Cards Order mode = "
+    },
+    {
+      "label": "Normal order label",
+      "default": "Normal"
+    },
+    {
+      "label": "Random order label",
+      "default": "Random"
+    },
+    {
+      "label": "Yes",
+      "default": "Yes"
+    },
+    {
+      "label": "No",
+      "default": "No"
+    },
+    {
+      "label": "Number of Cards",
+      "description": "If the cards are displayed in random order, ask the user how many cards they want.",
+      "default": "How many cards do you want?"
+    },
+    {
+      "label": "All Cards",
+      "default": "all the cards"
+    },
+    {
+      "label": "Textual representation of the score explanation button",
+      "default": "Show score explanation"
+    },
+    {
+      "label": "Notice to ask the user if they want to switch from the current way that the side of the cards is displayed first to the reverse side.",
+      "description": "@side will be replaced by the reverse side.",
+      "default": "Switch the current display mode of card sides to @side?"
+    },
+    {
+      "label": "Label used to tell the user which side of the cards is currently displayed first.",
+      "default": "Current display mode: First Side = "
+    },
+    {
+      "label": "Label used to tell the user the order in which the cards on the right are currently displayed.",
+      "default": "Current Order mode of Cards on the right = "
+    },
+    {
+      "label": "Notice to ask the user if they want to switch from the current way that the side of the cards is displayed on the left to the reverse side.",
+      "default": "Switch the current display mode of Left card side to @side?"
+    },
+    {
+      "label": "Label used to tell the user which side of the cards is currently displayed on the left.",
+      "default": "Current display mode: Left card = "
+    },
+    {
+      "label": "Label used to tell the user which filter is currently used to filter the cards (if any).",
+      "default": "Current Filter = "
+    },
+    {
+      "label": "Notice to ask the user to select one of the available filters.",
+      "default": "Select a filter for the cards to be displayed"
+    },
+    {
+      "label": "Label used to tell the user that they selected to NOT filter the cards.",
+      "default": "No Filter"
+    },
+    {
+      "label": "Boolean operator AND used to filter cards by categories",
+      "default": "AND"
+    },
+    {
+      "label": "Boolean operator OR used to filter cards by categories",
+      "default": "OR"
+    },
+    {
+      "label": "Boolean operator NOT used to filter cards by categories",
+      "default": "NOT"
+    }
+  ]
+}

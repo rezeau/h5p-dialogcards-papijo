@@ -1,0 +1,539 @@
+{
+  "semantics": [
+    {
+      "label": "Tutoriel et Exemples: <a href=\"http://www.rezeau.org/drupal/\" target=\"_blank\" rel=\"noopener\">Papi Jo's Drupal test site</a></span>",
+      "description": "<span style=\"color: white;margin-top: -20px;display: table-caption;font-size: large;\">&#9608;</span>"
+    },
+    {
+      "label": "En-tête"
+    },
+    {
+      "label": "Consigne",
+      "default": ""
+    },
+    {
+      "label": "Activer les catégories dans les cartes ?",
+      "description": "Ajouter un champ 'Catégories' dans les fiches des dialogues/cartes ?"
+    },
+    {
+      "label": "Activer les sous-titres dans les cartes ?",
+      "description": "Ajouter un champ 'sous-titre' dans les cartes ?"
+    },
+    {
+      "widgets": [
+        {
+          "label": "Default"
+        }
+      ],
+      "label": "Cartes",
+      "entity": "carte",
+      "field": {
+        "label": "Question",
+        "fields": [
+          {
+            "label": "Question",
+            "description": "Texte pour la face avant de la carte"
+          },
+          {
+            "label": "Réponse",
+            "description": "Texte facultatif pour le dos de la carte"
+          },
+          {
+            "label": "Images",
+            "fields": [
+              {
+            "label": "Image pour la face avant de la carte",
+            "description": "Image facultative pour la face avant de la carte. Cette image sera également affichée au dos de la carte si aucune image n'est ajoutée pour le dos ci-dessous."
+              },
+              {
+                "label": "Texte alternatif pour l'image de la face avant"
+              },
+              {
+                "label": "Image pour le dos de la carte",
+            "description": "Image facultative pour le dos de la carte."
+              },
+              {
+                "label": "Texte alternatif pour l'image du dos de la carte"
+              }
+            ]
+          },
+          {
+            "label": "Audio",
+            "fields": [
+              {
+                "label": "Fichier(s) audio pour la face avant de la carte",
+                "description": "Fichier(s) audio pour la face avant de la carte"
+              },
+              {
+                "label": "Fichier(s) audio pour la face arrière de la carte",
+                "description": "Fichier(s) audio pour la face arrière de la carte"
+              }
+            ]
+          },
+          {
+            "label": "Indices",
+            "fields": [
+              {
+                "label": "Indice pour la face avant",
+                "description": "Indice pour la face avant de la carte"
+              },
+              {
+                "label": "Indice pour le dos",
+                "description": "Indice pour le dos de la carte"
+              }
+            ]
+          },
+          {
+            "label": "Card Category/ies",
+            "description": "Optional. Category item(s) that this card belongs to. Enter the item name(s) separated by a comma and no space."
+          },
+          {
+            "label": "Subtitle for this card",
+            "description": "Subtitle for this card when the 'Free browsing with cards side by side' mode is enabled. Max characters = 80."
+          }
+        ]
+      }
+    },
+    {
+      "label": "Options générales",
+      "description": "Ces options vous permettent de paramétrer le déroulement de l'exercice.",
+      "fields": [
+        {
+          "label": "Filtres sur les catégories",
+          "entity": "un filtre",
+          "description": "Vous pouvez créer ici plusieurs filtres pour filtrer les cartes selon la catégorie à laquelle elles appartiennent.",
+          "widgets": [
+            {
+              "label": "Default"
+            }
+          ],
+          "showWhen": {
+            "rules": [
+              {}
+            ]
+          },
+          "field": {
+            "label": "Cliquez pour créer les paramètres de ce filtre",
+            "fields": [
+              {
+              "label": "Liste des catégories à utiliser dans ce filtre"
+              },
+              {
+                "label": "Opérateur booléen",
+                "default": "AND",
+                "description": "Sélectionnez l'opérateur booléen qui doit traiter la liste de filtres définie ci-dessus. La valeur par défaut est ET. L'opérateur ET limitera le choix aux cartes qui appartiennent à TOUTES les catégories énumérées dans ce filtre. L'opérateur OU élargira le choix à toutes les cartes qui appartiennent à au moins UNE catégorie. L'opérateur SAUF exclura toutes les cartes appartenant à toute catégorie énumérée dans le filtre.",
+                "options": [
+                  {
+                    "label": "ET"
+                  },
+                  {
+                    "label": "OU"
+                  },
+                  {
+                    "label": "SAUF"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "label": "Filtrer par catégories",
+          "description": "Choisissez comment les cartes seront filtrées. Pas de filtrage / Premier (ou unique) filtre défini ci-dessus. / Si plusieurs filtres ont été définis, permettre à l'utilisateur de sélectionner un filtre au moment de l'exécution.",
+          "default": "noFilter",
+          "showWhen": {
+            "rules": [
+              {}
+            ]
+          },
+          "options": [
+            {
+              "label": "Ne pas filtrer les cartes"
+            },
+            {
+              "label": "Utilisez le PREMIER filtre défini ci-dessus"
+            },
+            {
+              "label": "Filtre sélectionné par l'utilisateur"
+            }
+          ]
+        },
+        {
+          "label": "Mode",
+          "description": "La Navigation libre est le mode par défaut. Mode de navigation libre côte à côte : Si vous avez activé les sous-titres, ils s'afficheront sous les cartes. En mode Appariement, l'utilisateur devra apparier le recto et le verso des cartes. En mode Autocorrection, il pourra deviner l'autre côté des cartes et confirmer s'il l'avait deviné ou non. Appariement avec répétition est une combinaison des modes Appariement et Autocorrection.",
+          "default": "normal",
+          "options": [
+            {
+              "label": "Navigation libre"
+            },
+            {
+              "label": "Navigation libre côte à côte"
+            },
+            {
+              "label": "Appariement"
+            },
+            {
+              "label": "Appariement avec Répétition"
+            },
+            {
+              "label": "Autocorrection"
+            }
+          ]
+        },
+        {
+          "label": "Cacher les textes?",
+          "description": "Cochez cette case si vous n'utilisez que des images ou du son au recto et au verso des cartes, pas de texte."
+        },
+        {
+          "label": "Activer le bouton \"Recommencer\""
+        },
+        {
+          "label": "Mettre à l'échelle le texte afin de l'adapter à la taille de la carte",
+          "description": "Si cette option est décochée, la taille de la carte sera adaptée au texte placé à l'intérieur"
+        },
+        {
+          "label": "Couleur d'arrière-plan des cartes (Recto)",
+          "description": "Couleur d'arrière-plan du recto des cartes. Par défaut cet arrière-plan est transparent rgba(0, 0, 0, 0).",                           
+          "default": "rgba(0, 0, 0, 0)",
+          "spectrum": {
+            "togglePaletteMoreText": "Voir plus",
+            "togglePaletteLessText": "Voir moins",                    
+            "chooseText": "Choisir cette couleur",
+            "cancelText": "Annuler"
+          }
+        },
+        {
+          "label": "Couleur d'arrière-plan des cartes (Verso)",
+          "description": "Couleur d'arrière-plan du verso des cartes. Par défaut cet arrière-plan est transparent rgba(0, 0, 0, 0). En cas de défaut, la couleur de la face avant sera utilisée pour les deux faces.",                           
+          "default": "rgba(0, 0, 0, 0)",
+          "spectrum": {
+            "togglePaletteMoreText": "Voir plus",
+            "togglePaletteLessText": "Voir moins",                    
+            "chooseText": "Choisir cette couleur",
+            "cancelText": "Annuler"
+          }
+        },
+        {
+          "label": "Ne pas dupliquer les images du recto vers le verso des cartes.",
+          "description": "Cochez cette option si vous ne souhaitez pas que les images du recto soient automatiquement dupliquées au verso des cartes."
+        },
+        {
+          "label": "Ordre des cartes",
+          "description": "Choisissez l'ordre d'affichage des cartes pour l'utilisateur. Si vous mettez \"Au choix de l'utilisateur\" et que celui-ci choisit l'ordre aléatoire, il pourra également choisir le <b>nombre de cartes</b> tirées du paquet.",
+          "default": "normal",
+          "options": [
+            {
+              "label": "Ordre normal"
+            },
+            {
+              "label": "Tirage aléatoire"
+            },
+            {
+              "label": "Au choix de l'utilisateur"
+            }
+          ]
+        },
+        {
+          "label": "Sélectionner le nombre de cartes affichées",
+          "description": "Permet à l'utilisateur de choisir le nombre de cartes tirées dans le paquet de cartes.",
+          "showWhen": {
+            "rules": [
+              {}
+            ]
+          }
+        },
+        {
+          "label": "Afficher quel côté en premier ?",
+          "description": "Sélectionnez le mode d'affichage des cartes. Cette option est surtout utile si le recto des cartes n'est pas vraiment une question.",
+          "default": "frontFirst",
+          "options": [
+            {
+              "label": "Afficher d'abord la face avant (affichage normal)"
+            },
+            {
+              "label": "Afficher d'abord le dos (affichage inversé)"
+            },
+            {
+              "label": "Au choix de l'utilisateur"
+            }
+          ]
+        },
+        {
+          "label": "Afficher quel côté sur la gauche ?",
+          "description": "Sélectionnez le côté des cartes qui sera affiché à gauche",
+          "default": "frontLeft",
+          "showWhen": {
+            "rules": [
+              {}
+            ]
+          },
+          "options": [
+            {
+              "label": "Afficher le recto à gauche"
+            },
+            {
+              "label": "Afficher le verso à gauche"
+            },
+            {
+              "label": "Au choix de l'utilisateur"
+            }
+          ]
+        },
+        {
+          "label": "Pourcentage de pénalité",
+          "description": "Chaque tour supplémentaire (en mode autocorrection) ou appariement incorrect (en mode appariement) coûtera à l'utilisateur ce pourcentage du score maximum. Entrez 0 pour AUCUNE pénalité. La pénalité maximale est de 50(%). N'inscrivez PAS le signe % dans la case."
+        },
+        {
+          "label": "Pourcentage de réussite",
+          "description": "Pourcentage du score total requis pour obtenir la propriété Succès (result.success) dans les xAPI (comme Moode, etc)."
+        }
+      ]
+    },
+    {
+      "label": "Texte pour le bouton \"Retourner\"",
+      "default": "Retourner"
+    },
+    {
+      "label": "Texte pour le bouton \"Suivant\"",
+      "default": "Suivant"
+    },
+    {
+      "label": "Texte pour le bouton \"Précédent\"",
+      "default": "Précédent"
+    },
+    {
+      "label": "Texte pour le bouton \"Recommencer\"",
+      "default": "Recommencer"
+    },
+    {
+      "label": "Texte pour le bouton \"Réponse correcte\"",
+      "default": "J'ai eu bon!"
+    },
+    {
+      "label": "Texte pour le bouton \"Réponse incorrecte\"",
+      "default": "J'ai eu faux"
+    },
+    {
+      "label": "Texte pour le message \"Tour\" en dessous des cartes et sur le résumé",
+      "description": "@round sera remplacé par le numéro du tour actuel",
+      "default": "Tour n° @round"
+    },
+    {
+      "label": "Texte pour le message \"tour(s)\" sur le résumé final",      
+      "description": "@round sera remplacé par le nombre total de tours",
+      "default": "@rounds tour(s)"
+    },
+    {
+      "label": "Texte pour le message \"Cartes restantes\"",
+      "description": "@number sera remplacé par le nombre de cartes restantes pour ce tour",
+      "default": "Cartes restantes: @number"
+    },
+    {
+      "label": "Texte pour le bouton \"Tour suivant\"",
+      "description": "@round sera remplacé par le numéro du tour",
+      "default": "Procéder au tour @round"
+    },
+    {
+      "label": "Texte pour le bouton \"Correspondance\"",
+      "description": "Utilisé en mode Appariement pour étiqueter le bouton que l'utilisateur devra cliquer pour indiquer un appariement potentiel",
+      "default": "Correspondance"
+    },
+    {
+      "label": "Texte pour le message \"Appariement correct\"",
+      "description": "Utilisé en mode Appariement",
+      "default": "C'est bien une correspondance !"
+    },
+    {
+      "label": "Texte pour le message \"Appariement incorrect\"",
+      "description": "Utilisé en mode Appariement",
+      "default": "Ce n'est pas une correspondance !"
+    },
+    {
+      "label": "Texte pour le message indiquant le nombre actuel d'appariements corrects/incorrects",
+      "description": "@correct et @incorrect seront remplacés par les nombres d'appariements corrects/incorrects",
+      "default": "Appariements corrects : @correct | incorrects : @incorrect"
+    },
+    {
+      "label": "Etiquette pour le nombre d'appariements corrects dans la page de bilan",
+      "description": "Utilisé à la fin d'une session en mode Appariement",
+      "default": "Appariements corrects :"
+    },
+    {
+      "label": "Etiquette pour le nombre d'appariements incorrects dans la page de bilan",
+      "description": "Utilisé à la fin d'une session en mode Appariement",
+      "default": "Appariements incorrects :"
+    },
+    {
+      "label": "Message final de feedback usilisé dans la page de bilan",
+      "description": "Utilisé à la fin d'une session en mode Appariement",
+      "default": "Bravo !"
+    },
+    {
+      "label": "Texte pour le bouton \"Résumé final\"",
+      "description": "Utilisé en mode Autocorrection",
+      "default": "Résumé final"
+    },
+    {
+      "label": "Texte de titre de la page de résumé pour chaque tour",
+      "description": "Utilisé en mode Autocorrection",
+      "default": "Résumé"
+    },
+    {
+      "label": "Texte pour \"Cartes correctes:\"",
+      "description": "Utilisé en mode Autocorrection",
+      "default": "Cartes correctes:"
+    },
+    {
+      "label": "Texte pour \"Cartes incorrectes:\"",
+      "description": "Utilisé en mode Autocorrection",
+      "default": "Cartes incorrectes:"
+    },
+    {
+      "label": "Texte pour \"Score global\"",
+      "description": "Utilisé en modes Appariement et Autocorrection",
+      "default": "Score global"
+    },
+    {
+      "label": "Texte pour \"Cartes trouvées\"",
+      "description": "Utilisé en mode Autocorrection",
+      "default": "Cartes que vous avez trouvées :"
+    },
+    {
+      "label": "Texte pour \"Cartes sélectionnées\"",
+      "description": "Ce nombre sera affiché si l'utilisateur n'a pas choisi de tirer TOUTES les disponibles dans le paquet.",
+      "default": "Nombre de cartes que vous avez tirées du paquet :"
+    },
+    {
+      "label": "Texte pour \"Tours achevés :\"",
+      "description": "Utilisé en mode Autocorrection",
+      "default": "Tours achevés :"
+    },
+    {
+      "label": "Message affiché lorsque toutes les cartes ont été apprises",
+      "description": "Utilisé en mode Autocorrection. @cards sera remplacé par le nombre total de cartes trouvées.",
+      "default": "Bravo ! Vous avez réussi à trouver les @cards cartes !"
+    },
+    {
+      "label": "Explication du score lorsqu'un pourcentage de pénalité a été appliqué.",
+      "description": "Utilisé en mode Autocorrection. @penalty sera remplacé par le pourcentage de pénalité appliqué.",
+      "default": "Chaque tour supplémentaire vous a coûté une pénalité de @penalty%."
+    },
+    {
+      "label": "Explication du score en mode Appariement.",
+      "description": "Explication du score lorsque le score maximum n'a pas été atteint.",
+      "default": "Chaque appariement incorrect vous a coûté une pénalité de 1 point."
+    },
+    {
+      "label": "Texte de progression",
+      "description": "Les variables disponibles sont @card et @total.",
+      "default": "Carte @card sur @total"
+    },
+    {
+      "label": "Etiquette pour le devant de la carte",
+      "description": "Est utilisée par les technologies d'assistance pour plus d'accessibilité",
+      "default": "la face avant de la carte (recto)"
+    },
+    {
+      "label": "Etiquette pour le dos de la carte",
+      "description": "Est utilisée par les technologies d'assistance pour plus d'accessibilité",
+      "default": "le dos de la carte (verso)"
+    },
+    {
+      "label": "Etiquette pour montrer le bouton Indice",
+      "default": "Montrer l'indice"
+    },
+    {
+      "label": "Message L'audio n'est pas supporté",
+      "default": "Votre navigateur ne supporte pas ce fichier audio"
+    },
+    {
+      "label": "Afficher les cartes en ordre aléatoire ?",
+      "description": "Demander à l'utilisateur s'il veut afficher les cartes en ordre aléatoire.",
+      "default": "Afficher les cartes en ordre aléatoire ?"
+    },
+    {
+      "label": "Afficher les cartes à droite en ordre aléatoire ?",
+      "description": "Demander à l'utilisateur s'il veut afficher les cartes à droite en ordre aléatoire. Notez que les cartes à gauche sont TOUJOURS en ordre aléatoire.",
+      "default": "Afficher les cartes à droite en ordre aléatoire ?"
+    },
+    {
+      "label": "Notification de l'ordre des cartes actuel",
+      "description": "Indique à l'utilisateur l'ordre dans lequel il a choisi d'afficher les cartes (normal ou aléatoire).",
+      "default": "Ordre des cartes actuel = "
+    },
+    {
+      "label": "Etiquette pour l'ordre normal",
+      "default": "Normal"
+    },
+    {
+      "label": "Etiquette pour l'ordre aléatoire",
+      "default": "Aléatoire"
+    },
+    {
+      "label": "Oui",
+      "default": "Oui"
+    },
+    {
+      "label": "Non",
+      "default": "Non"
+    },
+    {
+      "label": "Nombre de cartes",
+      "description": "Si les cartes sont affichées en ordre aléatoire, demander à l'utilisateur combien de cartes il veut.",
+      "default": "Combien de cartes voulez-vous ?"
+    },
+    {
+      "label": "Toutes les cartes",
+      "default": "Toutes les cartes"
+    },
+    {
+      "label": "Représentation textuelle du bouton expliquant le score",
+      "default": "Expliquer le score"
+    },
+    {
+      "label": "Demander à l'utilisateur s'il souhaite inverser l'ordre d'affichage du côté des cartes.",       
+      "description": "@side sera remplacé par le côté opposé au côté actuel.",
+      "default": "Inverser l'affichage actuel pour afficher en premier @side ?"      
+    },
+    {
+      "label": "Etiquette pour indiquer à l'utilisateur quel côté des cartes est affiché en premier actuellement.",      
+      "default": "Mode d'affichage actuel : Côté affiché en premier = "      
+    },
+    {
+      "label": "Étiquette utilisée pour indiquer à l'utilisateur l'ordre dans lequel les cartes de droite sont actuellement affichées.",
+      "default": "Ordre actuel des cartes sur la droite = "
+    },
+    {
+      "label": "Demander à l'utilisateur s'il veut passer du côté des cartes actuellement affiché à gauche au côté opposé.",
+      "default": "Inverser l'affichage actuel pour afficher à gauche le côté @side?"
+    },
+    {
+      "label": "Etiquette pour indiquer à l'utilisateur quel côté des cartes est affiché actuellement à gauche.",
+      "default": "Affichage actuel : Carte de gauche = "
+    },
+    {
+      "label": "Étiquette utilisée pour indiquer à l'utilisateur quel filtre est actuellement utilisé pour filtrer les cartes (le cas échéant).",
+      "default": "Filtre actuel = "
+    },
+    {
+      "label": "Demander à l'utilisateur de choisir un filtre parmi ceux disponibles.",
+      "default": "Choisissez un filtre"
+    },
+    {
+      "label": "Étiquette utilisée pour indiquer à l'utilisateur que les cartes ne sont pas filtrées",
+      "default": "Aucun filtre"
+    },
+    {
+      "label": "Nom de l'opérateur booléen AND",
+      "default": "ET"
+    },
+    {
+      "label": "Nom de l'opérateur booléen OU",
+      "default": "OU"
+    },
+    {
+      "label": "Nom de l'opérateur booléen NOT",
+      "default": "SAUF"
+    }
+  ]
+}

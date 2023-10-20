@@ -1,0 +1,539 @@
+{
+  "semantics": [
+    {
+      "label": "Tutorial e Exemplos: <a href=\"http://www.rezeau.org/drupal/\" target=\"_blank\" rel=\"noopener\">Papi Jo's Drupal test site</a></span>",
+      "description": "<span style=\"color: white;margin-top: -20px;display: table-caption;font-size: large;\">&#9608;</span>"
+    },
+    {
+      "label": "Cabeçalho"
+    },
+    {
+      "label": "Descrição",
+      "default": "Escrever o Texto que se pretender que apareça no Cabeçalho do Conteúdo"
+    },
+    {
+      "label": "Ativar as categorias nos cartões ?",
+      "description": "Adicionar um campo 'Categorias' nos Cartões de Diálogo ?"
+    },
+    {
+      "label": "Ativar as legendas nos Cartões?",
+      "description": "Adicionar um campo de 'legendas' nos cartões ?"
+    },
+    {
+      "widgets": [
+        {
+          "label": "Valor por defeito"
+        }
+      ],
+      "label": "Cartões",
+      "entity": "cartão",
+      "field": {
+        "label": "Questão",
+        "fields": [
+          {
+            "label": "Questão",
+            "description": "Texto da parte frontal do Cartão"
+          },
+          {
+            "label": "Resposta",
+            "description": "Texto facultativo para o verso do Cartão"
+          },
+          {
+            "label": "Imagens",
+            "fields": [
+              {
+            "label": "Imagem da parte frontal do Cartão",
+            "description": "Imagem facultativa para a parte frontal do Cartão. Esta imagem será também utilizada no verso do Cartão se não for introduzida nenhuma imagem diferente para o mesmo."
+              },
+              {
+                "label": "Texto alternativo para a imagem na parte frontal do Cartão"
+              },
+              {
+                "label": "Imagem para o verso do Cartão",
+            "description": "Imagem facultativa para o verso do Cartão."
+              },
+              {
+                "label": "Texto alternativo para a imagem no verso do Cartão"
+              }
+            ]
+          },
+          {
+            "label": "Áudio",
+            "fields": [
+              {
+                "label": "Ficheiro(s) Áudio para a parte frontal do Cartão",
+                "description": "Ficheiro(s) Áudio para o lado frontal do Cartão"
+              },
+              {
+                "label": "Ficheiro(s) Áudio para o verso do Cartão",
+                "description": "Ficheiro(s) Áudio para o verso do Cartão"
+              }
+            ]
+          },
+          {
+            "label": "Ajuda",
+            "fields": [
+              {
+                "label": "Ajuda para o lado frontal do Cartão",
+                "description": "Ajuda para o lado frontal do Cartão"
+              },
+              {
+                "label": "Ajuda para o verso do Cartão",
+                "description": "Ajuda para o verso do Cartão"
+              }
+            ]
+          },
+          {
+            "label": "Categoria(s) do Cartão",
+            "description": "Opcional: categoria(s) à qual pertence este Cartão. Digitar a(s) categoria(s) separada(s) por vírgula, sem espaços."
+          },
+          {
+            "label": "Legenda para este Cartão",
+            "description": "Legenda para este Cartão quando foi selecionado o modo \"Normal\" e a opção 'Visualizar os Cartões lado a lado' está ativada. Máximo de carateres = 80."
+          }
+        ]
+      }
+    },
+    {
+      "label": "Opções gerais",
+      "description": "Estas opções permitem parametrizar o desenvolvimento do conteúdo.",
+      "fields": [
+        {
+          "label": "Filtrar as Categorias",
+          "entity": "um filtro",
+          "description": "Criar um ou mais filtros, usados para filtrar os Cartões que serão visualizados pelo utilizador. Usar as Categorias definidas para os Cartões acima.",
+          "widgets": [
+            {
+              "label": "Por defeito"
+            }
+          ],
+          "showWhen": {
+            "rules": [
+              {}
+            ]
+          },
+          "field": {
+            "label": "Clicar para criar os parâmetros deste filtro",
+            "fields": [
+              {
+              "label": "Lista das Categorias a utilizar neste filtro"
+              },
+              {
+                "label": "Operador Boleano",
+                "default": "E",
+                "description": "Selecionar o operador boleano que deverá conjugar a lista de filtros definida acima. O valor por defeito é 'E' - Conjunção. Este operador limitará a escolha aos Cartões aos que pertençam a todas as categorias enumeradas no respetivo filtro. O operador OU alargará a escolha dos Cartões aos que pertençam pelo menos a uma das Categorias enumeradas. O operador NÃO excluirá todos os Cartões que pertençam à(s) categoria(s) enumerados no filtro.",
+                "options": [
+                  {
+                    "label": "E"
+                  },
+                  {
+                    "label": "OU"
+                  },
+                  {
+                    "label": "NÃO"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "label": "Filtrar por Categorias",
+          "description": "Selecionar de que forma os Cartões serão filtrados. Sem filtros / O Primeiro (e únicamente esse) filtro definido acima. / Se forem definidos váriso filtros, permite ao utilizador a seleção de um filtro, antes de iniciar a atividade.",
+          "default": "noFilter",
+          "showWhen": {
+            "rules": [
+              {}
+            ]
+          },
+          "options": [
+            {
+              "label": "Sem filtros"
+            },
+            {
+              "label": "Utilizar o PRIMEIRO filtro, definido acima"
+            },
+            {
+              "label": "Filtro selecionado pelo utilizador"
+            }
+          ]
+        },
+        {
+          "label": "Modo",
+          "description": "A Navegação em modo Normal é o modo de funcionamento por defeito. Lado a lado: Se as Legendas estiverem ativadas, serão mostradas na parte inferior dos Cartões. No modo Associação, o utilizador deverá associar o lado frontal com o verso dos Cartões. Em modo Autocorreção, o utilizador poderá adivinhar o verso do Cartão e confirmar se estava correto ou não. Associação com Repetição é um modo de combinação dos dois anteriores.",
+          "default": "normal",
+          "options": [
+            {
+              "label": "Normal"
+            },
+            {
+              "label": "Lado a lado"
+            },
+            {
+              "label": "Associação"
+            },
+            {
+              "label": "Associação com Repetição"
+            },
+            {
+              "label": "Autocorreção"
+            }
+          ]
+        },
+        {
+          "label": "Não usar textos?",
+          "description": "Selecionar esta opção se pretender usar apenas imagens nos lados frontal e verso dos Cartões, sem texto."
+        },
+        {
+          "label": "Ativar a opção \"Tentar Novamente\""
+        },
+        {
+          "label": "Ajustar o texto à dimensão do Cartão.",
+          "description": "Se esta opção não for selecionada, então o Cartão ajustará a sua dimensão ao texto introduzido"
+        },
+        {
+          "label": "Cor de fundo dos Cartões (Lado frontal)",
+          "description": "Definição da cor de fundo do lado frontal dos Cartões. Por defeito será transparente rgba(0, 0, 0, 0).",
+          "default": "rgba(0, 0, 0, 0)",
+          "spectrum": {
+            "togglePaletteMoreText": "Ver mais",
+            "togglePaletteLessText": "Ver menos",
+            "chooseText": "Selecionar esta cor",
+            "cancelText": "Anular"
+          }
+        },
+        {
+          "label": "Cor de fundo dos Cartões (Verso)",
+          "description": "Definição da cor de fundo do verso dos Cartões. Por defeito será transparente rgba(0, 0, 0, 0). Em caso de utilização do valor por defeito, a cor do lado frontal será utilizada nas duas faces.",                           
+          "default": "rgba(0, 0, 0, 0)",
+          "spectrum": {
+            "togglePaletteMoreText": "Voir plus",
+            "togglePaletteLessText": "Voir moins",
+            "chooseText": "Choisir cette couleur",
+            "cancelText": "Annuler"
+          }
+        },
+        {
+          "label": "Não duplicar as imagens do lado frontal para o verso dos Cartões.",
+          "description": "Selecionar esta opção se não pretender que as imagens do lado frontal dos Cartões sejam duplicadas para o verso dos mesmos."
+        },
+        {
+          "label": "Ordem dos Cartões",
+          "description": "Selecionar a ordem pela qual os Cartões serão visualizados pelo utilizador. Se for selecionada a opção \"Permitir que o Utilizador Escolha\" e se este selecionar a \"Ordem Aleatória\", o utilizador poderá igualmente escolher o <b>número de Cartões</b> pretendidos, do número Total de Cartões.",
+          "default": "normal",
+          "options": [
+            {
+              "label": "Sequencial"
+            },
+            {
+              "label": "Ordem Aleatória"
+            },
+            {
+              "label": "Permitir que o Utilizador Escolha"
+            }
+          ]
+        },
+        {
+          "label": "Selecionar o número de Cartões a visualizar",
+          "description": "Será permitido ao utilizador escolher o <b>número de Cartões</b> pretendido, do número total de Cartões.",
+          "showWhen": {
+            "rules": [
+              {}
+            ]
+          }
+        },
+        {
+          "label": "Qual das faces dos Cartões pretende visualizar em primeiro lugar  ?",
+          "description": "Selecionar o modo de visualização dos Cartões. Esta opção torna-se útil se o lado frontal dos cartões não é própriamente uma questão.",
+          "default": "frontFirst",
+          "options": [
+            {
+              "label": "Visualizar em primeiro lugar o lado frontal (visualização normal)"
+            },
+            {
+              "label": "Visualizar em primeiro lugar o verso do Cartão (visualização invertida)"
+            },
+            {
+              "label": "Permitir que o Utilizador Escolha"
+            }
+          ]
+        },
+        {
+          "label": "Que face dos Cartões pretende visualizar  à esquerda ?",
+          "description": "Selecionar a face dos Cartões que será visualizada ao lado esquerdo",
+          "default": "frontLeft",
+          "showWhen": {
+            "rules": [
+              {}
+            ]
+          },
+          "options": [
+            {
+              "label": "Lado frontal à esquerda"
+            },
+            {
+              "label": "Verso do Cartão à esquerda"
+            },
+            {
+              "label": "Permitir que o Utilizador Escolha"
+            }
+          ]
+        },
+        {
+          "label": "Percentagem de penalização",
+          "description": "Cada tentativa suplementar (em modo Autocorreção) ou associação incorreta (Em modo Associação) penalizará o utilizador com esta percentagem da pontuação máxima. Introduzir 0 (zero) para não existir penalização. A penalização máxima é de 50(%). <b>Não introduzir o símbolo %</b>."
+        },
+        {
+          "label": "Percentagem para aprovação",
+          "description": "Essa configuração geralmente não tem efeito. É a percentagem da pontuação total necessária para obter um resultado positivo nas instruções xAPI (Moodle, etc.)."
+        }
+      ]
+    },
+    {
+      "label": "Texto para o botão \"Virar Cartão\"",
+      "default": "Virar Cartão"
+    },
+    {
+      "label": "Texto para o botão \"Seguinte\"",
+      "default": "Seguinte"
+    },
+    {
+      "label": "Texto para o botão \"Anterior\"",
+      "default": "Anterior"
+    },
+    {
+      "label": "Texto para o botão \"Tentar Novamente\"",
+      "default": "Tentar Novamente"
+    },
+    {
+      "label": "Texto para o botão \"Resposta Correta\"",
+      "default": "Acertei!"
+    },
+    {
+      "label": "Texto para o botão \"Resposta incorreta\"",
+      "default": "Não acertei"
+    },
+    {
+      "label": "Texto para a mensagem \"Tentativa\" na parte inferior dos Cartões e na página de resumo",
+      "description": "@round será substituido pela tentativa atual",
+      "default": "Tentativa n.º @round"
+    },
+    {
+      "label": "Texto para a mensagem \"tentativa(s)\" no resumo final",      
+      "description": "@round será substituido pelo número total de tentativas realizadas",
+      "default": "@rounds tentativas(s) realizadas"
+    },
+    {
+      "label": "Texto para a mensagem \"Cartões Restantes\"",
+      "description": "@number será substituido pelo número de Cartões restantes para o final desta tentativa",
+      "default": "@number Cartão(ões) para o final desta tentativa."
+    },
+    {
+      "label": "Texto para o botão \"Próxima Tentativa\"",
+      "description": "@round será substituido pelo número da tentativa",
+      "default": "Prosseguir para a tentativa n.º @round"
+    },
+    {
+      "label": "Texto para o botão \"Correspondência\"",
+      "description": "Utilização em modo Associação no botão em que o utilizador deverá clicar para indicar uma potencial associação",
+      "default": "Correspondência"
+    },
+    {
+      "label": "Texto para a mensagem \"Associação Correta\"",
+      "description": "Utilizado em modo Associação",
+      "default": "A associação está correta !"
+    },
+    {
+      "label": "Texto para a mensagem \"Associação Incorreta\"",
+      "description": "Utilizado em modo Associação",
+      "default": "Não existe correspondência nesta situação  !"
+    },
+    {
+      "label": "Texto para a mensagem sobre a relação entre o número de Associações corretas/incorretas",
+      "description": "@correct e @incorrect serão substituidos pelo número atual de correspondências correctas/incorretas",
+      "default": "Associações corretas : @correct | incorretas : @incorrect"
+    },
+    {
+      "label": "Texto para o número de associações corretas, a visualizar na página de resumo",
+      "description": "Utilizado no final de um exercício em modo de Associação",
+      "default": "Associações corretas :"
+    },
+    {
+      "label": "Texto para o número de associações incorretas, a visualizar na página de resumo",
+      "description": "Utilizado no final de um exercício em modo de Associação",
+      "default": "Associações incorretas :"
+    },
+    {
+      "label": "Mensagem final de feedback utilizada na página final de resumo",
+      "description": "Utilizado no final de um exercício em modo de Associação",
+      "default": "Fantástico !"
+    },
+    {
+      "label": "Texto para o botão \"Mostrar Resumo final\"",
+      "description": "Utilizado em modo Autocorreção",
+      "default": "Resumo final"
+    },
+    {
+      "label": "Texto para o título da página de resumo, em cada tentativa",
+      "description": "Utilizado em modo Autocorreção",
+      "default": "Resumo"
+    },
+    {
+      "label": "Texto para \"Cartões Corretos:\"",
+      "description": "Utilizado em modo Autocorreção",
+      "default": "Cartões Corretos:"
+    },
+    {
+      "label": "Texto para \"Cartões incorretos:\"",
+      "description": "Utilizado em modo Autocorreção",
+      "default": "Cartões incorretos:"
+    },
+    {
+      "label": "Texto para \"Pontação Total\"",
+      "description": "Utilizado nos modos Associação e Autocorreção",
+      "default": "Pontação Total"
+    },
+    {
+      "label": "Texto para \"Cartões de Aprendizagem\"",
+      "description": "Utilizado em modo Autocorreção",
+      "default": "Cartões de Aprendizagem com sucesso :"
+    },
+    {
+      "label": "Texto para \"Cartões Selecionados\"",
+      "description": "Este número será visualizado caso o utilizador não tenha selecionado todos os Cartões disponíveis no conjunto .",
+      "default": "Número de Cartões do conjunto selecionados :"
+    },
+    {
+      "label": "Texto para \"Tentativas Terminadas :\"",
+      "description": "Utilizado em modo Autocorreção",
+      "default": "Tentativas terminadas :"
+    },
+    {
+      "label": "Mensagem a visualizar quando se verifica o sucesso em todos os Cartões",
+      "description": "Utilizado em modo Autocorreção. @cards será substituido pelo total de Cartões utilizados.",
+      "default": "Fenomenal ! Conseguiu o resultado correto em todos os @cards Cartões !"
+    },
+    {
+      "label": "Explicação da pontuação para os modos Autocorreção e Associação com Repetição <b>SE</b> foi aplicada uma percentagem de penalização.",
+      "description": "Utilizado em modo Autocorreção. @penalty será substituido pela percentagem de penalização aplicada.",
+      "default": "Cada tentativa suplementar originou uma penalização de @penalty%."
+    },
+    {
+      "label": "Explicação da pontuação do modo de jogo.",
+      "description": "Usado em modo de jogo se a pontuação máxima não for atingida.",
+      "default": "Cada partida incorrecta custa-lhe uma penalização de 1 ponto."
+    },
+    {
+      "label": "Texto de progressão",
+      "description": "As variáveis disponíveis são @card e @total.",
+      "default": "Cartão @card de um total de @total"
+    },
+    {
+      "label": "Legenda para o lado Frontal do Cartão",
+      "description": "É utilizado pelas tecnologias de assistência à acessibilidade",
+      "default": " Face do Cartão"
+    },
+    {
+      "label": "Legenda para o verso do Cartão",
+      "description": "É utilizado pelas tecnologias de assistência à acessibilidade",
+      "default": " Verso do Cartão"
+    },
+    {
+      "label": "Legenda para o botão de Mostrar Ajuda",
+      "default": "Mostrar Ajuda"
+    },
+    {
+      "label": "Mensagem para as situações em que o ficheiro de Áudio não é suportado",
+      "default": "O seu navegador não suporta este tipo de ficheiro Áudio"
+    },
+    {
+      "label": "Visualizar os Cartões de forma aleatória ?",
+      "description": "Questionar o utilizador se deseja visualizar os Cartões por ordem aleatória.",
+      "default": "Visualizar os Cartões de forma aleatória ?"
+    },
+    {
+      "label": "Visualizar os Cartões do lado direito de forma aleatória ?",
+      "description": "Questionar se o utilizador deseja visualizar os Cartões dispostos do lado direito por ordem aleatória. Ter em conta que os Cartões apresentados do lado esquerdo o serão SEMPRE de forma aleatória.",
+      "default": "Visualizar os Cartões do lado direito de forma aleatória ?"
+    },
+    {
+      "label": "Notificação da forma de ordenação em uso",
+      "description": "Informa o utilizador qual a ordem de visualização escolhida para os Cartões(Sequencial ou Aleatória).",
+      "default": "A ordem dos Cartões é = "
+    },
+    {
+      "label": "Legenda para a ordem Sequencial",
+      "default": "Sequencial"
+    },
+    {
+      "label": "Legenda para a ordem Aleatória",
+      "default": "Aleatória"
+    },
+    {
+      "label": "Sim",
+      "default": "Sim"
+    },
+    {
+      "label": "Não",
+      "default": "Não"
+    },
+    {
+      "label": "Número de Cartões",
+      "description": "Se os Cartões forem visualizados de forma aleatória, questionar o utilizador quantos Cartões pretende selecionar.",
+      "default": "Deseja selecionar quantos Cartões ?"
+    },
+    {
+      "label": "Todos os Cartões",
+      "default": "Todos os Cartões"
+    },
+    {
+      "label": "Texto a visualizar no botão de explicação da pontuação",
+      "default": "Explicar a pontuação"
+    },
+    {
+      "label": "Questionar se o utilizador pretende trocar a forma atual como os Cartões são visualizados lado a lado.",       
+      "description": "@side será substituido pela face dos Cartões oposta à face atual.",
+      "default": "Trocar a visualização atual e mostrar primeiro o @side ?"      
+    },
+    {
+      "label": "Texto utilizado para informar o utilizador qual a face dos Cartões que será visualizada primeiro.",      
+      "default": "Modo de visualização atual: a face dos Cartões que será visualizada primeiro = "      
+    },
+    {
+      "label": "Texto utilizado para informar o utilizador sobre a ordem pela qual os Cartões apresentados do lado direito estão atualmente configurados.",
+      "default": "Ordem atual dos Cartões apresentados do lado direito = "
+    },
+    {
+      "label": "Questionar o utilizador se pretende trocar a face atual dos Cartões visualizados ao lado esquerdo, para a face oposta.",
+      "default": "Trocar a configuração atual para que os Cartões do lado esquerdo apresentem primeiro a/o @side?"
+    },
+    {
+      "label": "Texto para informar o utilizador qual a face dos Cartões do lado esquerdo que está atualmente configurada para aparecer em primeiro lugar.",
+      "default": "Configuração atual: Cartão visualizado do lado esquerdo = "
+    },
+    {
+      "label": "Texto utilizado para informar o utilizador qual o filtro que está atualmente a ser utilizado para filtrar os Cartões (caso exista).",
+      "default": "Filtro atual = "
+    },
+    {
+      "label": "Solicitar ao utilizador que escolha um dos filtros disponíveis.",
+      "default": "Selecione um filtro, de entre as categorias abaixo"
+    },
+    {
+      "label": "Texto utilizado para informar o utilzador que optou por não utilizar NENHUM filtro",
+      "default": "Sem filtros"
+    },
+    {
+      "label": "Nome do operador Boleano E",
+      "default": "E"
+    },
+    {
+      "label": "Nome do operador Boleano OU",
+      "default": "OU"
+    },
+    {
+      "label": "Nome do operador Boleano NÃO",
+      "default": "NÃO"
+    }
+  ]
+}
