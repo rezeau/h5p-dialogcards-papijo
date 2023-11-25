@@ -306,7 +306,7 @@
             "label": "Filter Boolean operator",
             "importance": "low",
             "default": "AND",
-            "description": "Select the Boolean operator to process the list of filters defined above. The default value is AND. The AND operator will limit the choice to cards that belong to ALL the categories listed in this filter. The OR operator will expand the choice to all cards that belong to at least ONE category. The NOT operator will exclude all cards belonging to any category listed in the filter.",
+            "description": "Select the Boolean operator to process the list of filters defined above. The default value is AND. The AND operator will limit the choice to cards that belong to ALL the categories listed in this filter. The OR operator will expand the choice to all cards that belong to at least ONE category. The NOT operator will exclude all cards belonging to any category listed in the filter. If there is only ONE category in the list, the AND and the OR operators will have the same result.",
             "options": [
                 {
                   "value": "AND",
