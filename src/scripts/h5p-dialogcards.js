@@ -959,6 +959,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         'class': 'h5p-dialogcards-cards-left',
         'aria-live': 'assertive'
       }).appendTo($footer);
+      
     }
     // Mode match with repetition. Under right card display footer similar to the GotIt mode.
     if (this.repetition) {
@@ -1898,6 +1899,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (this.enableGotIt) {
       // In case it was hidden when refreshing
       $card.find('.h5p-dialogcards-answer-button-off').removeClass('h5p-dialogcards-hide');
+      $card.find('.h5p-dialogcards-turn').removeClass('h5p-dialogcards-hide');
       const selectionIndex = self.$current.index();
       //let theindex = self.nbCards - self.dialogs.length;
 
@@ -2322,7 +2324,10 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
       // Toggle state for gotIt buttons
       if (self.enableGotIt) {
-
+        if (!turned) {
+          $buttonTurn = self.$current.find('.h5p-dialogcards-turn');
+          $buttonTurn.addClass('h5p-dialogcards-hide');
+        }
         const $answerButtons = $card.find('.h5p-dialogcards-answer-button');
         if (!turned) {
           $answerButtons
