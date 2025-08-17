@@ -1,15 +1,14 @@
 {
   "semantics": [
     {
-      "label": "Tutorial and Examples: <a href=\"http://www.rezeau.org/drupal/\" target=\"_blank\" rel=\"noopener\">Papi Jo's Drupal test site</a></span>",
+      "label": "Tutorial and Examples: <a href=\"http://www.h5p.rezeau.org\" target=\"_blank\" rel=\"noopener\">Papi Jo's H5P Moodle site</a></span>",
       "description": "<span style=\"color: white;margin-top: -20px;display: table-caption;font-size: large;\">&#9608;</span>"
     },
     {
       "label": "Heading"
     },
     {
-      "label": "Task description",
-      "default": ""
+      "label": "Task description"
     },
     {
       "label": "Enable Categories in Cards?",
@@ -115,7 +114,7 @@
               },
               {
                 "label": "Filter Boolean operator",
-                "description": "Select the Boolean operator to process the list of filters defined above. The default value is AND. The AND operator will limit the choice to cards that belong to ALL the categories listed in this filter. The OR operator will expand the choice to all cards that belong to at least ONE category. The NOT operator will exclude all cards belonging to any category listed in the filter.",
+                "description": "Select the Boolean operator to process the list of filters defined above. The default value is AND. The AND operator will limit the choice to cards that belong to ALL the categories listed in this filter. The OR operator will expand the choice to all cards that belong to at least ONE category. The NOT operator will exclude all cards belonging to any category listed in the filter. If there is only ONE category in the list, the AND and the OR operators will have the same result.",
                 "options": [
                   {
                     "label": "AND"
@@ -169,7 +168,11 @@
         },
         {
           "label": "Do not use text?",
-          "description": "Check this box if you only use only images and audio on front and back of cards, no text."
+          "description": "Check this box if you only want to display images or audio on front and back of cards, no text."
+        },
+        {
+          "label": "Hide the Turn button on back of cards?",
+          "description": "Check this box if you want to replace the 'Turn' button label with 'Check' and hide it on the back of cards."
         },
         {
           "label": "Enable \"Retry\" button"
@@ -180,11 +183,13 @@
         },
         {
           "label": "Cards Background color (Front Side)",
-          "description": "The color of the front side of the cards background. Default is transparent rgba(0, 0, 0, 0)."
+          "description": "The color of the front side of the cards background. Default is transparent rgba(0, 0, 0, 0).",
+          "default": "rgba(0, 0, 0, 0)"
         },
         {
           "label": "Cards Background color (Back Side)",
-          "description": "The color of the back side of the cards background. Default is transparent rgba(0, 0, 0, 0). If Default then the Front side colour will be used for both sides."
+          "description": "The color of the back side of the cards background. Default is transparent rgba(0, 0, 0, 0). If Default then the Front side colour will be used for both sides.",
+          "default": "rgba(0, 0, 0, 0)"
         },
         {
           "label": "Do not duplicate front images to back of cards",
@@ -252,6 +257,10 @@
     {
       "label": "Text for the turn button",
       "default": "Turn"
+    },
+    {
+      "label": "Text for the check button",
+      "default": "Check"
     },
     {
       "label": "Text for the next button",
@@ -434,8 +443,7 @@
       "default": "Yes"
     },
     {
-      "label": "No",
-      "default": "No"
+      "label": "No"
     },
     {
       "label": "Number of Cards",
@@ -488,8 +496,7 @@
       "default": "AND"
     },
     {
-      "label": "Boolean operator OR used to filter cards by categories",
-      "default": "OR"
+      "label": "Boolean operator OR used to filter cards by categories"
     },
     {
       "label": "Boolean operator NOT used to filter cards by categories",

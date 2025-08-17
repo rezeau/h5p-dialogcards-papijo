@@ -42,15 +42,15 @@
             "label": "Images",
             "fields": [
               {
-            "label": "Image pour la face avant de la carte",
-            "description": "Image facultative pour la face avant de la carte. Cette image sera également affichée au dos de la carte si aucune image n'est ajoutée pour le dos ci-dessous."
+                "label": "Image pour la face avant de la carte",
+                "description": "Image facultative pour la face avant de la carte. Cette image sera également affichée au dos de la carte si aucune image n'est ajoutée pour le dos ci-dessous."
               },
               {
                 "label": "Texte alternatif pour l'image de la face avant"
               },
               {
                 "label": "Image pour le dos de la carte",
-            "description": "Image facultative pour le dos de la carte."
+                "description": "Image facultative pour le dos de la carte."
               },
               {
                 "label": "Texte alternatif pour l'image du dos de la carte"
@@ -107,20 +107,14 @@
               "label": "Default"
             }
           ],
-          "showWhen": {
-            "rules": [
-              {}
-            ]
-          },
           "field": {
             "label": "Cliquez pour créer les paramètres de ce filtre",
             "fields": [
               {
-              "label": "Liste des catégories à utiliser dans ce filtre"
+                "label": "Liste des catégories à utiliser dans ce filtre"
               },
               {
                 "label": "Opérateur booléen",
-                "default": "AND",
                 "description": "Sélectionnez l'opérateur booléen qui doit traiter la liste de filtres définie ci-dessus. La valeur par défaut est ET. L'opérateur ET limitera le choix aux cartes qui appartiennent à TOUTES les catégories énumérées dans ce filtre. L'opérateur OU élargira le choix à toutes les cartes qui appartiennent à au moins UNE catégorie. L'opérateur SAUF exclura toutes les cartes appartenant à toute catégorie énumérée dans le filtre.",
                 "options": [
                   {
@@ -140,12 +134,6 @@
         {
           "label": "Filtrer par catégories",
           "description": "Choisissez comment les cartes seront filtrées. Pas de filtrage / Premier (ou unique) filtre défini ci-dessus. / Si plusieurs filtres ont été définis, permettre à l'utilisateur de sélectionner un filtre au moment de l'exécution.",
-          "default": "noFilter",
-          "showWhen": {
-            "rules": [
-              {}
-            ]
-          },
           "options": [
             {
               "label": "Ne pas filtrer les cartes"
@@ -161,7 +149,6 @@
         {
           "label": "Mode",
           "description": "La Navigation libre est le mode par défaut. Mode de navigation libre côte à côte : Si vous avez activé les sous-titres, ils s'afficheront sous les cartes. En mode Appariement, l'utilisateur devra apparier le recto et le verso des cartes. En mode Autocorrection, il pourra deviner l'autre côté des cartes et confirmer s'il l'avait deviné ou non. Appariement avec répétition est une combinaison des modes Appariement et Autocorrection.",
-          "default": "normal",
           "options": [
             {
               "label": "Navigation libre"
@@ -185,6 +172,10 @@
           "description": "Cochez cette case si vous n'utilisez que des images ou du son au recto et au verso des cartes, pas de texte."
         },
         {
+          "label": "Masquer le bouton « Retourner » au dos des cartes ?",
+          "description": "Cochez cette case si vous souhaitez remplacer le libellé du bouton « Retourner » par « Vérifier » et le masquer au dos des cartes."
+        },
+        {
           "label": "Activer le bouton \"Recommencer\""
         },
         {
@@ -193,25 +184,13 @@
         },
         {
           "label": "Couleur d'arrière-plan des cartes (Recto)",
-          "description": "Couleur d'arrière-plan du recto des cartes. Par défaut cet arrière-plan est transparent rgba(0, 0, 0, 0).",                           
-          "default": "rgba(0, 0, 0, 0)",
-          "spectrum": {
-            "togglePaletteMoreText": "Voir plus",
-            "togglePaletteLessText": "Voir moins",                    
-            "chooseText": "Choisir cette couleur",
-            "cancelText": "Annuler"
-          }
+          "description": "Couleur d'arrière-plan du recto des cartes. Par défaut cet arrière-plan est transparent rgba(0, 0, 0, 0).",
+          "default": "rgba(0, 0, 0, 0)"
         },
         {
           "label": "Couleur d'arrière-plan des cartes (Verso)",
-          "description": "Couleur d'arrière-plan du verso des cartes. Par défaut cet arrière-plan est transparent rgba(0, 0, 0, 0). En cas de défaut, la couleur de la face avant sera utilisée pour les deux faces.",                           
-          "default": "rgba(0, 0, 0, 0)",
-          "spectrum": {
-            "togglePaletteMoreText": "Voir plus",
-            "togglePaletteLessText": "Voir moins",                    
-            "chooseText": "Choisir cette couleur",
-            "cancelText": "Annuler"
-          }
+          "description": "Couleur d'arrière-plan du verso des cartes. Par défaut cet arrière-plan est transparent rgba(0, 0, 0, 0). En cas de défaut, la couleur de la face avant sera utilisée pour les deux faces.",
+          "default": "rgba(0, 0, 0, 0)"
         },
         {
           "label": "Ne pas dupliquer les images du recto vers le verso des cartes.",
@@ -220,7 +199,6 @@
         {
           "label": "Ordre des cartes",
           "description": "Choisissez l'ordre d'affichage des cartes pour l'utilisateur. Si vous mettez \"Au choix de l'utilisateur\" et que celui-ci choisit l'ordre aléatoire, il pourra également choisir le <b>nombre de cartes</b> tirées du paquet.",
-          "default": "normal",
           "options": [
             {
               "label": "Ordre normal"
@@ -235,17 +213,11 @@
         },
         {
           "label": "Sélectionner le nombre de cartes affichées",
-          "description": "Permet à l'utilisateur de choisir le nombre de cartes tirées dans le paquet de cartes.",
-          "showWhen": {
-            "rules": [
-              {}
-            ]
-          }
+          "description": "Permet à l'utilisateur de choisir le nombre de cartes tirées dans le paquet de cartes."
         },
         {
           "label": "Afficher quel côté en premier ?",
           "description": "Sélectionnez le mode d'affichage des cartes. Cette option est surtout utile si le recto des cartes n'est pas vraiment une question.",
-          "default": "frontFirst",
           "options": [
             {
               "label": "Afficher d'abord la face avant (affichage normal)"
@@ -261,12 +233,6 @@
         {
           "label": "Afficher quel côté sur la gauche ?",
           "description": "Sélectionnez le côté des cartes qui sera affiché à gauche",
-          "default": "frontLeft",
-          "showWhen": {
-            "rules": [
-              {}
-            ]
-          },
           "options": [
             {
               "label": "Afficher le recto à gauche"
@@ -294,6 +260,10 @@
       "default": "Retourner"
     },
     {
+      "label": "Texte pour le bouton \"Vérifier\"",
+      "default": "Vérifier"
+    },
+    {
       "label": "Texte pour le bouton \"Suivant\"",
       "default": "Suivant"
     },
@@ -319,7 +289,7 @@
       "default": "Tour n° @round"
     },
     {
-      "label": "Texte pour le message \"tour(s)\" sur le résumé final",      
+      "label": "Texte pour le message \"tour(s)\" sur le résumé final",
       "description": "@round sera remplacé par le nombre total de tours",
       "default": "@rounds tour(s)"
     },
@@ -491,13 +461,13 @@
       "default": "Expliquer le score"
     },
     {
-      "label": "Demander à l'utilisateur s'il souhaite inverser l'ordre d'affichage du côté des cartes.",       
+      "label": "Demander à l'utilisateur s'il souhaite inverser l'ordre d'affichage du côté des cartes.",
       "description": "@side sera remplacé par le côté opposé au côté actuel.",
-      "default": "Inverser l'affichage actuel pour afficher en premier @side ?"      
+      "default": "Inverser l'affichage actuel pour afficher en premier @side ?"
     },
     {
-      "label": "Etiquette pour indiquer à l'utilisateur quel côté des cartes est affiché en premier actuellement.",      
-      "default": "Mode d'affichage actuel : Côté affiché en premier = "      
+      "label": "Etiquette pour indiquer à l'utilisateur quel côté des cartes est affiché en premier actuellement.",
+      "default": "Mode d'affichage actuel : Côté affiché en premier = "
     },
     {
       "label": "Étiquette utilisée pour indiquer à l'utilisateur l'ordre dans lequel les cartes de droite sont actuellement affichées.",

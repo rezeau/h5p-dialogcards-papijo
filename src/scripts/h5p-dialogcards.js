@@ -24,6 +24,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       prev: "Previous",
       retry: "Retry",
       answer: "Turn",
+      check: "Check",
       correctAnswer: 'I got it right!',
       incorrectAnswer: 'I got it wrong',
       round: 'Round @round',
@@ -97,6 +98,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       behaviour: {
         enableRetry: true,
         noTextOnCards: false,
+        hideTurnButton: false,
         scaleTextNotCard: false,
         playMode: 'normalMode',
         cardsOrderChoice: 'user',
@@ -128,7 +130,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.cardsOrderChoice = self.params.behaviour.cardsOrderChoice;
     this.cardsOrderMode = this.cardsOrderChoice;
     this.enableCardsNumber = self.params.behaviour.enableCardsNumber;
-    this.noText = self.params.behaviour.noTextOnCards;
+    this.noText = self.params.behaviour.noTextOnCards;    
     this.actualScore = 0;
     this.firstText = self.params.dialogs[0].text;
 
@@ -232,6 +234,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (this.playMode === 'selfCorrectionMode') {
       this.enableGotIt = true;
       self.enableGotIt = true;
+      this.hideTurnButton = self.params.behaviour.hideTurnButton;
+      self.hideTurnButton = self.params.behaviour.hideTurnButton;
+      
     }
 
     // Used in the retry() function to determine if the options screen must be displayed upon re-trying the activity.
@@ -1594,9 +1599,10 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
 
     if (!this.matchIt) {
+      htmlText = self.hideTurnButton ? self.params.check : self.params.answer;
       this.$buttonTurn = H5P.JoubelUI.createButton({
         'class': 'h5p-dialogcards-turn',
-        'html': self.params.answer
+        'html': htmlText
       }).click(function () {
         self.turnCard($(this).parents('.h5p-dialogcards-cardwrap'));
       }).attr('tabindex', 0)
@@ -1899,7 +1905,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (this.enableGotIt) {
       // In case it was hidden when refreshing
       $card.find('.h5p-dialogcards-answer-button-off').removeClass('h5p-dialogcards-hide');
-      $card.find('.h5p-dialogcards-turn').removeClass('h5p-dialogcards-hide');
+      if (this.hideTurnButton) {
+        $card.find('.h5p-dialogcards-turn').removeClass('h5p-dialogcards-hide');
+      }
       const selectionIndex = self.$current.index();
       //let theindex = self.nbCards - self.dialogs.length;
 
@@ -2224,8 +2232,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     let $ch = $card.find('.h5p-dialogcards-cardholder').addClass('h5p-dialogcards-collapse');
     if (this.enableGotIt) {
       $cg = $card.find('.h5p-dialogcards-answer-button');
-
     }
+    
 
     // Removes tip, since it destroys the animation:
     $c.find('.joubel-tip-container').remove();
@@ -2324,7 +2332,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
       // Toggle state for gotIt buttons
       if (self.enableGotIt) {
-        if (!turned) {
+        if (!turned && self.hideTurnButton) {
           $buttonTurn = self.$current.find('.h5p-dialogcards-turn');
           $buttonTurn.addClass('h5p-dialogcards-hide');
         }

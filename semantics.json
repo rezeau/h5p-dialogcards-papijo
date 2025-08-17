@@ -1,9 +1,9 @@
-[ 
+[
   {
     "name": "info",
     "type": "boolean",
     "label": "Tutorial and Examples: <a href=\"http://www.h5p.rezeau.org\" target=\"_blank\" rel=\"noopener\">Papi Jo's H5P Moodle site</a></span>",
-    "description": "<span style=\"color: white;margin-top: -20px;display: table-caption;font-size: large;\">&#9608;</span>"    
+    "description": "<span style=\"color: white;margin-top: -20px;display: table-caption;font-size: large;\">&#9608;</span>"
   },
   {
     "name": "title",
@@ -92,13 +92,13 @@
             "p",
             "br",
             "strong",
-            "em",                        
+            "em",
             "ul",
             "ol",
             "hr",
             "a"
-            ],
-            "font": {
+          ],
+          "font": {
             "size": true,
             "color": true
           },
@@ -114,13 +114,13 @@
             "p",
             "br",
             "strong",
-            "em",                        
+            "em",
             "ul",
-            "ol",            
+            "ol",
             "hr",
             "a"
-            ],
-            "font": {
+          ],
+          "font": {
             "size": true,
             "color": true
           },
@@ -134,7 +134,7 @@
           "type": "group",
           "label": "Images",
           "importance": "low",
-          "fields": [            
+          "fields": [
             {
               "name": "image",
               "type": "image",
@@ -179,7 +179,9 @@
               "label": "Audio file(s) for the front of the card",
               "importance": "low",
               "optional": true,
-              "widgetExtensions": ["AudioRecorder"],
+              "widgetExtensions": [
+                "AudioRecorder"
+              ],
               "description": "Audio files for the front of the card"
             },
             {
@@ -188,7 +190,9 @@
               "label": "Audio file(s) for the back of the card",
               "importance": "low",
               "optional": true,
-              "widgetExtensions": ["AudioRecorder"],
+              "widgetExtensions": [
+                "AudioRecorder"
+              ],
               "description": "Audio files for the back of the card"
             }
           ]
@@ -223,7 +227,7 @@
           "label": "Card Category/ies",
           "importance": "low",
           "optional": true,
-          "description": "Optional. Category item(s) that this card belongs to. Enter the item name(s) separated by a comma and no space.",          
+          "description": "Optional. Category item(s) that this card belongs to. Enter the item name(s) separated by a comma and no space.",
           "widget": "showWhen",
           "showWhen": {
             "rules": [
@@ -254,7 +258,7 @@
         }
       ]
     }
-  },   
+  },
   {
     "name": "behaviour",
     "type": "group",
@@ -262,7 +266,7 @@
     "importance": "low",
     "description": "These options will let you control how the task behaves.",
     "optional": false,
-    "fields": [      
+    "fields": [
       {
         "name": "catFilters",
         "type": "list",
@@ -272,13 +276,13 @@
         "entity": "Filter",
         "min": 0,
         "defaultNum": 0,
-    "description": "Create one or more filters to be used to filter the cards displayed to the end user. Use the Card Categories entered for the cards above.",
-    "widgets": [
-      {
-        "name": "VerticalTabs",
-        "label": "Default"
-      }
-    ],          
+        "description": "Create one or more filters to be used to filter the cards displayed to the end user. Use the Card Categories entered for the cards above.",
+        "widgets": [
+          {
+            "name": "VerticalTabs",
+            "label": "Default"
+          }
+        ],
         "widget": "showWhen",
         "showWhen": {
           "rules": [
@@ -289,25 +293,25 @@
           ]
         },
         "field": {
-        "name": "catfilter",
-        "type": "group",
-        "expanded": false,
-        "label": "Click to set this filter parameters",
-        "importance": "low",
-        "fields": [
-          {
-            "name": "filterList",
-            "label": "List of the category/ies to use in this filter",
-            "type": "text"
-          },          
-          {
-            "name": "filterOperator",
-            "type": "select",
-            "label": "Filter Boolean operator",
-            "importance": "low",
-            "default": "AND",
-            "description": "Select the Boolean operator to process the list of filters defined above. The default value is AND. The AND operator will limit the choice to cards that belong to ALL the categories listed in this filter. The OR operator will expand the choice to all cards that belong to at least ONE category. The NOT operator will exclude all cards belonging to any category listed in the filter. If there is only ONE category in the list, the AND and the OR operators will have the same result.",
-            "options": [
+          "name": "catfilter",
+          "type": "group",
+          "expanded": false,
+          "label": "Click to set this filter parameters",
+          "importance": "low",
+          "fields": [
+            {
+              "name": "filterList",
+              "label": "List of the category/ies to use in this filter",
+              "type": "text"
+            },
+            {
+              "name": "filterOperator",
+              "type": "select",
+              "label": "Filter Boolean operator",
+              "importance": "low",
+              "default": "AND",
+              "description": "Select the Boolean operator to process the list of filters defined above. The default value is AND. The AND operator will limit the choice to cards that belong to ALL the categories listed in this filter. The OR operator will expand the choice to all cards that belong to at least ONE category. The NOT operator will exclude all cards belonging to any category listed in the filter. If there is only ONE category in the list, the AND and the OR operators will have the same result.",
+              "options": [
                 {
                   "value": "AND",
                   "label": "AND"
@@ -321,7 +325,7 @@
                   "label": "NOT"
                 }
               ]
-            }  
+            }
           ]
         }
       },
@@ -331,7 +335,7 @@
         "label": "Filter by Categories",
         "importance": "low",
         "description": "Select how the cards will be filtered. No filtering / First (or unique) filter defined above. / If more than one filter has been defined, enable user to select a filter at runtime.",
-        "default": "noFilter",          
+        "default": "noFilter",
         "widget": "showWhen",
         "showWhen": {
           "rules": [
@@ -340,7 +344,7 @@
               "equals": true
             }
           ]
-        },                   
+        },
         "options": [
           {
             "value": "noFilter",
@@ -362,7 +366,7 @@
         "label": "Select Mode",
         "importance": "low",
         "description": "\"Free browsing\" is the default mode. Free browsing side by side mode: If you have enabled sub-titles, they will be displayed below the cards. In \"Match\" mode the user will have to pair the front and the back side of cards. In \"Self Correction\" mode, they will be able to guess the other side of the cards and confirm if they got it correct or not. \"Match with Repetition\" is a combination of the \"Match\" and \"Self Correction\" modes.",
-        "default": "normalMode", 
+        "default": "normalMode",
         "options": [
           {
             "value": "normalMode",
@@ -390,10 +394,28 @@
         "name": "noTextOnCards",
         "type": "boolean",
         "label": "Do not use text?",
-        "description": "Check this box if you only use only images and audio on front and back of cards, no text.",
+        "description": "Check this box if you only want to display images or audio on front and back of cards, no text.",
         "importance": "medium",
         "default": false,
         "optional": true
+      },
+      {
+        "name": "hideTurnButton",
+        "type": "boolean",
+        "label": "Hide the Turn button on back of cards?",
+        "description": "Check this box if you want to replace the 'Turn' button label with 'Check' and hide it on the back of cards.",
+        "importance": "medium",
+        "default": false,
+        "optional": true,
+        "widget": "showWhen",
+        "showWhen": {
+          "rules": [
+            {
+              "field": "playMode",
+              "equals": "selfCorrectionMode"
+            }
+          ]
+        }
       },
       {
         "name": "enableRetry",
@@ -423,11 +445,11 @@
         "spectrum": {
           "preferredFormat": "rgb",
           "showButtons": true,
-          "showInput": true,          
+          "showInput": true,
           "showPaletteOnly": true,
           "togglePaletteOnly": true,
           "togglePaletteMoreText": "more",
-          "togglePaletteLessText": "less",                    
+          "togglePaletteLessText": "less",
           "chooseText": "Choose color",
           "cancelText": "Cancel",
           "palette": [
@@ -483,11 +505,11 @@
         "spectrum": {
           "preferredFormat": "rgb",
           "showButtons": true,
-          "showInput": true,          
+          "showInput": true,
           "showPaletteOnly": true,
           "togglePaletteOnly": true,
           "togglePaletteMoreText": "more",
-          "togglePaletteLessText": "less",                    
+          "togglePaletteLessText": "less",
           "chooseText": "Choose color",
           "cancelText": "Cancel",
           "palette": [
@@ -537,7 +559,7 @@
         "label": "Do not duplicate front images to back of cards",
         "importance": "low",
         "description": "Check this option if you do not want front card images duplicated automatically to the back of cards.",
-        "default": false        
+        "default": false
       },
       {
         "name": "cardsOrderChoice",
@@ -657,8 +679,8 @@
         "importance": "low",
         "description": "Each extra round (in Self-correction or Match with Repetition modes) will cost the user this percentage of the maximum score. Enter 0 for NO penalty. Maximum penalty is 50(%). Do NOT enter the % sign in the box.",
         "min": 0,
-        "max": 50,        
-        "default": 0,        
+        "max": 50,
+        "default": 0,
         "optional": true,
         "widget": "showWhen",
         "showWhen": {
@@ -687,7 +709,7 @@
           "rules": [
             {
               "field": "playMode",
-              "equals": [              
+              "equals": [
                 "matchMode",
                 "selfCorrectionMode",
                 "matchRepetition"
@@ -698,13 +720,20 @@
       }
     ]
   },
-  
   {
     "label": "Text for the turn button",
     "importance": "low",
     "name": "answer",
     "type": "text",
     "default": "Turn",
+    "common": true
+  },
+  {
+    "label": "Text for the check button",
+    "importance": "low",
+    "name": "check",
+    "type": "text",
+    "default": "Check",
     "common": true
   },
   {

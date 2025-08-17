@@ -185,6 +185,10 @@
           "description": "Selecionar esta opção se pretender usar apenas imagens nos lados frontal e verso dos Cartões, sem texto."
         },
         {
+          "label": "Ocultar o botão Virar na parte de trás das cartas?",
+          "description": "Marque esta caixa se desejar substituir o rótulo do botão « Virar » por « Verificar » e ocultá-lo no verso das cartas."
+        },
+        {
           "label": "Ativar a opção \"Tentar Novamente\""
         },
         {
@@ -292,6 +296,10 @@
     {
       "label": "Texto para o botão \"Virar Cartão\"",
       "default": "Virar Cartão"
+    },
+    {
+      "label": "Texto para o botão de verificação",
+      "default": "Verificar"
     },
     {
       "label": "Texto para o botão \"Seguinte\"",
