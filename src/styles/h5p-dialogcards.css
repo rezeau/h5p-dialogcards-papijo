@@ -109,11 +109,11 @@
 
 .h5p-dialogcards-final-summary-screen {
   display: flex;
-  flex-direction: column;                
+  flex-direction: column;
 }
 
 .h5p-dialogcards .h5p-dialogcards-card-footer {
-  height: 2.25em;
+  height: 2.25em!important;
   text-align: center;
 }
 

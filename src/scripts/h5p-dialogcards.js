@@ -100,7 +100,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         noTextOnCards: false,
         hideTurnButton: false,
         scaleTextNotCard: false,
-        playMode: 'normalMode',
+        playMode: 'freeBrowsing',
         cardsOrderChoice: 'user',
         enableCardsNumber: false,
         cardsSideChoice: 'user',
@@ -133,7 +133,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.noText = self.params.behaviour.noTextOnCards;    
     this.actualScore = 0;
     this.firstText = self.params.dialogs[0].text;
-
+    
     // Remove potential cards with empty front or empty back, i.e. no text, no audio, no image!
     for (let i = 0; i < self.params.dialogs.length; i++) {
       if (((self.params.dialogs[i]['text'] === undefined || this.noText)
@@ -195,7 +195,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
 
     this.userSelectedCategory = '';
-    if (this.cardsOrderMode === 'normal') {
+    if (this.cardsOrderMode !== 'random') {
       this.enableCardsNumber = false;
     }
     this.matchCorrect = null;
@@ -218,7 +218,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       this.playMode = 'matchMode';
       this.repetition = true;
     }
-
+    
     // Mode with cards displayed side by side.
     if (this.playMode === 'matchMode' || this.playMode === 'browseSideBySide') {
       this.matchIt = true;
@@ -425,6 +425,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       if (this.matchIt) {
         orderNotice = self.params.currentRightOrderNotice;
       }
+      
       if (this.cardsOrderMode === 'normal') {
         order = self.params.normalOrder;
       }
@@ -1129,14 +1130,39 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (this.progress > 0) {
       initLoad += this.progress;
     }
-
-    if ( (this.cardsOrderMode === 'normal' || this.cardsOrderMode === 'random') && !existsCardOrder) {
+    if (this.cardsOrderMode === 'alphabetical' && this.playMode === 'matchMode') {
+      this.cardsOrderMode = 'random';
+    }
+    // Re-order cards randomly OR alphabetical instead of their default order.
+    if ( (this.cardsOrderMode === 'random' || this.cardsOrderMode === 'alphabetical') && !existsCardOrder) {
       let cardOrdering = cards.map(function (cards, index) {
         return [cards, index];
       });
-      // Shuffle the multidimensional array IF 'random' only.
+
+      // Shuffle the multidimensional array.
       if (this.cardsOrderMode === 'random') {
         cardOrdering = H5P.shuffleArray(cardOrdering);
+      }
+      // Sort alphabetically by FRONT side.
+      if (this.cardsOrderMode === 'alphabetical') {
+        let useBackSide = false;          
+          if ((this.cardsSideMode !== undefined && this.cardsSideMode === 'backFirst') 
+            || (this.leftSideMode !== undefined && this.leftSideMode === 'backLeft')) {
+            useBackSide = true
+          }
+        if ((this.playMode === 'freeBrowsing' || this.playMode === 'selfCorrectionMode') && useBackSide === false) {
+          cardOrdering.sort(function (a, b) {
+            const textA = (a[0].text || '').toString().trim().toLowerCase();
+            const textB = (b[0].text || '').toString().trim().toLowerCase();
+            return textA.localeCompare(textB);
+          });
+        } else {
+          cardOrdering.sort(function (a, b) {
+            const textA = (a[0].answer || '').toString().trim().toLowerCase();
+            const textB = (b[0].answer || '').toString().trim().toLowerCase();
+            return textA.localeCompare(textB);
+          });
+        }
       }
 
       // Retrieve cards objects from the first index
@@ -1159,11 +1185,17 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         }
       }
       cards = randomCards;
-      this.nbCardsSelected = cards.length;
-      this.cardsLeftInStack = this.nbCardsSelected;
-      this.cardsLeft = this.nbCardsSelected;
+      /*
+      if (this.cardsOrderMode === 'random' || this.cardsOrderMode === 'alphabetical') {
+        this.nbCardsSelected = cards.length;
+        this.cardsLeftInStack = this.nbCardsSelected;
+        this.cardsLeft = this.nbCardsSelected;
+      }
+      */
     }
-
+        this.nbCardsSelected = cards.length;
+        this.cardsLeftInStack = this.nbCardsSelected;
+        this.cardsLeft = this.nbCardsSelected;
     // Use a previous order if it exists.
     if (this.contentData.previousState) {
       if (this.contentData.previousState.order && existsCardOrder) {
@@ -1869,7 +1901,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         $nextCard = $nextCard.nextAll('.h5p-dialogcards-cardwrap').eq(0);
       }
     }
-    if ((this.playMode === 'normalMode' || this.playMode === 'browseSideBySide') && $nextCard.length === 0) {
+    if ((this.playMode === 'freeBrowsing' || this.playMode === 'browseSideBySide') && $nextCard.length === 0) {
       self.finishedScreen();
     }
     if ($nextCard.length && !this.enableGotIt) {
@@ -1950,7 +1982,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     let self = this;
 
     // In those 2 modes, consider activity answered when first card is clicked.
-    if (this.playMode === 'normalMode' || this.playMode === 'browseSideBySide') {
+    if (this.playMode === 'freeBrowsing' || this.playMode === 'browseSideBySide') {
       self.triggerAnswered();
     }
     self.stopAudio(self.$current.index());
@@ -2473,7 +2505,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       this.progress = 0;
       return;
     }
-    if (this.taskFinished && (this.playMode !== 'normalMode' && this.playMode !== 'browseSideBySide')) {
+    if (this.taskFinished && (this.playMode !== 'freeBrowsing' && this.playMode !== 'browseSideBySide')) {
       self.finishedScreen();
       self.trigger('resize');
     }
@@ -3008,7 +3040,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     actualScore = Math.round(actualScore);
 
     this.actualScore = actualScore;
-    if (this.playMode === 'normalMode' || this.playMode === 'browseSideBySide') {
+    if (this.playMode === 'freeBrowsing' || this.playMode === 'browseSideBySide') {
       return;
     }
 
@@ -3658,7 +3690,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    * @returns {Number} Max points. Used in Interactive Book content.
    */
   C.prototype.getMaxScore = function () {
-    if (this.params.behaviour.playMode === 'normalMode' || this.playMode === 'browseSideBySide') {
+    if (this.params.behaviour.playMode === 'freeBrowsing' || this.playMode === 'browseSideBySide') {
       return 1;
     }
     if (this.nbCardsSelected) {
@@ -3674,7 +3706,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (!this.nbCardsSelected) {
       return 0;
     }
-    if (this.params.behaviour.playMode === 'normalMode' || this.playMode === 'browseSideBySide') {
+    if (this.params.behaviour.playMode === 'freeBrowsing' || this.playMode === 'browseSideBySide') {
       return 1;
     }
     return this.actualScore;
