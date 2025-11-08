@@ -389,7 +389,7 @@
             "label": "Self Correction"
           },
           {
-            "value": "userMode",
+            "value": "user",
             "label": "Mode selected by user"
           }
         ]

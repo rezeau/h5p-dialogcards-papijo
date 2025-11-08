@@ -69,6 +69,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       currentLeftSideNotice: "Current display mode: Left card = ",
       selectPlayMode: "Select a play mode",
       currentFilterNotice: "Current Filter = ",
+      currentPlayModeNotice: "Current Play Mode = ",
       selectFilter: "Select a filter for the cards to be displayed",
       noFilter: "No filter",
       boolean_AND: "AND",
@@ -195,7 +196,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         this.filterByCategories = self.params.behaviour.filterByCategories;
       }
     }
-
+//console.log('this.cardsOrderMode = ' + this.cardsOrderMode);
     this.userSelectedCategory = '';
     if (this.cardsOrderMode === 'normal') {
       this.enableCardsNumber = false;
@@ -209,7 +210,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (this.hasImageOnBack) {
       this.noDupeFrontPicToBack = false;
     }
-
+//    console.log('this.cardsOrderMode = ' + this.cardsOrderMode);
+console.log('this.playModeUser = ' + this.playModeUser);
+    /*
     if (self.params.behaviour.playMode === 'browseSideBySide') {
       this.sideBySide = true;
     }    
@@ -238,9 +241,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       self.enableGotIt = true;
       this.hideTurnButton = self.params.behaviour.hideTurnButton;
       self.hideTurnButton = self.params.behaviour.hideTurnButton;
-      
     }
-
+*/
     // Used in the retry() function to determine if the options screen must be displayed upon re-trying the activity.
     if (this.cardsOrderChoice === 'user' || this.cardsSideChoice === 'user'
       || this.cardsSideChoice === 'user' || this.enableCardsNumber
@@ -384,7 +386,7 @@ console.log('this.playMode = ' + this.playMode);
     if (this.filterByCategories === 'userFilter' && this.currentFilter === undefined) {
       self.createFilterCards().appendTo(self.$inner);
     }
-    else if (this.playMode === 'userMode') {
+    else if (this.playMode === 'user') {
       self.createPlayMode().appendTo(self.$inner);
     }
     else if (this.cardsOrderChoice === 'user' && this.cardOrder === undefined) {
@@ -408,9 +410,51 @@ console.log('this.playMode = ' + this.playMode);
    */
   C.prototype.attachContinue = function () {
     let self = this;
-    console.log('this.playModeUser = ' + this.playModeUser);
-    // Section to show the Display cards options if different from "normal".
     let text = '';
+     if (this.playMode === 'user') {
+      const value = this.playModeUser;
+        // Use .find() to get the object with matching value
+        const found = self.playModeNames.find(item => item.value === value);
+        // Retrieve the label (if found)
+        const label = found ? found.label : null;
+        text += this.params.currentPlayModeNotice + label + '<br>';
+    }
+    if (self.params.behaviour.playMode === 'browseSideBySide') {
+      this.sideBySide = true;
+    }    
+    // AUGUST 2022 Simplified code and fixed sides switching bug!
+    // NOVEMBER 2025 Moved playMode here for use with user choice of play mode.
+    this.playMode = self.params.behaviour.playMode;
+    if (self.params.behaviour.playMode === 'user') {
+      this.playMode = this.playModeUser;
+    }
+    
+    if (this.playMode === 'matchRepetition') {
+      this.playMode = 'matchMode';
+      this.repetition = true;
+    }
+
+    // Mode with cards displayed side by side.
+    if (this.playMode === 'matchMode' || this.playMode === 'browseSideBySide') {
+      this.matchIt = true;
+      this.cardsSideChoice = self.params.behaviour.cardsSideChoice;
+    }
+    // Mode with cards displayed in one stack.
+    else {
+      this.cardsSideChoice = self.params.behaviour.cardsSideChoice;
+      this.cardsSideMode = this.cardsSideChoice;
+    }
+    if (this.playMode === 'selfCorrectionMode') {
+      this.enableGotIt = true;
+      self.enableGotIt = true;
+      this.hideTurnButton = self.params.behaviour.hideTurnButton;
+      self.hideTurnButton = self.params.behaviour.hideTurnButton;
+      
+    }
+
+    
+    // Section to show the Display cards options if different from "normal".
+    
     let order = '';
     if (this.currentFilter !== undefined) {
       let filterNotice = self.params.currentFilterNotice;
@@ -428,9 +472,6 @@ console.log('this.playMode = ' + this.playMode);
         order = self.params.randomOrder;
       }
       text += orderNotice + ' ' + order + '<br>';
-    }
-    if (this.playMode === 'playModeUser') {
-      text += 'play mode ' + self.playModeUser + '<br>';
     }
     // If matchIt the left side = back of card and the right side = front of card
     if (this.matchIt) {
@@ -813,7 +854,7 @@ console.log('this.playMode = ' + this.playMode);
       'class': 'h5p-dialogcards-optionsbuttons'
     }).appendTo($play);
 
-    const playModeNames = [
+    self.playModeNames = [
       { value: "normalMode", label: "Free browsing" },
       { value: "browseSideBySide", label: "Free browsing side by side" },
       { value: "matchMode", label: "Match" },
@@ -821,17 +862,17 @@ console.log('this.playMode = ' + this.playMode);
       { value: "selfCorrectionMode", label: "Self Correction" }
     ];
     
-    for (i = 0; i < playModeNames.length; i++) {
+    for (i = 0; i < self.playModeNames.length; i++) {
       $class = 'h5p-joubelui-button';
           self.$button = JoubelUI.createButton({
             'class': $class,
-            'title': playModeNames[i]["value"],
-            'html': playModeNames[i]["label"],
+            'title': self.playModeNames[i]["value"],
+            'html': self.playModeNames[i]["label"],
             'id': i,
-            'selectedMode': playModeNames[i]["value"]
+            'selectedMode': self.playModeNames[i]["value"]
           }).click(function () {
             $( '.h5p-dialogcards-categories', self.$inner ).remove();
-              self.playModeUser = playModeNames[this.id]["value"];
+              self.playModeUser = self.playModeNames[this.id]["value"];
             if (self.cardsOrderChoice === 'user' && self.cardOrder === undefined) {
               self.createOrder().appendTo(self.$inner);
             }
