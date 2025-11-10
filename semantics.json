@@ -410,16 +410,7 @@
         "description": "Check this box if you want to replace the 'Turn' button label with 'Check' and hide it on the back of cards.",
         "importance": "medium",
         "default": false,
-        "optional": true,
-        "widget": "showWhen",
-        "showWhen": {
-          "rules": [
-            {
-              "field": "playMode",
-              "equals": "selfCorrectionMode"
-            }
-          ]
-        }
+        "optional": true
       },
       {
         "name": "enableRetry",
