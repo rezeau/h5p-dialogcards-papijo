@@ -142,6 +142,13 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (this.playMode === 'matchMode' || this.playMode === 'browseSideBySide') {
       this.matchIt = true;
     }
+    this.playModeNames = [
+      { value: "normalMode", label: "Free browsing" },
+      { value: "browseSideBySide", label: "Free browsing side by side" },
+      { value: "matchMode", label: "Match" },
+      { value: "matchRepetition", label: "Match with Repetition" },
+      { value: "selfCorrectionMode", label: "Self Correction" }
+    ];
     // Remove potential cards with empty front or empty back, i.e. no text, no audio, no image!
     for (let i = 0; i < self.params.dialogs.length; i++) {
       if (((self.params.dialogs[i]['text'] === undefined || this.noText)
@@ -287,6 +294,12 @@ console.log('***************** this.repetition = ' + this.repetition);
       if (this.contentData.previousState.cardsSideMode !== undefined) {
         this.cardsSideMode = this.contentData.previousState.cardsSideMode;
       }
+      if (this.contentData.previousState.playMode !== undefined) {        
+        this.playMode = this.contentData.previousState.playMode;
+      }
+      if (this.contentData.previousState.playModeUser !== undefined) {
+        this.playModeUser = this.contentData.previousState.playModeUser;
+      }
       if (this.repetition) {
         if (this.contentData.previousState.noMatchCards !== undefined) {
           this.noMatchCards = this.contentData.previousState.noMatchCards;
@@ -376,10 +389,20 @@ console.log('***************** this.repetition = ' + this.repetition);
     
     this.playMode = self.params.behaviour.playMode;
     if (this.playMode === 'user') {
+      /*
+      playModeNames = [
+      { value: "normalMode", label: "Free browsing" },
+      { value: "browseSideBySide", label: "Free browsing side by side" },
+      { value: "matchMode", label: "Match" },
+      { value: "matchRepetition", label: "Match with Repetition" },
+      { value: "selfCorrectionMode", label: "Self Correction" }
+    ];
+    */
+    
       this.playMode = this.playModeUser;
       const value = this.playMode;
         // Use .find() to get the object with matching value
-        const label = (self.playModeNames.find(i => i.value === value) || {}).label || null;
+        const label = (this.playModeNames.find(i => i.value === value) || {}).label || null;
         text += this.params.currentPlayModeNotice + label + '<br>';
     }
 /*
@@ -841,14 +864,6 @@ console.log('***************** this.repetition = ' + this.repetition);
       'class': 'h5p-dialogcards-optionsbuttons'
     }).appendTo($play);
 
-    self.playModeNames = [
-      { value: "normalMode", label: "Free browsing" },
-      { value: "browseSideBySide", label: "Free browsing side by side" },
-      { value: "matchMode", label: "Match" },
-      { value: "matchRepetition", label: "Match with Repetition" },
-      { value: "selfCorrectionMode", label: "Self Correction" }
-    ];
-    
     for (i = 0; i < self.playModeNames.length; i++) {
       $class = 'h5p-joubelui-button';
           self.$button = JoubelUI.createButton({
@@ -3723,6 +3738,8 @@ console.log('***************** this.repetition = ' + this.repetition);
     state.enableCardsNumber = this.enableCardsNumber;
     state.cardsSideChoice = this.cardsSideChoice;
     state.cardsSideMode = this.cardsSideMode;
+    state.playMode = this.playMode;
+    state.playModeUser = this.playModeUser;
     state.taskFinished = this.taskFinished;
     return state;
   };
