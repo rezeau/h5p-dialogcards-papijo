@@ -807,6 +807,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           else {
             self.currentFilter = self.params.noFilter;
           }
+          if (self.params.behaviour.playMode === 'user'/*&& self.playModeUser === undefined*/) {
+            self.createPlayMode().appendTo(self.$inner);
+          }
           if (self.cardsOrderChoice === 'user' && self.cardOrder === undefined) {
             self.createOrder().appendTo(self.$inner);
           }
