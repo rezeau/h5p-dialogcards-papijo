@@ -246,13 +246,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
     // Var cardOrder stores order of cards to allow resuming of card set AND removed cards if match or self-correction Mode.
     // Var progress stores current card index.
-console.log('***************** this.repetition = ' + this.repetition);
-    if (this.repetition) {
-      //this.noMatchCards = [];
-    }
 
     this.contentData = contentData || {};
-    ////console.log('contentData = ' + JSON.stringify(this.contentData, null, 4));
     // Bring card set up to date when resuming.
     if (this.contentData.previousState) {
       this.progress = this.contentData.previousState.progress;
@@ -384,37 +379,22 @@ console.log('***************** this.repetition = ' + this.repetition);
    */
   C.prototype.attachContinue = function () {
     console.log('attachContinue');
+    
     let self = this;
     let text = '';
     
     this.playMode = self.params.behaviour.playMode;
+    console.log('this.playMode = ' + this.playMode + ' this.playModeUser = ' + this.playModeUser);
     if (this.playMode === 'user') {
-      /*
-      playModeNames = [
-      { value: "normalMode", label: "Free browsing" },
-      { value: "browseSideBySide", label: "Free browsing side by side" },
-      { value: "matchMode", label: "Match" },
-      { value: "matchRepetition", label: "Match with Repetition" },
-      { value: "selfCorrectionMode", label: "Self Correction" }
-    ];
-    */
-    
       this.playMode = this.playModeUser;
       const value = this.playMode;
         // Use .find() to get the object with matching value
         const label = (this.playModeNames.find(i => i.value === value) || {}).label || null;
         text += this.params.currentPlayModeNotice + label + '<br>';
     }
-/*
-    if (self.params.behaviour.playMode === 'user') {
-      this.playMode = this.playModeUser;
-    }
-    */
 
-     
     // AUGUST 2022 Simplified code and fixed sides switching bug!
     // NOVEMBER 2025 Moved all params here attachContinue to use playmode selection by user.
-    
     
     if (this.playMode === 'matchRepetition') {
       this.playMode = 'matchMode';
@@ -423,7 +403,6 @@ console.log('***************** this.repetition = ' + this.repetition);
     if (this.playMode === 'matchMode' || this.playMode === 'browseSideBySide') {
       this.matchIt = true;
     }
-    console.log('line 406 this.playMode = ' + this.playMode + ' this.repetition = ' + this.repetition);
     if (this.repetition) {
       if (this.contentData.previousState !== undefined && this.contentData.previousState.noMatchCards !== undefined) {
           this.noMatchCards = this.contentData.previousState.noMatchCards;
@@ -448,7 +427,7 @@ console.log('***************** this.repetition = ' + this.repetition);
       self.enableGotIt = true;
       this.hideTurnButton = self.params.behaviour.hideTurnButton;
       self.hideTurnButton = self.params.behaviour.hideTurnButton;
-      
+      console.log('this.enableGotIt = ' + this.enableGotIt);
     }
   // Used in the retry() function to determine if the options screen must be displayed upon re-trying the activity.
     if (this.cardsOrderChoice === 'user' || this.cardsSideChoice === 'user'
@@ -899,6 +878,7 @@ console.log('***************** this.repetition = ' + this.repetition);
    * @returns {*|jQuery|HTMLElement} Footer element
    */
   C.prototype.createFooter = function () {
+    console.log('createFooter this.enableGotIt = ' + this.enableGotIt);
     let self = this;
     let $footer = $('<nav>', {
       'class': 'h5p-dialogcards-footer',
@@ -1561,7 +1541,6 @@ console.log('***************** this.repetition = ' + this.repetition);
    * @returns {*|jQuery|HTMLElement} Card footer element
    */
   C.prototype.createCardFooter = function () {
-    console.log('createCardFooter');
     let self = this;
     let footerClass;
     if (!this.enableGotIt) {
@@ -1621,7 +1600,6 @@ console.log('***************** this.repetition = ' + this.repetition);
         .appendTo($cardFooter);
     }
     else if (!this.sideBySide) {
-      console.log('1598');
       this.$buttonMatch = H5P.JoubelUI.createButton({
         'class': 'h5p-dialogcards-button-match',
         'html': self.params.matchButtonLabel
@@ -3264,7 +3242,6 @@ console.log('***************** this.repetition = ' + this.repetition);
   };
 
   C.prototype.matchCardsRepetition = function ($card) {
-    console.log('this.noMatchCards = ' + this.noMatchCards);
     let self = this;
     for (let i = 0; i < self.nbCards + 1; i++) {
       self.resetAudio(i);
@@ -3398,7 +3375,6 @@ console.log('***************** this.repetition = ' + this.repetition);
         }
       }, delayInMilliseconds);
     }
-    console.log('this.noMatchCards = ' + this.noMatchCards);
   };
 
   /**
@@ -3407,6 +3383,7 @@ console.log('***************** this.repetition = ' + this.repetition);
    */
 
   C.prototype.resetTask = function () {
+    console.log('resetTask');
     const self = this;
     self.answered = false;
     this.actualScore = 0;
@@ -3417,10 +3394,12 @@ console.log('***************** this.repetition = ' + this.repetition);
     this.$current = undefined;
     self.dialogs = self.params.dialogs;
     self.getCurrentState();
-
+    this.enableGotIt = false;
+    this.hideTurnButton = false
+    this.matchIt = false;
     // Added 11 AUGUST 2022 to fix the switch sides bug.
     if (self.reversed) {
-      //this.switchSides(self.dialogs);
+      //this.switchSides(self.dialogs); NOT NEEDED?
     }
     // JR for interactive book we need to remove the options upon Restart
     $( '.h5p-dialogcards-options', self.$inner).remove();
@@ -3461,6 +3440,9 @@ console.log('***************** this.repetition = ' + this.repetition);
     if (this.filterByCategories === 'userFilter') {
       self.nbCardsSelected = undefined;
       self.createFilterCards().appendTo(self.$inner);
+    }
+    else if (self.params.behaviour.playMode === 'user') {
+      self.createPlayMode().appendTo(self.$inner);
     }
     else if (this.cardsOrderChoice === 'user') {
       self.createOrder().appendTo(self.$inner);
@@ -3527,7 +3509,6 @@ console.log('***************** this.repetition = ' + this.repetition);
    */
 
   C.prototype.resetButtons = function (type) {
-
     let self = this;
     let $card = $(this);
     $card = self.$current;
