@@ -208,7 +208,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
     this.matchCorrect = null;
     this.existsCardOrder = false;
-    this.repetition = false;
+    //this.repetition = true;
     this.noDupeFrontPicToBack = self.params.behaviour.noDupeFrontPicToBack;
     // If at least one card has an image on back, de-activate potential noDupeFrontPicToBack
     // on those cards without back image, the front image will be used, as per this activity default!
@@ -239,18 +239,15 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
     // Var cardOrder stores order of cards to allow resuming of card set AND removed cards if match or self-correction Mode.
     // Var progress stores current card index.
-
+console.log('***************** this.repetition = ' + this.repetition);
     if (this.repetition) {
-      this.noMatchCards = [];
+      //this.noMatchCards = [];
     }
 
     this.contentData = contentData || {};
     ////console.log('contentData = ' + JSON.stringify(this.contentData, null, 4));
     // Bring card set up to date when resuming.
     if (this.contentData.previousState) {
-
-
-
       this.progress = this.contentData.previousState.progress;
       this.progressLeft = this.contentData.previousState.progressLeft;
 
@@ -373,10 +370,10 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    * @param {jQuery} $container
    */
   C.prototype.attachContinue = function () {
+    console.log('attachContinue');
     let self = this;
     let text = '';
-    console.log('attachContinue');
-    console.log('this.enableGotIt = ' + this.enableGotIt + ' self.enableGotIt = ' + self.enableGotIt);
+    
     this.playMode = self.params.behaviour.playMode;
     if (this.playMode === 'user') {
       this.playMode = this.playModeUser;
@@ -390,7 +387,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       this.playMode = this.playModeUser;
     }
     */
-console.log('this.playModeUser = ' + this.playModeUser + ' this.playMode = ' + this.playMode);
+
      
     // AUGUST 2022 Simplified code and fixed sides switching bug!
     // NOVEMBER 2025 Moved all params here attachContinue to use playmode selection by user.
@@ -400,13 +397,27 @@ console.log('this.playModeUser = ' + this.playModeUser + ' this.playMode = ' + t
       this.playMode = 'matchMode';
       this.repetition = true;
     }
-    
+    if (this.playMode === 'matchMode' || this.playMode === 'browseSideBySide') {
+      this.matchIt = true;
+    }
+    console.log('line 406 this.playMode = ' + this.playMode + ' this.repetition = ' + this.repetition);
+    if (this.repetition) {
+      if (this.contentData.previousState !== undefined && this.contentData.previousState.noMatchCards !== undefined) {
+          this.noMatchCards = this.contentData.previousState.noMatchCards;
+        }
+        else {
+          this.noMatchCards = [];
+        }
+    }
+
     this.cardsSideChoice = self.params.behaviour.cardsSideChoice;
     // no no no it may depend on user choice
     ///this.cardsSideMode = this.cardsSideChoice;
     // Mode with cards displayed side by side.
     if (this.playMode === 'matchMode' || this.playMode === 'browseSideBySide') {
       this.matchIt = true;
+    }
+    if (this.playMode === 'browseSideBySide') {
       this.sideBySide = true;
     }
     if (this.playMode === 'selfCorrectionMode') {
@@ -494,7 +505,7 @@ console.log('this.playModeUser = ' + this.playModeUser + ' this.playMode = ' + t
 
     // Create a $matchFooter container for $matchfooterLeft containing the current score
     // and the normal navigation $footer
-console.log('this.sideBySide = ' + this.sideBySide);
+
     if (this.matchIt && !this.sideBySide) {
       let $matchFooter = $('<div>', {
         'class': 'h5p-dialogcards-match-footer'
@@ -550,8 +561,8 @@ console.log('this.sideBySide = ' + this.sideBySide);
     if (this.repetition && this.cardsLeft === 0) {
       // set parameters as they were on nextRound screen before refreshing page
       this.cardsLeft = 1;
-      this.incorrect--;
-      self.matchCardsRepetition($(this).parents('.h5p-dialogcards-cardwrap'));
+      this.incorrect--;      
+      self.matchCardsRepetition($(this).parents('.h5p-dialogcards-cardwrap'));      
     }
     if (this.playMode === 'selfCorrectionMode' && this.cardsLeft === 0) {
       // set parameters as they were on nextRound screen before refreshing page
@@ -916,6 +927,7 @@ console.log('this.sideBySide = ' + this.sideBySide);
     }).click(function () {
       if (self.repetition) {
         self.retryRepetition();
+        self.trigger('resize');
       }
       else {
         self.retry();
@@ -1534,6 +1546,7 @@ console.log('this.sideBySide = ' + this.sideBySide);
    * @returns {*|jQuery|HTMLElement} Card footer element
    */
   C.prototype.createCardFooter = function () {
+    console.log('createCardFooter');
     let self = this;
     let footerClass;
     if (!this.enableGotIt) {
@@ -1593,6 +1606,7 @@ console.log('this.sideBySide = ' + this.sideBySide);
         .appendTo($cardFooter);
     }
     else if (!this.sideBySide) {
+      console.log('1598');
       this.$buttonMatch = H5P.JoubelUI.createButton({
         'class': 'h5p-dialogcards-button-match',
         'html': self.params.matchButtonLabel
@@ -3235,6 +3249,7 @@ console.log('this.sideBySide = ' + this.sideBySide);
   };
 
   C.prototype.matchCardsRepetition = function ($card) {
+    console.log('this.noMatchCards = ' + this.noMatchCards);
     let self = this;
     for (let i = 0; i < self.nbCards + 1; i++) {
       self.resetAudio(i);
@@ -3368,6 +3383,7 @@ console.log('this.sideBySide = ' + this.sideBySide);
         }
       }, delayInMilliseconds);
     }
+    console.log('this.noMatchCards = ' + this.noMatchCards);
   };
 
   /**
@@ -3376,7 +3392,6 @@ console.log('this.sideBySide = ' + this.sideBySide);
    */
 
   C.prototype.resetTask = function () {
-    console.log('resetTask');
     const self = this;
     self.answered = false;
     this.actualScore = 0;
@@ -3390,14 +3405,13 @@ console.log('this.sideBySide = ' + this.sideBySide);
 
     // Added 11 AUGUST 2022 to fix the switch sides bug.
     if (self.reversed) {
-      // JR not needed?
       //this.switchSides(self.dialogs);
     }
     // JR for interactive book we need to remove the options upon Restart
     $( '.h5p-dialogcards-options', self.$inner).remove();
     let $optionsText = self.$inner.find('.h5p-dialogcards-options');
     $optionsText.html('');
-    this.repetition = false;
+
     if (this.repetition) {
       this.noMatchCards = []; // needed here ?
     }
@@ -3411,18 +3425,13 @@ console.log('this.sideBySide = ' + this.sideBySide);
       + '.h5p-dialogcards-summary-screen, .h5p-dialogcards-summary-message, .h5p-dialogcards-feedback, .h5p-dialogcards-sub-title, .h5p-dialogcards-options', self.$inner).remove();
 
     // Reset various parameters.
-    this.matchIt = false;
-    this.enableGotIt = false;
-    self.enableGotIt = false;
     self.taskFinished = false;
     self.nbCards = self.params.dialogs.length;
     this.nbCardsInCurrentRound = self.nbCards;
-    this.cardsSideChoice = self.params.behaviour.cardsSideChoice;
+    //this.cardsSideChoice = self.params.behaviour.cardsSideChoice;
     this.cardsOrderChoice = self.params.behaviour.cardsOrderChoice;
     this.cardsOrderMode = this.cardsOrderChoice;
-    this.playMode = self.params.behaviour.playMode;
-    this.playModeUser = this.playMode;
-    ///this.cardOrder = undefined; // not needed???
+    this.cardOrder = undefined;
     self.cardSizeDetermined = [];
     self.cardsLeftInStack = self.nbCards;
     // Categories filter determined by author, reset filter and re-start at zero (first card).
@@ -3433,25 +3442,28 @@ console.log('this.sideBySide = ' + this.sideBySide);
     }
     this.filterList = undefined;
     this.filterOperator = undefined;
-    this.sideBySide = false;
 
-    if (this.filterByCategories === 'userFilter' && this.currentFilter === undefined) {
+    if (this.filterByCategories === 'userFilter') {
+      self.nbCardsSelected = undefined;
       self.createFilterCards().appendTo(self.$inner);
     }
-    else if (this.playMode === 'user') {
-      self.createPlayMode().appendTo(self.$inner);
-    }
-    else if (this.cardsOrderChoice === 'user' /*&& this.cardOrder === undefined*/) {
+    else if (this.cardsOrderChoice === 'user') {
       self.createOrder().appendTo(self.$inner);
     }
-    else if (this.enableCardsNumber && this.nbCardsSelected === undefined && self.nbCards > 5) {
-      self.createNumberCards().appendTo(self.$inner);
-    }
-    else if (this.cardsSideChoice === 'user' /*&& this.cardsSideMode === undefined*/) {
-      self.createcardsSideChoice().appendTo(self.$inner);
+    else if (this.enableCardsNumber && self.nbCards > 5) {
+      self.createNumberCards()
+        .appendTo(self.$inner);
     }
     else {
-      self.attachContinue();
+      if (!this.matchIt && this.cardsSideChoice === 'user') {
+        self.createcardsSideChoice().appendTo(self.$inner);
+      }
+      else if (this.matchIt && this.leftSideChoice === 'user') {
+        self.createleftSideChoice().appendTo(self.$inner);
+      }
+      else {
+        self.attachContinue();
+      }
     }
   };
 
@@ -3500,6 +3512,7 @@ console.log('this.sideBySide = ' + this.sideBySide);
    */
 
   C.prototype.resetButtons = function (type) {
+
     let self = this;
     let $card = $(this);
     $card = self.$current;
@@ -3665,8 +3678,7 @@ console.log('this.sideBySide = ' + this.sideBySide);
    * @returns {object} object containing content for each cloze
    */
   C.prototype.getCurrentState = function () {
-    let state = {};
-    console.log('getCurrentState');
+    let state = {};    
     if (this.$current !== undefined) {
       state.progress = this.$current.index();
     }
@@ -3712,8 +3724,6 @@ console.log('this.sideBySide = ' + this.sideBySide);
     state.cardsSideChoice = this.cardsSideChoice;
     state.cardsSideMode = this.cardsSideMode;
     state.taskFinished = this.taskFinished;
-    console.log('*********** state ********' + JSON.stringify(state, null, 4));
-
     return state;
   };
 
