@@ -352,11 +352,11 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     
 
     // Create filterCard, cardOrder and cardNumber buttons only on first instanciation for logged in user.
-    if (this.filterByCategories === 'userFilter' && this.currentFilter === undefined) {
-      self.createFilterCards().appendTo(self.$inner);
-    }
-    else if (this.playMode === 'user') {
+    if (this.playMode === 'user') {
       self.createPlayMode().appendTo(self.$inner);
+    }
+    else if (this.filterByCategories === 'userFilter' && this.currentFilter === undefined) {
+      self.createFilterCards().appendTo(self.$inner);
     }
     else if (this.cardsOrderChoice === 'user' && this.cardOrder === undefined) {
       self.createOrder().appendTo(self.$inner);
@@ -378,13 +378,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    * @param {jQuery} $container
    */
   C.prototype.attachContinue = function () {
-    console.log('attachContinue');
-    
     let self = this;
     let text = '';
-    
     this.playMode = self.params.behaviour.playMode;
-    console.log('this.playMode = ' + this.playMode + ' this.playModeUser = ' + this.playModeUser);
     if (this.playMode === 'user') {
       this.playMode = this.playModeUser;
       const value = this.playMode;
@@ -427,7 +423,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       self.enableGotIt = true;
       this.hideTurnButton = self.params.behaviour.hideTurnButton;
       self.hideTurnButton = self.params.behaviour.hideTurnButton;
-      console.log('this.enableGotIt = ' + this.enableGotIt);
     }
   // Used in the retry() function to determine if the options screen must be displayed upon re-trying the activity.
     if (this.cardsOrderChoice === 'user' || this.cardsSideChoice === 'user'
@@ -435,10 +430,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       || this.playMode === 'user') {
       this.userChoice = true;
     }
-
-    
     // Section to show the Display cards options if different from "normal".
-    
     let order = '';
     if (this.currentFilter !== undefined) {
       let filterNotice = self.params.currentFilterNotice;
@@ -807,9 +799,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           else {
             self.currentFilter = self.params.noFilter;
           }
-          if (self.params.behaviour.playMode === 'user'/*&& self.playModeUser === undefined*/) {
-            self.createPlayMode().appendTo(self.$inner);
-          }
           if (self.cardsOrderChoice === 'user' && self.cardOrder === undefined) {
             self.createOrder().appendTo(self.$inner);
           }
@@ -857,10 +846,13 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           }).click(function () {
             $( '.h5p-dialogcards-categories', self.$inner ).remove();
               self.playModeUser = self.playModeNames[this.id]["value"];
-            if (self.cardsOrderChoice === 'user' && self.cardOrder === undefined) {
+            if (self.filterByCategories === 'userFilter' && this.currentFilter === undefined) {
+              self.createFilterCards().appendTo(self.$inner);
+            }
+            else if (self.cardsOrderChoice === 'user' && self.cardOrder === undefined) {
               self.createOrder().appendTo(self.$inner);
             }
-            else  if (self.enableCardsNumber && self.nbCardsSelected === undefined && self.nbCards > 5) {
+            else if (self.enableCardsNumber && self.nbCardsSelected === undefined && self.nbCards > 5) {
               self.createNumberCards().appendTo(self.$inner);
             }
             else if (!self.matchIt && self.cardsSideChoice === 'user' && self.cardsSideMode === 'user') {
@@ -881,7 +873,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    * @returns {*|jQuery|HTMLElement} Footer element
    */
   C.prototype.createFooter = function () {
-    console.log('createFooter this.enableGotIt = ' + this.enableGotIt);
     let self = this;
     let $footer = $('<nav>', {
       'class': 'h5p-dialogcards-footer',
@@ -3386,7 +3377,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    */
 
   C.prototype.resetTask = function () {
-    console.log('resetTask');
     const self = this;
     self.answered = false;
     this.actualScore = 0;
@@ -3400,6 +3390,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.enableGotIt = false;
     this.hideTurnButton = false
     this.matchIt = false;
+    this.sideBySide = false;
     // Added 11 AUGUST 2022 to fix the switch sides bug.
     if (self.reversed) {
       //this.switchSides(self.dialogs); NOT NEEDED?
@@ -3440,12 +3431,12 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.filterList = undefined;
     this.filterOperator = undefined;
 
-    if (this.filterByCategories === 'userFilter') {
+    if (self.params.behaviour.playMode === 'user') {
+      self.createPlayMode().appendTo(self.$inner);
+    }
+    else if (this.filterByCategories === 'userFilter') {
       self.nbCardsSelected = undefined;
       self.createFilterCards().appendTo(self.$inner);
-    }
-    else if (self.params.behaviour.playMode === 'user') {
-      self.createPlayMode().appendTo(self.$inner);
     }
     else if (this.cardsOrderChoice === 'user') {
       self.createOrder().appendTo(self.$inner);
