@@ -395,6 +395,61 @@
         ]
       },
       {
+        "name": "allowedPlayModes",
+        "importance": "low",
+        "type": "group",
+        "label": "Allowed Play Modes",
+        "description": "Allowed Play Modes",
+        "widget": "showWhen",
+        "showWhen": {
+          "rules": [
+            {
+              "field": "playMode",
+              "equals": [
+                "user"
+              ]
+            }
+          ]
+        },
+        "fields": [
+          {
+            "name": "normalMode",
+            "type": "boolean",
+            "label": "Free browsing",
+            "importance": "low",
+            "default": false
+          },
+          {
+            "name": "browseSideBySide",
+            "type": "boolean",
+            "label": "browseSideBySide",
+            "importance": "low",
+            "default": false
+          },
+          {
+            "name": "matchMode",
+            "type": "boolean",
+            "label": "matchMode",
+            "importance": "low",
+            "default": false
+          },
+          {
+            "name": "matchRepetition",
+            "type": "boolean",
+            "label": "matchRepetition",
+            "importance": "low",
+            "default": false
+          },
+          {
+            "name": "selfCorrectionMode",
+            "type": "boolean",
+            "label": "selfCorrectionMode",
+            "importance": "low",
+            "default": false
+          }
+        ]
+      },
+      {
         "name": "noTextOnCards",
         "type": "boolean",
         "label": "Do not use text?",

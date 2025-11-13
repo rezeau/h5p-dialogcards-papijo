@@ -114,6 +114,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         filterByCategories: 'user'
       }
     }, params);
+//console.log(JSON.stringify(params["behaviour"]["allowedPlayModes"], null, 4));
 
     self._current = -1;
     self._turned = [];
@@ -149,6 +150,21 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       { value: "matchRepetition", label: "Match with Repetition" },
       { value: "selfCorrectionMode", label: "Self Correction" }
     ];
+    this.allowedPlayModes = self.params["behaviour"]["allowedPlayModes"];
+    console.log("this.playModeNames = " + JSON.stringify(this.playModeNames, null, 4));
+    this.playModeNames = this.playModeNames.filter(mode => this.allowedPlayModes[mode.value]);
+
+    console.log("this.allowedPlayModes = " + JSON.stringify(this.allowedPlayModes, null, 4));
+    console.log("this.playModeNames = " + JSON.stringify(this.playModeNames, null, 4));
+    console.log('this.playModeNames.length = ' + this.playModeNames.length);
+    if (this.playModeNames.length === 0) {
+      this.playMode = "normalMode";
+      this.playModeUser = this.playMode;
+    }
+    else if (this.playModeNames.length === 1) {
+      this.playMode = this.playModeNames["value"];
+      this.playModeUser = this.playMode;
+    }
     // Remove potential cards with empty front or empty back, i.e. no text, no audio, no image!
     for (let i = 0; i < self.params.dialogs.length; i++) {
       if (((self.params.dialogs[i]['text'] === undefined || this.noText)
