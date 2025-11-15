@@ -398,8 +398,7 @@
         "name": "allowedPlayModes",
         "importance": "low",
         "type": "group",
-        "label": "Allowed Play Modes",
-        "description": "Allowed Play Modes",
+        "label": "Allowed Play Modes (un-check the un-wanted play modes",
         "widget": "showWhen",
         "showWhen": {
           "rules": [
@@ -417,35 +416,35 @@
             "type": "boolean",
             "label": "Free browsing",
             "importance": "low",
-            "default": false
+            "default": true
           },
           {
             "name": "browseSideBySide",
             "type": "boolean",
-            "label": "browseSideBySide",
+            "label": "Free browsing side by side",
             "importance": "low",
-            "default": false
+            "default": true
           },
           {
             "name": "matchMode",
             "type": "boolean",
-            "label": "matchMode",
+            "label": "Match",
             "importance": "low",
-            "default": false
+            "default": true
           },
           {
             "name": "matchRepetition",
             "type": "boolean",
-            "label": "matchRepetition",
+            "label": "Match with Repetition",
             "importance": "low",
-            "default": false
+            "default": true
           },
           {
             "name": "selfCorrectionMode",
             "type": "boolean",
-            "label": "selfCorrectionMode",
+            "label": "Self Correction",
             "importance": "low",
-            "default": false
+            "default": true
           }
         ]
       },

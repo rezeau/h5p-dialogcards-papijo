@@ -22,7 +22,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       description: "Sit in pairs and make up sentences where you include the expressions below.<br/>Example: I should have said yes, HOWEVER I kept my mouth shut.",
       next: "Next",
       prev: "Previous",
-      retry: "Retry",
+      retry: "Retry this",
       answer: "Turn",
       check: "Check",
       correctAnswer: 'I got it right!',
@@ -114,7 +114,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         filterByCategories: 'user'
       }
     }, params);
-//console.log(JSON.stringify(params["behaviour"]["allowedPlayModes"], null, 4));
 
     self._current = -1;
     self._turned = [];
@@ -122,7 +121,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     self.$images2 = [];
     self.audios = [];
     self.audios2 = [];
-
+    this.resetAll = false;
     this.currentRound = 1;
     this.lastCardIndex = 0;
     this.endOfStack = 0;
@@ -151,12 +150,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       { value: "selfCorrectionMode", label: "Self Correction" }
     ];
     this.allowedPlayModes = self.params["behaviour"]["allowedPlayModes"];
-    console.log("this.playModeNames = " + JSON.stringify(this.playModeNames, null, 4));
     this.playModeNames = this.playModeNames.filter(mode => this.allowedPlayModes[mode.value]);
-
-    console.log("this.allowedPlayModes = " + JSON.stringify(this.allowedPlayModes, null, 4));
-    console.log("this.playModeNames = " + JSON.stringify(this.playModeNames, null, 4));
-    console.log('this.playModeNames.length = ' + this.playModeNames.length);
     if (this.playModeNames.length === 0) {
       this.playMode = "normalMode";
       this.playModeUser = this.playMode;
@@ -344,6 +338,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
   C.prototype.attach = function ($container) {
     let self = this;
 
+    
     self.$inner = $container
       .addClass('h5p-dialogcards')
       .append($('' +
@@ -402,7 +397,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       const value = this.playMode;
         // Use .find() to get the object with matching value
         const label = (this.playModeNames.find(i => i.value === value) || {}).label || null;
-        text += this.params.currentPlayModeNotice + label + '<br>';
+        if (label !== null) {
+          text += this.params.currentPlayModeNotice + label + '<br>';
+        }
     }
 
     // AUGUST 2022 Simplified code and fixed sides switching bug!
@@ -967,7 +964,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         'aria-live': 'assertive'
       }).appendTo($footer);
     }
-
     return $footer;
   };
 
@@ -1000,7 +996,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    */
   C.prototype.updateImageSize = function () {
     let self = this;
-
     // There is no current card in Interactive Book after a Restart.
     if (self.$current === undefined) {
       return;
@@ -1871,7 +1866,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       }
     }
     if ((this.playMode === 'normalMode' || this.playMode === 'browseSideBySide') && $nextCard.length === 0) {
-      self.finishedScreen();
+      /// todo jr not needed ? self.finishedScreen();
     }
     if ($nextCard.length && !this.enableGotIt) {
       self.$next.removeClass('h5p-dialogcards-disabled');
@@ -1937,6 +1932,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     else if (this.sideBySide) {
       self.$progress.text(self.params.progressText.replace('@card', (self.$current.index()) / 2 + 1)
         .replace('@total', self.dialogs.length));
+        if ($nextCard.length === 0) {          
+          self.$retry.removeClass('h5p-dialogcards-disabled');
+        }
     }
     else {
       self.$progress.text(self.params.progressText.replace('@card', (self.$current.index()) + 1)
@@ -2206,7 +2204,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    * @param {jQuery} $card
    */
   C.prototype.turnCard = function ($card) {
-
     let self = this;
     let $cg;
     //let $c = $card.find('.h5p-dialogcards-card-content');
@@ -2359,7 +2356,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (this.endOfStack) {
       self.updateNavigation();
     }
-
   };
 
   /**
@@ -3392,8 +3388,10 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    * Used in contracts. Used upon Restart in Interactive Book!
    */
 
-  C.prototype.resetTask = function () {
+  C.prototype.resetTask = function () {    
     const self = this;
+    //this.resetAll = true;
+    this.contentData.previousState = {};
     self.answered = false;
     this.actualScore = 0;
     this.cardsLeft = self.params.dialogs.length;
@@ -3402,7 +3400,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.incorrect = 0;
     this.$current = undefined;
     self.dialogs = self.params.dialogs;
-    self.getCurrentState();
+    //self.getCurrentState();
     this.enableGotIt = false;
     this.hideTurnButton = false
     this.matchIt = false;
@@ -3425,17 +3423,18 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     // Removes all these elements to start afresh.
 
     $('.h5p-dialogcards-cardwrap-set, .h5p-dialogcards-footer, .h5p-question-feedback-container,'
-      + '.h5p-dialogcards-card-side-announcer, .h5p-dialogcards-button-reset, .h5p-dialogcards-order, .h5p-joubelui-score-bar,'
+      + '.h5p-dialogcards-card-side-announcer, .h5p-dialogcards-button-reset, .h5p-dialogcards-order, .h5p-joubelui-score-bar, .h5p-dialogcards-match-footer,'
       + '.h5p-dialogcards-summary-screen, .h5p-dialogcards-summary-message, .h5p-dialogcards-feedback, .h5p-dialogcards-sub-title, .h5p-dialogcards-options', self.$inner).remove();
 
     // Reset various parameters.
     self.taskFinished = false;
     self.nbCards = self.params.dialogs.length;
-    this.nbCardsInCurrentRound = self.nbCards;
-    //this.cardsSideChoice = self.params.behaviour.cardsSideChoice;
+    this.nbCardsInCurrentRound = self.nbCards;    
     this.cardsOrderChoice = self.params.behaviour.cardsOrderChoice;
+    this.enableCardsNumber = self.params.behaviour.enableCardsNumber;
     this.cardsOrderMode = this.cardsOrderChoice;
     this.cardOrder = undefined;
+    this.nbCardsSelected = undefined;
     self.cardSizeDetermined = [];
     self.cardsLeftInStack = self.nbCards;
     // Categories filter determined by author, reset filter and re-start at zero (first card).
@@ -3444,10 +3443,23 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       this.currentFilter = self.makeCurrentFilterName(this.filterList, this.filterOperator);
       this.progress = 0;
     }
+    this.progress = 0;
     this.filterList = undefined;
     this.filterOperator = undefined;
-
-    if (self.params.behaviour.playMode === 'user') {
+    self.getCurrentState();
+    if (this.playModeNames.length === 0) {
+      this.playMode = "normalMode";
+      this.playModeUser = this.playMode;
+    }
+    else if (this.playModeNames.length === 1) {
+      this.playMode = this.playModeNames["value"];
+      this.playModeUser = this.playMode;
+    } 
+    else  {
+      this.playMode = self.params.behaviour.playMode;
+    }
+    //if (self.params.behaviour.playMode === 'user') {
+    if (this.playMode === 'user') {
       self.createPlayMode().appendTo(self.$inner);
     }
     else if (this.filterByCategories === 'userFilter') {
@@ -3457,20 +3469,15 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     else if (this.cardsOrderChoice === 'user') {
       self.createOrder().appendTo(self.$inner);
     }
-    else if (this.enableCardsNumber && self.nbCards > 5) {
+    else if (this.enableCardsNumber && this.nbCardsSelected === undefined && self.nbCards > 5) {
       self.createNumberCards()
         .appendTo(self.$inner);
     }
-    else {
-      if (!this.matchIt && this.cardsSideChoice === 'user') {
+    else if (!this.matchIt && this.cardsSideChoice === 'user') {
         self.createcardsSideChoice().appendTo(self.$inner);
-      }
-      else if (this.matchIt && this.leftSideChoice === 'user') {
-        self.createleftSideChoice().appendTo(self.$inner);
-      }
-      else {
-        self.attachContinue();
-      }
+    }
+    else {
+      self.attachContinue();
     }
   };
 
@@ -3684,7 +3691,12 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    * @returns {object} object containing content for each cloze
    */
   C.prototype.getCurrentState = function () {
-    let state = {};    
+    let state = {};
+    /* todo
+    if (this.resetAll) {
+      return state;
+    }
+    */
     if (this.$current !== undefined) {
       state.progress = this.$current.index();
     }
@@ -3732,6 +3744,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     state.playMode = this.playMode;
     state.playModeUser = this.playModeUser;
     state.taskFinished = this.taskFinished;
+
     return state;
   };
 
