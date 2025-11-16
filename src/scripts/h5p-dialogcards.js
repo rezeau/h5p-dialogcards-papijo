@@ -1936,6 +1936,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     else if (this.sideBySide) {
       self.$progress.text(self.params.progressText.replace('@card', (self.$current.index()) / 2 + 1)
         .replace('@total', self.dialogs.length));
+        if ($nextCard.length === 0) {          
+          self.$retry.removeClass('h5p-dialogcards-disabled');
+        }
     }
     else {
       self.$progress.text(self.params.progressText.replace('@card', (self.$current.index()) + 1)
