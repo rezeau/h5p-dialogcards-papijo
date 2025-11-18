@@ -2461,7 +2461,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     // In case a dark background was set for the cards.
     $card.find('.h5p-dialogcards-card-content').removeClass('h5p-dialogcards-summary-screen');
     self.stopAudio(self.$current.index());
-    if (!this.enableGotIt && this.userChoice) {
+    if (!this.enableGotIt) {
       this.taskFinished = true;
       let $cards = self.$inner.find('.h5p-dialogcards-cardwrap');
       $cards.each(function (index) {
