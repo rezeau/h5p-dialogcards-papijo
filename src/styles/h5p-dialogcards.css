@@ -115,6 +115,7 @@
 .h5p-dialogcards .h5p-dialogcards-card-footer {
   height: 2.25em;
   text-align: center;
+display: block;
 }
 
 .h5p-dialogcards .h5p-dialogcards-card-footer-enablegotit {
