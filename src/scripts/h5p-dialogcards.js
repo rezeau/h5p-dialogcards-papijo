@@ -2322,7 +2322,7 @@ console.log('this.cardsSideChoice = ' + this.cardsSideChoice + 'this.cardsSideMo
     // In case a dark background was set for the cards.
     $card.find('.h5p-dialogcards-card-content').removeClass('h5p-dialogcards-summary-screen');
     self.stopAudio(self.$current.index());
-    if (!this.enableGotIt && this.userChoice) {
+    if (!this.enableGotIt) {
       this.taskFinished = true;
       let $cards = self.$inner.find('.h5p-dialogcards-cardwrap');
       $cards.each(function (index) {
@@ -2332,7 +2332,6 @@ console.log('this.cardsSideChoice = ' + this.cardsSideChoice + 'this.cardsSideMo
         }
       });
       self.resetTask();
-
       // Needed to re-start on first card if user saved state at another card.
       this.progress = 0;
       return;
@@ -2350,7 +2349,6 @@ console.log('this.cardsSideChoice = ' + this.cardsSideChoice + 'this.cardsSideMo
     this.correct = 0;
     this.incorrect = 0;
     this.$progress.removeClass('h5p-dialogcards-hide');
-
     if (this.lastCardIndex) {
       // Now remove the current 'gotitdone' card from the cards and cardOrder arrays.
       self.dialogs.splice(this.lastCardIndex, 1);
