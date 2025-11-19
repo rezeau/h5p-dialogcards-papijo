@@ -334,7 +334,7 @@
         "type": "select",
         "label": "Filter by Categories",
         "importance": "low",
-        "description": "Select how the cards will be filtered. No filtering / First (or unique) filter defined above. / If more than one filter has been defined, enable user to select a filter at runtime.",
+        "description": "Select how the cards will be filtered. If more than one filter has been defined, enable user to select a filter at runtime.",
         "default": "noFilter",
         "widget": "showWhen",
         "showWhen": {
@@ -349,10 +349,6 @@
           {
             "value": "noFilter",
             "label": "Do not filter"
-          },
-          {
-            "value": "authorFilter",
-            "label": "Use the FIRST filter defined above"
           },
           {
             "value": "userFilter",

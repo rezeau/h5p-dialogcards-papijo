@@ -245,13 +245,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     self.dialogs = self.copy(self.params.dialogs);
 
     this.noFilterMessage = '';
-    if (self.params.enableCategories && this.filterByCategories === 'authorFilter') {
-      this.filterList = self.params.behaviour.catFilters[0]["filterList"];
-      this.filterOperator = self.params.behaviour.catFilters[0]["filterOperator"];
-      self.applyFilter(this.filterList, this.filterOperator, false);
-      this.currentFilter = self.makeCurrentFilterName(this.filterList, this.filterOperator);
-    }
-
     self.nbCards = self.dialogs.length;
     this.cardsLeftInStack = this.nbCardsSelected;
     this.nbCardsInCurrentRound = self.nbCards;
@@ -3303,13 +3296,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.cardsOrderMode = this.cardsOrderChoice;
     this.cardOrder = undefined;
     self.cardSizeDetermined = [];
-    self.cardsLeftInStack = self.nbCards;
-    // Categories filter determined by author, reset filter and re-start at zero (first card).
-    if (self.params.enableCategories && this.filterList !== undefined && this.filterByCategories === 'authorFilter') {
-      self.applyFilter(this.filterList, this.filterOperator, false);
-      this.currentFilter = self.makeCurrentFilterName(this.filterList, this.filterOperator);
-      this.progress = 0;
-    }
+    self.cardsLeftInStack = self.nbCards;    
     this.filterList = undefined;
     this.filterOperator = undefined;
 
