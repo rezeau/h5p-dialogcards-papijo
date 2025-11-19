@@ -334,7 +334,7 @@
         "type": "select",
         "label": "Filter by Categories",
         "importance": "low",
-        "description": "Select how the cards will be filtered. No filtering / First (or unique) filter defined above. / If more than one filter has been defined, enable user to select a filter at runtime.",
+        "description": "Select how the cards will be filtered. If more than one filter has been defined, enable user to select a filter at runtime.",
         "default": "noFilter",
         "widget": "showWhen",
         "showWhen": {
@@ -349,10 +349,6 @@
           {
             "value": "noFilter",
             "label": "Do not filter"
-          },
-          {
-            "value": "authorFilter",
-            "label": "Use the FIRST filter defined above"
           },
           {
             "value": "userFilter",
@@ -606,22 +602,10 @@
       {
         "name": "cardsSideChoice",
         "type": "select",
-        "label": "Display which side first?",
+        "label": "Display which side first/on the left?",
         "importance": "low",
         "description": "Select how the cards will be displayed. This option is mostly useful if the front of the cards is not really a question",
         "default": "frontFirst",
-        "widget": "showWhen",
-        "showWhen": {
-          "rules": [
-            {
-              "field": "playMode",
-              "equals": [
-                "selfCorrectionMode",
-                "normalMode"
-              ]
-            }
-          ]
-        },
         "options": [
           {
             "value": "frontFirst",
@@ -630,41 +614,6 @@
           {
             "value": "backFirst",
             "label": "Display back side first (reverse display)"
-          },
-          {
-            "value": "user",
-            "label": "User's choice"
-          }
-        ]
-      },
-      {
-        "name": "leftSideChoice",
-        "type": "select",
-        "label": "Display which side on the left?",
-        "importance": "low",
-        "description": "Select which side of the cards will be displayed on the left",
-        "default": "frontLeft",
-        "widget": "showWhen",
-        "showWhen": {
-          "rules": [
-            {
-              "field": "playMode",
-              "equals": [
-                "matchMode",
-                "matchRepetition",
-                "browseSideBySide"
-              ]
-            }
-          ]
-        },
-        "options": [
-          {
-            "value": "frontLeft",
-            "label": "Display the front side on the left"
-          },
-          {
-            "value": "backLeft",
-            "label": "Display the back side on the left"
           },
           {
             "value": "user",
