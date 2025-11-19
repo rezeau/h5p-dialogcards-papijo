@@ -366,7 +366,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     else {
       this.existsCardOrder = false;
     }
-console.log('this.cardsSideChoice = ' + this.cardsSideChoice + 'this.cardsSideMode =' + this.cardsSideMode);
+
     // Create filterCard, cardOrder and cardNumber buttons only on first instanciation for logged in user.
     if (this.filterByCategories === 'userFilter' && this.currentFilter === undefined) {
       self.createFilterCards().appendTo(self.$inner);
@@ -378,7 +378,6 @@ console.log('this.cardsSideChoice = ' + this.cardsSideChoice + 'this.cardsSideMo
       self.createNumberCards().appendTo(self.$inner);
     }
     else if (this.cardsSideChoice === 'user' && this.cardsSideMode === 'user') {
-      console.log('goto create');
       self.createcardsSideChoice().appendTo(self.$inner);
     }
     else {
@@ -580,7 +579,6 @@ console.log('this.cardsSideChoice = ' + this.cardsSideChoice + 'this.cardsSideMo
    * @returns {*|jQuery|HTMLElement} Side element
    */
   C.prototype.createcardsSideChoice = function () {
-    console.log('createcardsSideChoice');
     let self = this;
     let currentSide;
     let reverseSide;
@@ -997,6 +995,7 @@ console.log('this.cardsSideChoice = ' + this.cardsSideChoice + 'this.cardsSideMo
     let mustSwitch = false;
     const isReversed = cards[0].text !== this.firstText && !this.catFilters;
     // concise version by ChatGPT 18:26 09/11/2025
+    mustSwitch = (this.cardsSideMode === 'backFirst') !== !!this.matchIt;
     if (!isReversed && mustSwitch || isReversed && !mustSwitch) {
       this.switchSides(cards);
     }
@@ -1640,7 +1639,6 @@ console.log('this.cardsSideChoice = ' + this.cardsSideChoice + 'this.cardsSideMo
    * @returns {*|jQuery|HTMLElement} Card audio element
    */
   C.prototype.createCardAudio = function (card) {
-
     let self = this;
     let audio = null;
     let audioClass = 'h5p-dialogcards-audio-wrapper';
@@ -2287,15 +2285,12 @@ console.log('this.cardsSideChoice = ' + this.cardsSideChoice + 'this.cardsSideMo
   };
 
   /**
-
   // hide and show audio not used in papi Jo version
   /**
    * Hide audio button
    *
    * @param $card
    */
-
-
   C.prototype.removeAudio = function ($card) {
     let self = this;
     self.stopAudio($card.closest('.h5p-dialogcards-cardwrap').index());
@@ -2739,7 +2734,6 @@ console.log('this.cardsSideChoice = ' + this.cardsSideChoice + 'this.cardsSideMo
       let increaseFontSize = true;
       while (increaseFontSize) {
         fontSize += C.SCALEINTERVAL;
-
         // Cap at  16px
         if (fontSize > mainFontSize) {
           increaseFontSize = false;
