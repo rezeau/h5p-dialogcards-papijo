@@ -139,9 +139,6 @@
               "label": "Ne pas filtrer les cartes"
             },
             {
-              "label": "Utilisez le PREMIER filtre défini ci-dessus"
-            },
-            {
               "label": "Filtre sélectionné par l'utilisateur"
             }
           ]
@@ -216,7 +213,7 @@
           "description": "Permet à l'utilisateur de choisir le nombre de cartes tirées dans le paquet de cartes."
         },
         {
-          "label": "Afficher quel côté en premier ?",
+          "label": "Afficher quel côté en premier/sur la gauche ?",
           "description": "Sélectionnez le mode d'affichage des cartes. Cette option est surtout utile si le recto des cartes n'est pas vraiment une question.",
           "options": [
             {
@@ -224,21 +221,6 @@
             },
             {
               "label": "Afficher d'abord le dos (affichage inversé)"
-            },
-            {
-              "label": "Au choix de l'utilisateur"
-            }
-          ]
-        },
-        {
-          "label": "Afficher quel côté sur la gauche ?",
-          "description": "Sélectionnez le côté des cartes qui sera affiché à gauche",
-          "options": [
-            {
-              "label": "Afficher le recto à gauche"
-            },
-            {
-              "label": "Afficher le verso à gauche"
             },
             {
               "label": "Au choix de l'utilisateur"

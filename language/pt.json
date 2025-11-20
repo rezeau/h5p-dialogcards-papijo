@@ -151,9 +151,6 @@
               "label": "Sem filtros"
             },
             {
-              "label": "Utilizar o PRIMEIRO filtro, definido acima"
-            },
-            {
               "label": "Filtro selecionado pelo utilizador"
             }
           ]
@@ -247,7 +244,7 @@
           }
         },
         {
-          "label": "Qual das faces dos Cartões pretende visualizar em primeiro lugar  ?",
+          "label": "Qual das faces dos Cartões pretende visualizar em primeiro lugar/à esquerda ?",
           "description": "Selecionar o modo de visualização dos Cartões. Esta opção torna-se útil se o lado frontal dos cartões não é própriamente uma questão.",
           "default": "frontFirst",
           "options": [
@@ -256,27 +253,6 @@
             },
             {
               "label": "Visualizar em primeiro lugar o verso do Cartão (visualização invertida)"
-            },
-            {
-              "label": "Permitir que o Utilizador Escolha"
-            }
-          ]
-        },
-        {
-          "label": "Que face dos Cartões pretende visualizar  à esquerda ?",
-          "description": "Selecionar a face dos Cartões que será visualizada ao lado esquerdo",
-          "default": "frontLeft",
-          "showWhen": {
-            "rules": [
-              {}
-            ]
-          },
-          "options": [
-            {
-              "label": "Lado frontal à esquerda"
-            },
-            {
-              "label": "Verso do Cartão à esquerda"
             },
             {
               "label": "Permitir que o Utilizador Escolha"

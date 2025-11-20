@@ -1,7 +1,7 @@
 {
   "semantics": [
     {
-      "label": "Tutorial and Examples: <a href=\"http://www.h5p.rezeau.org\" target=\"_blank\" rel=\"noopener\">Papi Jo's H5P Moodle site</a></span>",
+      "label": "Tutorial and Examples: <a href=\"http://www.h5p.rezeau.org\" target=\"_blank\" rel=\"noopener\">Papi Jo's H5P site</a></span>",
       "description": "<span style=\"color: white;margin-top: -20px;display: table-caption;font-size: large;\">&#9608;</span>"
     },
     {
@@ -132,13 +132,10 @@
         },
         {
           "label": "Filter by Categories",
-          "description": "Select how the cards will be filtered. No filtering / First (or unique) filter defined above. / If more than one filter has been defined, enable user to select a filter at runtime.",
+          "description": "Select how the cards will be filtered. If more than one filter has been defined, enable user to select a filter at runtime.",
           "options": [
             {
               "label": "Do not filter"
-            },
-            {
-              "label": "Use the FIRST filter defined above"
             },
             {
               "label": "Filter selected by User"
@@ -183,13 +180,11 @@
         },
         {
           "label": "Cards Background color (Front Side)",
-          "description": "The color of the front side of the cards background. Default is transparent rgba(0, 0, 0, 0).",
-          "default": "rgba(0, 0, 0, 0)"
+          "description": "The color of the front side of the cards background. Default is transparent rgba(0, 0, 0, 0)."
         },
         {
           "label": "Cards Background color (Back Side)",
-          "description": "The color of the back side of the cards background. Default is transparent rgba(0, 0, 0, 0). If Default then the Front side colour will be used for both sides.",
-          "default": "rgba(0, 0, 0, 0)"
+          "description": "The color of the back side of the cards background. Default is transparent rgba(0, 0, 0, 0). If Default then the Front side colour will be used for both sides."
         },
         {
           "label": "Do not duplicate front images to back of cards",
@@ -215,7 +210,7 @@
           "description": "Allow user to select the number of cards drawn from the pool"
         },
         {
-          "label": "Display which side first?",
+          "label": "Display which side first/on the left?",
           "description": "Select how the cards will be displayed. This option is mostly useful if the front of the cards is not really a question",
           "options": [
             {
@@ -223,21 +218,6 @@
             },
             {
               "label": "Display back side first (reverse display)"
-            },
-            {
-              "label": "User's choice"
-            }
-          ]
-        },
-        {
-          "label": "Display which side on the left?",
-          "description": "Select which side of the cards will be displayed on the left",
-          "options": [
-            {
-              "label": "Display the front side on the left"
-            },
-            {
-              "label": "Display the back side on the left"
             },
             {
               "label": "User's choice"
@@ -443,7 +423,8 @@
       "default": "Yes"
     },
     {
-      "label": "No"
+      "label": "No",
+      "default": "No"
     },
     {
       "label": "Number of Cards",
@@ -496,7 +477,8 @@
       "default": "AND"
     },
     {
-      "label": "Boolean operator OR used to filter cards by categories"
+      "label": "Boolean operator OR used to filter cards by categories",
+      "default": "OR"
     },
     {
       "label": "Boolean operator NOT used to filter cards by categories",
