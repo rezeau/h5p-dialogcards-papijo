@@ -1,0 +1,491 @@
+{
+  "semantics": [
+    {
+      "label": "Eğitim ve Örnekler: <a href=\"http://www.h5p.rezeau.org\" target=\"_blank\" rel=\"noopener\">Papi Jo's H5P Moodle site</a></span>",
+      "description": "<span style=\"color: white;margin-top: -20px;display: table-caption;font-size: large;\">&#9608;</span>"
+    },
+    {
+      "label": "Başlık"
+    },
+    {
+      "label": "Talimat",
+      "default": ""
+    },
+    {
+      "label": "Kartlarda kategoriler etkinleştirilsin mi?",
+      "description": "Diyaloglar/kartlar için 'Kategoriler' alanı eklensin mi?"
+    },
+    {
+      "label": "Kartlarda alt başlıklar etkinleştirilsin mi?",
+      "description": "Kartlara 'alt başlık' alanı eklensin mi?"
+    },
+    {
+      "widgets": [
+        {
+          "label": "Varsayılan"
+        }
+      ],
+      "label": "Kartlar",
+      "entity": "kart",
+      "field": {
+        "label": "Soru",
+        "fields": [
+          {
+            "label": "Soru",
+            "description": "Kartın ön yüzü için metin"
+          },
+          {
+            "label": "Cevap",
+            "description": "Kartın arka yüzü için isteğe bağlı metin"
+          },
+          {
+            "label": "Görseller",
+            "fields": [
+              {
+            "label": "Kartın ön yüzü için görsel",
+            "description": "Kartın ön yüzü için isteğe bağlı görsel. Eğer aşağıda arka yüz için görsel eklenmezse, bu görsel arka yüzde de gösterilecektir."
+              },
+              {
+                "label": "Ön yüz görseli için alternatif metin"
+              },
+              {
+                "label": "Kartın arka yüzü için görsel",
+            "description": "Kartın arka yüzü için isteğe bağlı görsel."
+              },
+              {
+                "label": "Arka yüz görseli için alternatif metin"
+              }
+            ]
+          },
+          {
+            "label": "Ses",
+            "fields": [
+              {
+                "label": "Kartın ön yüzü için ses dosyası/ları",
+                "description": "Kartın ön yüzü için ses dosyası/ları"
+              },
+              {
+                "label": "Kartın arka yüzü için ses dosyası/ları",
+                "description": "Kartın arka yüzü için ses dosyası/ları"
+              }
+            ]
+          },
+          {
+            "label": "İpuçları",
+            "fields": [
+              {
+                "label": "Ön yüz için ipucu",
+                "description": "Kartın ön yüzü için ipucu"
+              },
+              {
+                "label": "Arka yüz için ipucu",
+                "description": "Kartın arka yüzü için ipucu"
+              }
+            ]
+          },
+          {
+            "label": "Kart Kategorisi/leri",
+            "description": "İsteğe bağlı. Bu kartın ait olduğu kategori(ler). Öğe ad(lar)ını virgülle ve boşluk bırakmadan girin."
+          },
+          {
+            "label": "Bu kart için alt başlık",
+            "description": "'Yan yana serbest gezinme' modu etkinleştirildiğinde bu kart için alt başlık. Maksimum karakter = 80."
+          }
+        ]
+      }
+    },
+    {
+      "label": "Genel Ayarlar",
+      "description": "Bu seçenekler alıştırmanın işleyişini yapılandırmanızı sağlar.",
+      "fields": [
+        {
+          "label": "Kategori filtreleri",
+          "entity": "filtre",
+          "description": "Kartları ait oldukları kategoriye göre filtrelemek için burada birden çok filtre oluşturabilirsiniz.",
+          "widgets": [
+            {
+              "label": "Varsayılan"
+            }
+          ],
+          "field": {
+            "label": "Bu filtrenin ayarlarını oluşturmak için tıklayın",
+            "fields": [
+              {
+              "label": "Bu filtrede kullanılacak kategori listesi"
+              },
+              {
+                "label": "Mantıksal operatör",
+                "description": "Yukarıda tanımlanan filtre listesini işleyecek mantıksal operatörü seçin. Varsayılan değer VE'dir. VE operatörü seçimi, bu filtrede listelenen TÜM kategorilere ait kartlarla sınırlandıracaktır. VEYA operatörü seçimi, en az BİR kategoriye ait tüm kartlara genişletecektir. HARİÇ operatörü, filtrede listelenen herhangi bir kategoriye ait tüm kartları hariç tutacaktır.",
+                "options": [
+                  {
+                    "label": "VE"
+                  },
+                  {
+                    "label": "VEYA"
+                  },
+                  {
+                    "label": "HARİÇ"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "label": "Kategorilere göre filtrele",
+          "description": "Kartların nasıl filtreleneceğini seçin. Filtreleme yok / Yukarıda tanımlanan İLK (veya tek) filtre. / Birden çok filtre tanımlandıysa, kullanıcının çalışma zamanında bir filtre seçmesine izin verin.",
+          "options": [
+            {
+              "label": "Kartları filtreleme"
+            },
+            {
+              "label": "Kullanıcı tarafından seçilen filtre"
+            }
+          ]
+        },
+        {
+          "label": "Mod",
+          "description": "Serbest Gezinme varsayılan moddur. Yan yana serbest gezinme modu: Alt başlıkları etkinleştirdiyseniz, kartların altında görüntülenecektir. Eşleştirme modunda, kullanıcı kartların ön ve arka yüzlerini eşleştirmelidir. Kendi Kendini Düzeltme modunda, kartların diğer tarafını tahmin edebilir ve doğru tahmin edip etmediğini onaylayabilir. Tekrarlı Eşleştirme, Eşleştirme ve Kendi Kendini Düzeltme modlarının birleşimidir.",
+          "options": [
+            {
+              "label": "Serbest Gezinme"
+            },
+            {
+              "label": "Yan Yana Serbest Gezinme"
+            },
+            {
+              "label": "Eşleştirme"
+            },
+            {
+              "label": "Tekrarlı Eşleştirme"
+            },
+            {
+              "label": "Kendi Kendini Düzeltme"
+            }
+          ]
+        },
+        {
+          "label": "Metinleri gizle?",
+          "description": "Kartların ön ve arka yüzlerinde yalnızca görsel veya ses kullanıyorsanız, metin kullanmıyorsanız bu kutuyu işaretleyin."
+        },
+        {
+          "label": "Hide the Turn button on back of cards?",
+          "description": "Check this box if you want to replace the 'Turn' button label with 'Check' and hide it on the back of cards."
+        },
+        {
+          "label": "\"Yeniden Başlat\" butonunu etkinleştir"
+        },
+        {
+          "label": "Metni kart boyutuna uyacak şekilde ölçeklendir",
+          "description": "Bu seçenek işaretlenmezse, kart boyutu içine yerleştirilen metne göre ayarlanacaktır"
+        },
+        {
+          "label": "Kartların arka plan rengi (Ön Yüz)",
+          "description": "Kartların ön yüzü için arka plan rengi. Varsayılan olarak bu arka plan şeffaftır rgba(0, 0, 0, 0).",
+          "default": "rgba(0, 0, 0, 0)"
+        },
+        {
+          "label": "Kartların arka plan rengi (Arka Yüz)",
+          "description": "Kartların arka yüzü için arka plan rengi. Varsayılan olarak bu arka plan şeffaftır rgba(0, 0, 0, 0). Varsayılan olarak, ön yüz rengi her iki yüz için de kullanılacaktır.",
+          "default": "rgba(0, 0, 0, 0)"
+        },
+        {
+          "label": "Ön yüz görsellerini kartların arka yüzüne kopyalama.",
+          "description": "Ön yüz görsellerinin otomatik olarak kartların arka yüzüne kopyalanmasını istemiyorsanız bu seçeneği işaretleyin."
+        },
+        {
+          "label": "Kart sıralaması",
+          "description": "Kullanıcı için kartların görüntülenme sırasını seçin. \"Kullanıcı seçimi\"ni seçerseniz ve kullanıcı rastgele sırayı seçerse, ayrıca desteden çekilecek <b>kart sayısını</b> da seçebilecektir.",
+          "options": [
+            {
+              "label": "Normal sıra"
+            },
+            {
+              "label": "Rastgele sıra"
+            },
+            {
+              "label": "Kullanıcı seçimi"
+            }
+          ]
+        },
+        {
+          "label": "Görüntülenecek kart sayısını seç",
+          "description": "Kullanıcının desteden çekilecek kart sayısını seçmesine izin verir."
+        },
+        {
+          "label": "Önce hangi yüz gösterilsin/gösterilsin?",
+          "description": "Kartların görüntülenme modunu seçin. Bu seçenek özellikle kartların ön yüzünün gerçekten bir soru olmadığı durumlarda kullanışlıdır.",
+          "options": [
+            {
+              "label": "Önce ön yüzü göster (normal görüntüleme)"
+            },
+            {
+              "label": "Önce arka yüzü göster (ters görüntüleme)"
+            },
+            {
+              "label": "Kullanıcı seçimi"
+            }
+          ]
+        },
+        {
+          "label": "Ceza yüzdesi",
+          "description": "Her ek tur (kendi kendini düzeltme modunda) veya yanlış eşleştirme (eşleştirme modunda), kullanıcıya maksimum puanın bu yüzdesine mal olacaktır. HİÇ ceza olmaması için 0 girin. Maksimum ceza 50(%)'dir. Kutuya % işareti YAZMAYIN."
+        },
+        {
+          "label": "Başarı yüzdesi",
+          "description": "xAPI'de (Moode gibi) Başarı (result.success) özelliğini elde etmek için gereken toplam puan yüzdesi."
+        }
+      ]
+    },
+    {
+      "label": "\"Dönüş\" düğmesi için metin",
+      "default": "Dönüş"
+    },
+    {
+      "label": "\"Kontrol et\" düğmesi için metin",
+      "default": "Kontrol et"
+    },
+    {
+      "label": "\"Sonraki\" butonu için metin",
+      "default": "Sonraki"
+    },
+    {
+      "label": "\"Önceki\" butonu için metin",
+      "default": "Önceki"
+    },
+    {
+      "label": "\"Yeniden Başlat\" butonu için metin",
+      "default": "Yeniden Başlat"
+    },
+    {
+      "label": "\"Doğru cevap\" butonu için metin",
+      "default": "Doğru bildim!"
+    },
+    {
+      "label": "\"Yanlış cevap\" butonu için metin",
+      "default": "Yanlış bildim"
+    },
+    {
+      "label": "Kartların altında ve özet sayfasında görünen \"Tur\" mesajı için metin",
+      "description": "@round mevcut tur numarası ile değiştirilecektir",
+      "default": "@round. Tur"
+    },
+    {
+      "label": "Son özet sayfasında görünen \"tur(lar)\" mesajı için metin",      
+      "description": "@round toplam tur sayısı ile değiştirilecektir",
+      "default": "@round tur"
+    },
+    {
+      "label": "\"Kalan kartlar\" mesajı için metin",
+      "description": "@number bu tur için kalan kart sayısı ile değiştirilecektir",
+      "default": "Kalan kartlar: @number"
+    },
+    {
+      "label": "\"Sonraki tur\" butonu için metin",
+      "description": "@round tur numarası ile değiştirilecektir",
+      "default": "@round. Tura geç"
+    },
+    {
+      "label": "\"Eşleştirme\" butonu için metin",
+      "description": "Eşleştirme modunda, kullanıcının potansiyel bir eşleşmeyi belirtmek için tıklaması gereken butonu etiketlemek için kullanılır",
+      "default": "Eşleştir"
+    },
+    {
+      "label": "\"Doğru eşleştirme\" mesajı için metin",
+      "description": "Eşleştirme modunda kullanılır",
+      "default": "Bu bir eşleşme!"
+    },
+    {
+      "label": "\"Yanlış eşleştirme\" mesajı için metin",
+      "description": "Eşleştirme modunda kullanılır",
+      "default": "Bu bir eşleşme değil!"
+    },
+    {
+      "label": "Mevcut doğru/yanlış eşleştirme sayısını gösteren mesaj için metin",
+      "description": "@correct ve @incorrect doğru/yanlış eşleştirme sayıları ile değiştirilecektir",
+      "default": "Doğru eşleştirmeler: @correct | Yanlış eşleştirmeler: @incorrect"
+    },
+    {
+      "label": "Özet sayfasında doğru eşleştirme sayısı etiketi",
+      "description": "Eşleştirme modunda bir oturumun sonunda kullanılır",
+      "default": "Doğru eşleştirmeler:"
+    },
+    {
+      "label": "Özet sayfasında yanlış eşleştirme sayısı etiketi",
+      "description": "Eşleştirme modunda bir oturumun sonunda kullanılır",
+      "default": "Yanlış eşleştirmeler:"
+    },
+    {
+      "label": "Özet sayfasında kullanılan son geri bildirim mesajı",
+      "description": "Eşleştirme modunda bir oturumun sonunda kullanılır",
+      "default": "Tebrikler!"
+    },
+    {
+      "label": "\"Son özet\" butonu için metin",
+      "description": "Kendi Kendini Düzeltme modunda kullanılır",
+      "default": "Son özet"
+    },
+    {
+      "label": "Her tur için özet sayfası başlık metni",
+      "description": "Kendi Kendini Düzeltme modunda kullanılır",
+      "default": "Özet"
+    },
+    {
+      "label": "\"Doğru kartlar:\" için metin",
+      "description": "Kendi Kendini Düzeltme modunda kullanılır",
+      "default": "Doğru kartlar:"
+    },
+    {
+      "label": "\"Yanlış kartlar:\" için metin",
+      "description": "Kendi Kendini Düzeltme modunda kullanılır",
+      "default": "Yanlış kartlar:"
+    },
+    {
+      "label": "\"Genel puan\"",
+      "description": "Eşleştirme ve Kendi Kendini Düzeltme modlarında kullanılır",
+      "default": "Genel puan"
+    },
+    {
+      "label": "\"Bulunan kartlar\"",
+      "description": "Kendi Kendini Düzeltme modunda kullanılır",
+      "default": "Bulduğunuz kartlar:"
+    },
+    {
+      "label": "\"Seçilen kartlar\"",
+      "description": "Kullanıcı destedeki TÜM kartları çekmeyi seçmediyse bu sayı gösterilecektir.",
+      "default": "Desteden çektiğiniz kart sayısı:"
+    },
+    {
+      "label": "\"Tamamlanan turlar:\" için metin",
+      "description": "Kendi Kendini Düzeltme modunda kullanılır",
+      "default": "Tamamlanan turlar:"
+    },
+    {
+      "label": "Tüm kartlar öğrenildiğinde gösterilen mesaj",
+      "description": "Kendi Kendini Düzeltme modunda kullanılır. @cards bulunan toplam kart sayısı ile değiştirilecektir.",
+      "default": "Tebrikler! @cards kartın tümünü bulmayı başardınız!"
+    },
+    {
+      "label": "Ceza yüzdesi uygulandığında puan açıklaması.",
+      "description": "Kendi Kendini Düzeltme modunda kullanılır. @penalty uygulanan ceza yüzdesi ile değiştirilecektir.",
+      "default": "Her ek tur size @penalty% cezaya mal oldu."
+    },
+    {
+      "label": "Eşleştirme modunda puan açıklaması.",
+      "description": "Maksimum puan elde edilmediğinde puanın açıklaması.",
+      "default": "Her yanlış eşleştirme size 1 puan cezaya mal oldu."
+    },
+    {
+      "label": "İlerleme metni",
+      "description": "Kullanılabilir değişkenler @card ve @total.",
+      "default": "@card / @total kart"
+    },
+    {
+      "label": "Kartın ön yüzü için etiket",
+      "description": "Erişilebilirlik için yardımcı teknolojiler tarafından kullanılır",
+      "default": "kartın ön yüzü (recto)"
+    },
+    {
+      "label": "Kartın arka yüzü için etiket",
+      "description": "Erişilebilirlik için yardımcı teknolojiler tarafından kullanılır",
+      "default": "kartın arka yüzü (verso)"
+    },
+    {
+      "label": "İpucu butonunu göster etiketi",
+      "default": "İpucunu göster"
+    },
+    {
+      "label": "Ses desteklenmiyor mesajı",
+      "default": "Tarayıcınız bu ses dosyasını desteklemiyor"
+    },
+    {
+      "label": "Kartlar rastgele sırada gösterilsin mi?",
+      "description": "Kullanıcıya kartları rastgele sırada göstermek isteyip istemediğini sorun.",
+      "default": "Kartlar rastgele sırada gösterilsin mi?"
+    },
+    {
+      "label": "Sağdaki kartlar rastgele sırada gösterilsin mi?",
+      "description": "Kullanıcıya sağdaki kartları rastgele sırada göstermek isteyip istemediğini sorun. Soldaki kartların DAİMA rastgele sırada olduğunu unutmayın.",
+      "default": "Sağdaki kartlar rastgele sırada gösterilsin mi?"
+    },
+    {
+      "label": "Mevcut kart sıralaması bildirimi",
+      "description": "Kullanıcıya kartları hangi sırada gösterdiğini bildirir (normal veya rastgele).",
+      "default": "Mevcut kart sıralaması = "
+    },
+    {
+      "label": "Normal sıra için etiket",
+      "default": "Normal"
+    },
+    {
+      "label": "Rastgele sıra için etiket",
+      "default": "Rastgele"
+    },
+    {
+      "label": "Evet",
+      "default": "Evet"
+    },
+    {
+      "label": "Hayır",
+      "default": "Hayır"
+    },
+    {
+      "label": "Kart sayısı",
+      "description": "Kartlar rastgele sırada gösteriliyorsa, kullanıcıya kaç kart istediğini sorun.",
+      "default": "Kaç kart istiyorsunuz?"
+    },
+    {
+      "label": "Tüm kartlar",
+      "default": "Tüm kartlar"
+    },
+    {
+      "label": "Puanı açıklayan butonun metinsel temsili",
+      "default": "Puanı açıkla"
+    },
+    {
+      "label": "Kullanıcıya kartların görüntülenme yönünü tersine çevirmek isteyip istemediğini sorun.",       
+      "description": "@side mevcut tarafın karşıtı ile değiştirilecektir.",
+      "default": "Mevcut görüntülemeyi tersine çevirerek önce @side tarafını göstermek ister misiniz?"      
+    },
+    {
+      "label": "Kullanıcıya kartların hangi tarafının şu anda önce gösterildiğini bildiren etiket.",      
+      "default": "Mevcut görüntüleme modu: Önce gösterilen taraf = "      
+    },
+    {
+      "label": "Sağdaki kartların şu anda hangi sırada gösterildiğini kullanıcıya bildirmek için kullanılan etiket.",
+      "default": "Sağdaki kartların mevcut sıralaması = "
+    },
+    {
+      "label": "Kullanıcıya şu anda solda gösterilen kart tarafını karşı tarafa çevirmek isteyip istemediğini sorun.",
+      "default": "Mevcut görüntülemeyi tersine çevirerek solda @side tarafını göstermek ister misiniz?"
+    },
+    {
+      "label": "Kullanıcıya kartların hangi tarafının şu anda solda gösterildiğini bildiren etiket.",
+      "default": "Mevcut görüntüleme: Soldaki kart = "
+    },
+    {
+      "label": "Kartları filtrelemek için şu anda hangi filtrenin kullanıldığını kullanıcıya bildirmek için kullanılan etiket.",
+      "default": "Mevcut filtre = "
+    },
+    {
+      "label": "Kullanıcıdan mevcut filtreler arasından bir filtre seçmesini isteyin.",
+      "default": "Bir filtre seçin"
+    },
+    {
+      "label": "Kartların filtrelenmediğini kullanıcıya bildirmek için kullanılan etiket",
+      "default": "Filtre yok"
+    },
+    {
+      "label": "AND mantıksal operatörünün adı",
+      "default": "VE"
+    },
+    {
+      "label": "OR mantıksal operatörünün adı",
+      "default": "VEYA"
+    },
+    {
+      "label": "NOT mantıksal operatörünün adı",
+      "default": "HARİÇ"
+    }
+  ]
+}
