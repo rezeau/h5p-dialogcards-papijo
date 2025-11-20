@@ -84,12 +84,12 @@
             ]
           },
           {
-            "label": "Card Category/ies",
-            "description": "Optional. Category item(s) that this card belongs to. Enter the item name(s) separated by a comma and no space."
+            "label": "Catégorie(s) de carte(s)",
+            "description": "Optionnel. Catégorie(s) à laquelle appartient cette carte. Entrez le(s) nom(s) de la/des catégorie(s) séparé(s) par une virgule et sans espace."
           },
           {
-            "label": "Subtitle for this card",
-            "description": "Subtitle for this card when the 'Free browsing with cards side by side' mode is enabled. Max characters = 80."
+            "label": "Sous-titre pour cette carte",
+            "description": "Sous-titre de cette carte lorsque le mode « Navigation libre avec cartes côte à côte » est activé. Nombre maximal de caractères = 80."
           }
         ]
       }
