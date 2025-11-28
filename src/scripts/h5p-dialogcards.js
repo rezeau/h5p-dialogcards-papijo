@@ -886,6 +886,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    * @returns {*|jQuery|HTMLElement} Footer element
    */
   C.prototype.createFooter = function () {
+    console.log('createFooter');
+    console.log('this.enableGotIt = '+this.repetition + ' this.repetition = ' + this.repetition);
     let self = this;
     let $footer = $('<nav>', {
       'class': 'h5p-dialogcards-footer',
@@ -2441,7 +2443,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     // In case a dark background was set for the cards.
     $card.find('.h5p-dialogcards-card-content').removeClass('h5p-dialogcards-summary-screen');
     self.stopAudio(self.$current.index());
-    if (!this.enableGotIt && this.userChoice) {
+    if (!this.enableGotIt /*&& this.userChoice*/) {
       this.taskFinished = true;
       let $cards = self.$inner.find('.h5p-dialogcards-cardwrap');
       $cards.each(function (index) {
@@ -3388,7 +3390,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    * Used in contracts. Used upon Restart in Interactive Book!
    */
 
-  C.prototype.resetTask = function () {    
+  C.prototype.resetTask = function () {   
+console.log('resetTask');  
     const self = this;
     //this.resetAll = true;
     this.contentData.previousState = {};
@@ -3400,11 +3403,13 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.incorrect = 0;
     this.$current = undefined;
     self.dialogs = self.params.dialogs;
-    //self.getCurrentState();
+    self.getCurrentState();
     this.enableGotIt = false;
+    this.repetition = false;
     this.hideTurnButton = false
     this.matchIt = false;
     this.sideBySide = false;
+    console.log('resetTask this.enableGotIt = '+this.enableGotIt + ' this.repetition = ' + this.repetition);
     // Added 11 AUGUST 2022 to fix the switch sides bug.
     if (self.reversed) {
       //this.switchSides(self.dialogs); NOT NEEDED?
