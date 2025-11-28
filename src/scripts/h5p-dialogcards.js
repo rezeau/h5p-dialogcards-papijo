@@ -144,20 +144,23 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
     this.playModeNames = [
       { value: "normalMode", label: "Free browsing" },
-      { value: "browseSideBySide", label: "Free browsing side by side" },
+      // on hold for the moment { value: "browseSideBySide", label: "Free browsing side by side" },
       { value: "matchMode", label: "Match" },
       { value: "matchRepetition", label: "Match with Repetition" },
       { value: "selfCorrectionMode", label: "Self Correction" }
     ];
-    this.allowedPlayModes = self.params["behaviour"]["allowedPlayModes"];
-    this.playModeNames = this.playModeNames.filter(mode => this.allowedPlayModes[mode.value]);
-    if (this.playModeNames.length === 0) {
-      this.playMode = "normalMode";
-      this.playModeUser = this.playMode;
-    }
-    else if (this.playModeNames.length === 1) {
-      this.playMode = this.playModeNames["value"];
-      this.playModeUser = this.playMode;
+    // condition used when importing previous contents with no selectMode feature
+    if (this.allowedPlayModes !== undefined) {
+      this.allowedPlayModes = self.params["behaviour"]["allowedPlayModes"];
+      this.playModeNames = this.playModeNames.filter(mode => this.allowedPlayModes[mode.value]);
+      if (this.playModeNames.length === 0) {
+        this.playMode = "normalMode";
+        this.playModeUser = this.playMode;
+      }
+      else if (this.playModeNames.length === 1) {
+        this.playMode = this.playModeNames["value"];
+        this.playModeUser = this.playMode;
+      }
     }
     // Remove potential cards with empty front or empty back, i.e. no text, no audio, no image!
     for (let i = 0; i < self.params.dialogs.length; i++) {
@@ -500,7 +503,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (this.contentData.previousState && this.filterList !== undefined) {
       self.applyFilter(this.filterList, this.filterOperator, false);
     }
-    //// TODO check this pack of cards upon new mode choice
+    //// TODO check this pack of cards upon new mode choice ???
     self.initCards(self.dialogs)
       .appendTo(self.$inner);
     self.$cardSideAnnouncer = $('<div>', {
@@ -886,8 +889,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    * @returns {*|jQuery|HTMLElement} Footer element
    */
   C.prototype.createFooter = function () {
-    console.log('createFooter');
-    console.log('this.enableGotIt = '+this.repetition + ' this.repetition = ' + this.repetition);
     let self = this;
     let $footer = $('<nav>', {
       'class': 'h5p-dialogcards-footer',
@@ -3391,9 +3392,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    */
 
   C.prototype.resetTask = function () {   
-console.log('resetTask');  
     const self = this;
-    //this.resetAll = true;
     this.contentData.previousState = {};
     self.answered = false;
     this.actualScore = 0;
@@ -3409,11 +3408,6 @@ console.log('resetTask');
     this.hideTurnButton = false
     this.matchIt = false;
     this.sideBySide = false;
-    console.log('resetTask this.enableGotIt = '+this.enableGotIt + ' this.repetition = ' + this.repetition);
-    // Added 11 AUGUST 2022 to fix the switch sides bug.
-    if (self.reversed) {
-      //this.switchSides(self.dialogs); NOT NEEDED?
-    }
     // JR for interactive book we need to remove the options upon Restart
     $( '.h5p-dialogcards-options', self.$inner).remove();
     let $optionsText = self.$inner.find('.h5p-dialogcards-options');
@@ -3697,11 +3691,6 @@ console.log('resetTask');
    */
   C.prototype.getCurrentState = function () {
     let state = {};
-    /* todo
-    if (this.resetAll) {
-      return state;
-    }
-    */
     if (this.$current !== undefined) {
       state.progress = this.$current.index();
     }
