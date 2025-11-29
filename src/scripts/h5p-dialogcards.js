@@ -144,24 +144,22 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
     this.playModeNames = [
       { value: "normalMode", label: "Free browsing" },
-      // on hold for the moment { value: "browseSideBySide", label: "Free browsing side by side" },
+      { value: "browseSideBySide", label: "Free browsing side by side" },
       { value: "matchMode", label: "Match" },
       { value: "matchRepetition", label: "Match with Repetition" },
       { value: "selfCorrectionMode", label: "Self Correction" }
     ];
-    // condition used when importing previous contents with no selectMode feature
-    if (this.allowedPlayModes !== undefined) {
+    if (self.params["behaviour"]["allowedPlayModes"] !== undefined) {
       this.allowedPlayModes = self.params["behaviour"]["allowedPlayModes"];
       this.playModeNames = this.playModeNames.filter(mode => this.allowedPlayModes[mode.value]);
       if (this.playModeNames.length === 0) {
         this.playMode = "normalMode";
-        this.playModeUser = this.playMode;
       }
       else if (this.playModeNames.length === 1) {
         this.playMode = this.playModeNames["value"];
-        this.playModeUser = this.playMode;
       }
     }
+    this.playModeUser = this.playMode;
     // Remove potential cards with empty front or empty back, i.e. no text, no audio, no image!
     for (let i = 0; i < self.params.dialogs.length; i++) {
       if (((self.params.dialogs[i]['text'] === undefined || this.noText)
@@ -3408,6 +3406,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.hideTurnButton = false
     this.matchIt = false;
     this.sideBySide = false;
+    self.progress = -1;
+    self.progressLeft = -1;
     // JR for interactive book we need to remove the options upon Restart
     $( '.h5p-dialogcards-options', self.$inner).remove();
     let $optionsText = self.$inner.find('.h5p-dialogcards-options');

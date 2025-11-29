@@ -417,7 +417,14 @@
             "label": "Free browsing",
             "importance": "low",
             "default": true
-          },          
+          },
+          {
+            "name": "browseSideBySide",
+            "type": "boolean",
+            "label": "Free browsing side by side",
+            "importance": "low",
+            "default": true
+          },
           {
             "name": "matchMode",
             "type": "boolean",
