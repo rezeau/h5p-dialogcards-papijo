@@ -930,7 +930,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }).click(function () {
       if (self.repetition) {
         self.retryRepetition();
-        self.trigger('resize');
+        /// todo throws error maybe not needed? self.trigger('resize');
       }
       else {
         self.retry();
