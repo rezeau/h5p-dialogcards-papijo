@@ -361,7 +361,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     else {
       this.existsCardOrder = false;
     }
-    
 
     // Create filterCard, cardOrder and cardNumber buttons only on first instanciation for logged in user.
     if (this.playMode === 'user') {
@@ -373,7 +372,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     else if (this.cardsOrderChoice === 'user' && this.cardOrder === undefined) {
       self.createOrder().appendTo(self.$inner);
     }
-    else if (this.enableCardsNumber && this.nbCardsSelected === undefined && self.nbCards > 5) {
+    else if (this.enableCardsNumber && this.nbCardsSelected === undefined /*&& self.nbCards > 5*/) {
       self.createNumberCards().appendTo(self.$inner);
     }
     else if (this.cardsSideChoice === 'user' && this.cardsSideMode === undefined) {
@@ -501,7 +500,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (this.contentData.previousState && this.filterList !== undefined) {
       self.applyFilter(this.filterList, this.filterOperator, false);
     }
-    //// TODO check this pack of cards upon new mode choice ???
+
     self.initCards(self.dialogs)
       .appendTo(self.$inner);
     self.$cardSideAnnouncer = $('<div>', {
@@ -721,7 +720,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         'id': 'dc-number-' + i
       }).click(function () {
         self.nbCards = this.title;
-        this.nbCards = this.title;        
+        this.nbCards = this.title;
+        self.nbCardsSelected = this.title;
+        this.nbCardsSelected = this.title;
           if (self.cardsSideChoice === 'user') {
             $( '.h5p-dialogcards-number', self.$inner ).remove();
             self.createcardsSideChoice().appendTo(self.$inner);
@@ -1095,23 +1096,19 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    * @returns {*|jQuery|HTMLElement} Card wrapper set
    */
   C.prototype.initCards = function (cards) {
+    if (this.nbCardsSelected !== undefined) {
+      this.nbCards = this.nbCardsSelected;
+    } else {
+      this.nbCardsSelected = this.nbCards;
+    }
     // Reversed cards array to be used in these options.
-    // Check if switching sides is needed.
-    //alert('cards[0].text = ' + cards[0].text + ' this.firstText = ' + this.firstText + ' this.cardsSideMode = ' + this.cardsSideMode);
+    // Check if switching sides is needed.    
     let mustSwitch = false;
     const isReversed = cards[0].text !== this.firstText && !this.catFilters;
-    /*
-    if ( (this.cardsSideMode === 'backFirst' && !this.matchIt) || (this.cardsSideMode === 'frontFirst' && this.matchIt) ) {
-      mustSwitch = true;
-    }*/
     // concise version by ChatGPT 18:26 09/11/2025
     mustSwitch = (this.cardsSideMode === 'backFirst') !== !!this.matchIt;
-
-//    alert ('this.matchIt = ' + this.matchIt + ' isReversed = ' + isReversed  + ' mustSwitch = ' + mustSwitch); 
     if (!isReversed && mustSwitch || isReversed && !mustSwitch) {
-  //    alert ('do switchSides');
       this.switchSides(cards);
-      
     }
 
     let self = this;
@@ -1135,7 +1132,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       if (this.cardsOrderMode === 'random') {
         cardOrdering = H5P.shuffleArray(cardOrdering);
       }
-
       // Retrieve cards objects from the first index
       let randomCards = [];
       for (let i = 0; i < self.nbCards; i++) {
@@ -1156,7 +1152,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         }
       }
       cards = randomCards;
-      this.nbCardsSelected = cards.length;
       this.cardsLeftInStack = this.nbCardsSelected;
       this.cardsLeft = this.nbCardsSelected;
     }
@@ -3462,14 +3457,13 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       self.createPlayMode().appendTo(self.$inner);
     }
     else if (this.filterByCategories === 'userFilter') {
-      self.nbCardsSelected = undefined;
       self.createFilterCards().appendTo(self.$inner);
     }
     else if (this.cardsOrderChoice === 'user') {
       self.createOrder().appendTo(self.$inner);
-    }
+    }    
     else if (this.enableCardsNumber && this.nbCardsSelected === undefined && self.nbCards > 5) {
-      self.createNumberCards()
+     self.createNumberCards()
         .appendTo(self.$inner);
     }
     else if (!this.matchIt && this.cardsSideChoice === 'user') {
