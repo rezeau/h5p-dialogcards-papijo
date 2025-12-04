@@ -8,8 +8,7 @@
       "label": "En-tête"
     },
     {
-      "label": "Consigne",
-      "default": ""
+      "label": "Consigne"
     },
     {
       "label": "Activer les catégories dans les cartes ?",
@@ -161,6 +160,29 @@
             },
             {
               "label": "Autocorrection"
+            },
+            {
+              "label": "Mode choisi par l'utilisateur"
+            }
+          ]
+        },
+        {
+          "label": "Modes de fonctionnement autorisés (décochez les modes de fonctionnement interdits)",
+          "fields": [
+            {
+              "label": "Navigation libre"
+            },
+            {
+              "label": "Navigation libre côte à côte"
+            },
+            {
+              "label": "Appariement"
+            },
+            {
+              "label": "Mode choisi par l'utilisateur"
+            },
+            {
+              "label": "Autocorrection"
             }
           ]
         },
@@ -181,13 +203,11 @@
         },
         {
           "label": "Couleur d'arrière-plan des cartes (Recto)",
-          "description": "Couleur d'arrière-plan du recto des cartes. Par défaut cet arrière-plan est transparent rgba(0, 0, 0, 0).",
-          "default": "rgba(0, 0, 0, 0)"
+          "description": "Couleur d'arrière-plan du recto des cartes. Par défaut cet arrière-plan est transparent rgba(0, 0, 0, 0)."
         },
         {
           "label": "Couleur d'arrière-plan des cartes (Verso)",
-          "description": "Couleur d'arrière-plan du verso des cartes. Par défaut cet arrière-plan est transparent rgba(0, 0, 0, 0). En cas de défaut, la couleur de la face avant sera utilisée pour les deux faces.",
-          "default": "rgba(0, 0, 0, 0)"
+          "description": "Couleur d'arrière-plan du verso des cartes. Par défaut cet arrière-plan est transparent rgba(0, 0, 0, 0). En cas de défaut, la couleur de la face avant sera utilisée pour les deux faces."
         },
         {
           "label": "Ne pas dupliquer les images du recto vers le verso des cartes.",
@@ -372,7 +392,7 @@
     },
     {
       "label": "Explication du score en mode Appariement.",
-      "description": "Explication du score lorsque le score maximum n'a pas été atteint.",
+      "description": "Explicatiu score lorsque le score maximum n'a pas été atteint.",
       "default": "Chaque appariement incorrect vous a coûté une pénalité de 1 point."
     },
     {
@@ -486,6 +506,26 @@
     {
       "label": "Nom de l'opérateur booléen NOT",
       "default": "SAUF"
+    },
+    {
+      "label": "Etiquette pour indiquer le mode Navigation libre",
+      "default": "Navigation libre"
+    },
+    {
+      "label": "Etiquette pour indiquer le mode Navigation libre côte à côte",
+      "default": "Navigation libre côte à côte"
+    },
+    {
+      "label": "Etiquette pour indiquer le mode Appariement",
+      "default": "Appariement"
+    },
+    {
+      "label": "Etiquette pour indiquer le mode Appariement avec Répétition",
+      "default": "Appariement avec Répétition"
+    },
+    {
+      "label": "Etiquette pour indiquer le mode Autocorrection",
+      "default": "Autocorrection"
     }
   ]
 }

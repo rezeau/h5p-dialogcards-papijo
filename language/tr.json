@@ -8,8 +8,7 @@
       "label": "Başlık"
     },
     {
-      "label": "Talimat",
-      "default": ""
+      "label": "Talimat"
     },
     {
       "label": "Kartlarda kategoriler etkinleştirilsin mi?",
@@ -42,15 +41,15 @@
             "label": "Görseller",
             "fields": [
               {
-            "label": "Kartın ön yüzü için görsel",
-            "description": "Kartın ön yüzü için isteğe bağlı görsel. Eğer aşağıda arka yüz için görsel eklenmezse, bu görsel arka yüzde de gösterilecektir."
+                "label": "Kartın ön yüzü için görsel",
+                "description": "Kartın ön yüzü için isteğe bağlı görsel. Eğer aşağıda arka yüz için görsel eklenmezse, bu görsel arka yüzde de gösterilecektir."
               },
               {
                 "label": "Ön yüz görseli için alternatif metin"
               },
               {
                 "label": "Kartın arka yüzü için görsel",
-            "description": "Kartın arka yüzü için isteğe bağlı görsel."
+                "description": "Kartın arka yüzü için isteğe bağlı görsel."
               },
               {
                 "label": "Arka yüz görseli için alternatif metin"
@@ -161,6 +160,29 @@
             },
             {
               "label": "Kendi Kendini Düzeltme"
+            },
+            {
+              "label": "Mode selected by user"
+            }
+          ]
+        },
+        {
+          "label": "Allowed Play Modes (un-check the un-wanted play modes",
+          "fields": [
+            {
+              "label": "Free browsing"
+            },
+            {
+              "label": "Free browsing side by side"
+            },
+            {
+              "label": "Match"
+            },
+            {
+              "label": "Match with Repetition"
+            },
+            {
+              "label": "Self Correction"
             }
           ]
         },
@@ -181,13 +203,11 @@
         },
         {
           "label": "Kartların arka plan rengi (Ön Yüz)",
-          "description": "Kartların ön yüzü için arka plan rengi. Varsayılan olarak bu arka plan şeffaftır rgba(0, 0, 0, 0).",
-          "default": "rgba(0, 0, 0, 0)"
+          "description": "Kartların ön yüzü için arka plan rengi. Varsayılan olarak bu arka plan şeffaftır rgba(0, 0, 0, 0)."
         },
         {
           "label": "Kartların arka plan rengi (Arka Yüz)",
-          "description": "Kartların arka yüzü için arka plan rengi. Varsayılan olarak bu arka plan şeffaftır rgba(0, 0, 0, 0). Varsayılan olarak, ön yüz rengi her iki yüz için de kullanılacaktır.",
-          "default": "rgba(0, 0, 0, 0)"
+          "description": "Kartların arka yüzü için arka plan rengi. Varsayılan olarak bu arka plan şeffaftır rgba(0, 0, 0, 0). Varsayılan olarak, ön yüz rengi her iki yüz için de kullanılacaktır."
         },
         {
           "label": "Ön yüz görsellerini kartların arka yüzüne kopyalama.",
@@ -486,6 +506,26 @@
     {
       "label": "NOT mantıksal operatörünün adı",
       "default": "HARİÇ"
+    },
+    {
+      "label": "Label for selecting the Serbest Gezinme mode",
+      "default": "Serbest Gezinme"
+    },
+    {
+      "label": "Label for selecting the Free browsing side by side mode",
+      "default": "Yan Yana Serbest Gezinme"
+    },
+    {
+      "label": "Label for selecting the Match mode",
+      "default": "Eşleştirme"
+    },
+    {
+      "label": "Label for selecting the Match with Repetition mode",
+      "default": "Tekrarlı Eşleştirme"
+    },
+    {
+      "label": "Label for selecting the Self Correction mode",
+      "default": "Kendi Kendini Düzeltme"
     }
   ]
 }

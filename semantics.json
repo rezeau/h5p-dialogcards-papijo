@@ -334,7 +334,7 @@
         "type": "select",
         "label": "Filter by Categories",
         "importance": "low",
-        "description": "Select how the cards will be filtered. If more than one filter has been defined, enable user to select a filter at runtime.",
+        "description": "Select how the cards will be filtered. No filtering / First (or unique) filter defined above. / If more than one filter has been defined, enable user to select a filter at runtime.",
         "default": "noFilter",
         "widget": "showWhen",
         "showWhen": {
@@ -383,6 +383,64 @@
           {
             "value": "selfCorrectionMode",
             "label": "Self Correction"
+          },
+          {
+            "value": "user",
+            "label": "Mode selected by user"
+          }
+        ]
+      },
+      {
+        "name": "allowedPlayModes",
+        "importance": "low",
+        "type": "group",
+        "label": "Allowed Play Modes (un-check the un-wanted play modes",
+        "widget": "showWhen",
+        "showWhen": {
+          "rules": [
+            {
+              "field": "playMode",
+              "equals": [
+                "user"
+              ]
+            }
+          ]
+        },
+        "fields": [
+          {
+            "name": "normalMode",
+            "type": "boolean",
+            "label": "Free browsing",
+            "importance": "low",
+            "default": true
+          },
+          {
+            "name": "browseSideBySide",
+            "type": "boolean",
+            "label": "Free browsing side by side",
+            "importance": "low",
+            "default": true
+          },
+          {
+            "name": "matchMode",
+            "type": "boolean",
+            "label": "Match",
+            "importance": "low",
+            "default": true
+          },
+          {
+            "name": "matchRepetition",
+            "type": "boolean",
+            "label": "Match with Repetition",
+            "importance": "low",
+            "default": true
+          },
+          {
+            "name": "selfCorrectionMode",
+            "type": "boolean",
+            "label": "Self Correction",
+            "importance": "low",
+            "default": true
           }
         ]
       },
@@ -402,16 +460,7 @@
         "description": "Check this box if you want to replace the 'Turn' button label with 'Check' and hide it on the back of cards.",
         "importance": "medium",
         "default": false,
-        "optional": true,
-        "widget": "showWhen",
-        "showWhen": {
-          "rules": [
-            {
-              "field": "playMode",
-              "equals": "selfCorrectionMode"
-            }
-          ]
-        }
+        "optional": true
       },
       {
         "name": "enableRetry",
@@ -638,7 +687,8 @@
               "field": "playMode",
               "equals": [
                 "selfCorrectionMode",
-                "matchRepetition"
+                "matchRepetition",
+                "user"
               ]
             }
           ]
@@ -661,7 +711,8 @@
               "equals": [
                 "matchMode",
                 "selfCorrectionMode",
-                "matchRepetition"
+                "matchRepetition",
+                "user"
               ]
             }
           ]
@@ -1137,6 +1188,46 @@
     "label": "Boolean operator NOT used to filter cards by categories",
     "importance": "low",
     "default": "NOT",
+    "common": true
+  },
+  {
+    "name": "normalMode",
+    "type": "text",
+    "label": "Label for selecting the Free browsing mode",
+    "importance": "low",
+    "default": "Free browsing mode",
+    "common": true
+  },
+  {
+    "name": "browseSideBySide",
+    "type": "text",
+    "label": "Label for selecting the Free browsing side by side mode",
+    "importance": "low",
+    "default": "Free browsing side by side",
+    "common": true
+  },
+  {
+    "name": "matchMode",
+    "type": "text",
+    "label": "Label for selecting the Match mode",
+    "importance": "low",
+    "default": "Match",
+    "common": true
+  },
+  {
+    "name": "matchRepetition",
+    "type": "text",
+    "label": "Label for selecting the Match with Repetition mode",
+    "importance": "low",
+    "default": "Match with Repetition",
+    "common": true
+  },
+  {
+    "name": "selfCorrectionMode",
+    "type": "text",
+    "label": "Label for selecting the Self Correction mode",
+    "importance": "low",
+    "default": "Self Correction",
     "common": true
   }
 ]

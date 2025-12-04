@@ -132,10 +132,13 @@
         },
         {
           "label": "Filter by Categories",
-          "description": "Select how the cards will be filtered. If more than one filter has been defined, enable user to select a filter at runtime.",
+          "description": "Select how the cards will be filtered. No filtering / First (or unique) filter defined above. / If more than one filter has been defined, enable user to select a filter at runtime.",
           "options": [
             {
               "label": "Do not filter"
+            },
+            {
+              "label": "Use the FIRST filter defined above"
             },
             {
               "label": "Filter selected by User"
@@ -146,6 +149,29 @@
           "label": "Select Mode",
           "description": "\"Free browsing\" is the default mode. Free browsing side by side mode: If you have enabled sub-titles, they will be displayed below the cards. In \"Match\" mode the user will have to pair the front and the back side of cards. In \"Self Correction\" mode, they will be able to guess the other side of the cards and confirm if they got it correct or not. \"Match with Repetition\" is a combination of the \"Match\" and \"Self Correction\" modes.",
           "options": [
+            {
+              "label": "Free browsing"
+            },
+            {
+              "label": "Free browsing side by side"
+            },
+            {
+              "label": "Match"
+            },
+            {
+              "label": "Match with Repetition"
+            },
+            {
+              "label": "Self Correction"
+            },
+            {
+              "label": "Mode selected by user"
+            }
+          ]
+        },
+        {
+          "label": "Allowed Play Modes (un-check the un-wanted play modes",
+          "fields": [
             {
               "label": "Free browsing"
             },
@@ -483,6 +509,26 @@
     {
       "label": "Boolean operator NOT used to filter cards by categories",
       "default": "NOT"
+    },
+    {
+      "label": "Label for selecting the Free browsing mode",
+      "default": "Free browsing mode"
+    },
+    {
+      "label": "Label for selecting the Free browsing side by side mode",
+      "default": "Free browsing side by side"
+    },
+    {
+      "label": "Label for selecting the Match mode",
+      "default": "Match"
+    },
+    {
+      "label": "Label for selecting the Match with Repetition mode",
+      "default": "Match with Repetition"
+    },
+    {
+      "label": "Label for selecting the Self Correction mode",
+      "default": "Self Correction"
     }
   ]
 }

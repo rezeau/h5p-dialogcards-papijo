@@ -8,8 +8,7 @@
       "label": "Cabeçalho"
     },
     {
-      "label": "Descrição",
-      "default": "Escrever o Texto que se pretender que apareça no Cabeçalho do Conteúdo"
+      "label": "Descrição"
     },
     {
       "label": "Ativar as categorias nos cartões ?",
@@ -107,11 +106,6 @@
               "label": "Por defeito"
             }
           ],
-          "showWhen": {
-            "rules": [
-              {}
-            ]
-          },
           "field": {
             "label": "Clicar para criar os parâmetros deste filtro",
             "fields": [
@@ -120,7 +114,6 @@
               },
               {
                 "label": "Operador Boleano",
-                "default": "E",
                 "description": "Selecionar o operador boleano que deverá conjugar a lista de filtros definida acima. O valor por defeito é 'E' - Conjunção. Este operador limitará a escolha aos Cartões aos que pertençam a todas as categorias enumeradas no respetivo filtro. O operador OU alargará a escolha dos Cartões aos que pertençam pelo menos a uma das Categorias enumeradas. O operador NÃO excluirá todos os Cartões que pertençam à(s) categoria(s) enumerados no filtro.",
                 "options": [
                   {
@@ -140,12 +133,6 @@
         {
           "label": "Filtrar por Categorias",
           "description": "Selecionar de que forma os Cartões serão filtrados. Sem filtros / O Primeiro (e únicamente esse) filtro definido acima. / Se forem definidos váriso filtros, permite ao utilizador a seleção de um filtro, antes de iniciar a atividade.",
-          "default": "noFilter",
-          "showWhen": {
-            "rules": [
-              {}
-            ]
-          },
           "options": [
             {
               "label": "Sem filtros"
@@ -158,7 +145,6 @@
         {
           "label": "Modo",
           "description": "A Navegação em modo Normal é o modo de funcionamento por defeito. Lado a lado: Se as Legendas estiverem ativadas, serão mostradas na parte inferior dos Cartões. No modo Associação, o utilizador deverá associar o lado frontal com o verso dos Cartões. Em modo Autocorreção, o utilizador poderá adivinhar o verso do Cartão e confirmar se estava correto ou não. Associação com Repetição é um modo de combinação dos dois anteriores.",
-          "default": "normal",
           "options": [
             {
               "label": "Normal"
@@ -174,6 +160,29 @@
             },
             {
               "label": "Autocorreção"
+            },
+            {
+              "label": "Mode selected by user"
+            }
+          ]
+        },
+        {
+          "label": "Allowed Play Modes (un-check the un-wanted play modes",
+          "fields": [
+            {
+              "label": "Free browsing"
+            },
+            {
+              "label": "Free browsing side by side"
+            },
+            {
+              "label": "Match"
+            },
+            {
+              "label": "Match with Repetition"
+            },
+            {
+              "label": "Self Correction"
             }
           ]
         },
@@ -194,25 +203,11 @@
         },
         {
           "label": "Cor de fundo dos Cartões (Lado frontal)",
-          "description": "Definição da cor de fundo do lado frontal dos Cartões. Por defeito será transparente rgba(0, 0, 0, 0).",
-          "default": "rgba(0, 0, 0, 0)",
-          "spectrum": {
-            "togglePaletteMoreText": "Ver mais",
-            "togglePaletteLessText": "Ver menos",
-            "chooseText": "Selecionar esta cor",
-            "cancelText": "Anular"
-          }
+          "description": "Definição da cor de fundo do lado frontal dos Cartões. Por defeito será transparente rgba(0, 0, 0, 0)."
         },
         {
           "label": "Cor de fundo dos Cartões (Verso)",
-          "description": "Definição da cor de fundo do verso dos Cartões. Por defeito será transparente rgba(0, 0, 0, 0). Em caso de utilização do valor por defeito, a cor do lado frontal será utilizada nas duas faces.",                           
-          "default": "rgba(0, 0, 0, 0)",
-          "spectrum": {
-            "togglePaletteMoreText": "Voir plus",
-            "togglePaletteLessText": "Voir moins",
-            "chooseText": "Choisir cette couleur",
-            "cancelText": "Annuler"
-          }
+          "description": "Definição da cor de fundo do verso dos Cartões. Por defeito será transparente rgba(0, 0, 0, 0). Em caso de utilização do valor por defeito, a cor do lado frontal será utilizada nas duas faces."
         },
         {
           "label": "Não duplicar as imagens do lado frontal para o verso dos Cartões.",
@@ -221,7 +216,6 @@
         {
           "label": "Ordem dos Cartões",
           "description": "Selecionar a ordem pela qual os Cartões serão visualizados pelo utilizador. Se for selecionada a opção \"Permitir que o Utilizador Escolha\" e se este selecionar a \"Ordem Aleatória\", o utilizador poderá igualmente escolher o <b>número de Cartões</b> pretendidos, do número Total de Cartões.",
-          "default": "normal",
           "options": [
             {
               "label": "Sequencial"
@@ -236,17 +230,11 @@
         },
         {
           "label": "Selecionar o número de Cartões a visualizar",
-          "description": "Será permitido ao utilizador escolher o <b>número de Cartões</b> pretendido, do número total de Cartões.",
-          "showWhen": {
-            "rules": [
-              {}
-            ]
-          }
+          "description": "Será permitido ao utilizador escolher o <b>número de Cartões</b> pretendido, do número total de Cartões."
         },
         {
           "label": "Qual das faces dos Cartões pretende visualizar em primeiro lugar/à esquerda ?",
           "description": "Selecionar o modo de visualização dos Cartões. Esta opção torna-se útil se o lado frontal dos cartões não é própriamente uma questão.",
-          "default": "frontFirst",
           "options": [
             {
               "label": "Visualizar em primeiro lugar o lado frontal (visualização normal)"
@@ -518,6 +506,26 @@
     {
       "label": "Nome do operador Boleano NÃO",
       "default": "NÃO"
+    },
+    {
+      "label": "Label for selecting the Free browsing mode",
+      "default": "Modelo de navegação livre"
+    },
+    {
+      "label": "Label for selecting the Free browsing side by side mode",
+      "default": "Lado a lado"
+    },
+    {
+      "label": "Label for selecting the Match mode",
+      "default": "Associação"
+    },
+    {
+      "label": "Label for selecting the Match with Repetition mode",
+      "default": "Associação com Repetição"
+    },
+    {
+      "label": "Label for selecting the Self Correction mode",
+      "default": "Autocorreção"
     }
   ]
 }
