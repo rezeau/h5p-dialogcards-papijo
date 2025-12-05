@@ -161,7 +161,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         this.playMode = "normalMode";
       }
       else if (this.playModeNames.length === 1) {
-        this.playMode = this.playModeNames["value"];
+        this.playMode = this.playModeNames[0]["value"];
       }
     }
     this.playModeUser = this.playMode;
