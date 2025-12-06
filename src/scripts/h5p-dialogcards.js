@@ -23,6 +23,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       next: "Next",
       prev: "Previous",
       retry: "Retry",
+      resetTask: "Reset task",
       answer: "Turn",
       check: "Check",
       correctAnswer: 'I got it right!',
@@ -929,7 +930,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         self.retry();
       }
     }).appendTo($footer);
-
+    
+    
+    
     if (!this.enableGotIt) {
       self.$progress = $('<div>', {
         'class': 'h5p-dialogcards-progress',
@@ -2421,6 +2424,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
   C.prototype.retry = function () {
     let self = this;
     let $card = $(this);
+    console.log('*** retry');
     // To hide the summary text upon retrying
     if (this.noText) {
       $card.find('.h5p-dialogcards-card-text-wrapper').addClass('hide');
@@ -2428,6 +2432,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     // In case a dark background was set for the cards.
     $card.find('.h5p-dialogcards-card-content').removeClass('h5p-dialogcards-summary-screen');
     self.stopAudio(self.$current.index());
+    
     if (!this.enableGotIt) {
       this.taskFinished = true;
       let $cards = self.$inner.find('.h5p-dialogcards-cardwrap');
@@ -2438,11 +2443,10 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         }
       });
       self.resetTask();
-
       // Needed to re-start on first card if user saved state at another card.
       this.progress = 0;
-      return;
     }
+    console.log('*** retry');
     if (this.taskFinished && (this.playMode !== 'normalMode' && this.playMode !== 'browseSideBySide')) {
       self.finishedScreen();
       // todo removed this resize causes error when inside interactive Book PapiJo
@@ -2531,6 +2535,11 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     self.$current.find('.h5p-dialogcards-answer-button-off').removeClass('h5p-dialogcards-disabled');
     self.resetButtons('restart');
   };
+
+  C.prototype.reset = function () {
+    let self = this;
+    alert('this is reset');
+  }
 
   /**
    * Reset the task so that the user can re-start from first card.
@@ -3108,9 +3117,17 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         'title': self.params.retry,
         'html': self.params.retry
       }).click(function () {
-        self.resetTask();
+        self.resetTask(false);
       }).appendTo($feedbackFooter);
     }
+      self.$reset = JoubelUI.createButton({
+        'class': 'h5p-dialogcards-button-reset',
+        'title': self.params.resetTask,
+        'html': self.params.resetTask
+      }).click(function () {
+          self.resetTask(true);
+      }).appendTo($feedbackFooter);
+    
   };
 
   /**
@@ -3380,8 +3397,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    * Used in contracts. Used upon Restart in Interactive Book!
    */
 
-  C.prototype.resetTask = function () {
+  C.prototype.resetTask = function (allReset) {
     const self = this;
+    console.log('allReset = ' + allReset);
     this.contentData.previousState = {};
     self.answered = false;
     this.actualScore = 0;
@@ -3431,33 +3449,38 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.filterList = undefined;
     this.filterOperator = undefined;
     self.getCurrentState();
-    if (this.playModeNames.length === 0) {
-      this.playMode = "normalMode";
-      this.playModeUser = this.playMode;
-    }
-    else if (this.playModeNames.length === 1) {
-      this.playMode = this.playModeNames["value"];
-      this.playModeUser = this.playMode;
-    }
-    else  {
-      this.playMode = self.params.behaviour.playMode;
-    }
-    //if (self.params.behaviour.playMode === 'user') {
-    if (this.playMode === 'user') {
-      self.createPlayMode().appendTo(self.$inner);
-    }
-    else if (this.filterByCategories === 'userFilter') {
-      self.createFilterCards().appendTo(self.$inner);
-    }
-    else if (this.cardsOrderChoice === 'user') {
-      self.createOrder().appendTo(self.$inner);
-    }
-    else if (this.enableCardsNumber && this.nbCardsSelected === undefined && self.nbCards > 5) {
-      self.createNumberCards()
-        .appendTo(self.$inner);
-    }
-    else if (!this.matchIt && this.cardsSideChoice === 'user') {
-      self.createcardsSideChoice().appendTo(self.$inner);
+    if (allReset) {
+      if (this.playModeNames.length === 0) {
+        this.playMode = "normalMode";
+        this.playModeUser = this.playMode;
+      }
+      else if (this.playModeNames.length === 1) {
+        this.playMode = this.playModeNames["value"];
+        this.playModeUser = this.playMode;
+      }
+      else  {
+        this.playMode = self.params.behaviour.playMode;
+      }
+      //if (self.params.behaviour.playMode === 'user') {
+      if (this.playMode === 'user') {
+        self.createPlayMode().appendTo(self.$inner);
+      }
+      else if (this.filterByCategories === 'userFilter') {
+        self.createFilterCards().appendTo(self.$inner);
+      }
+      else if (this.cardsOrderChoice === 'user') {
+        self.createOrder().appendTo(self.$inner);
+      }
+      else if (this.enableCardsNumber && this.nbCardsSelected === undefined && self.nbCards > 5) {
+        self.createNumberCards()
+          .appendTo(self.$inner);
+      }
+      else if (!this.matchIt && this.cardsSideChoice === 'user') {
+        self.createcardsSideChoice().appendTo(self.$inner);
+      }
+      else {
+        self.attachContinue();
+      }
     }
     else {
       self.attachContinue();
