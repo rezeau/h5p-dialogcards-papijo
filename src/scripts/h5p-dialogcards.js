@@ -397,7 +397,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         text += this.params.currentPlayModeNotice + label + '<br>';
       }
     }
-
     // AUGUST 2022 Simplified code and fixed sides switching bug!
     // NOVEMBER 2025 Moved all params here attachContinue to use playmode selection by user.
     if (this.playMode === 'matchRepetition') {
@@ -432,12 +431,14 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       this.hideTurnButton = self.params.behaviour.hideTurnButton;
       self.hideTurnButton = self.params.behaviour.hideTurnButton;
     }
-    // Used in the retry() function to determine if the options screen must be displayed upon re-trying the activity.
+    // Used in the retry() function to determine if the options screen must be displayed upon re-trying the activity. NOT USED ???
+    /*
     if (this.cardsOrderChoice === 'user' || this.cardsSideChoice === 'user'
       || this.enableCardsNumber || this.filterByCategories === 'userFilter'
       || this.playMode === 'user') {
       this.userChoice = true;
     }
+    */
     // Section to show the Display cards options if different from "normal".
     let order = '';
     if (this.currentFilter !== undefined) {
@@ -498,6 +499,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
     self.initCards(self.dialogs)
       .appendTo(self.$inner);
+
     self.$cardSideAnnouncer = $('<div>', {
       html: self.params.cardFrontLabel,
       'class': 'h5p-dialogcards-card-side-announcer',
@@ -545,7 +547,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     // Creating a Date Object used by XAPI
     this.startTime = new Date().getTime();
     this.triggerXAPI('attempted');
-
     self.on('retry', function () {
       self.retry();
     });
@@ -2424,7 +2425,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
   C.prototype.retry = function () {
     let self = this;
     let $card = $(this);
-    console.log('*** retry');
     // To hide the summary text upon retrying
     if (this.noText) {
       $card.find('.h5p-dialogcards-card-text-wrapper').addClass('hide');
@@ -2446,7 +2446,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       // Needed to re-start on first card if user saved state at another card.
       this.progress = 0;
     }
-    console.log('*** retry');
     if (this.taskFinished && (this.playMode !== 'normalMode' && this.playMode !== 'browseSideBySide')) {
       self.finishedScreen();
       // todo removed this resize causes error when inside interactive Book PapiJo
@@ -2535,11 +2534,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     self.$current.find('.h5p-dialogcards-answer-button-off').removeClass('h5p-dialogcards-disabled');
     self.resetButtons('restart');
   };
-
-  C.prototype.reset = function () {
-    let self = this;
-    alert('this is reset');
-  }
 
   /**
    * Reset the task so that the user can re-start from first card.
@@ -3112,7 +3106,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
     // Display reset button to enable user to do the task again IF Retry option enabled.
     if (self.params.behaviour.enableRetry) {
-      self.$resetTaskButton = JoubelUI.createButton({
+      self.$retryButton = JoubelUI.createButton({
         'class': 'h5p-dialogcards-button-reset',
         'title': self.params.retry,
         'html': self.params.retry
@@ -3399,7 +3393,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
   C.prototype.resetTask = function (allReset) {
     const self = this;
-    console.log('allReset = ' + allReset);
     this.contentData.previousState = {};
     self.answered = false;
     this.actualScore = 0;
@@ -3440,9 +3433,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.nbCardsInCurrentRound = self.nbCards;
     this.cardsOrderChoice = self.params.behaviour.cardsOrderChoice;
     this.enableCardsNumber = self.params.behaviour.enableCardsNumber;
-    this.cardsOrderMode = this.cardsOrderChoice;
     this.cardOrder = undefined;
-    this.nbCardsSelected = undefined;
     self.cardSizeDetermined = [];
     self.cardsLeftInStack = self.nbCards;
     this.progress = 0;
@@ -3450,6 +3441,10 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.filterOperator = undefined;
     self.getCurrentState();
     if (allReset) {
+      // Reset cardsSideMode to original value.
+      this.cardsSideMode = this.cardsSideChoice;
+      // Reset nbCardsSelected to original value.
+      this.nbCardsSelected = undefined;
       if (this.playModeNames.length === 0) {
         this.playMode = "normalMode";
         this.playModeUser = this.playMode;
@@ -3460,8 +3455,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       }
       else  {
         this.playMode = self.params.behaviour.playMode;
-      }
-      //if (self.params.behaviour.playMode === 'user') {
+      }      
       if (this.playMode === 'user') {
         self.createPlayMode().appendTo(self.$inner);
       }
@@ -3485,6 +3479,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     else {
       self.attachContinue();
     }
+    // This window refreshing is needed because sometimes cards with images do not display correctly
+    location.reload();
   };
 
   /**
@@ -3547,6 +3543,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       this.$retry.addClass('h5p-dialogcards-disabled');
     }
     else if (type === 'retry button' || type === 'finished button') {
+      
       // Disable answer buttons, turn button, Hide card text button and Enable the Retry button
       if ($gotIt || this.repetition) {
         if (this.noText) {
@@ -3584,33 +3581,34 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           let $cardText = $card.find('.h5p-dialogcards-card-text');
           $cardText.addClass('h5p-dialogcards-auto-height');
         }
+        // This Timeout to prevent invisible summary text sometimes...
+        setTimeout(function () {
+          let $cardContent = $card.find('.h5p-dialogcards-card-content');
+          let $cardTextArea = $card.find('.h5p-dialogcards-card-text-area');
+          $cardContent.addClass('h5p-dialogcards-summary-screen');
+          let text = '<div class="h5p-dialogcards-summary-header">'
+            + summary + '</div>'
+            + '<div class="h5p-dialogcards-summary-subheader">' + roundTxt + '</div>'
+            + '<table class="h5p-dialogcards-summary-table"><tr><td class="h5p-dialogcards-summary-table-row-category">'
+            + cardsRight + '</td>'
+            + '<td class="h5p-dialogcards-summary-table-row-symbol h5p-dialogcards-check">&nbsp;</td>'
+            + '<td class="h5p-dialogcards-summary-table-row-score">'
+            + totalCorrect
+            + '&nbsp;<span class="h5p-dialogcards-summary-table-row-score-divider">/</span>&nbsp;'
+            + totalCards
+            + '</td></tr>'
+            + '<tr><td class="h5p-dialogcards-summary-table-row-category">'
+            + cardsWrong
+            + '</td><td class="h5p-dialogcards-summary-table-row-symbol h5p-dialogcards-times">&nbsp;</td>'
+            + '<td class="h5p-dialogcards-summary-table-row-score">'
+            + totalInCorrect
+            + '&nbsp;<span class="h5p-dialogcards-summary-table-row-score-divider">/</span>&nbsp;'
+            + totalCards
+            + '</td></tr></table>';
 
-        let $cardContent = $card.find('.h5p-dialogcards-card-content');
-        let $cardTextArea = $card.find('.h5p-dialogcards-card-text-area');
-        $cardContent.addClass('h5p-dialogcards-summary-screen');
-        let text = '<div class="h5p-dialogcards-summary-header">'
-          + summary + '</div>'
-          + '<div class="h5p-dialogcards-summary-subheader">' + roundTxt + '</div>'
-          + '<table class="h5p-dialogcards-summary-table"><tr><td class="h5p-dialogcards-summary-table-row-category">'
-          + cardsRight + '</td>'
-          + '<td class="h5p-dialogcards-summary-table-row-symbol h5p-dialogcards-check">&nbsp;</td>'
-          + '<td class="h5p-dialogcards-summary-table-row-score">'
-          + totalCorrect
-          + '&nbsp;<span class="h5p-dialogcards-summary-table-row-score-divider">/</span>&nbsp;'
-          + totalCards
-          + '</td></tr>'
-          + '<tr><td class="h5p-dialogcards-summary-table-row-category">'
-          + cardsWrong
-          + '</td><td class="h5p-dialogcards-summary-table-row-symbol h5p-dialogcards-times">&nbsp;</td>'
-          + '<td class="h5p-dialogcards-summary-table-row-score">'
-          + totalInCorrect
-          + '&nbsp;<span class="h5p-dialogcards-summary-table-row-score-divider">/</span>&nbsp;'
-          + totalCards
-          + '</td></tr></table>';
-
-        $cardTextArea.html(text);
-        $card.find('.h5p-dialogcards-card-text').removeClass('hide');
-
+          $cardTextArea.html(text);
+          $card.find('.h5p-dialogcards-card-text').removeClass('hide');
+        }, 200);
         if (type === 'retry button') {
           this.cardsLeft = 0;
           this.$retry.html(this.params.nextRound.replace('@round', this.currentRound + 1));
