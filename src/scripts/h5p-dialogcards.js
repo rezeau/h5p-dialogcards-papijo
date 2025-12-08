@@ -137,7 +137,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.cardsOrderChoice = self.params.behaviour.cardsOrderChoice;
     this.cardsOrderMode = this.cardsOrderChoice;
     this.cardsSideChoice = self.params.behaviour.cardsSideChoice;
-    this.cardsSideMode = this.cardsSideChoice;
+    ////this.cardsSideMode = this.cardsSideChoice;
     this.playMode = self.params.behaviour.playMode;
     this.playModeUser = this.playMode;
     this.enableCardsNumber = self.params.behaviour.enableCardsNumber;
@@ -359,6 +359,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
 
     // Create filterCard, cardOrder and cardNumber buttons only on first instanciation for logged in user.
+    console.log('*** this.cardsSideChoice = ' + this.cardsSideChoice 
+         + '\n this.cardsSideMode = ' + this.cardsSideMode         
+      );
     if (this.playMode === 'user') {
       self.createPlayMode().appendTo(self.$inner);
     }
@@ -431,14 +434,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       this.hideTurnButton = self.params.behaviour.hideTurnButton;
       self.hideTurnButton = self.params.behaviour.hideTurnButton;
     }
-    // Used in the retry() function to determine if the options screen must be displayed upon re-trying the activity. NOT USED ???
-    /*
-    if (this.cardsOrderChoice === 'user' || this.cardsSideChoice === 'user'
-      || this.enableCardsNumber || this.filterByCategories === 'userFilter'
-      || this.playMode === 'user') {
-      this.userChoice = true;
-    }
-    */
     // Section to show the Display cards options if different from "normal".
     let order = '';
     if (this.currentFilter !== undefined) {
@@ -627,6 +622,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    * @returns {*|jQuery|HTMLElement} Side element
    */
   C.prototype.createcardsSideChoice = function () {
+    console.log('+++++++++++ createcardsSideChoice ++++++++');
     let self = this;
     let currentSide;
     let reverseSide;
@@ -925,15 +921,21 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }).click(function () {
       if (self.repetition) {
         self.retryRepetition();
-        /// todo throws error maybe not needed? self.trigger('resize');
       }
+      //// TODO 
+      /*
+      else if (self.params.behaviour.playMode === 'user'
+          || self.params.behaviour.cardsOrderChoice === 'user'
+          || (this.cardsOrderMode === true && self.params.behaviour.enableCardsNumber === true)
+          || self.params.behaviour.filterByCategories === 'userFilter') {
+        self.resetTask(true);
+      }
+      */
       else {
         self.retry();
       }
     }).appendTo($footer);
-    
-    
-    
+
     if (!this.enableGotIt) {
       self.$progress = $('<div>', {
         'class': 'h5p-dialogcards-progress',
@@ -2442,9 +2444,10 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           self.removeClass('h5p-dialogcards-noMatch');
         }
       });
-      self.resetTask();
-      // Needed to re-start on first card if user saved state at another card.
       this.progress = 0;
+      self.resetTask(true);
+      // Needed to re-start on first card if user saved state at another card.
+      return;
     }
     if (this.taskFinished && (this.playMode !== 'normalMode' && this.playMode !== 'browseSideBySide')) {
       self.finishedScreen();
@@ -3114,6 +3117,11 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         self.resetTask(false);
       }).appendTo($feedbackFooter);
     }
+    if (self.params.behaviour.playMode === 'user'
+      || self.params.behaviour.cardsOrderChoice === 'user'
+      || self.params.behaviour.cardsSideChoice === 'user'
+      || self.params.behaviour.enableCardsNumber === true
+      || self.params.behaviour.filterByCategories === 'userFilter') {
       self.$reset = JoubelUI.createButton({
         'class': 'h5p-dialogcards-button-reset',
         'title': self.params.resetTask,
@@ -3121,7 +3129,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       }).click(function () {
           self.resetTask(true);
       }).appendTo($feedbackFooter);
-    
+    }
   };
 
   /**
@@ -3528,6 +3536,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    */
 
   C.prototype.resetButtons = function (type) {
+    console.log('resetButtons tyype = ' + type);
     let self = this;
     let $card = $(this);
     $card = self.$current;
@@ -3543,7 +3552,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       this.$retry.addClass('h5p-dialogcards-disabled');
     }
     else if (type === 'retry button' || type === 'finished button') {
-      
       // Disable answer buttons, turn button, Hide card text button and Enable the Retry button
       if ($gotIt || this.repetition) {
         if (this.noText) {
@@ -3621,7 +3629,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         }
       }
       else {
-        this.$retry.html(self.params.retry);
+        this.$retry.html(self.params.resetTask);
         this.$retry.addClass('h5p-dialogcards-button-reset');
       }
       this.$retry.removeClass('h5p-dialogcards-disabled');
@@ -3644,6 +3652,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       $cardContent.removeClass('h5p-dialogcards-summary-screen');
       this.$retry.addClass('h5p-dialogcards-disabled');
     }
+    console.log('END END END END resetButtons tyype = ' + type);
   };
 
   /**
