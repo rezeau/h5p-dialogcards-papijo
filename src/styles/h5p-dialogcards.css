@@ -526,10 +526,19 @@ display: block;
   content: "\f061";
 }
 
-.h5p-dialogcards-button-reset {
+.h5p-dialogcards-papijo-button-reset {
+   right: 1em;
 }
 
-.h5p-dialogcards-button-reset:before {
+.h5p-dialogcards-papijo-button-reset:before {
+  font-family: 'H5PFontAwesome4';
+  content: "\f0e2";
+}
+
+.h5p-dialogcards-button-retry {
+}
+
+.h5p-dialogcards-button-retry:before {
   font-family: 'H5PFontAwesome4';
   content: "\f01e";
 }

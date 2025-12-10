@@ -633,20 +633,8 @@
         "type": "boolean",
         "label": "Select number of cards displayed",
         "importance": "low",
-        "description": "Allow user to select the number of cards drawn from the pool",
-        "default": false,
-        "widget": "showWhen",
-        "showWhen": {
-          "rules": [
-            {
-              "field": "cardsOrderChoice",
-              "equals": [
-                "random",
-                "user"
-              ]
-            }
-          ]
-        }
+        "description": "Allow user to select the number of cards drawn from the pool. Will only be available IF the total number of cards is > 5 AND if the current Cards Order is set to random.",
+        "default": false        
       },
       {
         "name": "cardsSideChoice",
@@ -658,11 +646,11 @@
         "options": [
           {
             "value": "frontFirst",
-            "label": "Display front side first (normal display)"
+            "label": "Display front side first/on the left (normal display)"
           },
           {
             "value": "backFirst",
-            "label": "Display back side first (reverse display)"
+            "label": "Display back side first/on the left (reverse display)"
           },
           {
             "value": "user",
