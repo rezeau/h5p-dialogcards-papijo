@@ -120,7 +120,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         filterByCategories: 'user'
       }
     }, params);
-
+    
     self._current = -1;
     self._turned = [];
     self.$images = [];
@@ -137,7 +137,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.cardsOrderChoice = self.params.behaviour.cardsOrderChoice;
     this.cardsOrderMode = this.cardsOrderChoice;
     this.cardsSideChoice = self.params.behaviour.cardsSideChoice;
-    
+    this.cardsSideMode = this.cardsSideChoice;
     this.playMode = self.params.behaviour.playMode;
     this.playModeUser = this.playMode;
     this.enableCardsNumber = self.params.behaviour.enableCardsNumber;
@@ -241,7 +241,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
     // Copy parameters for further use if save content state.
     self.dialogs = self.copy(self.params.dialogs);
-
+    
     this.noFilterMessage = '';
     self.nbCards = self.dialogs.length;
     this.cardsLeftInStack = this.nbCardsSelected;
@@ -362,7 +362,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (this.playMode === 'user') {
       self.createPlayMode().appendTo(self.$inner);
     }
-    else if (this.filterByCategories === 'userFilter' && this.currentFilter === undefined) {
+    else if (this.filterByCategories === 'userFilter' /*&& this.currentFilter === undefined*/) {
       self.createFilterCards().appendTo(self.$inner);
     }
     else if (this.cardsOrderChoice === 'user' && this.cardOrder === undefined) {
@@ -805,7 +805,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           else  if (self.enableCardsNumber && self.nbCardsSelected === undefined && self.nbCards > 5) {
             self.createNumberCards().appendTo(self.$inner);
           }
-          else if (self.cardsSideChoice === 'user' && self.cardsSideMode === 'undefined') {
+          else if (self.cardsSideChoice === 'user' /*&& self.cardsSideMode === 'undefined'*/) {
             self.createcardsSideChoice().appendTo(self.$inner);
           }
           else {
@@ -1080,12 +1080,30 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    * @returns {*|jQuery|HTMLElement} Card wrapper set
    */
   C.prototype.initCards = function (cards) {
+    let self = this;
+    ////cards = self.dialogs;
     if (this.nbCardsSelected !== undefined) {
       this.nbCards = this.nbCardsSelected;
     }
     else {
       this.nbCardsSelected = this.nbCards;
     }
+    let stripHtml = str => str.replace(/<[^>]*>/g, '');
+    let toto = self.params.dialogs;
+    simplifiedCards = toto.map(card => ({
+        text: stripHtml(card.text),
+        answer: stripHtml(card.answer)
+      }));
+      console.log('init cards self dialogs = ');
+      console.table(simplifiedCards);
+    
+    simplifiedCards = cards.map(card => ({
+        text: stripHtml(card.text),
+        answer: stripHtml(card.answer)
+      }));
+      console.log('init cards = ');
+      console.table(simplifiedCards);
+    
     // Reversed cards array to be used in these options.
     // Check if switching sides is needed.
     let mustSwitch = false;
@@ -1096,7 +1114,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       this.switchSides(cards);
     }
 
-    let self = this;
+    
     let loaded = 0;
     let existsCardOrder = true;
     if ($.isEmptyObject(this.cardOrder)) {
@@ -1122,7 +1140,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       for (let i = 0; i < self.nbCards; i++) {
         randomCards[i] = cardOrdering[i][0];
       }
-
+    
       // Retrieve the new shuffled order from the second index
       let newOrder = [];
       for (let i = 0; i < self.nbCards; i++) {
@@ -1159,9 +1177,10 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
     // Save data to content state for resuming later on.
     // Push the new 'cards array' into self.dialogs.
-
+      //// bug ?????
     self.dialogs = cards;
-
+    ////self.dialogs = self.copy(self.params.dialogs);
+    ////
     self.$cardwrapperSet = $('<div>', {
       'class': 'h5p-dialogcards-cardwrap-set'
     });
@@ -1182,6 +1201,14 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       x = 0;
     }
     // ********************************************** LOOP TO CREATE CARDS **********************************
+    
+    simplifiedCards = cards.map(card => ({
+        text: stripHtml(card.text),
+        answer: stripHtml(card.answer)
+      }));
+      console.log('Cards = ');
+      console.table(simplifiedCards);
+
     for (let i = 0; i < cards.length; i++) {
       // Load cards progressively
       // If matchIt, all cards are loaded upon init, this is needed.
@@ -1190,6 +1217,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           //break; // DEV remove break to load all cards for testing. REMOVED this because causes problem with cards with different heights JR 07 MARCH 2021
         }
       }
+      
+      
+
       // Set current card index
       // If there is a saved state, then set current card index to saved position (progress)
       // otherwise set it to zero.
@@ -2414,6 +2444,17 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    */
   C.prototype.retry = function () {
     let self = this;
+    self.dialogs = self.params.dialogs;
+    cards = self.dialogs;
+    let stripHtml = str => str.replace(/<[^>]*>/g, '');
+    let toto = self.params.dialogs;
+    simplifiedCards = toto.map(card => ({
+        text: stripHtml(card.text),
+        answer: stripHtml(card.answer)
+      }));
+      console.log('init cards self dialogs = ');
+      console.table(simplifiedCards);
+    
     let $card = $(this);
     // To hide the summary text upon retrying
     if (this.noText) {
