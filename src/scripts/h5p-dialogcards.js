@@ -238,10 +238,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (this.hasImageOnBack) {
       this.noDupeFrontPicToBack = false;
     }
-
     // Copy parameters for further use if save content state.
     self.dialogs = self.copy(self.params.dialogs);
-    
     this.noFilterMessage = '';
     self.nbCards = self.dialogs.length;
     this.cardsLeftInStack = this.nbCardsSelected;
@@ -1081,29 +1079,12 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    */
   C.prototype.initCards = function (cards) {
     let self = this;
-    ////cards = self.dialogs;
     if (this.nbCardsSelected !== undefined) {
       this.nbCards = this.nbCardsSelected;
     }
     else {
       this.nbCardsSelected = this.nbCards;
     }
-    let stripHtml = str => str.replace(/<[^>]*>/g, '');
-    let toto = self.params.dialogs;
-    simplifiedCards = toto.map(card => ({
-        text: stripHtml(card.text),
-        answer: stripHtml(card.answer)
-      }));
-      console.log('init cards self dialogs = ');
-      console.table(simplifiedCards);
-    
-    simplifiedCards = cards.map(card => ({
-        text: stripHtml(card.text),
-        answer: stripHtml(card.answer)
-      }));
-      console.log('init cards = ');
-      console.table(simplifiedCards);
-    
     // Reversed cards array to be used in these options.
     // Check if switching sides is needed.
     let mustSwitch = false;
@@ -1177,10 +1158,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
     // Save data to content state for resuming later on.
     // Push the new 'cards array' into self.dialogs.
-      //// bug ?????
-    self.dialogs = cards;
-    ////self.dialogs = self.copy(self.params.dialogs);
-    ////
+    self.dialogs = self.copy(self.params.dialogs);
     self.$cardwrapperSet = $('<div>', {
       'class': 'h5p-dialogcards-cardwrap-set'
     });
@@ -1201,14 +1179,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       x = 0;
     }
     // ********************************************** LOOP TO CREATE CARDS **********************************
-    
-    simplifiedCards = cards.map(card => ({
-        text: stripHtml(card.text),
-        answer: stripHtml(card.answer)
-      }));
-      console.log('Cards = ');
-      console.table(simplifiedCards);
-
     for (let i = 0; i < cards.length; i++) {
       // Load cards progressively
       // If matchIt, all cards are loaded upon init, this is needed.
@@ -1938,7 +1908,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
     else if (this.sideBySide) {
       self.$progress.text(self.params.progressText.replace('@card', (self.$current.index()) / 2 + 1)
-        .replace('@total', self.dialogs.length));
+        .replace('@total', self.nbCards));
       if ($nextCard.length === 0) {
         self.$retry.removeClass('h5p-dialogcards-disabled');
         this.$retry.html(self.params.resetTask);
@@ -2444,17 +2414,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    */
   C.prototype.retry = function () {
     let self = this;
-    self.dialogs = self.params.dialogs;
-    cards = self.dialogs;
-    let stripHtml = str => str.replace(/<[^>]*>/g, '');
-    let toto = self.params.dialogs;
-    simplifiedCards = toto.map(card => ({
-        text: stripHtml(card.text),
-        answer: stripHtml(card.answer)
-      }));
-      console.log('init cards self dialogs = ');
-      console.table(simplifiedCards);
-    
+    self.dialogs = self.params.dialogs;    
     let $card = $(this);
     // To hide the summary text upon retrying
     if (this.noText) {
@@ -2474,7 +2434,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         }
       });
       this.progress = 0;
-      self.resetTask(true);
+      self.resetTask();
       // Needed to re-start on first card if user saved state at another card.
       return;
     }
@@ -2978,11 +2938,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
   };
 
-
   /**
    * Task is finished.
    */
-
   C.prototype.finishedScreen = function () {
     let self = this;
     self.taskFinished = true;
@@ -3136,28 +3094,27 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     // We only trigger XAPI at the end of the activity
     this.endTime = new Date().getTime();
     self.triggerAnswered();
-
+    
     // Display reset button to enable user to do the task again IF Retry option enabled.
+    let message =  self.params.retry;
+    let thisclass = 'h5p-dialogcards-button-retry';    
+    if (this.playMode === 'user'
+      || this.filterByCategories === 'userFilter'
+      || this.cardsOrderChoice === 'user'
+      || this.cardsOrderMode === 'random' && this.enableCardsNumber === undefined
+      || this.cardsSideChoice === 'user'
+    ) {
+      message =  self.params.resetTask;
+      thisclass = 'h5p-dialogcards-button-reset'
+    }
+    
     if (self.params.behaviour.enableRetry) {
       self.$retryButton = JoubelUI.createButton({
-        'class': 'h5p-dialogcards-button-retry',
-        'title': self.params.retry,
-        'html': self.params.retry
-      }).click(function () {
-        self.resetTask(false);
-      }).appendTo($feedbackFooter);
-    }
-    if (self.params.behaviour.playMode === 'user'
-      || self.params.behaviour.cardsOrderChoice === 'user'
-      || self.params.behaviour.cardsSideChoice === 'user'
-      || self.params.behaviour.enableCardsNumber === true
-      || self.params.behaviour.filterByCategories === 'userFilter') {
-      self.$reset = JoubelUI.createButton({
-        'class': 'h5p-dialogcards-papijo-button-reset',
-        'title': self.params.resetTask,
-        'html': self.params.resetTask
-      }).click(function () {
-          self.resetTask(true);
+        'class': thisclass,
+        'title': message,
+        'html': message
+      }).click(function () {          
+          self.resetTask();
       }).appendTo($feedbackFooter);
     }
   };
@@ -3430,7 +3387,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    * Used in contracts. Used upon Restart in Interactive Book!
    */
 
-  C.prototype.resetTask = function (allReset) {
+  C.prototype.resetTask = function () {
     const self = this;
     this.contentData.previousState = {};
     self.answered = false;
@@ -3479,47 +3436,45 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.filterList = undefined;
     this.filterOperator = undefined;
     self.getCurrentState();
-    if (allReset) {
-      // Reset cardsSideMode to original value.
-      this.cardsSideMode = this.cardsSideChoice;
-      // Reset nbCardsSelected to original value.
-      this.nbCardsSelected = undefined;
-      if (this.playModeNames.length === 0) {
-        this.playMode = "normalMode";
-        this.playModeUser = this.playMode;
-      }
-      else if (this.playModeNames.length === 1) {
-        this.playMode = this.playModeNames["value"];
-        this.playModeUser = this.playMode;
-      }
-      else  {
-        this.playMode = self.params.behaviour.playMode;
-      }      
-      if (this.playMode === 'user') {
-        self.createPlayMode().appendTo(self.$inner);
-      }
-      else if (this.filterByCategories === 'userFilter') {
-        self.createFilterCards().appendTo(self.$inner);
-      }
-      else if (this.cardsOrderChoice === 'user') {
-        self.createOrder().appendTo(self.$inner);
-      }
-      else if (this.enableCardsNumber && this.nbCardsSelected === undefined && self.nbCards > 5) {
-        self.createNumberCards()
-          .appendTo(self.$inner);
-      }
-      else if (!this.matchIt && this.cardsSideChoice === 'user') {
-        self.createcardsSideChoice().appendTo(self.$inner);
-      }
-      else {
-        self.attachContinue();
-      }
-      // This window refreshing is needed because sometimes cards with images do not display correctly
-      location.reload();
+    
+    // Reset cardsSideMode to original value.
+    this.cardsSideMode = this.cardsSideChoice;
+    // Reset nbCardsSelected to original value.
+    this.nbCardsSelected = undefined;
+    if (this.playModeNames.length === 0) {
+      this.playMode = "normalMode";
+      this.playModeUser = this.playMode;
+    }
+    else if (this.playModeNames.length === 1) {
+      this.playMode = this.playModeNames["value"];
+      this.playModeUser = this.playMode;
+    }
+    else  {
+      this.playMode = self.params.behaviour.playMode;
+    }      
+    if (this.playMode === 'user') {
+      self.createPlayMode().appendTo(self.$inner);
+    }
+    else if (this.filterByCategories === 'userFilter') {
+      self.createFilterCards().appendTo(self.$inner);
+    }
+    else if (this.cardsOrderChoice === 'user') {
+      self.createOrder().appendTo(self.$inner);
+    }
+    else if (this.enableCardsNumber && this.nbCardsSelected === undefined && self.nbCards > 5) {
+      self.createNumberCards()
+        .appendTo(self.$inner);
+    }
+    else if (!this.matchIt && this.cardsSideChoice === 'user') {
+      self.createcardsSideChoice().appendTo(self.$inner);
     }
     else {
       self.attachContinue();
     }
+    // This window refreshing is needed because sometimes cards with images do not display correctly
+    location.reload();
+    self.attachContinue();
+    
   };
 
   /**
