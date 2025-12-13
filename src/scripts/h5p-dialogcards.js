@@ -361,7 +361,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (this.playMode === 'user') {
       self.createPlayMode().appendTo(self.$inner);
     }
-    else if (this.filterByCategories === 'userFilter' && this.currentFilter === undefined) {
+    else if (this.filterByCategories === 'userFilter' /*&& this.currentFilter === undefined*/) {
       self.createFilterCards().appendTo(self.$inner);
     }
     else if (this.cardsOrderChoice === 'user' && this.cardOrder === undefined) {
@@ -370,7 +370,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     else if (this.enableCardsNumber && this.nbCardsSelected === undefined /*&& self.nbCards > 5*/) {
       self.createNumberCards().appendTo(self.$inner);
     }
-    else if (this.cardsSideChoice === 'user' && this.cardsSideMode === undefined) {
+    else if (this.cardsSideChoice === 'user' /*&& this.cardsSideMode === undefined*/) {
       self.createcardsSideChoice().appendTo(self.$inner);
     }
     else {
@@ -629,7 +629,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     let currentSide;
     let reverseSide;
 
-    if (self.cardsSideMode === 'user') {
+    if (self.cardsSideChoice === 'user') {
       self.cardsSideMode = 'frontFirst';
       currentSide = self.params.cardFrontLabel;
     }
@@ -812,7 +812,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           else  if (self.enableCardsNumber && self.nbCardsSelected === undefined && self.nbCards > 5) {
             self.createNumberCards().appendTo(self.$inner);
           }
-          else if (self.cardsSideChoice === 'user' && self.cardsSideMode === 'undefined') {
+          else if (self.cardsSideChoice === 'user' /*&& self.cardsSideMode === 'undefined'*/) {
             self.createcardsSideChoice().appendTo(self.$inner);
           }
           else {
