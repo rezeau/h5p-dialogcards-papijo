@@ -3513,6 +3513,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     let $card = $(this);
     $card = self.$current;
     $card.removeClass('h5p-dialogcards-match-right');
+    // Fixes possible hidden intermediary summary screen 
+    $card.removeClass('h5p-dialogcards-previous');
     self.stopAudio(self.$current.index());
     let $gotIt = this.enableGotIt;
     $card.find('.h5p-dialogcards-answer-button').addClass('h5p-dialogcards-disabled');
