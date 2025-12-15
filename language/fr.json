@@ -278,6 +278,10 @@
       "default": "Recommencer"
     },
     {
+      "label": "Texte pour le bouton \"Réinitialiser\"",
+      "default": "Réinitialiser"
+    },
+    {
       "label": "Texte pour le bouton \"Réponse correcte\"",
       "default": "J'ai eu bon!"
     },

@@ -761,6 +761,14 @@
     "common": true
   },
   {
+    "name": "resetTask",
+    "type": "text",
+    "label": "Text for the Reset Task button",
+    "importance": "low",
+    "default": "Reset task",
+    "common": true
+  },
+  {
     "name": "correctAnswer",
     "type": "text",
     "label": "Text for the \"correct answer\" button",

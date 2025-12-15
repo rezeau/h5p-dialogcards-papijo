@@ -278,6 +278,10 @@
       "default": "Yeniden Başlat"
     },
     {
+      "label": "\"Görevi Sıfırla\" butonu için metin",
+      "default": "Görevi Sıfırla"
+    },
+    {
       "label": "\"Doğru cevap\" butonu için metin",
       "default": "Doğru bildim!"
     },

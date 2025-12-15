@@ -2,6 +2,7 @@
   "name": "h5p-dialogcards",
   "version": "1.7.3",
   "description": "H5P Dialogue Cards ==========",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "build": "cross-env NODE_ENV='production' webpack",
@@ -24,6 +25,7 @@
     "babel-loader": "^8.2.5",
     "cross-env": "^7.0.3",
     "css-loader": "^6.7.1",
+    "eslint-config-snordian-h5p": "github:otacke/eslint-config-snordian-h5p",
     "mini-css-extract-plugin": "^2.6.1",
     "resolve-url-loader": "^5.0.0",
     "webpack": "^5.76.0",

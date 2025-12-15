@@ -138,9 +138,6 @@
               "label": "Do not filter"
             },
             {
-              "label": "Use the FIRST filter defined above"
-            },
-            {
               "label": "Filter selected by User"
             }
           ]
@@ -279,6 +276,10 @@
     {
       "label": "Text for the retry button",
       "default": "Retry"
+    },
+    {
+      "label": "Text for the Reset Task button",
+      "default": "Reset task"
     },
     {
       "label": "Text for the \"correct answer\" button",

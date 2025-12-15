@@ -278,6 +278,10 @@
       "default": "Tentar Novamente"
     },
     {
+      "label": "Texto para o botão \"Redefinir tarefa\"",
+      "default": "Redefinir tarefa"
+    },
+    {
       "label": "Texto para o botão \"Resposta Correta\"",
       "default": "Acertei!"
     },
