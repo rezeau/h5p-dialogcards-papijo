@@ -445,7 +445,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       else {
         order = self.params.randomOrder;
       }
-      ////text += orderNotice + ' ' + order + '<br>';
       text += `${orderNotice} ${order}<br>`;
     }
     // If matchIt the left side = back of card and the right side = front of card
@@ -1579,7 +1578,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         .appendTo($cardFooter);
 
       let classesMatch = 'h5p-dialogcards-answer-button h5p-dialogcards-quick-progression'
-        + 'h5p-dialogcards-match h5p-dialogcards-disabled';
+        + ' h5p-dialogcards-match h5p-dialogcards-disabled';
       // JR dummy button for correct match.
       this.$buttonCorrectMatch = H5P.JoubelUI.createButton({
         'class': classesMatch,
@@ -2955,7 +2954,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
     // Remove all these elements.
     $('.h5p-dialogcards-cardwrap-set, .h5p-dialogcards-match-footer, .h5p-dialogcards-footer,'
-      + '.h5p-dialogcards-options', self.$inner).remove();
+      + ' .h5p-dialogcards-options', self.$inner).remove();
 
     // Display task finished feedback message.
 
