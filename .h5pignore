@@ -5,6 +5,7 @@ test
 dev
 src
 .eslintrc.json
+eslint.config.js
 .idea
 .git
 .babelrc
@@ -12,7 +13,7 @@ src
 .h5pignore
 .travis.yml
 karma.conf.js
-webpack.config.js
+webpack.config.cjs
 webpack.dev.config.js
 README.md
 CONTRIBUTING.md
