@@ -373,7 +373,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     else if (this.enableCardsNumber && this.nbCardsSelected === undefined /*&& self.nbCards > 5*/) {
       self.createNumberCards().appendTo(self.$inner);
     }
-    else if (this.cardsSideChoice === 'user' && this.cardsSideMode === undefined) {
+    else if (this.cardsSideChoice === 'user' && this.cardsSideMode === 'user') {
       self.createcardsSideChoice().appendTo(self.$inner);
     }
     else {
