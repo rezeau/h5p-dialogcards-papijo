@@ -870,19 +870,38 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (this.matchIt) {
       $footer.addClass('h5p-dialogcards-footer-match-right');
     }
-    if (!this.enableGotIt) {
-      self.$prev = JoubelUI.createButton({
-        'class': 'h5p-dialogcards-footer-button h5p-dialogcards-prev truncated',
-        'title': self.params.prev,
-      }).click(function () {
-        self.prevCard();
-      }).appendTo($footer);
 
+    // 18:25 19/12/2025 added a timeout to the Prev and Next buttons to prevent double clicks
+    if (!this.enableGotIt) {
+      const preventDoubleClick = function ($btn, action) {
+        if ($btn.prop('disabled')) {
+          return;
+        }
+        $btn.prop('disabled', true);
+        action();
+        setTimeout(function () {
+          $btn.prop('disabled', false);
+        }, C.NB300);
+      };
+
+      // NEXT
       self.$next = JoubelUI.createButton({
         'class': 'h5p-dialogcards-footer-button h5p-dialogcards-next truncated',
         'title': self.params.next,
       }).click(function () {
-        self.nextCard();
+        preventDoubleClick($(this), function () {
+          self.nextCard();
+        });
+      }).appendTo($footer);
+
+      // PREV
+      self.$prev = JoubelUI.createButton({
+        'class': 'h5p-dialogcards-footer-button h5p-dialogcards-prev truncated',
+        'title': self.params.prev,
+      }).click(function () {
+        preventDoubleClick($(this), function () {
+          self.prevCard();
+        });
       }).appendTo($footer);
     }
 
