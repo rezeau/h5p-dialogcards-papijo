@@ -676,6 +676,10 @@ display: block;
 }
 .h5p-dialogcards-matchLeft {
   line-height: 1.5;
+  height: 100%;
+  height: -moz-available;          /* WebKit-based browsers will ignore this. */
+  height: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
+  height: fill-available;
 }
 .h5p-dialogcards a:link {
   text-decoration: none;

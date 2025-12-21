@@ -138,7 +138,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.playMode = self.params.behaviour.playMode;
     this.playModeUser = this.playMode;
     this.enableCardsNumber = self.params.behaviour.enableCardsNumber;
-    this.noText = self.params.behaviour.noTextOnCards;
+    this.noText = self.params.behaviour.noTextOnCards;    
     this.actualScore = 0;
     this.firstText = self.params.dialogs[0].text;
     this.matchIt = false;
@@ -175,6 +175,12 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         i--;
       }
     }
+    if (self.params.dialogs[0].answer === ''
+      && self.params.dialogs[0].imageMedia.image2 !== undefined
+      && !this.noText) {
+      this.frontTextBackImage = true;
+    }
+
     this.hasAudio = false;
 
     for (let i = 0; i < self.params.dialogs.length; i++) {
@@ -1042,6 +1048,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    * @param {number} [index] Index of card
    */
   C.prototype.addTipToCard = function ($card, side, index) {
+    ////console.log('addTipToCard side = ' + side);
     let self = this;
 
     // Make sure we have a side
@@ -1061,20 +1068,37 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     let tips = self.dialogs[index].tips;
     if (tips !== undefined && tips[side] !== undefined) {
       let tip = tips[side].trim();
-      if (tip.length) {
-        if (!this.noText) {
-          $card.find('.h5p-dialogcards-card-text-wrapper .h5p-dialogcards-card-text-inner')
-            .after(JoubelUI.createTip(tip, {
-              tipLabel: self.params.tipButtonLabel,
-            }));
+      if (!this.frontTextBackImage) {
+        if (tip.length) {
+          if (!this.noText) {
+            $card.find('.h5p-dialogcards-card-text-wrapper .h5p-dialogcards-card-text-inner')
+              .after(JoubelUI.createTip(tip, {
+                tipLabel: self.params.tipButtonLabel,
+              }));
+          }
+          else {
+            $card.find('.h5p-dialogcards-image-wrapper')
+              .append(JoubelUI.createTip(tip, {
+                tipLabel: self.params.tipButtonLabel,
+                addclass: 'joubel-tip-notext',
+              }));
+            $card.find('.joubel-tip-container').addClass('noText');
+          }
         }
-        else {
+      }
+      else {
+        switch (side) {
+          case 'front':
+            $card.find('.h5p-dialogcards-card-text-wrapper .h5p-dialogcards-card-text-inner')
+              .after(JoubelUI.createTip(tip, {
+                tipLabel: self.params.tipButtonLabel,
+              }));
+            break;
+          case 'back':
           $card.find('.h5p-dialogcards-image-wrapper')
-            .append(JoubelUI.createTip(tip, {
-              tipLabel: self.params.tipButtonLabel,
-              addclass: 'joubel-tip-notext',
-            }));
-          $card.find('.joubel-tip-container').addClass('noText');
+              .after(JoubelUI.createTip(tip, {
+                tipLabel: self.params.tipButtonLabel,
+              }));
         }
       }
     }
@@ -1311,20 +1335,20 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    * @returns {HTMLElement} Card content wrapper
    */
   C.prototype.createCardContent = function (card, cardNumber, setCardSizeCallback) {
+    
     let $cardContent = $('<div>', {
       'class': 'h5p-dialogcards-card-content',
     });
     let isLeft = false;
+    
     $cardContent.css('background-color', this.backgroundColor);
     if (this.matchIt && this.cardsSideMode === 'frontFirst') {
       $cardContent.css('background-color', this.backgroundColorBack);
     }
     if (card.imageMedia.image !== undefined || card.imageMedia.image2 !== undefined) {
-
       this.createCardImage(card, setCardSizeCallback, isLeft)
         .appendTo($cardContent);
     }
-
     let $cardTextWrapper = $('<div>', {
       'class': 'h5p-dialogcards-card-text-wrapper',
     }).appendTo($cardContent);
@@ -1337,10 +1361,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       'class': 'h5p-dialogcards-card-text-inner-content',
     }).appendTo($cardTextInner);
 
-    if (this.hasAudio && !this.noText) {
+    if (this.hasAudio && !this.noText && !this.frontTextBackImage) {
       this.createCardAudio(card)
         .appendTo($cardTextInnerContent);
-
       this.createCardAudio2(card)
         .appendTo($cardTextInnerContent);
     }
@@ -1358,12 +1381,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (!card.text || !card.text.length) {
       $cardText.addClass('hide');
     }
-
-    if (!this.noText) {
-      this.createCardFooter()
-        .appendTo($cardTextWrapper);
-    }
-    else {
+    if (this.noText || this.frontTextBackImage) {
       $cardTextWrapper.addClass('hide');
       if (this.hasAudio) {
         this.createCardAudio(card)
@@ -1372,11 +1390,14 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           .appendTo($cardContent);
       }
       this.createCardFooter()
-        .appendTo($cardContent)
+        .appendTo($cardContent)        
         .addClass('spacer');
     }
-
-    return $cardContent;
+    else {
+      this.createCardFooter()
+        .appendTo($cardTextWrapper);
+    }
+  return $cardContent;
   };
 
   /**
@@ -1387,6 +1408,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    * @returns {HTMLElement} Card content wrapper
    */
   C.prototype.createCardContentLeft = function (card, cardNumber, setCardSizeCallback) {
+    console.log('this.frontTextBackImage = ' + this.frontTextBackImage);
     let self = this;
     // Reverse all card elements which have been reversed before.
     let t = card.text;
@@ -1424,11 +1446,15 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
     // Upon restore content state maybe necessary to hide previously incorrectly matched cards
     // Do not create image div is not necessary
-    if (card.imageMedia.image !== undefined || card.imageMedia.image2 !== undefined) {
-      let isLeft = true;
-      self.createCardImage(card, setCardSizeCallback, isLeft)
-        .appendTo($cardContent);
+    if (this.frontTextBackImage) {
+      // do nothing
     }
+    else if (card.imageMedia.image !== undefined || card.imageMedia.image2 !== undefined) {
+        let isLeft = true;
+        self.createCardImage(card, setCardSizeCallback, isLeft)
+          .appendTo($cardContent);
+      }
+    
 
     let $cardTextWrapper = $('<div>', {
       'class': 'h5p-dialogcards-card-text-wrapper',
@@ -1469,7 +1495,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
     // Dummy cardfooter to get a "correct" left card height if too much text...
     // Create it if needed by this.sideBySide
-    if (!this.noText) {
+    if (!this.noText /*&& !this.frontTextBackImage*/) {
       if (self.params.behaviour.scaleTextNotCard === false || this.sideBySide) {
         let $cardFooterLeft = $('<div>', {
           'class': 'h5p-dialogcards-card-footer subtitle',
@@ -1747,7 +1773,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     let self = this;
     let audio = null;
     let audioClass = 'h5p-dialogcards-audio-wrapper';
-    if (this.noText) {
+    if (this.noText || this.frontTextBackImage) {
       audioClass += ' spacer';
     }
     let $audioWrapper = $('<div>', {
@@ -1778,7 +1804,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     let self = this;
     let audio2 = null;
     let audioClass = 'h5p-dialogcards-audio-wrapper2 hide';
-    if (this.noText) {
+    if (this.noText || this.frontTextBackImage) {
       audioClass += ' spacer';
     }
     let $audioWrapper2 = $('<div>', {
@@ -2168,7 +2194,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    */
 
   C.prototype.turnCardToFront = function () {
-  //return;
     let self = this;
     let $c = self.$current.find('.h5p-dialogcards-card-content');
     let turned = $c.hasClass('h5p-dialogcards-turned');
@@ -2384,7 +2409,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    
    // hide and show audio not used in papi Jo version
    /**
-    Hide audio button
+    hide audio button
    * @param $card
    */
 
@@ -2409,8 +2434,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     let self = this;
     let $card = $(this);
     // To hide the summary text upon retrying
-    if (this.noText) {
-      $card.find('.h5p-dialogcards-card-text-wrapper').addClass('hide');
+    if (this.noText || this.frontTextBackImage) {
+      $card.find('.h5p-dialogcards-card-text-wrapper')
+        .addClass('hide');
     }
     // In case a dark background was set for the cards.
     $card.find('.h5p-dialogcards-card-content').removeClass('h5p-dialogcards-summary-screen');
@@ -3514,9 +3540,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       this.$retry.addClass('h5p-dialogcards-disabled');
     }
     else if (type === 'retry button' || type === 'finished button') {
-      // Disable answer buttons, turn button, Hide card text button and Enable the Retry button
+      // Disable answer buttons, turn button, hide card text button and Enable the Retry button
       if ($gotIt || this.repetition) {
-        if (this.noText) {
+        if (this.noText || this.frontTextBackImage) {
           let $el = $card.find('.h5p-dialogcards-card-text-wrapper');
           let aClass = 'noText';
           if (this.audioOnly) {
