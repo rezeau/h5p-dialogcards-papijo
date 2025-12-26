@@ -99,6 +99,11 @@
   /*background: #FFF;*/
   box-shadow: 0 2px 15px rgba(0,0,0,0.30);
   padding: 1em;
+  min-height: 12em;
+  height: 100%;
+  height: -moz-available;          /* WebKit-based browsers will ignore this. */
+  height: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
+  height: fill-available;
 }
 
 .h5p-dialogcards-summary-screen, .h5p-dialogcards-intermediary-summary-screen {
@@ -632,7 +637,6 @@ display: block;
   box-sizing: border-box;
   visibility: hidden;
   height: inherit;
-
   -webkit-transition: visibility 0s 0.3s, left 300ms;
   transition: visibility 0s 0.3s, left 300ms;
 }
@@ -676,6 +680,11 @@ display: block;
 }
 .h5p-dialogcards-matchLeft {
   line-height: 1.5;
+  height: 100%;
+  height: -moz-available;          /* WebKit-based browsers will ignore this. */
+  height: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
+  height: fill-available;
+  min-height: 12em;
 }
 .h5p-dialogcards a:link {
   text-decoration: none;
@@ -726,6 +735,10 @@ display: block;
   margin-top: 0.4em;
 }
 
+.h5p-dialogcards .spacerAudioOnly {
+  margin-bottom: 4em;
+}
+
 .h5p-dialogcards .joubel-tip-container.noText {  
   top: 95%;
 }
@@ -749,4 +762,12 @@ display: block;
   padding-right: 1em;
   text-align: center;
   max-width: fit-content;
+}
+
+.h5p-dialogcards .hidden {
+  display: none;
+}
+
+.h5p-dialogcards .show {
+  display: block;
 }
