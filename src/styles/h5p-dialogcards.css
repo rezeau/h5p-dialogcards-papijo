@@ -736,11 +736,7 @@ display: block;
 }
 
 .h5p-dialogcards .spacerAudioOnly {
-  margin-bottom: 4em;
-}
-
-.h5p-dialogcards .joubel-tip-container.noText {  
-  top: 95%;
+  margin-top: 4em;
 }
 
 .h5p-dialogcards .h5p-dialogcards-card-text-wrapper.noText {
@@ -750,7 +746,7 @@ display: block;
 
 .h5p-dialogcards .h5p-dialogcards-card-text-wrapper.audioOnly {
   position: absolute;
-  top: -35%;
+  top: -15%;
 }
 
 .h5p-dialogcards-sub-title {
