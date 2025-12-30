@@ -176,10 +176,11 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         i--;
       }
     }
-    // TODO Refine this error message
+    // TODO Translate this error message
     if (!self.params.dialogs.length) {
-      self.params.description = '<b>ERROR ERROR ERROR</b>';
+      self.params.description = '<b>ERROR</b> Wrong use of the "no text" option: you have NO CARDS with images or audio on their back side.';
     }
+
     this.hasAudio = false;
 
     for (let i = 0; i < self.params.dialogs.length; i++) {
@@ -351,6 +352,10 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           ${this.noFilterMessage}
         </div>
         `));
+
+    if (!this.params.dialogs.length){
+      return;
+    }
 
     // If we are resuming task from a previously finished task, Reset the task.
     if (this.taskFinished) {
