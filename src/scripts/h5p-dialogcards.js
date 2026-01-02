@@ -184,7 +184,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.hasAudio = false;
 
     for (let i = 0; i < self.params.dialogs.length; i++) {
-      if (self.params.dialogs[i].audioMedia.audio) {
+      if (self.params.dialogs[i].audioMedia.audio
+        || self.params.dialogs[i].audioMedia.audio2 ) {
         this.hasAudio = true;
         break;
       }
@@ -213,7 +214,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         }
       }
     }
-
+console.log('this.hasAudio = ' + this.hasAudio);
     // IF categories filters enabled!!!
     if (self.params.enableCategories && self.params.behaviour.catFilters) {
       this.catFilters = self.params.behaviour.catFilters;
@@ -1670,6 +1671,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     let i;
     let i2;
     let $2images = false;
+    
     let $imageWrapper = $('<div>', {
       'class': 'h5p-dialogcards-image-wrapper',
     });
@@ -1683,9 +1685,14 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         card.imageMedia.image2 = i;
       }
     }
-
+    console.log('$2images = ' + $2images);
     if (card.imageMedia.image !== undefined) { // Alternative conditions for (front) image to be displayed.
-      if (this.cardsSideMode === 'frontFirst' || !this.noDupeFrontPicToBack || this.matchIt) {
+    console.log('------------------- createCardImage'
+      + '\nisLeft = ' + isLeft
+      + '\nthis.cardsSideMode = ' + this.cardsSideMode
+      + '\n this.matchIt= ' + this.matchIt
+      );
+      if (this.cardsSideMode === 'frontFirst'|| this.matchIt || !this.noDupeFrontPicToBack) {
         $image = $(`<img class="h5p-dialogcards-image"
           src="${  H5P.getPath(card.imageMedia.image.path, self.id)  }"/>`);
       }
@@ -1713,11 +1720,23 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
 
     if (card.imageMedia.image2 !== undefined) {
+      console.log('++++++++++++++++++++++ createCardImage 2'
+      + '\nisLeft = ' + isLeft
+      + '\nthis.cardsSideMode = ' + this.cardsSideMode
+      + '\nthis.matchIt = ' + this.matchIt
+      + '\ncard.imageMedia.image = ' + card.imageMedia.image
+      + '\ncard.imageMedia.image2 = ' + card.imageMedia.image2
+      + '\n$2images = ' + $2images
+      + '\ncard.text = ' + card.text
+      + '\ncard.answer = ' + card.answer
+      );
       // In browse or self-correction modes,
       // if there is a back image but no front image, use the back image in backFirst mode.
       // In match modes, create image2 on left side if backFirst OR create it on right side if frontLeft.
-      if ((this.cardsSideMode === 'backFirst' && !card.imageMedia.image)
-        || (self.matchIt && isLeft && this.cardsSideMode === 'backFirst' && !$2images)
+      if ((this.cardsSideMode === 'backFirst' && !card.imageMedia.image 
+        && (!isLeft && !self.matchIt)
+        )
+        || (self.matchIt && isLeft && this.cardsSideMode === 'backFirst' && !$2images )
         || (self.matchIt && !isLeft && this.cardsSideMode === 'frontFirst' && !$2images)
       ) {
         $image2 = $(`<img class="h5p-dialogcards-image2"
@@ -1736,11 +1755,15 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       self.$images2.push($image2);
       $image2.appendTo($imageWrapper);
     }
-
+console.log('******** this.matchIt = ' + this.matchIt);
     // OCTOBER 2021 New noDupeFrontPicToBack option.
-    if (this.noDupeFrontPicToBack && (this.cardsSideMode === 'frontFirst' && !isLeft
-      || this.cardsSideMode === 'backFirst' && isLeft)) {
-      $image.addClass('h5p-dialogcards-hide');
+    if (this.matchIt && !$2images
+      && this.noDupeFrontPicToBack 
+      && this.cardsSideMode === 'frontFirst' 
+        && !isLeft
+      || this.cardsSideMode === 'backFirst' 
+        && isLeft) {
+        $image.addClass('h5p-dialogcards-hide');
     }
 
     self.$images.push($image);
@@ -1761,6 +1784,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    * @returns {HTMLElement} Card audio element
    */
   C.prototype.createCardAudio = function (card) {
+    console.log('createCardAudio');
     let self = this;
     let audio = null;
     let audioClass = 'h5p-dialogcards-audio-wrapper';
@@ -1792,6 +1816,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    * @returns {HTMLElement} Card audio element
    */
   C.prototype.createCardAudio2 = function (card) {
+    console.log('createCardAudio2');
     let self = this;
     let audio2 = null;
     let audioClass = 'h5p-dialogcards-audio-wrapper2 hide';
@@ -2578,10 +2603,10 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       let $card = $(this).removeClass('h5p-dialogcards-previous h5p-dialogcards-noMatch');
       // Show all front images (ci) and hide all back images (ci2)
       // except if let noDupeFrontPicToBack = true;
-      if (!noDupeFrontPicToBack) {
+      ////if (!noDupeFrontPicToBack) {
         let $ci = $card.find('.h5p-dialogcards-image');
         $ci.removeClass('h5p-dialogcards-hide');
-      }
+      ////}
       // Show all front audios (ca) and hide all back audios (ca2)
       let $ca = $card.find('.h5p-dialogcards-audio-wrapper');
       $ca.removeClass('hide');
@@ -3497,10 +3522,10 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         i2 = i0;
         i0 = cards[i].imageMedia.image2;
       }
-      if (!this.noDupeFrontPicToBack) {
+      ////if (!this.noDupeFrontPicToBack) {
         cards[i].imageMedia.image = i2;
         cards[i].imageMedia.image2 = i0;
-      }
+      ////}
       let ialt = cards[i].imageMedia.imageAltText;
       let ialt2 = cards[i].imageMedia.imageAltText2;
       cards[i].imageMedia.imageAltText = ialt2;
