@@ -214,7 +214,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         }
       }
     }
-console.log('this.hasAudio = ' + this.hasAudio);
     // IF categories filters enabled!!!
     if (self.params.enableCategories && self.params.behaviour.catFilters) {
       this.catFilters = self.params.behaviour.catFilters;
@@ -1665,6 +1664,7 @@ console.log('this.hasAudio = ' + this.hasAudio);
    */
 
   C.prototype.createCardImage = function (card, loadCallback, isLeft = false) {
+    
     let self = this;
     let $image;
     let $image2;
@@ -1685,14 +1685,15 @@ console.log('this.hasAudio = ' + this.hasAudio);
         card.imageMedia.image2 = i;
       }
     }
-    console.log('$2images = ' + $2images);
+    if (!this.hasImageOnBack) {
+      $2images = false;
+    }
     if (card.imageMedia.image !== undefined) { // Alternative conditions for (front) image to be displayed.
-    console.log('------------------- createCardImage'
-      + '\nisLeft = ' + isLeft
-      + '\nthis.cardsSideMode = ' + this.cardsSideMode
-      + '\n this.matchIt= ' + this.matchIt
-      );
-      if (this.cardsSideMode === 'frontFirst'|| this.matchIt || !this.noDupeFrontPicToBack) {
+    console.log('++++++++ createCardImage ++++');
+      if (this.cardsSideMode === 'frontFirst'
+        || this.matchIt 
+        || (this.cardsSideMode === 'backFirst' && !this.noDupeFrontPicToBack)
+        ) {
         $image = $(`<img class="h5p-dialogcards-image"
           src="${  H5P.getPath(card.imageMedia.image.path, self.id)  }"/>`);
       }
@@ -1719,7 +1720,7 @@ console.log('this.hasAudio = ' + this.hasAudio);
       }
     }
 
-    if (card.imageMedia.image2 !== undefined) {
+    if (card.imageMedia.image2 !== undefined && this.hasImageOnBack) {
       console.log('++++++++++++++++++++++ createCardImage 2'
       + '\nisLeft = ' + isLeft
       + '\nthis.cardsSideMode = ' + this.cardsSideMode
@@ -1745,6 +1746,10 @@ console.log('this.hasAudio = ' + this.hasAudio);
       else {
         $image2 = $(`<img class="h5p-dialogcards-image2 h5p-dialogcards-hide"
           src="${  H5P.getPath(card.imageMedia.image2.path, self.id)  }"/>`);
+      }
+      if (self.matchIt && isLeft && this.cardsSideMode === 'backFirst' && $2images) {
+        $image2 = $(`<img class="h5p-dialogcards-image"
+          src="${  H5P.getPath(card.imageMedia.image.path, self.id)  }"/>`);
       }
       if (loadCallback) {
         $image2.load(loadCallback);
@@ -2294,19 +2299,20 @@ console.log('******** this.matchIt = ' + this.matchIt);
       }
       else {
         if (self.cardsSideMode === 'frontFirst' && self.noDupeFrontPicToBack) {
-          //$ci.toggleClass('h5p-dialogcards-hide');
-          //$ci2.toggleClass('h5p-dialogcards-hide');
+          $ci.toggleClass('h5p-dialogcards-hide');
+          $ci2.toggleClass('h5p-dialogcards-hide');
         }
         else {
-          if (self.params.behaviour.noDupeFrontPicToBack) {
-            //$ci.toggleClass('h5p-dialogcards-hide');
+          if (self.noDupeFrontPicToBack) {
+            $ci.toggleClass('h5p-dialogcards-hide');
           }
           else {
-            //$ci2.removeClass('h5p-dialogcards-hide');
+            $ci2.removeClass('h5p-dialogcards-hide');
           }
 
         }
       }
+      // Manage front & back images.
       let audioIndex = self.$current.index();
       /* why?
       if (this.enableGotIt) {
