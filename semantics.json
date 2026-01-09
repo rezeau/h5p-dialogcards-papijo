@@ -1237,5 +1237,21 @@
     "importance": "low",
     "default": "Self Correction",
     "common": true
+  },
+  {
+    "name": "selectPlayMode",
+    "type": "text",
+    "label": "Label for selecting the play mode",
+    "importance": "low",
+    "default": "Select a play mode",
+    "common": true
+  },
+  {
+    "name": "currentPlayModeNotice",
+    "type": "text",
+    "label": "Label used to tell the user which play mode is currently used.",
+    "default": "Current Play Mode = ",
+    "importance": "low",
+    "common": true
   }
 ]

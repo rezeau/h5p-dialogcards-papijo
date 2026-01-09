@@ -530,6 +530,14 @@
     {
       "label": "Label for selecting the Self Correction mode",
       "default": "Autocorreção"
+    },
+    {
+      "label": "Label for selecting the play mode",
+      "default": "Selectionar um modo de jogo"
+    },
+    {
+      "label": "Label used to tell the user which play mode is currently used.",
+      "default": "Modo de jogo atual = "
     }
   ]
 }

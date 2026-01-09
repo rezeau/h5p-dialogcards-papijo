@@ -421,7 +421,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       const label = (this.playModeNames.find((i) => i.value === value) || {}).label || null;
       // Use backticks (`) and ${}
       if (label) {
-        text += `${this.params.currentPlayModeNotice}${label}<br>`;
+        text += `${this.params.currentPlayModeNotice + '&nbsp;'}${label}<br>`;
       }
 
     }

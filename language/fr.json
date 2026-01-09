@@ -530,6 +530,14 @@
     {
       "label": "Etiquette pour indiquer le mode Autocorrection",
       "default": "Autocorrection"
+    },
+    {
+      "label": "Etiquette pour choisir le mode de jeu",
+      "default": "Choisissez un mode de jeu"
+    },
+    {
+      "label": "Etiquette pour indiquer le mode de jeu actuel",
+      "default": "Mode de jeu actuel = "
     }
   ]
 }
