@@ -741,7 +741,7 @@ display: block;
 
 .h5p-dialogcards .h5p-dialogcards-card-text-wrapper.noText {
   position: absolute;
-  top: 25%;
+  top: 10%;
 }
 
 .h5p-dialogcards .h5p-dialogcards-card-text-wrapper.audioOnly {
