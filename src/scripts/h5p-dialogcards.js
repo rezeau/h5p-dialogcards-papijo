@@ -899,7 +899,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       $footer.addClass('h5p-dialogcards-footer-match-right');
     }
 
-    // 18:25 19/12/2025 added a timeout to the Prev and Next buttons to prevent double clicks
+    // 19/12/2025 added a timeout to the Prev and Next buttons to prevent double clicks
     if (!this.enableGotIt) {
       const preventDoubleClick = function ($btn, action) {
         if ($btn.prop('disabled')) {
@@ -2311,6 +2311,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       let $off = self.$current.find('.h5p-dialogcards-answer-button-off');
 
       // Manage front & back images.
+      // If exists image2
       if ($ci2.attr('src')) {
         if (self.cardsSideMode === 'frontFirst') {
           $ci.toggleClass('h5p-dialogcards-hide');
@@ -2318,12 +2319,10 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         }
         else {
           // If exists image
-          if ($ci.attr('src')) {
-            if ($ci.attr('src') !== $ci2.attr('src')) {
-              $ci.toggleClass('h5p-dialogcards-hide');
-            }
-            $ci2.toggleClass('h5p-dialogcards-hide');
+          if ($ci.attr('src') && $ci.attr('src') !== $ci2.attr('src')) {
+            $ci.toggleClass('h5p-dialogcards-hide');
           }
+          $ci2.toggleClass('h5p-dialogcards-hide');
         }
       }
       else {
@@ -2552,10 +2551,19 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       // Show all front images (ci) and hide all back images (ci2)
       let $ci = $card.find('.h5p-dialogcards-image');
       let $ci2 = $card.find('.h5p-dialogcards-image2');
-      $ci.removeClass('h5p-dialogcards-hide');
-      $ci2.addClass('h5p-dialogcards-hide');
-      if (self.cardsSideMode === 'backFirst' && this.hasTwoImages) {
-        $ci2.removeClass('h5p-dialogcards-hide');
+
+      if (self.cardsSideMode === 'backFirst') {
+        if (self.hasTwoImages) {
+          $ci.removeClass('h5p-dialogcards-hide');
+          $ci2.addClass('h5p-dialogcards-hide');
+        }
+        else {
+          $ci2.removeClass('h5p-dialogcards-hide');
+        }
+      }
+      else {
+        $ci.removeClass('h5p-dialogcards-hide');
+        $ci2.addClass('h5p-dialogcards-hide');
       }
       // Show all front audios (ca) and hide all back audios (ca2)
       let $ca = $card.find('.h5p-dialogcards-audio-wrapper');
@@ -2568,14 +2576,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       let $caButton = $card.find('.h5p-audio-minimal-button');
       if ($caButton.hasClass(paused)) {
         $caButton.switchClass( paused, play);
-      }
-
-      // Case option cardsSideChoice and image2 but no image
-      if (self.cardsSideMode === 'backFirst') {
-        if (!this.hasTwoImages) {
-          $ci.addClass('h5p-dialogcards-hide');
-        }
-        $ci2.removeClass('h5p-dialogcards-hide');
       }
 
       $cardContent.removeClass('h5p-dialogcards-turned');
