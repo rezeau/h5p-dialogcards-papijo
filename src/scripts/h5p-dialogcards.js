@@ -421,7 +421,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       const label = (this.playModeNames.find((i) => i.value === value) || {}).label || null;
       // Use backticks (`) and ${}
       if (label) {
-        text += `${this.params.currentPlayModeNotice + '&nbsp;'}${label}<br>`;
+        text += `<div class="h5p-dialogcards-option"><b>${this.params.currentPlayModeNotice + '</b>&nbsp;'}${label}</div>`;
       }
 
     }
@@ -460,7 +460,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     // Section to show the Display cards options if different from "normal".
     let order = '';
     if (this.currentFilter !== undefined) {
-      text += `${self.params.currentFilterNotice} ${this.currentFilter}<br>`;
+      text += `<div class="h5p-dialogcards-option"><b>${self.params.currentFilterNotice}</b> ${this.currentFilter}</div>`;
     }
     if (this.cardsOrderChoice === 'user') {
       let orderNotice = self.params.currentOrderNotice;
@@ -473,7 +473,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       else {
         order = self.params.randomOrder;
       }
-      text += `${orderNotice} ${order}<br>`;
+      text += `<div class="h5p-dialogcards-option"><b>${orderNotice} </b>${order}</div>`;
     }
     // If matchIt the left side = back of card and the right side = front of card
     if (this.matchIt) {
@@ -482,7 +482,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         if (this.cardsSideMode === 'frontFirst') {
           currentSide = self.params.cardFrontLabel;
         }
-        text += self.params.currentLeftSideNotice + '&nbsp;' + currentSide;
+        text += '<div class="h5p-dialogcards-option"><b>' + self.params.currentLeftSideNotice + '</b>&nbsp;'
+          + currentSide + '</div>';
       }
     }
     else {
@@ -491,7 +492,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         if (this.cardsSideMode === 'backFirst') {
           currentSide = self.params.cardBackLabel;
         }
-        text += self.params.currentSideNotice + '&nbsp;' + currentSide;
+        text += '<div class="h5p-dialogcards-option"><b>' + self.params.currentSideNotice + '</b>&nbsp;' + currentSide + '</div>';
       }
     }
     if (text !== '') {
@@ -657,9 +658,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       currentSide = self.params.cardBackLabel;
       reverseSide = self.params.cardFrontLabel;
     }
-
+    // Do not use the h5p-dialogcards-options flex display here.
     let $side = $('<div>', {
-      'class': 'h5p-dialogcards-side h5p-dialogcards-options',
+      'class': 'h5p-dialogcards-side h5p-dialogcards-options show',
       'html': self.params.currentSideNotice + '&nbsp;' + currentSide,
     });
     let $optionButtons = $('<div>', {
@@ -766,7 +767,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     const self = this;
     // Init params
     const $filterCards = $('<div>', {
-      'class': 'h5p-dialogcards-categories h5p-dialogcards-options',
+      'class': 'h5p-dialogcards-categories',
       'html': self.params.selectFilter,
     });
 
