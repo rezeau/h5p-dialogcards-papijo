@@ -12,12 +12,7 @@
     "label": "Heading",
     "importance": "high",
     "optional": true,
-    "tags": [
-      "p",
-      "br",
-      "strong",
-      "em"
-    ]
+    "tags": ["p", "br", "strong", "em"]
   },
   {
     "name": "description",
@@ -88,16 +83,7 @@
           "name": "text",
           "type": "text",
           "widget": "html",
-          "tags": [
-            "p",
-            "br",
-            "strong",
-            "em",
-            "ul",
-            "ol",
-            "hr",
-            "a"
-          ],
+          "tags": ["p", "br", "strong", "em", "ul", "ol", "hr", "a"],
           "font": {
             "size": true,
             "color": true
@@ -110,16 +96,7 @@
           "name": "answer",
           "type": "text",
           "widget": "html",
-          "tags": [
-            "p",
-            "br",
-            "strong",
-            "em",
-            "ul",
-            "ol",
-            "hr",
-            "a"
-          ],
+          "tags": ["p", "br", "strong", "em", "ul", "ol", "hr", "a"],
           "font": {
             "size": true,
             "color": true
@@ -179,9 +156,7 @@
               "label": "Audio file(s) for the front of the card",
               "importance": "low",
               "optional": true,
-              "widgetExtensions": [
-                "AudioRecorder"
-              ],
+              "widgetExtensions": ["AudioRecorder"],
               "description": "Audio files for the front of the card"
             },
             {
@@ -190,9 +165,7 @@
               "label": "Audio file(s) for the back of the card",
               "importance": "low",
               "optional": true,
-              "widgetExtensions": [
-                "AudioRecorder"
-              ],
+              "widgetExtensions": ["AudioRecorder"],
               "description": "Audio files for the back of the card"
             }
           ]
@@ -400,9 +373,7 @@
           "rules": [
             {
               "field": "playMode",
-              "equals": [
-                "user"
-              ]
+              "equals": ["user"]
             }
           ]
         },
@@ -498,9 +469,7 @@
           "chooseText": "Choose color",
           "cancelText": "Cancel",
           "palette": [
-            [
-              "rgba(0, 0, 0, 0)"
-            ],
+            ["rgba(0, 0, 0, 0)"],
             [
               "rgb(230, 230, 230)",
               "rgb(242, 242, 240)",
@@ -558,9 +527,7 @@
           "chooseText": "Choose color",
           "cancelText": "Cancel",
           "palette": [
-            [
-              "rgba(0, 0, 0, 0)"
-            ],
+            ["rgba(0, 0, 0, 0)"],
             [
               "rgb(230, 230, 230)",
               "rgb(242, 242, 240)",
@@ -640,10 +607,7 @@
           "rules": [
             {
               "field": "cardsOrderChoice",
-              "equals": [
-                "random",
-                "user"
-              ]
+              "equals": ["random", "user"]
             }
           ]
         }
@@ -685,11 +649,7 @@
           "rules": [
             {
               "field": "playMode",
-              "equals": [
-                "selfCorrectionMode",
-                "matchRepetition",
-                "user"
-              ]
+              "equals": ["selfCorrectionMode", "matchRepetition", "user"]
             }
           ]
         }

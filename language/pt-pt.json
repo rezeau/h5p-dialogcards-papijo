@@ -41,15 +41,15 @@
             "label": "Imagens",
             "fields": [
               {
-            "label": "Imagem da parte frontal do Cartão",
-            "description": "Imagem facultativa para a parte frontal do Cartão. Esta imagem será também utilizada no verso do Cartão se não for introduzida nenhuma imagem diferente para o mesmo."
+                "label": "Imagem da parte frontal do Cartão",
+                "description": "Imagem facultativa para a parte frontal do Cartão. Esta imagem será também utilizada no verso do Cartão se não for introduzida nenhuma imagem diferente para o mesmo."
               },
               {
                 "label": "Texto alternativo para a imagem na parte frontal do Cartão"
               },
               {
                 "label": "Imagem para o verso do Cartão",
-            "description": "Imagem facultativa para o verso do Cartão."
+                "description": "Imagem facultativa para o verso do Cartão."
               },
               {
                 "label": "Texto alternativo para a imagem no verso do Cartão"
@@ -110,7 +110,7 @@
             "label": "Clicar para criar os parâmetros deste filtro",
             "fields": [
               {
-              "label": "Lista das Categorias a utilizar neste filtro"
+                "label": "Lista das Categorias a utilizar neste filtro"
               },
               {
                 "label": "Operador Boleano",
@@ -295,7 +295,7 @@
       "default": "Tentativa n.º @round"
     },
     {
-      "label": "Texto para a mensagem \"tentativa(s)\" no resumo final",      
+      "label": "Texto para a mensagem \"tentativa(s)\" no resumo final",
       "description": "@round será substituido pelo número total de tentativas realizadas",
       "default": "@rounds tentativas(s) realizadas"
     },
@@ -467,13 +467,13 @@
       "default": "Explicar a pontuação"
     },
     {
-      "label": "Questionar se o utilizador pretende trocar a forma atual como os Cartões são visualizados lado a lado.",       
+      "label": "Questionar se o utilizador pretende trocar a forma atual como os Cartões são visualizados lado a lado.",
       "description": "@side será substituido pela face dos Cartões oposta à face atual.",
-      "default": "Trocar a visualização atual e mostrar primeiro o @side ?"      
+      "default": "Trocar a visualização atual e mostrar primeiro o @side ?"
     },
     {
-      "label": "Texto utilizado para informar o utilizador qual a face dos Cartões que será visualizada primeiro.",      
-      "default": "Modo de visualização atual: a face dos Cartões que será visualizada primeiro = "      
+      "label": "Texto utilizado para informar o utilizador qual a face dos Cartões que será visualizada primeiro.",
+      "default": "Modo de visualização atual: a face dos Cartões que será visualizada primeiro = "
     },
     {
       "label": "Texto utilizado para informar o utilizador sobre a ordem pela qual os Cartões apresentados do lado direito estão atualmente configurados.",

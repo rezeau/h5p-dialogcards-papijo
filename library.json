@@ -12,9 +12,7 @@
     "majorVersion": 1,
     "minorVersion": 15
   },
-  "embedTypes": [
-    "iframe"
-  ],
+  "embedTypes": ["iframe"],
   "preloadedCss": [
     {
       "path": "dist/h5p-dialogcards.css"

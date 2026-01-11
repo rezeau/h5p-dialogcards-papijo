@@ -110,7 +110,7 @@
             "label": "Bu filtrenin ayarlarını oluşturmak için tıklayın",
             "fields": [
               {
-              "label": "Bu filtrede kullanılacak kategori listesi"
+                "label": "Bu filtrede kullanılacak kategori listesi"
               },
               {
                 "label": "Mantıksal operatör",
@@ -295,7 +295,7 @@
       "default": "@round. Tur"
     },
     {
-      "label": "Son özet sayfasında görünen \"tur(lar)\" mesajı için metin",      
+      "label": "Son özet sayfasında görünen \"tur(lar)\" mesajı için metin",
       "description": "@round toplam tur sayısı ile değiştirilecektir",
       "default": "@round tur"
     },
@@ -467,13 +467,13 @@
       "default": "Puanı açıkla"
     },
     {
-      "label": "Kullanıcıya kartların görüntülenme yönünü tersine çevirmek isteyip istemediğini sorun.",       
+      "label": "Kullanıcıya kartların görüntülenme yönünü tersine çevirmek isteyip istemediğini sorun.",
       "description": "@side mevcut tarafın karşıtı ile değiştirilecektir.",
-      "default": "Mevcut görüntülemeyi tersine çevirerek önce @side tarafını göstermek ister misiniz?"      
+      "default": "Mevcut görüntülemeyi tersine çevirerek önce @side tarafını göstermek ister misiniz?"
     },
     {
-      "label": "Kullanıcıya kartların hangi tarafının şu anda önce gösterildiğini bildiren etiket.",      
-      "default": "Mevcut görüntüleme modu: Önce gösterilen taraf = "      
+      "label": "Kullanıcıya kartların hangi tarafının şu anda önce gösterildiğini bildiren etiket.",
+      "default": "Mevcut görüntüleme modu: Önce gösterilen taraf = "
     },
     {
       "label": "Sağdaki kartların şu anda hangi sırada gösterildiğini kullanıcıya bildirmek için kullanılan etiket.",

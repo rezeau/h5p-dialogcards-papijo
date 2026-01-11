@@ -16,7 +16,7 @@ H5PUpgrades['H5P.Dialogcards'] = (function () {
       4: function (parameters, finished) {
         // The old default was to scale the text and not the card
         parameters.behaviour = {
-          scaleTextNotCard: true
+          scaleTextNotCard: true,
         };
 
         // Complete
@@ -26,19 +26,25 @@ H5PUpgrades['H5P.Dialogcards'] = (function () {
       7: function (parameters, finished, extras) {
         var extrasOut = extras || {};
         // Copy html-free title to new metadata structure if present
-        var title = parameters.title || ((extras && extras.metadata) ? extras.metadata.title : undefined);
+        var title =
+          parameters.title ||
+          (extras && extras.metadata ? extras.metadata.title : undefined);
         if (title) {
           title = title.replace(/<[^>]*>?/g, '');
         }
         extrasOut.metadata = {
-          title: title
+          title: title,
         };
 
         finished(null, parameters, extrasOut);
       },
 
       9: function (parameters, finished, extras) {
-        if (parameters && parameters.dialogs && Array.isArray(parameters.dialogs)) {
+        if (
+          parameters &&
+          parameters.dialogs &&
+          Array.isArray(parameters.dialogs)
+        ) {
           /*
            * Regardless of what alignment was set in the editor, the stylesheet
            * would always center the text. For not breaking the view of existing
@@ -49,27 +55,33 @@ H5PUpgrades['H5P.Dialogcards'] = (function () {
             // Update text on front
             if (typeof dialog.text === 'string') {
               if (dialog.text.substr(0, 2) !== '<p') {
-                dialog.text = '<p style="text-align: center;">' + dialog.text + '</p>'; // was plain text
-              }
-              else {
-                dialog.text = dialog.text.replace(/<p[^>]*>/g, '<p style="text-align: center;">');
+                dialog.text =
+                  '<p style="text-align: center;">' + dialog.text + '</p>'; // was plain text
+              } else {
+                dialog.text = dialog.text.replace(
+                  /<p[^>]*>/g,
+                  '<p style="text-align: center;">'
+                );
               }
             }
 
             // Update text on back
             if (typeof dialog.answer === 'string') {
               if (dialog.answer.substr(0, 2) !== '<p') {
-                dialog.answer = '<p style="text-align: center;">' + dialog.answer + '</p>'; // was plain text
-              }
-              else {
-                dialog.answer = dialog.answer.replace(/<p[^>]*>/g, '<p style="text-align: center;">');
+                dialog.answer =
+                  '<p style="text-align: center;">' + dialog.answer + '</p>'; // was plain text
+              } else {
+                dialog.answer = dialog.answer.replace(
+                  /<p[^>]*>/g,
+                  '<p style="text-align: center;">'
+                );
               }
             }
           });
         }
 
         finished(null, parameters, extras);
-      }
-    }
+      },
+    },
   };
 })();
