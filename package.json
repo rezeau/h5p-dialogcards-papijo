@@ -1,10 +1,6 @@
 {
   "name": "h5p-dialogcards",
   "version": "1.7.3",
-  "prettier": {
-    "singleQuote": true,
-    "trailingComma": "es5"
-  },
   "description": "H5P Dialogue Cards ==========",
   "type": "module",
   "main": "index.js",

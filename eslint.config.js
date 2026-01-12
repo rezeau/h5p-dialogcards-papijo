@@ -6,7 +6,7 @@ export default [
     // You can override or extend the rules here
     // For example:
     rules: {
-      'no-console': 'on',
+      'no-console': 'warn',
     },
   },
 ];
