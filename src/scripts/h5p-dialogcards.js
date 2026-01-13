@@ -1578,11 +1578,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       .addClass(this.audioOnly ? 'spacerAudioOnly' : 'spacer');
     };
 
-    // Hide text wrapper when NOT frontTextBackImage
-    if (!this.frontTextBackImage) {
-    $cardTextWrapper.addClass('hide');
-    }
-
     const shouldHideText =
     this.noText ||
     (this.frontTextBackImage &&
