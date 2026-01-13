@@ -1566,32 +1566,47 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
 
     const hideTextAndBuildContent = () => {
-      $cardTextWrapper.addClass('hide');
-      if (this.hasAudio) {
-        this.createCardAudio(card).appendTo($cardContent);
-        this.createCardAudio2(card).appendTo($cardContent);
-      }
-      this.createCardFooter()
-        .appendTo($cardContent)
-        .addClass(this.audioOnly ? 'spacerAudioOnly' : 'spacer');
+    $cardTextWrapper.addClass('hide');
+
+    if (this.hasAudio) {
+      this.createCardAudio(card).appendTo($cardContent);
+      this.createCardAudio2(card).appendTo($cardContent);
+    }
+
+    this.createCardFooter()
+      .appendTo($cardContent)
+      .addClass(this.audioOnly ? 'spacerAudioOnly' : 'spacer');
     };
 
-    if (!this.noText) {
-      this.createCardFooter().appendTo($cardTextWrapper);
-    }
-    else {
-      hideTextAndBuildContent();
+    // Hide text wrapper when NOT frontTextBackImage
+    if (!this.frontTextBackImage) {
+    $cardTextWrapper.addClass('hide');
     }
 
-    if (
-      this.frontTextBackImage &&
+    const shouldHideText =
+    this.noText ||
+    (this.frontTextBackImage &&
       this.cardsSideMode === 'frontFirst' &&
-      this.matchIt
-    ) {
-      hideTextAndBuildContent();
+      this.matchIt);
+
+    if (shouldHideText) {
+    hideTextAndBuildContent();
+    } else if (this.frontTextBackImage && !this.matchIt) {
+    // NEW CONDITION: footer goes to card content
+    this.createCardFooter().appendTo($cardContent);
+    } else {
+    // Default behavior
+    this.createCardFooter().appendTo($cardTextWrapper);
     }
+    if (this.frontTextBackImage && !this.matchIt) {
+        $cardContent
+            .find('.h5p-dialogcards-image-wrapper')
+            .addClass('hide');
+        }
     return $cardContent;
-  };
+
+  }
+
 
   /**
    * Create content for a card on the left (in Match modes)
@@ -2538,7 +2553,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    * Show the opposite site of the card.
    * @param {object} [$card] Current card
    */
-  C.prototype.turnCard = function ($card) {
+  C.prototype.turnCard = function ($card) {    
     let self = this;
     let $cg;
     let $c = self.$current.find('.h5p-dialogcards-card-content');
@@ -2655,7 +2670,15 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         $cg.toggleClass('h5p-dialogcards-disabled');
         $off.toggleClass('h5p-dialogcards-disabled');
       }
-
+      console.log('self.frontTextBackImage = ' + self.frontTextBackImage);
+      if (self.frontTextBackImage) {
+      $card
+        .find('.h5p-dialogcards-image-wrapper')
+        .toggleClass('hide');
+        $card
+        .find('.h5p-dialogcards-card-text-wrapper')
+        .toggleClass('hide');
+      }
       // Toggle state for gotIt buttons
       if (self.enableGotIt) {
         if (!turned && self.hideTurnButton) {
@@ -3969,6 +3992,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    */
 
   C.prototype.resetButtons = function (type) {
+    console.log('resetButtons type = ' + type);
     let self = this;
     let $card = $(this);
     $card = self.$current;
@@ -4003,7 +4027,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     else if (type === 'retry button' || type === 'finished button') {
       // Disable answer buttons, turn button, Hide card text button and Enable the Retry button
       if ($gotIt || this.repetition) {
-        if (this.noText || (this.frontTextBackImage && this.repetition)) {
+        /// todo check this
+        if (this.noText || (this.frontTextBackImage /*&& this.repetition*/)) {
           let $el = $card.find('.h5p-dialogcards-card-text-wrapper');
           let aClass = 'noText';
           if (this.audioOnly) {
