@@ -1566,7 +1566,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
 
     const hideTextAndBuildContent = () => {
-    $cardTextWrapper.addClass('hide');
+      if (this.noText) {
+        $cardTextWrapper.addClass('hide');
+        }
 
     if (this.hasAudio) {
       this.createCardAudio(card).appendTo($cardContent);
@@ -2665,7 +2667,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         $cg.toggleClass('h5p-dialogcards-disabled');
         $off.toggleClass('h5p-dialogcards-disabled');
       }
-      console.log('self.frontTextBackImage = ' + self.frontTextBackImage);
       if (self.frontTextBackImage) {
       $card
         .find('.h5p-dialogcards-image-wrapper')
@@ -3987,7 +3988,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    */
 
   C.prototype.resetButtons = function (type) {
-    console.log('resetButtons type = ' + type);
     let self = this;
     let $card = $(this);
     $card = self.$current;
