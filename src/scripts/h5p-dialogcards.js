@@ -202,6 +202,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       this.frontTextBackImage = false;
       if (
         self.params.dialogs[0].answer === '' &&
+        self.params.dialogs[0].imageMedia.image === undefined &&
         self.params.dialogs[0].imageMedia.image2 !== undefined &&
         !this.noText
       ) {
@@ -1764,9 +1765,17 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       if (this.sideBySide) {
         footerClass = 'h5p-dialogcards-card-footer subtitle';
       }
+      if (this.frontTextBackImage) {
+        footerClass = 'h5p-dialogcards-card-footer front-text-back-image';
+      }
     }
     else {
-      footerClass = 'h5p-dialogcards-card-footer-enablegotit';
+      if (!this.frontTextBackImage) {
+        footerClass = 'h5p-dialogcards-card-footer-enablegotit';
+      }
+      else {
+        footerClass = 'h5p-dialogcards-card-footer-enablegotit front-text-back-image';
+      }
     }
     let $cardFooter = $('<div>', {
       class: footerClass,

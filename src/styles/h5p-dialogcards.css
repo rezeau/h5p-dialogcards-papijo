@@ -109,6 +109,7 @@
   height: -moz-available; /* WebKit-based browsers will ignore this. */
   height: -webkit-fill-available; /* Mozilla-based browsers will ignore this. */
   height: fill-available;
+  position: relative;
 }
 
 .h5p-dialogcards-summary-screen,
@@ -132,12 +133,26 @@
   text-align: center;
   display: block;
 }
-
-.h5p-dialogcards .h5p-dialogcards-card-footer-enablegotit {
+.h5p-dialogcards .h5p-dialogcards-card-footer.front-text-back-image {
+  height: 2.25em;
+  text-align: center;
+  display: block;
+  position: absolute;
+  bottom: 0.4em;
+  left: 45%;
+}
+.h5p-dialogcards .h5p-dialogcards-card-footer-enablegotit,
+.h5p-dialogcards .h5p-dialogcards-card-footer-enablegotit.front-text-back-image {
   height: 2.25em;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+.h5p-dialogcards .h5p-dialogcards-card-footer-enablegotit.front-text-back-image {
+  position: absolute;
+  bottom: 0.4em;
+  left: 10px;
+  right: 10px;
 }
 
 .h5p-dialogcards .h5p-dialogcards-image-wrapper {
@@ -166,11 +181,11 @@
 .h5p-dialogcards .h5p-dialogcards-card-text-wrapper {
   position: relative;
   overflow: hidden;
-  min-height: 12em;
+  min-height: 15em;
 }
 
 .h5p-dialogcards.h5p-text-scaling .h5p-dialogcards-card-text-wrapper {
-  height: 12em;
+  height: 15em;
 }
 
 .h5p-dialogcards .h5p-dialogcards-audio-wrapper,
