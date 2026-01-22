@@ -195,7 +195,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (!self.params.dialogs.length) {
       self.params.description =
         '<b>ERROR</b> Wrong use of the "no text" option:' +
-        'you have NO CARDS with images or audio on their back side.';
+        'you need cards with images or audio on both sides.';
     }
     else {
       // We assume that all cards are on the same model, with no text on back but image on back.
@@ -1677,7 +1677,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         .appendTo($cardContent);
     }
     let $cardTextWrapper = $('<div>', {
-      class: 'h5p-dialogcards-card-text-wrapper coucou',
+      class: 'h5p-dialogcards-card-text-wrapper',
     }).appendTo($cardContent);
 
     let $cardTextInner = $('<div>', {
@@ -1742,17 +1742,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (this.cardsSideMode === 'backFirst') {
       let t = card.text;
       let a = card.answer;
-      //let i = card.image;
-      //let i2 = card.image2;
       let au = card.audio;
-      let au2 = card.audio2;
-      if (!card.image2 && card.image) {
-        //i2 = i;
-      }
-      if (!card.image && card.image2) {
-        //i2 = i;
-        //i = card.image2;
-      }
+      let au2 = card.audio2;      
       let ialt = card.imageAltText;
       let ialt2 = card.imageAltText2;
       card.text = a;
@@ -1778,8 +1769,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       if (this.sideBySide) {
         footerClass = 'h5p-dialogcards-card-footer subtitle';
       }
-      if (this.frontTextBackImage) {
-        footerClass = 'h5p-dialogcards-card-footer front-text-back-image';
+      if (this.frontTextBackImage && !this.matchIt) {
+        footerClass = 'h5p-dialogcards-card-footer coco';
       }
     }
     else {
@@ -2614,7 +2605,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           $cardText.removeClass('hide');
         }
         else {
-          /// We need to reset text to its original front card state.
+          // We need to reset text to its original front card state.
           $cardText.toggleClass('hide', !turned);
         }
       }
@@ -2930,13 +2921,15 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         .removeClass('hide');
 
       if (self.frontTextBackImage) {
+        const showText = self.cardsSideMode === 'frontFirst';
         $card
           .find('.h5p-dialogcards-image-wrapper')
-          .addClass('hide');        
+          .toggleClass('hide', showText);
         $card
           .find('.h5p-dialogcards-card-text-wrapper')
-          .removeClass('hide');
+          .toggleClass('hide', !showText);
       }
+
     });
     // hide and show audio not used in papi Jo version BUT SHOULD DO A GENERAL RESET OF ALL AUDIO BUTTONS upon retry
 
@@ -4051,7 +4044,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     else if (type === 'retry button' || type === 'finished button') {
       // Disable answer buttons, turn button, Hide card text button and Enable the Retry button
       if ($gotIt || this.repetition) {
-        /// todo check this
         if (this.noText || (this.frontTextBackImage /*&& this.repetition*/)) {
           let $el = $card.find('.h5p-dialogcards-card-text-wrapper');
           let aClass = '';
@@ -4356,7 +4348,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
             numCardsInCats++;
           }
           else {
-            catDialogs[i] = self.dialogs[i];
+            catDialogs[i] = self.params.dialogs[i];
           }
         }
       }
@@ -4372,9 +4364,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         'ERROR! categories filter returned an empty result. No filter will be applied.';
     }
     else {
-      this.dialogs = filtered;
+      self.dialogs = filtered;
       this.nbCards = self.dialogs.length;
-      return filtered;
+      return self.dialogs;
     }
   };
 

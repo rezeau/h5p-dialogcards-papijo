@@ -128,31 +128,46 @@
   flex-direction: column;
 }
 
+/* Base block footer styles */
 .h5p-dialogcards .h5p-dialogcards-card-footer {
   height: 2.25em;
   text-align: center;
   display: block;
 }
-.h5p-dialogcards .h5p-dialogcards-card-footer.front-text-back-image {
-  height: 2.25em;
-  text-align: center;
-  display: block;
-  position: absolute;
-  bottom: 0.4em;
-  left: 45%;
-}
+
+/* Flex-style footers */
 .h5p-dialogcards .h5p-dialogcards-card-footer-enablegotit,
-.h5p-dialogcards .h5p-dialogcards-card-footer-enablegotit.front-text-back-image {
+.h5p-dialogcards .coco {
   height: 2.25em;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
-.h5p-dialogcards .h5p-dialogcards-card-footer-enablegotit.front-text-back-image {
+
+/* Shared positioning for front-text-back-image */
+.h5p-dialogcards .front-text-back-image {
   position: absolute;
   bottom: 0.4em;
+}
+
+/* Block footer variant */
+.h5p-dialogcards .h5p-dialogcards-card-footer.front-text-back-image {
+  left: 45%;
+}
+
+/* Enable-got-it footer variant */
+.h5p-dialogcards
+  .h5p-dialogcards-card-footer-enablegotit.front-text-back-image {
   left: 10px;
   right: 10px;
+}
+
+/* Coco positioning */
+.h5p-dialogcards .coco {
+  position: absolute;
+  left: 50%;
+  bottom: -0.8em;
+  transform: translate(-50%, -50%);
 }
 
 .h5p-dialogcards .h5p-dialogcards-image-wrapper {
