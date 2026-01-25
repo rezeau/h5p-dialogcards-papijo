@@ -1559,9 +1559,12 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }).appendTo($cardTextInner);
 
     if (this.hasAudio && !this.noText) {
-      this.createCardAudio(card).appendTo($cardTextInnerContent);
-
-      this.createCardAudio2(card).appendTo($cardTextInnerContent);
+      if (card.audioMedia.audio !== undefined) {
+        this.createCardAudio(card).appendTo($cardTextInnerContent);
+      }
+      if (card.audioMedia.audio2 !== undefined) {
+        this.createCardAudio2(card).appendTo($cardTextInnerContent);
+      }
     }
 
     let $cardText = $('<div>', {
@@ -1582,11 +1585,13 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       if (this.matchIt && this.cardsSideMode === 'frontFirst' || this.noText) {
         $cardTextWrapper.addClass('hide');
       }
-      if (this.hasAudio) {
+      if (card.audioMedia.audio !== undefined) {
         this.createCardAudio(card).appendTo($cardContent);
+      }
+      if (card.audioMedia.audio2 !== undefined) {
         this.createCardAudio2(card).appendTo($cardContent);
       }
-      this.createCardFooter()
+      this.createCardFooter(card, $cardContent)
         .appendTo($cardContent)
         .addClass(this.audioOnly ? 'spacerAudioOnly' : 'spacer');
     };
@@ -1607,15 +1612,18 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     // Default behavior
       this.createCardFooter().appendTo($cardTextWrapper);
     }
-    if (this.frontTextBackImage && this.cardsSideMode === 'frontFirst' && !this.matchIt) {
-      $cardContent
-        .find('.h5p-dialogcards-image-wrapper')
-        .addClass('hide');
+    if (this.frontTextBackImage) {
+      $cardTextWrapper.css('min-height', '15em');
+      let $c = $cardContent.find('.h5p-dialogcards-image-wrapper');
+      if (this.cardsSideMode === 'frontFirst' && !this.matchIt) {
+        $c.addClass('hide');
+      }
+      if (this.cardsSideMode === 'backFirst' || this.params.behaviour.scaleTextNotCard) {
+        $c.addClass('front-text-back-image-reduced');
+      }
     }
     return $cardContent;
-
   };
-
 
   /**
    * Create content for a card on the left (in Match modes)
@@ -1715,8 +1723,10 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     // Create it if needed by this.sideBySide
     if (this.noText) {
       $cardTextWrapper.addClass('hide');
-      if (this.hasAudio) {
+      if (card.audioMedia.audio !== undefined) {
         self.createCardAudio(card).appendTo($cardContent);
+      }
+      if (card.audioMedia.audio2 !== undefined) {
         self.createCardAudio2(card).appendTo($cardContent);
       }
       let $cardFooterLeft = $('<div>', {
@@ -1727,9 +1737,10 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
     if (this.frontTextBackImage && this.cardsSideMode === 'backFirst') {
       $cardTextWrapper.addClass('hide');
-
-      if (this.hasAudio) {
+      if (card.audioMedia.audio !== undefined) {
         this.createCardAudio(card).appendTo($cardContent);
+      }
+      if (card.audioMedia.audio2 !== undefined) {
         this.createCardAudio2(card).appendTo($cardContent);
       }
       let $cardFooterLeft = $('<div>', {
@@ -1761,16 +1772,24 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    * Create card footer
    * @returns {HTMLElement} Card footer element
    */
-  C.prototype.createCardFooter = function () {
+  C.prototype.createCardFooter = function (card, $cardContent) {
     let self = this;
     let footerClass;
     if (!this.enableGotIt) {
       footerClass = 'h5p-dialogcards-card-footer';
       if (this.sideBySide) {
-        footerClass = 'h5p-dialogcards-card-footer subtitle';
+        footerClass += ' subtitle';
       }
       if (this.frontTextBackImage && !this.matchIt) {
-        footerClass = 'h5p-dialogcards-card-footer coco';
+        footerClass += ' reduced-image';
+      }
+      if (this.noText 
+        && this.cardsSideMode === 'backFirst'
+        && card.audioMedia.audio !== undefined
+        ) {
+        let audioWrapper = $cardContent.find('.h5p-dialogcards-audio-wrapper');
+        audioWrapper.addClass('display-audio-centered');
+        footerClass += ' audio';
       }
     }
     else {
@@ -2041,7 +2060,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     let audio = null;
     let audioClass = 'h5p-dialogcards-audio-wrapper';
     if (this.noText) {
-      audioClass += ' spacer';
+      audioClass += ' spacer display-audio-centered';
     }
     let $audioWrapper = $('<div>', {
       class: audioClass,
@@ -2072,7 +2091,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     let audio2 = null;
     let audioClass = 'h5p-dialogcards-audio-wrapper2 hide';
     if (this.noText) {
-      audioClass += ' spacer';
+      audioClass += ' spacer display-audio-centered';
     }
     let $audioWrapper2 = $('<div>', {
       class: audioClass,
@@ -2981,7 +3000,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
     self.$current = $cards.filter(':first').addClass('h5p-dialogcards-current');
     self.$current.addClass('h5p-dialogcards-match-right');
-    //self.updateNavigation();
     // audio buttons
     let paused = 'h5p-audio-minimal-play-paused';
     let play = 'h5p-audio-minimal-play';

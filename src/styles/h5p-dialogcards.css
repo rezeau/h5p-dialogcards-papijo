@@ -129,15 +129,24 @@
 }
 
 /* Base block footer styles */
-.h5p-dialogcards .h5p-dialogcards-card-footer {
+.h5p-dialogcards .h5p-dialogcards-card-footer,
+.h5p-dialogcards .h5p-dialogcards-card-footer.audio {
   height: 2.25em;
   text-align: center;
   display: block;
 }
 
+.h5p-dialogcards .h5p-dialogcards-card-footer.audio {
+  position: absolute;
+  left: 50%;
+  bottom: 0.1em;
+  height: initial;
+  transform: translate(-50%, -50%);
+}
+
 /* Flex-style footers */
 .h5p-dialogcards .h5p-dialogcards-card-footer-enablegotit,
-.h5p-dialogcards .coco {
+.h5p-dialogcards .reduced-image {
   height: 2.25em;
   display: flex;
   flex-direction: row;
@@ -162,8 +171,8 @@
   right: 10px;
 }
 
-/* Coco positioning */
-.h5p-dialogcards .coco {
+/* reduced-image positioning */
+.h5p-dialogcards .reduced-image {
   position: absolute;
   left: 50%;
   bottom: -0.8em;
@@ -196,11 +205,11 @@
 .h5p-dialogcards .h5p-dialogcards-card-text-wrapper {
   position: relative;
   overflow: hidden;
-  min-height: 15em;
+  min-height: 12em;
 }
 
 .h5p-dialogcards.h5p-text-scaling .h5p-dialogcards-card-text-wrapper {
-  height: 15em;
+  height: 12em;
 }
 
 .h5p-dialogcards .h5p-dialogcards-audio-wrapper,
@@ -843,4 +852,19 @@
 .h5p-dialogcards .h5p-dialogcards-categories {
   display: flex;
   font-size: 0.8em;
+}
+
+/* If frontTextBackImage reduce image height to fit footer. */
+.h5p-dialogcards .front-text-back-image-reduced > .h5p-dialogcards-image,
+.h5p-dialogcards .front-text-back-image-reduced > .h5p-dialogcards-image2 {
+  max-height: 85%;
+  top: 41%;
+}
+
+.h5p-dialogcards .display-audio-centered {
+  position: absolute;
+  left: 50%;
+  top: 33%;
+  height: initial;
+  transform: translate(-50%, -50%);
 }
