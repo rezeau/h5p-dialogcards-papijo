@@ -146,11 +146,15 @@
 
 /* Flex-style footers */
 .h5p-dialogcards .h5p-dialogcards-card-footer-enablegotit,
+.h5p-dialogcards .h5p-dialogcards-card-footer-enablegotit.audio,
 .h5p-dialogcards .reduced-image {
   height: 2.25em;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+.h5p-dialogcards .h5p-dialogcards-card-footer-enablegotit.audio {
+  margin-top: 10em;
 }
 
 /* Shared positioning for front-text-back-image */
@@ -817,7 +821,7 @@
 }
 
 .h5p-dialogcards .spacerAudioOnly {
-  margin-top: 4em;
+  margin-top: 10em;
 }
 
 .h5p-dialogcards .h5p-dialogcards-card-text-wrapper.noText {

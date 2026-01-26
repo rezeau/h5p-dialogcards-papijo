@@ -1,4 +1,5 @@
 /**
+/**
  * Dialogcards module PapiJo
  * @param $
  */
@@ -248,10 +249,10 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           self.params.dialogs[i].audioMedia.audio2 !== undefined
         ) {
           this.audioOnly = true;
+          break;
         }
         else {
           this.audioOnly = false;
-          break;
         }
       }
     }
@@ -1210,6 +1211,14 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
               }),
             );
             $card.find('.joubel-tip-container').addClass('noText');
+
+            // Case of front card notext + audio & back card image.
+            $card.find('.h5p-dialogcards-audio-wrapper').before(
+              JoubelUI.createTip(tip, {
+                tipLabel: self.params.tipButtonLabel,
+                addclass: 'joubel-tip-notext',
+              }),
+            );
           }
         }
       }
@@ -1528,11 +1537,11 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       $cardContent.css('background-color', this.backgroundColorBack);
     }
 
-    if (
-      card.imageMedia.image !== undefined ||
+    if (!this.audioOnly &&
+      (card.imageMedia.image !== undefined ||
       (card.imageMedia.image2 !== undefined &&
-        this.cardsSideMode === 'frontFirst') ||
-      !this.matchIt
+        this.cardsSideMode === 'frontFirst') 
+        || !this.matchIt)
     ) {
       this.createCardImage(card, setCardSizeCallback, isLeft).appendTo(
         $cardContent,
@@ -1591,9 +1600,10 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       if (card.audioMedia.audio2 !== undefined) {
         this.createCardAudio2(card).appendTo($cardContent);
       }
+      
       this.createCardFooter(card, $cardContent)
         .appendTo($cardContent)
-        .addClass(this.audioOnly ? 'spacerAudioOnly' : 'spacer');
+        .addClass(this.audioOnly ? ' spacerAudioOnly' : ' spacer');
     };
 
     const shouldHideText =
@@ -1770,6 +1780,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
   /**
    * Create card footer
+   * @param {object} card Card parameters
+   * @param {HTMLElement} $cardContent Card content container
    * @returns {HTMLElement} Card footer element
    */
   C.prototype.createCardFooter = function (card, $cardContent) {
@@ -1783,10 +1795,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       if (this.frontTextBackImage && !this.matchIt) {
         footerClass += ' reduced-image';
       }
-      if (this.noText 
-        && this.cardsSideMode === 'backFirst'
-        && card.audioMedia.audio !== undefined
-        ) {
+      if (this.noText && card.audioMedia.audio !== undefined) {
         let audioWrapper = $cardContent.find('.h5p-dialogcards-audio-wrapper');
         audioWrapper.addClass('display-audio-centered');
         footerClass += ' audio';
