@@ -178,27 +178,96 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       }
     }
     this.playModeUser = this.playMode;
-    // Remove potential cards with empty front or empty back, i.e. no text, no audio, no image!
-    for (let i = 0; i < self.params.dialogs.length; i++) {
-      if (
-        ((self.params.dialogs[i].text === undefined || this.noText) &&
-          self.params.dialogs[i].imageMedia.image === undefined &&
-          self.params.dialogs[i].audioMedia.audio === undefined) ||
-        (self.params.dialogs[i].answer === undefined &&
-          self.params.dialogs[i].imageMedia.image2 === undefined &&
-          self.params.dialogs[i].audioMedia.audio2 === undefined)
-      ) {
-        self.params.dialogs.splice(i, 1);
-        i--;
-      }
+    /* *************************************************** */
+    if (this.noText) {
+      this.report = checkConsistency(self);
     }
+
+/* *************************************************** */
     // TODO Translate this error message
-    if (!self.params.dialogs.length) {
-      self.params.description =
-        '<b>ERROR</b> Wrong use of the "no text" option:' +
-        'you need cards with images or audio on both sides.';
+    if (!self.params.dialogs.length || this.report) {
+      self.params.description +=
+        '<hr><b>ERROR</b> Wrong use of the "no text" option:' +
+        'you need cards with images or audio on both sides. ' 
+        + '<br>' + this.report;
+        
     }
-    else {
+    if (!self.params.dialogs.length) {      
+        return;
+    }
+
+// Reset all flags
+this.frontTextBackImage = false;
+this.frontAudioBackImage = false;
+this.frontImageBackAudio = false;
+this.hasAudio = false;
+this.has2Audio = false;
+this.hasImageOnFront = false;
+this.hasImageOnBack = false;
+this.hasTwoImages = false;
+this.audioOnly = false;
+
+// -------------------------
+// Flags that depend on text being present
+// -------------------------
+if (!this.noText) {
+  // All dialogs must satisfy: empty answer + no front image + back image exists
+  this.frontTextBackImage = self.params.dialogs.every(dialog =>
+    dialog.answer === '' &&
+    dialog.imageMedia.image === undefined &&
+    dialog.imageMedia.image2 !== undefined
+  );
+}
+
+// -------------------------
+// Flags that depend on no text
+// -------------------------
+  if (this.noText) {
+    // All dialogs must have front audio and back image
+    this.frontAudioBackImage = self.params.dialogs.every(dialog =>
+      dialog.audioMedia.audio &&
+      dialog.imageMedia.image2 !== undefined
+    );
+
+    // All dialogs must have front image and back audio
+    this.frontImageBackAudio = self.params.dialogs.every(dialog =>
+      dialog.imageMedia.image !== undefined &&
+      dialog.audioMedia.audio2 !== undefined
+    );
+
+    // All dialogs must have audio (front or back)
+    this.hasAudio = self.params.dialogs.every(dialog =>
+      dialog.audioMedia.audio || dialog.audioMedia.audio2
+    );
+
+    // All dialogs must have both front and back audio
+    this.has2Audio = self.params.dialogs.every(dialog =>
+      dialog.audioMedia.audio && dialog.audioMedia.audio2
+    );
+
+    // All dialogs must satisfy “audio only” condition
+    this.audioOnly = self.params.dialogs.every(dialog =>
+      dialog.imageMedia.image === undefined &&
+      dialog.audioMedia.audio !== undefined &&
+      dialog.imageMedia.image2 === undefined &&
+      dialog.audioMedia.audio2 !== undefined
+    );
+
+    // All dialogs must have front image
+    this.hasImageOnFront = self.params.dialogs.every(dialog =>
+      dialog.imageMedia.image !== undefined
+    );
+
+    // All dialogs must have back image
+    this.hasImageOnBack = self.params.dialogs.every(dialog =>
+      dialog.imageMedia.image2 !== undefined
+    );
+    
+    if (this.hasImageOnFront && this.hasImageOnBack) {
+      this.hasTwoImages = true;
+    }
+  }
+/*
       // We assume that all cards are on the same model, with no text on back but image on back.
       this.frontTextBackImage = false;
       if (
@@ -209,7 +278,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       ) {
         this.frontTextBackImage = true;
       }
-    }
+    
     this.hasAudio = false;
     for (let i = 0; i < self.params.dialogs.length; i++) {
       if (
@@ -256,6 +325,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         }
       }
     }
+    */
     // IF categories filters enabled!!!
     if (self.params.enableCategories && self.params.behaviour.catFilters) {
       this.catFilters = self.params.behaviour.catFilters;
@@ -4542,6 +4612,73 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
     return [message, thisclass];
   };
+/**/
+function checkConsistency(self) {
+    const removedCards = [];
+
+    self.params.dialogs = self.params.dialogs.filter((card, index) => {
+        const { imageMedia, audioMedia } = card;
+
+        const frontImage = !!imageMedia?.image;
+        const frontAudio = !!audioMedia?.audio;
+        const backImage = !!imageMedia?.image2;
+        const backAudio = !!audioMedia?.audio2;
+
+        const frontCount = (frontImage ? 1 : 0) + (frontAudio ? 1 : 0);
+        const backCount  = (backImage ? 1 : 0) + (backAudio ? 1 : 0);
+
+        const reasons = [];
+
+        // Front / back must have exactly ONE media
+        if (frontCount === 0) reasons.push("Empty front");
+        if (backCount === 0) reasons.push("Empty back");
+
+        if (frontCount > 1) reasons.push("Multiple media on front");
+        if (backCount > 1) reasons.push("Multiple media on back");
+
+        if (reasons.length > 0) {
+            const text = card.text.replace(/<[^>]*>/g, "").trim();
+            const answer = card.answer.replace(/<[^>]*>/g, "").trim();
+
+            removedCards.push({
+                index,
+                reason: reasons.join(" & "),
+                text,
+                answer
+            });
+
+            return false;
+        }
+
+        return true; // valid card
+    });
+
+    if (removedCards.length === 0) {
+        return '';
+    }
+
+    // HTML Report
+    let report = `<div style="font-family:Arial,sans-serif;">`;
+    report += `<h2 style="color:#d9534f;">⚠️ Consistency Check Report</h2>`;
+    report += `<hr>`;
+
+    removedCards.forEach(card => {
+        report += `
+            <div style="margin-bottom:12px;color:black;">
+                <strong>Card # ${card.index + 1}. Reason:</strong> ${card.reason}<br>
+                <strong>Text:</strong> "${card.text}"<br>
+                <strong>Answer:</strong> "${card.answer}"
+            </div>
+            <hr style="border:1px dashed #ccc;">
+        `;
+    });
+
+    report += `<p><strong>Total cards removed:</strong> ${removedCards.length}</p>`;
+    report += `</div>`;
+
+    return report;
+}
+
 
   C.SCALEINTERVAL = 0.2;
   C.MAXSCALE = 16;
