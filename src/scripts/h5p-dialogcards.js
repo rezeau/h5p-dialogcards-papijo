@@ -187,15 +187,15 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     // TODO Translate this error message
     if (!self.params.dialogs.length || this.report) {
       self.params.description +=
-        '<hr><b>ERROR</b> Wrong use of the "no text" option:' +
-        'you need cards with images or audio on both sides. ' 
+        '<hr><b>ERROR</b> You are using the "no text" option:' +
+        '<br>but your set of cards is not cosistent.' 
         + '<br>' + this.report;
         
     }
     if (!self.params.dialogs.length) {      
         return;
     }
-
+/*
 // Reset all flags
 this.frontTextBackImage = false;
 this.frontAudioBackImage = false;
@@ -267,7 +267,7 @@ if (!this.noText) {
       this.hasTwoImages = true;
     }
   }
-/*
+*/
       // We assume that all cards are on the same model, with no text on back but image on back.
       this.frontTextBackImage = false;
       if (
@@ -325,7 +325,7 @@ if (!this.noText) {
         }
       }
     }
-    */
+    
     // IF categories filters enabled!!!
     if (self.params.enableCategories && self.params.behaviour.catFilters) {
       this.catFilters = self.params.behaviour.catFilters;
@@ -4612,71 +4612,152 @@ if (!this.noText) {
     }
     return [message, thisclass];
   };
+
 /**/
+
 function checkConsistency(self) {
     const removedCards = [];
 
-    self.params.dialogs = self.params.dialogs.filter((card, index) => {
-        const { imageMedia, audioMedia } = card;
+    if (!self.params.dialogs || self.params.dialogs.length === 0) {
+        return '';
+    }
 
-        const frontImage = !!imageMedia?.image;
-        const frontAudio = !!audioMedia?.audio;
-        const backImage = !!imageMedia?.image2;
-        const backAudio = !!audioMedia?.audio2;
+    // Helper: get front/back media map
+    function getMediaMap(card) {
+        return {
+            front: {
+                image: !!card.imageMedia?.image,
+                audio: !!card.audioMedia?.audio
+            },
+            back: {
+                image:  !!card.imageMedia?.image2,
+                audio:  !!card.audioMedia?.audio2
+            }
+        };
+    }
 
-        const frontCount = (frontImage ? 1 : 0) + (frontAudio ? 1 : 0);
-        const backCount  = (backImage ? 1 : 0) + (backAudio ? 1 : 0);
+    // Helper: human-readable layout description
+    function describeLayout(media) {
+        const parts = [];
+        ['front', 'back'].forEach(side => {
+            ['image', 'audio'].forEach(type => {
+                if (media[side][type]) {
+                    parts.push(`${type.charAt(0).toUpperCase() + type.slice(1)} ${side}`);
+                }
+            });
+        });
+        return parts.join(' AND ');
+    }
 
-        const reasons = [];
+    const reference = getMediaMap(self.params.dialogs[0]);
 
-        // Front / back must have exactly ONE media
-        if (frontCount === 0) reasons.push("Empty front");
-        if (backCount === 0) reasons.push("Empty back");
+    // --- VALIDATE FIRST CARD ---
+    const frontCount = (reference.front.image ? 1 : 0) + (reference.front.audio ? 1 : 0);
+    const backCount  = (reference.back.image  ? 1 : 0) + (reference.back.audio ? 1 : 0);
 
-        if (frontCount > 1) reasons.push("Multiple media on front");
-        if (backCount > 1) reasons.push("Multiple media on back");
+    if (frontCount !== 1 || backCount !== 1) {
+        // First card invalid: issue warning and stop checking the deck
+        const text = self.params.dialogs[0].text.replace(/<[^>]*>/g, "").trim();
+        const answer = self.params.dialogs[0].answer.replace(/<[^>]*>/g, "").trim();
 
-        if (reasons.length > 0) {
+        let report = `<div style="font-family:Arial,sans-serif;">`;
+        report += `<h2 style="color:#d9534f;">⚠️ Reference Card Invalid</h2>`;
+        report += `<p>The first card must contain exactly one media per side (front & back).</p>`;
+        report += `<p><strong>Current layout:</strong> ${describeLayout(reference)}</p>`;
+        report += `<hr>`;
+        report += `
+            <div style="margin-bottom:12px;color:black;">
+                <strong>Card #1</strong><br>
+                <strong>Text:</strong> "${text}"<br>
+                <strong>Answer:</strong> "${answer}"
+            </div>
+        `;
+        report += `</div>`;
+
+        // Stop processing deck
+        return report;
+    }
+
+    // --- CHECK OTHER CARDS AGAINST REFERENCE ---
+    self.params.dialogs.forEach((card, index) => {
+        if (index === 0) return;
+
+        const current = getMediaMap(card);
+        const missing = [];
+        const extra = [];
+
+        ['front', 'back'].forEach(side => {
+            ['image', 'audio'].forEach(type => {
+                if (reference[side][type] && !current[side][type]) {
+                    missing.push(`missing ${type} ${side}`);
+                }
+                if (!reference[side][type] && current[side][type]) {
+                    extra.push(`extra ${type} media ${side}`);
+                }
+            });
+        });
+
+        if (missing.length || extra.length) {
+            let reason = '';
+            if (missing.length) reason += missing.join(' and ');
+            if (extra.length) reason += (reason ? ' AND ' : '') + extra.join(' and ');
+
             const text = card.text.replace(/<[^>]*>/g, "").trim();
             const answer = card.answer.replace(/<[^>]*>/g, "").trim();
 
             removedCards.push({
                 index,
-                reason: reasons.join(" & "),
+                reason,
                 text,
                 answer
             });
-
-            return false;
         }
-
-        return true; // valid card
     });
 
-    if (removedCards.length === 0) {
-        return '';
+    // Any mismatch → reject entire deck
+    if (removedCards.length > 0) {
+        const deckSize = self.params.dialogs.length;
+        self.params.dialogs = [];
+
+        let report = `<div style="font-family:Arial,sans-serif;">`;
+        report += `<h2 style="color:#d9534f;">⚠️ Deck Rejected</h2>`;
+        report += `<p><strong>Card #1 defines the required media layout:</strong> ${describeLayout(reference)}</p>`;
+        report += `<hr>`;
+
+        removedCards.forEach(card => {
+            report += `
+                <div style="margin-bottom:12px;color:black;">
+                    <strong>Card #${card.index + 1} — Rejection reason:</strong> ${card.reason}<br>
+                    <strong>Text:</strong> "${card.text}"
+                </div>
+                <hr style="border:1px dashed #ccc;">
+            `;
+        });
+
+        report += `<p><strong>Deck size:</strong> ${deckSize} cards</p>`;
+        report += `<p><strong>Cards with mismatches:</strong> ${removedCards.length}</p>`;
+        report += `</div>`;
+
+        return report;
     }
 
-    // HTML Report
-    let report = `<div style="font-family:Arial,sans-serif;">`;
-    report += `<h2 style="color:#d9534f;">⚠️ Consistency Check Report</h2>`;
-    report += `<hr>`;
+    // ✅ All good, deck passes consistency
+    return '';
+}
 
-    removedCards.forEach(card => {
-        report += `
-            <div style="margin-bottom:12px;color:black;">
-                <strong>Card # ${card.index + 1}. Reason:</strong> ${card.reason}<br>
-                <strong>Text:</strong> "${card.text}"<br>
-                <strong>Answer:</strong> "${card.answer}"
-            </div>
-            <hr style="border:1px dashed #ccc;">
-        `;
+
+function describeLayout(reference) {
+    const parts = [];
+
+    ['front', 'back'].forEach(side => {
+        ['image', 'audio'].forEach(type => {
+            if (reference[side][type]) {
+                parts.push(`${type.charAt(0).toUpperCase() + type.slice(1)} ${side}`);
+            }
+        });
     });
 
-    report += `<p><strong>Total cards removed:</strong> ${removedCards.length}</p>`;
-    report += `</div>`;
-
-    return report;
+    return parts.join(' AND ');
 }
 
 
