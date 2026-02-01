@@ -305,8 +305,9 @@ if (!this.noText) {
         break;
       }
     }
-
+///todo use the ALL oR NOTHING for this!
     this.hasTwoImages = this.hasImageOnFront && this.hasImageOnBack;
+    
 
     if (this.hasAudio && this.noText) {
       this.audioOnly = false;
@@ -1274,21 +1275,73 @@ if (!this.noText) {
               );
           }
           else {
-            $card.find('.h5p-dialogcards-image-wrapper').append(
-              JoubelUI.createTip(tip, {
-                tipLabel: self.params.tipButtonLabel,
-                addclass: 'joubel-tip-notext',
-              }),
-            );
-            $card.find('.joubel-tip-container').addClass('noText');
+            if (index == 0) {
+              console.log('self.cardsSideMode = ' + this.cardsSideMode
+                + '\nself.matchIt = ' + self.matchIt
+                + '\nself.noText = ' + self.noText
+                + '\nimage = ' + self.dialogs[index].imageMedia.image
+                + '\nimage2 = ' + self.dialogs[index].imageMedia.image2
+                + '\naudio = ' + self.dialogs[index].audioMedia.audio
+                + '\naudio2 = ' + self.dialogs[index].audioMedia.audio2
+                + '\nside = ' + side
+              );
+            }
+            
+            let showAudioTip;
+            /*
+            if (self.matchIt === false
+              && self.dialogs[index].audioMedia.audio2 === undefined
+              ) {
+                showAudioTip = false;
+              }
+            if (self.matchIt === true
+              && self.dialogs[index].audioMedia.audio2 === undefined
+              ) {
+                showAudioTip = false;
+              }
+            if (self.cardsSideMode === 'frontFirst'
+              && self.matchIt === true
+              && self.dialogs[index].audioMedia.audio2 === undefined
+              ) {
+                showAudioTip = true;
+              }
+              if (self.cardsSideMode === 'backFirst'
+                && self.matchIt === true
+                && side === 'front') {
+                  showAudioTip = true;
+                }
+              
+              
+  /*            
+              showAudioTip =
+  self.cardsSideMode === 'frontFirst' &&
+  self.matchIt === true &&
+  self.dialogs[index].audioMedia.audio2 === undefined;
+ 
+*/
+showAudioTip =
+  self.matchIt &&
+  (
+    (self.cardsSideMode === 'frontFirst' &&
+     self.dialogs[index].audioMedia.audio2 === undefined) ||
+    (self.cardsSideMode === 'backFirst' && side === 'front')
+  );
 
-            // Case of front card notext + audio & back card image.
-            $card.find('.h5p-dialogcards-audio-wrapper').before(
-              JoubelUI.createTip(tip, {
-                tipLabel: self.params.tipButtonLabel,
-                addclass: 'joubel-tip-notext',
-              }),
-            );
+              $card.find('.h5p-dialogcards-image-wrapper').append(
+                JoubelUI.createTip(tip, {
+                  tipLabel: self.params.tipButtonLabel,
+                  addclass: 'joubel-tip-notext',
+                }),
+              );
+            
+            if (showAudioTip) {
+              $card.find('.h5p-dialogcards-audio-wrapper').before(
+                JoubelUI.createTip(tip, {
+                  tipLabel: self.params.tipButtonLabel,
+                  addclass: 'joubel-tip-notext',
+                }),
+              );
+            }
           }
         }
       }
