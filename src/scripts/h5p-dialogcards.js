@@ -195,7 +195,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (!self.params.dialogs.length) {      
         return;
     }
-/*
+
 // Reset all flags
 this.frontTextBackImage = false;
 this.frontAudioBackImage = false;
@@ -267,66 +267,7 @@ if (!this.noText) {
       this.hasTwoImages = true;
     }
   }
-*/
-      // We assume that all cards are on the same model, with no text on back but image on back.
-      this.frontTextBackImage = false;
-      if (
-        self.params.dialogs[0].answer === '' &&
-        self.params.dialogs[0].imageMedia.image === undefined &&
-        self.params.dialogs[0].imageMedia.image2 !== undefined &&
-        !this.noText
-      ) {
-        this.frontTextBackImage = true;
-      }
-    
-    this.hasAudio = false;
-    for (let i = 0; i < self.params.dialogs.length; i++) {
-      if (
-        self.params.dialogs[i].audioMedia.audio ||
-        self.params.dialogs[i].audioMedia.audio2
-      ) {
-        this.hasAudio = true;
-        break;
-      }
-    }
 
-    this.hasImageOnFront = false;
-    for (let i = 0; i < self.params.dialogs.length; i++) {
-      if (self.params.dialogs[i].imageMedia.image) {
-        this.hasImageOnFront = true;
-        break;
-      }
-    }
-
-    this.hasImageOnBack = false;
-    for (let i = 0; i < self.params.dialogs.length; i++) {
-      if (self.params.dialogs[i].imageMedia.image2) {
-        this.hasImageOnBack = true;
-        break;
-      }
-    }
-///todo use the ALL oR NOTHING for this!
-    this.hasTwoImages = this.hasImageOnFront && this.hasImageOnBack;
-    
-
-    if (this.hasAudio && this.noText) {
-      this.audioOnly = false;
-      for (let i = 0; i < self.params.dialogs.length; i++) {
-        if (
-          self.params.dialogs[i].imageMedia.image === undefined &&
-          self.params.dialogs[i].audioMedia.audio !== undefined &&
-          self.params.dialogs[i].imageMedia.image2 === undefined &&
-          self.params.dialogs[i].audioMedia.audio2 !== undefined
-        ) {
-          this.audioOnly = true;
-          break;
-        }
-        else {
-          this.audioOnly = false;
-        }
-      }
-    }
-    
     // IF categories filters enabled!!!
     if (self.params.enableCategories && self.params.behaviour.catFilters) {
       this.catFilters = self.params.behaviour.catFilters;
@@ -1275,58 +1216,14 @@ if (!this.noText) {
               );
           }
           else {
-            if (index == 0) {
-              console.log('self.cardsSideMode = ' + this.cardsSideMode
-                + '\nself.matchIt = ' + self.matchIt
-                + '\nself.noText = ' + self.noText
-                + '\nimage = ' + self.dialogs[index].imageMedia.image
-                + '\nimage2 = ' + self.dialogs[index].imageMedia.image2
-                + '\naudio = ' + self.dialogs[index].audioMedia.audio
-                + '\naudio2 = ' + self.dialogs[index].audioMedia.audio2
-                + '\nside = ' + side
+            const showAudioTip =
+              this.has2Audio ||
+              self.matchIt 
+              && ((self.cardsSideMode === 'frontFirst' 
+                && self.dialogs[index].audioMedia.audio2 === undefined) 
+                 || (self.cardsSideMode === 'backFirst' && side === 'front') ||
+                this.has2Audio
               );
-            }
-            
-            let showAudioTip;
-            /*
-            if (self.matchIt === false
-              && self.dialogs[index].audioMedia.audio2 === undefined
-              ) {
-                showAudioTip = false;
-              }
-            if (self.matchIt === true
-              && self.dialogs[index].audioMedia.audio2 === undefined
-              ) {
-                showAudioTip = false;
-              }
-            if (self.cardsSideMode === 'frontFirst'
-              && self.matchIt === true
-              && self.dialogs[index].audioMedia.audio2 === undefined
-              ) {
-                showAudioTip = true;
-              }
-              if (self.cardsSideMode === 'backFirst'
-                && self.matchIt === true
-                && side === 'front') {
-                  showAudioTip = true;
-                }
-              
-              
-  /*            
-              showAudioTip =
-  self.cardsSideMode === 'frontFirst' &&
-  self.matchIt === true &&
-  self.dialogs[index].audioMedia.audio2 === undefined;
- 
-*/
-showAudioTip =
-  self.matchIt &&
-  (
-    (self.cardsSideMode === 'frontFirst' &&
-     self.dialogs[index].audioMedia.audio2 === undefined) ||
-    (self.cardsSideMode === 'backFirst' && side === 'front')
-  );
-
               $card.find('.h5p-dialogcards-image-wrapper').append(
                 JoubelUI.createTip(tip, {
                   tipLabel: self.params.tipButtonLabel,
@@ -2142,8 +2039,8 @@ showAudioTip =
       if (
         self.matchIt &&
         isLeft &&
-        this.cardsSideMode === 'backFirst' &&
-        this.hasTwoImages
+        this.cardsSideMode === 'backFirst' 
+        && this.hasTwoImages
       ) {
         $image2 = $(`<img class="h5p-dialogcards-image"
           src="${H5P.getPath(card.imageMedia.image.path, self.id)}"/>`);
