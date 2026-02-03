@@ -2077,32 +2077,37 @@ if (typeof $image !== 'undefined') {
       $image2.appendTo($imageWrapper);
     }
 
-    // OCTOBER 2021 New noDupeFrontPicToBack option.
-    if (
-      (this.matchIt &&
-        !this.hasTwoImages
-        )
-    ) {
-      if (typeof $image !== 'undefined') {
-        if (this.cardsSideMode === 'frontFirst') {
-          if (isLeft) {
-            $image.addClass('h5p-dialogcards-hide');
-          }
-          else {            
-            $image.removeClass('h5p-dialogcards-hide');
-          }
-        }
-        else {
-          if (isLeft) {
-            $image.addClass('h5p-dialogcards-hide');            
-          }
-          else {            
-            $image.removeClass('h5p-dialogcards-hide');
-          }
-        }
+    if (this.frontImageBackAudio && typeof $image !== 'undefined') {
+  const isFrontFirst = this.cardsSideMode === 'frontFirst';
+  const isBackFirst  = this.cardsSideMode === 'backFirst';
+
+  // Case 1: matchIt enabled
+  if (this.matchIt) {
+    if (isFrontFirst) {
+      // both sides hide image
+      $image.addClass('h5p-dialogcards-hide');
+
+      if (!isLeft && typeof $image2 !== 'undefined') {
+        $image2.addClass('h5p-dialogcards-hide');
       }
     }
-    
+    else if (isBackFirst) {
+      if (isLeft) {
+        $image.addClass('h5p-dialogcards-hide');
+      }
+      else {
+        $image.removeClass('h5p-dialogcards-hide');
+      }
+    }
+  }
+
+  // Case 2: matchIt disabled + backFirst
+  else if (isBackFirst) {
+    $image.addClass('h5p-dialogcards-hide');
+  }
+}
+
+
     if (typeof $image !== 'undefined') {
       self.$images.push($image);
       $image.appendTo($imageWrapper);
