@@ -1967,7 +1967,7 @@ if (!this.noText) {
     let $imageWrapper = $('<div>', {
       class: 'h5p-dialogcards-image-wrapper',
     });
-
+    console.log('isLeft = ' + isLeft + ' this.hasTwoImages = ' + this.hasTwoImages);
     if (this.hasTwoImages) {
       if (isLeft) {
         i = card.imageMedia.image;
@@ -1976,19 +1976,22 @@ if (!this.noText) {
         card.imageMedia.image2 = i;
       }
     }
+    
     if (card.imageMedia.image !== undefined) {
       // Alternative conditions for (front) image to be displayed.
+      $image = $(`<img class="h5p-dialogcards-image"
+          src="${H5P.getPath(card.imageMedia.image.path, self.id)}"/>`);
       if (
         this.cardsSideMode === 'frontFirst' ||
         this.matchIt ||
         (this.cardsSideMode === 'backFirst' && !this.noDupeFrontPicToBack)
       ) {
-        $image = $(`<img class="h5p-dialogcards-image"
-          src="${H5P.getPath(card.imageMedia.image.path, self.id)}"/>`);
+        ///$image = $(`<img class="h5p-dialogcards-image"
+        ///  src="${H5P.getPath(card.imageMedia.image.path, self.id)}"/>`);
       }
       else {
-        $image = $(`<img class="h5p-dialogcards-image h5p-dialogcards-hide"
-          src="${H5P.getPath(card.imageMedia.image.path, self.id)}"/>`);
+      ///  $image.addClass('h5p-dialogcards-hide');
+          ///src="${H5P.getPath(card.imageMedia.image.path, self.id)}"/>`);
       }
       if (loadCallback) {
         $image.load(loadCallback);
@@ -1997,6 +2000,12 @@ if (!this.noText) {
         $image.attr('alt', card.imageAltText);
       }
     }
+    else {
+      if (this.cardsSideMode === 'backFirst') {
+        
+      }
+    }
+    /*
     else {
       if (this.cardsSideMode === 'backFirst') {
         $image = $(
@@ -2010,22 +2019,33 @@ if (!this.noText) {
         loadCallback();
       }
     }
+    */
+if (typeof $image !== 'undefined') {
+  console.log('exists image');
+} else {
+  console.log('nonoonon');
+}
 
-    if (card.imageMedia.image2 !== undefined && this.hasImageOnBack) {
+    if (card.imageMedia.image2 !== undefined /*&& this.hasImageOnBack*/) {
+      console.log('card.imageMedia.image ' + card.imageMedia.image);
       // In browse or self-correction modes,
       // if there is a back image but no front image, use the back image in backFirst mode.
       // In match modes, create image2 on left side if backFirst OR create it on right side if frontLeft.
+      /*
+      $image2 = $(`<img class="h5p-dialogcards-image2"
+          src="${H5P.getPath(card.imageMedia.image2.path, self.id)}"/>`);
+          */
       if (
         (this.cardsSideMode === 'backFirst' &&
           !card.imageMedia.image &&
-          !isLeft &&
+          //!isLeft &&
           !self.matchIt) ||
         (self.matchIt &&
-          isLeft &&
+          //isLeft &&
           this.cardsSideMode === 'backFirst' &&
           !this.hasTwoImages) ||
         (self.matchIt &&
-          !isLeft &&
+          //!isLeft &&
           this.cardsSideMode === 'frontFirst' &&
           !this.hasTwoImages)
       ) {
@@ -2042,8 +2062,10 @@ if (!this.noText) {
         this.cardsSideMode === 'backFirst' 
         && this.hasTwoImages
       ) {
+        /*
         $image2 = $(`<img class="h5p-dialogcards-image"
           src="${H5P.getPath(card.imageMedia.image.path, self.id)}"/>`);
+          */
       }
       if (loadCallback) {
         $image2.load(loadCallback);
@@ -2058,17 +2080,33 @@ if (!this.noText) {
     // OCTOBER 2021 New noDupeFrontPicToBack option.
     if (
       (this.matchIt &&
-        !this.hasTwoImages &&
-        this.noDupeFrontPicToBack &&
-        this.cardsSideMode === 'frontFirst' &&
-        !isLeft) ||
-      (this.cardsSideMode === 'backFirst' && isLeft)
+        !this.hasTwoImages
+        )
     ) {
-      $image.addClass('h5p-dialogcards-hide');
+      if (typeof $image !== 'undefined') {
+        if (this.cardsSideMode === 'frontFirst') {
+          if (isLeft) {
+            $image.addClass('h5p-dialogcards-hide');
+          }
+          else {            
+            $image.removeClass('h5p-dialogcards-hide');
+          }
+        }
+        else {
+          if (isLeft) {
+            $image.addClass('h5p-dialogcards-hide');            
+          }
+          else {            
+            $image.removeClass('h5p-dialogcards-hide');
+          }
+        }
+      }
     }
-
-    self.$images.push($image);
-    $image.appendTo($imageWrapper);
+    
+    if (typeof $image !== 'undefined') {
+      self.$images.push($image);
+      $image.appendTo($imageWrapper);
+    }
 
     // Restore initial card images
     if (this.hasTwoImages && isLeft) {
