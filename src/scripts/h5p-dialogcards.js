@@ -183,91 +183,90 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       this.report = checkConsistency(self);
     }
 
-/* *************************************************** */
+    /* *************************************************** */
     // TODO Translate this error message
     if (!self.params.dialogs.length || this.report) {
       self.params.description +=
         '<hr><b>ERROR</b> You are using the "no text" option:' +
         '<br>but your set of cards is not cosistent.' 
-        + '<br>' + this.report;
+        + `<br>${  this.report}`;
         
     }
     if (!self.params.dialogs.length) {      
-        return;
+      return;
     }
 
-// Reset all flags
-this.frontTextBackImage = false;
-this.frontAudioBackImage = false;
-this.frontImageBackAudio = false;
-this.hasAudio = false;
-this.has2Audio = false;
-this.hasImageOnFront = false;
-this.hasImageOnBack = false;
-this.hasTwoImages = false;
-this.audioOnly = false;
+    // Reset all flags
+    this.frontTextBackImage = false;
+    this.frontAudioBackImage = false;
+    this.frontImageBackAudio = false;
+    this.hasAudio = false;
+    this.has2Audio = false;
+    this.hasImageOnFront = false;
+    this.hasImageOnBack = false;
+    this.hasTwoImages = false;
+    this.audioOnly = false;
 
-// -------------------------
-// Flags that depend on text being present
-// -------------------------
-if (!this.noText) {
-  // All dialogs must satisfy: empty answer + no front image + back image exists
-  this.frontTextBackImage = self.params.dialogs.every(dialog =>
-    dialog.answer === '' &&
+    // -------------------------
+    // Flags that depend on text being present
+    // -------------------------
+    if (!this.noText) {
+      // All dialogs must satisfy: empty answer + no front image + back image exists
+      this.frontTextBackImage = self.params.dialogs.every((dialog) =>
+        dialog.answer === '' &&
     dialog.imageMedia.image === undefined &&
-    dialog.imageMedia.image2 !== undefined
-  );
-}
+    dialog.imageMedia.image2 !== undefined,
+      );
+    }
 
-// -------------------------
-// Flags that depend on no text
-// -------------------------
-  if (this.noText) {
+    // -------------------------
+    // Flags that depend on no text
+    // -------------------------
+    if (this.noText) {
     // All dialogs must have front audio and back image
-    this.frontAudioBackImage = self.params.dialogs.every(dialog =>
-      dialog.audioMedia.audio &&
-      dialog.imageMedia.image2 !== undefined
-    );
+      this.frontAudioBackImage = self.params.dialogs.every((dialog) =>
+        dialog.audioMedia.audio &&
+      dialog.imageMedia.image2 !== undefined,
+      );
 
-    // All dialogs must have front image and back audio
-    this.frontImageBackAudio = self.params.dialogs.every(dialog =>
-      dialog.imageMedia.image !== undefined &&
-      dialog.audioMedia.audio2 !== undefined
-    );
+      // All dialogs must have front image and back audio
+      this.frontImageBackAudio = self.params.dialogs.every((dialog) =>
+        dialog.imageMedia.image !== undefined &&
+      dialog.audioMedia.audio2 !== undefined,
+      );
 
-    // All dialogs must have audio (front or back)
-    this.hasAudio = self.params.dialogs.every(dialog =>
-      dialog.audioMedia.audio || dialog.audioMedia.audio2
-    );
+      // All dialogs must have audio (front or back)
+      this.hasAudio = self.params.dialogs.every((dialog) =>
+        dialog.audioMedia.audio || dialog.audioMedia.audio2,
+      );
 
-    // All dialogs must have both front and back audio
-    this.has2Audio = self.params.dialogs.every(dialog =>
-      dialog.audioMedia.audio && dialog.audioMedia.audio2
-    );
+      // All dialogs must have both front and back audio
+      this.has2Audio = self.params.dialogs.every((dialog) =>
+        dialog.audioMedia.audio && dialog.audioMedia.audio2,
+      );
 
-    // All dialogs must satisfy “audio only” condition
-    this.audioOnly = self.params.dialogs.every(dialog =>
-      dialog.imageMedia.image === undefined &&
+      // All dialogs must satisfy “audio only” condition
+      this.audioOnly = self.params.dialogs.every((dialog) =>
+        dialog.imageMedia.image === undefined &&
       dialog.audioMedia.audio !== undefined &&
       dialog.imageMedia.image2 === undefined &&
-      dialog.audioMedia.audio2 !== undefined
-    );
+      dialog.audioMedia.audio2 !== undefined,
+      );
 
-    // All dialogs must have front image
-    this.hasImageOnFront = self.params.dialogs.every(dialog =>
-      dialog.imageMedia.image !== undefined
-    );
+      // All dialogs must have front image
+      this.hasImageOnFront = self.params.dialogs.every((dialog) =>
+        dialog.imageMedia.image !== undefined,
+      );
 
-    // All dialogs must have back image
-    this.hasImageOnBack = self.params.dialogs.every(dialog =>
-      dialog.imageMedia.image2 !== undefined
-    );
+      // All dialogs must have back image
+      this.hasImageOnBack = self.params.dialogs.every((dialog) =>
+        dialog.imageMedia.image2 !== undefined,
+      );
     
-    if (this.hasImageOnFront && this.hasImageOnBack) {
-      this.hasTwoImages = true;
+      if (this.hasImageOnFront && this.hasImageOnBack) {
+        this.hasTwoImages = true;
+      }
     }
-  }
-
     // IF categories filters enabled!!!
     if (self.params.enableCategories && self.params.behaviour.catFilters) {
       this.catFilters = self.params.behaviour.catFilters;
@@ -290,12 +289,7 @@ if (!this.noText) {
     this.matchCorrect = null;
     this.existsCardOrder = false;
     this.noDupeFrontPicToBack = self.params.behaviour.noDupeFrontPicToBack;
-    // If at least one card has an image on back, de-activate potential noDupeFrontPicToBack
-    // on those cards without back image, the front image will be used, as per this activity default!
-    if (this.hasImageOnBack) {
-      this.noDupeFrontPicToBack = false;
-    }
-
+    
     // Copy parameters for further use if save content state.
     self.dialogs = self.copy(self.params.dialogs);
 
@@ -1224,12 +1218,12 @@ if (!this.noText) {
                  || (self.cardsSideMode === 'backFirst' && side === 'front') ||
                 this.has2Audio
               );
-              $card.find('.h5p-dialogcards-image-wrapper').append(
-                JoubelUI.createTip(tip, {
-                  tipLabel: self.params.tipButtonLabel,
-                  addclass: 'joubel-tip-notext',
-                }),
-              );
+            $card.find('.h5p-dialogcards-image-wrapper').append(
+              JoubelUI.createTip(tip, {
+                tipLabel: self.params.tipButtonLabel,
+                addclass: 'joubel-tip-notext',
+              }),
+            );
             
             if (showAudioTip) {
               $card.find('.h5p-dialogcards-audio-wrapper').before(
@@ -1563,7 +1557,7 @@ if (!this.noText) {
         this.cardsSideMode === 'frontFirst') 
         || !this.matchIt)
     ) {
-      this.createCardImage(card, setCardSizeCallback, isLeft).appendTo(
+      this.createCardImage(card, cardNumber, setCardSizeCallback, isLeft).appendTo(
         $cardContent,
       );
     }
@@ -1711,7 +1705,7 @@ if (!this.noText) {
     ) {
       let isLeft = true;
       self
-        .createCardImage(card, setCardSizeCallback, isLeft)
+        .createCardImage(card, cardNumber, setCardSizeCallback, isLeft)
         .appendTo($cardContent);
     }
     let $cardTextWrapper = $('<div>', {
@@ -1958,7 +1952,7 @@ if (!this.noText) {
    * @returns {HTMLElement} Card image wrapper
    */
 
-  C.prototype.createCardImage = function (card, loadCallback, isLeft = false) {
+  C.prototype.createCardImage = function (card, cardNumber, loadCallback, isLeft = false) {
     let self = this;
     let $image;
     let $image2;
@@ -1967,8 +1961,12 @@ if (!this.noText) {
     let $imageWrapper = $('<div>', {
       class: 'h5p-dialogcards-image-wrapper',
     });
-    console.log('isLeft = ' + isLeft + ' this.hasTwoImages = ' + this.hasTwoImages);
-    if (this.hasTwoImages) {
+    // Case where only some cards have 2 images.
+    let cardHasTwoImages;
+    if (card.imageMedia.image !== undefined && card.imageMedia.image2 !== undefined) {
+      cardHasTwoImages = true;
+    }
+    if (this.hasTwoImages || cardHasTwoImages) {
       if (isLeft) {
         i = card.imageMedia.image;
         i2 = card.imageMedia.image2;
@@ -1991,7 +1989,7 @@ if (!this.noText) {
       }
       else {
       ///  $image.addClass('h5p-dialogcards-hide');
-          ///src="${H5P.getPath(card.imageMedia.image.path, self.id)}"/>`);
+        ///src="${H5P.getPath(card.imageMedia.image.path, self.id)}"/>`);
       }
       if (loadCallback) {
         $image.load(loadCallback);
@@ -2005,68 +2003,23 @@ if (!this.noText) {
         
       }
     }
-    /*
-    else {
-      if (this.cardsSideMode === 'backFirst') {
-        $image = $(
-          '<div class="h5p-dialogcards-image h5p-dialogcards-hide"></div>',
-        );
-      }
-      else {
-        $image = $('<div class="h5p-dialogcards-image"></div>');
-      }
-      if (loadCallback) {
-        loadCallback();
-      }
-    }
-    */
-if (typeof $image !== 'undefined') {
-  console.log('exists image');
-} else {
-  console.log('nonoonon');
-}
 
-    if (card.imageMedia.image2 !== undefined /*&& this.hasImageOnBack*/) {
-      console.log('card.imageMedia.image ' + card.imageMedia.image);
+    if (card.imageMedia.image2 !== undefined) {
       // In browse or self-correction modes,
       // if there is a back image but no front image, use the back image in backFirst mode.
       // In match modes, create image2 on left side if backFirst OR create it on right side if frontLeft.
-      /*
+      
       $image2 = $(`<img class="h5p-dialogcards-image2"
           src="${H5P.getPath(card.imageMedia.image2.path, self.id)}"/>`);
-          */
-      if (
-        (this.cardsSideMode === 'backFirst' &&
-          !card.imageMedia.image &&
-          //!isLeft &&
-          !self.matchIt) ||
-        (self.matchIt &&
-          //isLeft &&
-          this.cardsSideMode === 'backFirst' &&
-          !this.hasTwoImages) ||
-        (self.matchIt &&
-          //!isLeft &&
-          this.cardsSideMode === 'frontFirst' &&
-          !this.hasTwoImages)
-      ) {
-        $image2 = $(`<img class="h5p-dialogcards-image2"
-          src="${H5P.getPath(card.imageMedia.image2.path, self.id)}"/>`);
+      
+      const shouldShowImage2 =
+        (this.cardsSideMode === 'backFirst' && !self.matchIt && !card.imageMedia.image) ||
+        (self.matchIt && !this.hasTwoImages);
+
+      if (!shouldShowImage2) {
+        $image2.addClass('h5p-dialogcards-hide');
       }
-      else {
-        $image2 = $(`<img class="h5p-dialogcards-image2 h5p-dialogcards-hide"
-          src="${H5P.getPath(card.imageMedia.image2.path, self.id)}"/>`);
-      }
-      if (
-        self.matchIt &&
-        isLeft &&
-        this.cardsSideMode === 'backFirst' 
-        && this.hasTwoImages
-      ) {
-        /*
-        $image2 = $(`<img class="h5p-dialogcards-image"
-          src="${H5P.getPath(card.imageMedia.image.path, self.id)}"/>`);
-          */
-      }
+
       if (loadCallback) {
         $image2.load(loadCallback);
       }
@@ -2076,45 +2029,46 @@ if (typeof $image !== 'undefined') {
       self.$images2.push($image2);
       $image2.appendTo($imageWrapper);
     }
-
+    
+    // Needed for notext image + audio 
+    const isFrontFirst = this.cardsSideMode === 'frontFirst';
+    const isBackFirst  = this.cardsSideMode === 'backFirst';
+      
     if (this.frontImageBackAudio && typeof $image !== 'undefined') {
-  const isFrontFirst = this.cardsSideMode === 'frontFirst';
-  const isBackFirst  = this.cardsSideMode === 'backFirst';
+      // Case 1: matchIt enabled
+      if (this.matchIt) {
+        if (isFrontFirst) {
+          // both sides hide image
+          $image.addClass('h5p-dialogcards-hide');
 
-  // Case 1: matchIt enabled
-  if (this.matchIt) {
-    if (isFrontFirst) {
-      // both sides hide image
-      $image.addClass('h5p-dialogcards-hide');
-
-      if (!isLeft && typeof $image2 !== 'undefined') {
-        $image2.addClass('h5p-dialogcards-hide');
+          if (!isLeft && typeof $image2 !== 'undefined') {
+            $image2.addClass('h5p-dialogcards-hide');
+          }
+        }
+        else if (isBackFirst) {
+          if (isLeft) {
+            $image.addClass('h5p-dialogcards-hide');
+          }
+          else {
+            $image.removeClass('h5p-dialogcards-hide');
+          }
+        }
       }
-    }
-    else if (isBackFirst) {
-      if (isLeft) {
+
+      // Case 2: matchIt disabled + backFirst
+      else if (isBackFirst) {
         $image.addClass('h5p-dialogcards-hide');
       }
-      else {
-        $image.removeClass('h5p-dialogcards-hide');
-      }
     }
-  }
-
-  // Case 2: matchIt disabled + backFirst
-  else if (isBackFirst) {
-    $image.addClass('h5p-dialogcards-hide');
-  }
-}
-
-
+    
+    /*******************************************************************************/
     if (typeof $image !== 'undefined') {
       self.$images.push($image);
       $image.appendTo($imageWrapper);
     }
 
     // Restore initial card images
-    if (this.hasTwoImages && isLeft) {
+    if (this.hasTwoImages || cardHasTwoImages && isLeft) {
       card.image = i;
       card.image2 = i2;
     }
@@ -3003,7 +2957,7 @@ if (typeof $image !== 'undefined') {
       $cardContent.removeClass('h5p-dialogcards-turned');
       self.addTipToCard($cardContent, 'front', index);
 
-      // In case it was hidden on the summary screen. TODO check if needed.
+      // In case it was hidden on the summary screen.
       $card
         .find('.h5p-dialogcards-image-wrapper')
         .removeClass('h5p-dialogcards-hide');
@@ -4605,154 +4559,156 @@ if (typeof $image !== 'undefined') {
     }
     return [message, thisclass];
   };
-
-/**/
-
-function checkConsistency(self) {
+  /**
+   * Checks media consistency across dialog cards.
+   * @param {object} self - H5P content instance containing params and dialogs
+   * @returns {string} HTML report string or empty string if valid
+   */
+  function checkConsistency(self) {
     const removedCards = [];
 
     if (!self.params.dialogs || self.params.dialogs.length === 0) {
-        return '';
+      return '';
     }
 
-    // Helper: get front/back media map
+    /**
+     * Builds a front/back media availability map for a card.
+     * @param {object} card - Dialog card configuration object
+     * @returns {object} Media map for front and back sides
+     */
     function getMediaMap(card) {
-        return {
-            front: {
-                image: !!card.imageMedia?.image,
-                audio: !!card.audioMedia?.audio
-            },
-            back: {
-                image:  !!card.imageMedia?.image2,
-                audio:  !!card.audioMedia?.audio2
-            }
-        };
+      return {
+        front: {
+          image: !!card.imageMedia?.image,
+          audio: !!card.audioMedia?.audio,
+        },
+        back: {
+          image: !!card.imageMedia?.image2,
+          audio: !!card.audioMedia?.audio2,
+        },
+      };
     }
 
-    // Helper: human-readable layout description
+    /**
+     * Produces a human-readable media layout description.
+     * @param {object} media - Media map with front/back image/audio flags
+     * @returns {string} Layout description
+     */
     function describeLayout(media) {
-        const parts = [];
-        ['front', 'back'].forEach(side => {
-            ['image', 'audio'].forEach(type => {
-                if (media[side][type]) {
-                    parts.push(`${type.charAt(0).toUpperCase() + type.slice(1)} ${side}`);
-                }
-            });
+      const parts = [];
+
+      ['front', 'back'].forEach((side) => {
+        ['image', 'audio'].forEach((type) => {
+          if (media[side][type]) {
+            parts.push(`${type.charAt(0).toUpperCase() + type.slice(1)} ${side}`);
+          }
         });
-        return parts.join(' AND ');
+      });
+
+      return parts.join(' AND ');
     }
 
     const reference = getMediaMap(self.params.dialogs[0]);
 
     // --- VALIDATE FIRST CARD ---
-    const frontCount = (reference.front.image ? 1 : 0) + (reference.front.audio ? 1 : 0);
-    const backCount  = (reference.back.image  ? 1 : 0) + (reference.back.audio ? 1 : 0);
+    const frontCount =
+      (reference.front.image ? 1 : 0) +
+    (reference.front.audio ? 1 : 0);
+    const backCount =
+      (reference.back.image ? 1 : 0) +
+    (reference.back.audio ? 1 : 0);
 
     if (frontCount !== 1 || backCount !== 1) {
-        // First card invalid: issue warning and stop checking the deck
-        const text = self.params.dialogs[0].text.replace(/<[^>]*>/g, "").trim();
-        const answer = self.params.dialogs[0].answer.replace(/<[^>]*>/g, "").trim();
+      const text = self.params.dialogs[0].text.replace(/<[^>]*>/g, '').trim();
+      const answer = self.params.dialogs[0].answer.replace(/<[^>]*>/g, '').trim();
 
-        let report = `<div style="font-family:Arial,sans-serif;">`;
-        report += `<h2 style="color:#d9534f;">⚠️ Reference Card Invalid</h2>`;
-        report += `<p>The first card must contain exactly one media per side (front & back).</p>`;
-        report += `<p><strong>Current layout:</strong> ${describeLayout(reference)}</p>`;
-        report += `<hr>`;
-        report += `
-            <div style="margin-bottom:12px;color:black;">
-                <strong>Card #1</strong><br>
-                <strong>Text:</strong> "${text}"<br>
-                <strong>Answer:</strong> "${answer}"
-            </div>
-        `;
-        report += `</div>`;
+      let report = '<div style="font-family:Arial,sans-serif;">';
+      report += '<h2 style="color:#d9534f;">⚠️ Reference Card Invalid</h2>';
+      report += '<p>The first card must contain exactly one media per side (front & back).</p>';
+      report += `<p><strong>Current layout:</strong> ${describeLayout(reference)}</p>`;
+      report += '<hr>';
+      report += `
+      <div style="margin-bottom:12px;color:black;">
+        <strong>Card #1</strong><br>
+        <strong>Text:</strong> "${text}"<br>
+        <strong>Answer:</strong> "${answer}"
+      </div>
+    `;
+      report += '</div>';
 
-        // Stop processing deck
-        return report;
+      return report;
     }
 
     // --- CHECK OTHER CARDS AGAINST REFERENCE ---
     self.params.dialogs.forEach((card, index) => {
-        if (index === 0) return;
+      if (index === 0) {
+        return;
+      }
 
-        const current = getMediaMap(card);
-        const missing = [];
-        const extra = [];
+      const current = getMediaMap(card);
+      const missing = [];
+      const extra = [];
 
-        ['front', 'back'].forEach(side => {
-            ['image', 'audio'].forEach(type => {
-                if (reference[side][type] && !current[side][type]) {
-                    missing.push(`missing ${type} ${side}`);
-                }
-                if (!reference[side][type] && current[side][type]) {
-                    extra.push(`extra ${type} media ${side}`);
-                }
-            });
+      ['front', 'back'].forEach((side) => {
+        ['image', 'audio'].forEach((type) => {
+          if (reference[side][type] && !current[side][type]) {
+            missing.push(`missing ${type} ${side}`);
+          }
+          if (!reference[side][type] && current[side][type]) {
+            extra.push(`extra ${type} media ${side}`);
+          }
         });
+      });
 
-        if (missing.length || extra.length) {
-            let reason = '';
-            if (missing.length) reason += missing.join(' and ');
-            if (extra.length) reason += (reason ? ' AND ' : '') + extra.join(' and ');
-
-            const text = card.text.replace(/<[^>]*>/g, "").trim();
-            const answer = card.answer.replace(/<[^>]*>/g, "").trim();
-
-            removedCards.push({
-                index,
-                reason,
-                text,
-                answer
-            });
+      if (missing.length || extra.length) {
+        let reason = '';
+        if (missing.length) {
+          reason += missing.join(' and ');
         }
+        if (extra.length) {
+          reason += (reason ? ' AND ' : '') + extra.join(' and ');
+        }
+
+        const text = card.text.replace(/<[^>]*>/g, '').trim();
+        const answer = card.answer.replace(/<[^>]*>/g, '').trim();
+
+        removedCards.push({
+          index,
+          reason,
+          text,
+          answer,
+        });
+      }
     });
 
-    // Any mismatch → reject entire deck
     if (removedCards.length > 0) {
-        const deckSize = self.params.dialogs.length;
-        self.params.dialogs = [];
+      const deckSize = self.params.dialogs.length;
+      self.params.dialogs = [];
 
-        let report = `<div style="font-family:Arial,sans-serif;">`;
-        report += `<h2 style="color:#d9534f;">⚠️ Deck Rejected</h2>`;
-        report += `<p><strong>Card #1 defines the required media layout:</strong> ${describeLayout(reference)}</p>`;
-        report += `<hr>`;
+      let report = '<div style="font-family:Arial,sans-serif;">';
+      report += '<h2 style="color:#d9534f;">⚠️ Deck Rejected</h2>';
+      report += `<p><strong>Card #1 defines the required media layout:</strong> ${describeLayout(reference)}</p>`;
+      report += '<hr>';
 
-        removedCards.forEach(card => {
-            report += `
-                <div style="margin-bottom:12px;color:black;">
-                    <strong>Card #${card.index + 1} — Rejection reason:</strong> ${card.reason}<br>
-                    <strong>Text:</strong> "${card.text}"
-                </div>
-                <hr style="border:1px dashed #ccc;">
-            `;
-        });
+      removedCards.forEach((card) => {
+        report += `
+        <div style="margin-bottom:12px;color:black;">
+          <strong>Card #${card.index + 1} — Rejection reason:</strong> ${card.reason}<br>
+          <strong>Text:</strong> "${card.text}"
+        </div>
+        <hr style="border:1px dashed #ccc;">
+      `;
+      });
 
-        report += `<p><strong>Deck size:</strong> ${deckSize} cards</p>`;
-        report += `<p><strong>Cards with mismatches:</strong> ${removedCards.length}</p>`;
-        report += `</div>`;
+      report += `<p><strong>Deck size:</strong> ${deckSize} cards</p>`;
+      report += `<p><strong>Cards with mismatches:</strong> ${removedCards.length}</p>`;
+      report += '</div>';
 
-        return report;
+      return report;
     }
 
-    // ✅ All good, deck passes consistency
     return '';
-}
-
-
-function describeLayout(reference) {
-    const parts = [];
-
-    ['front', 'back'].forEach(side => {
-        ['image', 'audio'].forEach(type => {
-            if (reference[side][type]) {
-                parts.push(`${type.charAt(0).toUpperCase() + type.slice(1)} ${side}`);
-            }
-        });
-    });
-
-    return parts.join(' AND ');
-}
-
+  }
 
   C.SCALEINTERVAL = 0.2;
   C.MAXSCALE = 16;
