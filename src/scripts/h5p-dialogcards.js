@@ -291,10 +291,15 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.noDupeFrontPicToBack = self.params.behaviour.noDupeFrontPicToBack;
     
     // Copy parameters for further use if save content state.
-    self.dialogs = self.copy(self.params.dialogs);
+    ///self.dialogs = self.copy(self.params.dialogs);
+    ///const self.dialogs = [...self.params.dialogs];   // copy
+    ///self.currentDialogs = Array.from(self.params.dialogs);
+    self.currentDialogs = structuredClone(self.params.dialogs); // ✅ best modern solution
+
+
 
     this.noFilterMessage = '';
-    self.nbCards = self.dialogs.length;
+    self.nbCards = self.currentDialogs.length;
     this.cardsLeftInStack = this.nbCardsSelected;
     this.nbCardsInCurrentRound = self.nbCards;
     self.enableCardsNumber = this.enableCardsNumber;
@@ -585,7 +590,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       self.applyFilter(this.filterList, this.filterOperator, false);
     }
 
-    self.initCards(self.dialogs).appendTo(self.$inner);
+    self.initCards(self.currentDialogs).appendTo(self.$inner);
     self.$cardSideAnnouncer = $('<div>', {
       html: self.params.cardFrontLabel,
       class: 'h5p-dialogcards-card-side-announcer',
@@ -771,7 +776,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    */
   C.prototype.createNumberCards = function () {
     let self = this;
-    let numCards = self.dialogs.length;
+    let numCards = self.currentDialogs.length;
     let $numberCards = $('<div>', {
       class: 'h5p-dialogcards-number h5p-dialogcards-options',
       html: self.params.numCardsQuestion,
@@ -834,7 +839,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
   /**
    * Create filterCards option request
-   * @returns {HTMLElement} self.dialogs array
+   * @returns {HTMLElement} self.currentDialogs array
    */
 
   C.prototype.createFilterCards = function () {
@@ -924,7 +929,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
   /**
    * Create filterCards option request
-   * @returns {HTMLElement} self.dialogs array
+   * @returns {HTMLElement} self.currentDialogs array
    */
 
   C.prototype.createPlayMode = function () {
@@ -1129,8 +1134,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     let height = 0;
     let i;
     let foundImage = false;
-    for (i = 0; i < self.dialogs.length; i++) {
-      let card = self.dialogs[i];
+    for (i = 0; i < self.currentDialogs.length; i++) {
+      let card = self.currentDialogs[i];
       let $card = self.$current.find('.h5p-dialogcards-card-content');
       if (
         card.imageMedia.image === undefined &&
@@ -1193,7 +1198,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     $card.find('.joubel-tip-container').remove();
 
     // Add new tip if set and has length after trim
-    let tips = self.dialogs[index].tips;
+    let tips = self.currentDialogs[index].tips;
     if (tips !== undefined && tips[side] !== undefined) {
       let tip = tips[side].trim();
       if (!this.frontTextBackImage || (!this.matchIt && this.noText)) {
@@ -1214,7 +1219,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
               this.has2Audio ||
               self.matchIt 
               && ((self.cardsSideMode === 'frontFirst' 
-                && self.dialogs[index].audioMedia.audio2 === undefined) 
+                && self.currentDialogs[index].audioMedia.audio2 === undefined) 
                  || (self.cardsSideMode === 'backFirst' && side === 'front') ||
                 this.has2Audio
               );
@@ -1351,9 +1356,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
 
     // Save data to content state for resuming later on.
-    // Push the new 'cards array' into self.dialogs.
+    // Push the new 'cards array' into self.currentDialogs.
 
-    self.dialogs = cards;
+    self.currentDialogs = cards;
 
     self.$cardwrapperSet = $('<div>', {
       class: 'h5p-dialogcards-cardwrap-set',
@@ -1976,6 +1981,10 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
     
     if (card.imageMedia.image !== undefined) {
+      /*
+      console.log('image src 37 = ' + card.imageMedia.image.path
+      + '\nimage2 src 74 = ' + card.imageMedia.image2.path);
+      */
       // Alternative conditions for (front) image to be displayed.
       $image = $(`<img class="h5p-dialogcards-image"
           src="${H5P.getPath(card.imageMedia.image.path, self.id)}"/>`);
@@ -2151,8 +2160,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       let $cardFooter = $card.find('.h5p-dialogcards-card-footer');
       $cardFooter.html(this.rightSubTitle);
       const i = self.$current.index() / C.NB2;
-      // Clear subTitle text in case self.dialogs[i].cardSubtitle is undefined
-      let cardSubTitle = self.dialogs[i].cardSubtitle;
+      // Clear subTitle text in case self.currentDialogs[i].cardSubtitle is undefined
+      let cardSubTitle = self.currentDialogs[i].cardSubtitle;
       if (cardSubTitle === undefined) {
         cardSubTitle = '&nbsp;';
         this.$subTitle.addClass('h5p-dialogcards-hide');
@@ -2224,7 +2233,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       self.$progress.text(
         this.params.cardsLeft.replace(
           '@number',
-          self.dialogs.length - selectionIndex - this.endOfStack,
+          self.currentDialogs.length - selectionIndex - this.endOfStack,
         ),
       );
       self.$round.text(this.params.round.replace('@round', this.currentRound));
@@ -2240,7 +2249,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         self.$progress.text(
           self.params.progressText
             .replace('@card', self.$current.index() / C.NB2 + 1)
-            .replace('@total', self.dialogs.length),
+            .replace('@total', self.currentDialogs.length),
         );
       }
       else {
@@ -2256,7 +2265,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       self.$progress.text(
         self.params.progressText
           .replace('@card', self.$current.index() / C.NB2 + 1)
-          .replace('@total', self.dialogs.length),
+          .replace('@total', self.currentDialogs.length),
       );
       if ($nextCard.length === 0) {
         const retryOrReset = self.getRetryOrReset();
@@ -2273,7 +2282,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       self.$progress.text(
         self.params.progressText
           .replace('@card', self.$current.index() + 1)
-          .replace('@total', self.dialogs.length),
+          .replace('@total', self.currentDialogs.length),
       );
     }
   };
@@ -2323,11 +2332,11 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         let $loadCard = self.$current.next('.h5p-dialogcards-cardwrap');
         if (
           !$loadCard.length &&
-          self.$current.index() + 1 < self.dialogs.length
+          self.$current.index() + 1 < self.currentDialogs.length
         ) {
           let $cardWrapper = self
             .createCard(
-              self.dialogs[self.$current.index() + 1],
+              self.currentDialogs[self.$current.index() + 1],
               self.$current.index() + 1,
             )
             .appendTo(self.$cardwrapperSet);
@@ -2365,7 +2374,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
   C.prototype.nextCardLeft = function () {
     let self = this;
-    let x = Math.floor(Math.random() * self.dialogs.length);
+    let x = Math.floor(Math.random() * self.currentDialogs.length);
     if (this.matchIt && this.sideBySide) {
       x = 0;
     }
@@ -2454,10 +2463,10 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     $cardContent.removeClass('h5p-dialogcards-turned');
     const selectionIndex = self.$current.index();
     let cardsLeftInStack =
-      self.dialogs.length - selectionIndex - this.endOfStack;
+      self.currentDialogs.length - selectionIndex - this.endOfStack;
     this.incorrect++;
     if ($next.length) {
-      let audioIndex = self.nbCards - self.dialogs.length;
+      let audioIndex = self.nbCards - self.currentDialogs.length;
       self.stopAudio(audioIndex);
       self.$current
         .removeClass('h5p-dialogcards-current h5p-dialogcards-turned')
@@ -2474,11 +2483,11 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       let $loadCard = self.$current.next('.h5p-dialogcards-cardwrap');
       if (
         !$loadCard.length &&
-        self.$current.index() + 1 < self.dialogs.length
+        self.$current.index() + 1 < self.currentDialogs.length
       ) {
         let $cardWrapper = self
           .createCard(
-            self.dialogs[self.$current.index() + 1],
+            self.currentDialogs[self.$current.index() + 1],
             self.$current.index() + 1,
           )
           .appendTo(self.$cardwrapperSet);
@@ -2642,10 +2651,10 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       // Manage front & back texts.
       let $cardText = $card.find('.h5p-dialogcards-card-text');
       if (self.cardsSideMode === 'frontFirst') {
-        if (self.dialogs[$card.index()].answer) {
+        if (self.currentDialogs[$card.index()].answer) {
           self.changeText(
             $c,
-            self.dialogs[$card.index()][turned ? 'text' : 'answer'],
+            self.currentDialogs[$card.index()][turned ? 'text' : 'answer'],
           );
           $cardText.removeClass('hide');
         }
@@ -2658,14 +2667,14 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         // backFirst & image2
         self.changeText(
           $c,
-          self.dialogs[$card.index()][turned ? 'text' : 'answer'],
+          self.currentDialogs[$card.index()][turned ? 'text' : 'answer'],
         );
         $cardText.removeClass('hide');
       }
       else {
         self.changeText(
           $c,
-          self.dialogs[$card.index()][turned ? 'text' : 'answer'],
+          self.currentDialogs[$card.index()][turned ? 'text' : 'answer'],
         );
       }
 
@@ -2704,7 +2713,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       let audioIndex = self.$current.index();
       /* why?
       if (this.enableGotIt) {
-        audioIndex = (self.nbCards - self.dialogs.length);
+        audioIndex = (self.nbCards - self.currentDialogs.length);
       }
       */
       let audio = self.audios[audioIndex];
@@ -2755,7 +2764,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         self.addTipToCard($c, turned ? 'front' : 'back');
         if (
           !self.$current.next('.h5p-dialogcards-cardwrap').length &&
-          self.dialogs.length > 1
+          self.currentDialogs.length > 1
         ) {
           if (self.params.behaviour.enableRetry && !this.enableGotIt) {
             self.resizeOverflowingText();
@@ -2895,7 +2904,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
     if (this.lastCardIndex) {
       // Now remove the current 'gotitdone' card from the cards and cardOrder arrays.
-      self.dialogs.splice(this.lastCardIndex, 1);
+      self.currentDialogs.splice(this.lastCardIndex, 1);
       if (!$.isEmptyObject(this.cardOrder)) {
         self.cardOrder.splice(this.lastCardIndex, 1);
       }
@@ -2922,7 +2931,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       let $card = $(this).removeClass(
         'h5p-dialogcards-previous h5p-dialogcards-turned',
       );
-      self.changeText($card, self.dialogs[$card.index()].text);
+      self.changeText($card, self.currentDialogs[$card.index()].text);
       let $cardContent = $card.find('.h5p-dialogcards-card-content');
       // Show all front images (ci) and hide all back images (ci2)
       let $ci = $card.find('.h5p-dialogcards-image');
@@ -2996,7 +3005,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     let $card = $(this);
     // Now remove the current 'gotitdone' card from the cards and cardOrder arrays.
     let index = this.lastCardIndex;
-    self.dialogs.splice(index, 1);
+    self.currentDialogs.splice(index, 1);
     if (!$.isEmptyObject(this.cardOrder)) {
       self.cardOrder.splice(index, 1);
     }
@@ -3156,7 +3165,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
       // Change to answer
       if (!self.matchIt) {
-        self.changeText($content, self.dialogs[i].answer);
+        self.changeText($content, self.currentDialogs[i].answer);
       }
 
       // Grab size with answer
@@ -3180,7 +3189,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
       // Change back to text
       if (!self.matchIt) {
-        self.changeText($content, self.dialogs[i].text);
+        self.changeText($content, self.currentDialogs[i].text);
       }
     });
   };
@@ -3639,7 +3648,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.endOfStack = 0;
     this.correct++;
     //const selectionIndex = self.$current.index();
-    let audioIndex = self.nbCards - self.dialogs.length;
+    let audioIndex = self.nbCards - self.currentDialogs.length;
     self.stopAudio(audioIndex);
 
     // Mark current card with a 'gotitdone' class.
@@ -3670,7 +3679,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
 
     // Now remove the current 'gotitdone' card from the cards and cardOrder arrays.
-    self.dialogs.splice(index, 1);
+    self.currentDialogs.splice(index, 1);
     if (!$.isEmptyObject(this.cardOrder)) {
       self.cardOrder.splice(index, 1);
     }
@@ -3730,7 +3739,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       }, delayInMilliseconds);
 
       // Now remove the current 'gotitdone' card from the cards and cardOrder arrays.
-      self.dialogs.splice(index, 1);
+      self.currentDialogs.splice(index, 1);
       if (!$.isEmptyObject(this.cardOrder)) {
         self.cardOrder.splice(index, 1);
       }
@@ -3751,7 +3760,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
 
     // No cards left in stack. End game.
-    if (self.dialogs.length === 0) {
+    if (self.currentDialogs.length === 0) {
       setTimeout(function () {
         self.finishedScreen();
       }, delayInMilliseconds);
@@ -3837,7 +3846,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         }, delayInMilliseconds);
 
         // Now remove the current 'gotitdone' card from the cards and cardOrder arrays.
-        self.dialogs.splice(index, 1);
+        self.currentDialogs.splice(index, 1);
         if (!$.isEmptyObject(this.cardOrder)) {
           self.cardOrder.splice(index, 1);
         }
@@ -3930,7 +3939,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.correct = 0;
     this.incorrect = 0;
     this.$current = undefined;
-    self.dialogs = self.params.dialogs;
+    self.currentDialogs = structuredClone(self.params.dialogs);
     self.getCurrentState();
     this.enableGotIt = false;
     this.repetition = false;
@@ -4018,6 +4027,13 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    */
 
   C.prototype.switchSides = function (cards) {
+    /*
+    console.log('--------switchSides--------');
+    console.log('image dialogs ori 37 src = ' + this.params.dialogs[0].imageMedia.image.path
+      + '\nimage  37 src = ' + cards[0].imageMedia.image.path
+      + '\nimage2  74 src = ' + cards[0].imageMedia.image2.path
+    );
+    */
     for (let i = 0; i < cards.length; i++) {
       let t = cards[i].text;
       let a = cards[i].answer;
@@ -4365,9 +4381,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     let isSelected = 0;
     let notSelected = 0;
     let numCardsInCats = 0;
-    for (let i = 0; i < self.dialogs.length; i++) {
-      if (self.dialogs[i].itemCategories !== undefined) {
-        let itemCats = self.dialogs[i].itemCategories.split(',');
+    for (let i = 0; i < self.currentDialogs.length; i++) {
+      if (self.currentDialogs[i].itemCategories !== undefined) {
+        let itemCats = self.currentDialogs[i].itemCategories.split(',');
         isSelected = 0;
         notSelected = 0;
         for (let j = 0; j < itemCats.length; j++) {
@@ -4408,9 +4424,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         'ERROR! categories filter returned an empty result. No filter will be applied.';
     }
     else {
-      self.dialogs = filtered;
-      this.nbCards = self.dialogs.length;
-      return self.dialogs;
+      self.currentDialogs = filtered;
+      this.nbCards = self.currentDialogs.length;
+      return self.currentDialogs;
     }
   };
 
