@@ -1586,14 +1586,15 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       class: 'h5p-dialogcards-card-text-inner-content',
     }).appendTo($cardTextInner);
 
-    if (this.hasAudio && !this.noText) {
+    /// todo no, this should work all the time
+    ///if (this.hasAudio && !this.noText) {
       if (card.audioMedia.audio !== undefined) {
         this.createCardAudio(card).appendTo($cardTextInnerContent);
       }
       if (card.audioMedia.audio2 !== undefined) {
         this.createCardAudio2(card).appendTo($cardTextInnerContent);
       }
-    }
+    ///}
 
     let $cardText = $('<div>', {
       class: 'h5p-dialogcards-card-text',
@@ -1981,10 +1982,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
     
     if (card.imageMedia.image !== undefined) {
-      /*
-      console.log('image src 37 = ' + card.imageMedia.image.path
-      + '\nimage2 src 74 = ' + card.imageMedia.image2.path);
-      */
       // Alternative conditions for (front) image to be displayed.
       $image = $(`<img class="h5p-dialogcards-image"
           src="${H5P.getPath(card.imageMedia.image.path, self.id)}"/>`);
@@ -4026,14 +4023,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    * @param {object} card Card parameters
    */
 
-  C.prototype.switchSides = function (cards) {
-    /*
-    console.log('--------switchSides--------');
-    console.log('image dialogs ori 37 src = ' + this.params.dialogs[0].imageMedia.image.path
-      + '\nimage  37 src = ' + cards[0].imageMedia.image.path
-      + '\nimage2  74 src = ' + cards[0].imageMedia.image2.path
-    );
-    */
+  C.prototype.switchSides = function (cards) {    
     for (let i = 0; i < cards.length; i++) {
       let t = cards[i].text;
       let a = cards[i].answer;
