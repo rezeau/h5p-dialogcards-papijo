@@ -245,8 +245,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       dialog.audioMedia.audio2 !== undefined,
       );
 
-      const hasImageOnFront = self.params.dialogs.every(d => d.imageMedia.image);
-      const hasImageOnBack  = self.params.dialogs.every(d => d.imageMedia.image2);
+      const hasImageOnFront = self.params.dialogs.every((d) => d.imageMedia.image);
+      const hasImageOnBack  = self.params.dialogs.every((d) => d.imageMedia.image2);
       this.hasTwoImages = hasImageOnFront && hasImageOnBack;
 
     }
@@ -3147,7 +3147,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       if (!self.matchIt) {
         if (!this.noText) {
           self.changeText($content, self.currentDialogs[i].text);
-          }
+        }
       }
     });
   };
