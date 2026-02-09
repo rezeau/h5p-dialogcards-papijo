@@ -151,6 +151,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.noText = self.params.behaviour.noTextOnCards;
     this.actualScore = 0;
     this.firstText = self.params.dialogs[0].text;
+    this.firstAnswer = self.params.dialogs[0].answer;
     this.matchIt = false;
     if (
       this.playModeUser === 'matchMode' ||
@@ -273,13 +274,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.existsCardOrder = false;
     this.noDupeFrontPicToBack = self.params.behaviour.noDupeFrontPicToBack;
     
-    // Copy parameters for further use if save content state.
-    ///self.dialogs = self.copy(self.params.dialogs);
-    ///const self.dialogs = [...self.params.dialogs];   // copy
-    ///self.currentDialogs = Array.from(self.params.dialogs);
+    // Copy parameters for further use if save content state. Use Clone for perfect copy.
     self.currentDialogs = structuredClone(self.params.dialogs); // ✅ best modern solution
-
-
 
     this.noFilterMessage = '';
     self.nbCards = self.currentDialogs.length;
@@ -351,6 +347,11 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       if (this.contentData.previousState.playModeUser !== undefined) {
         this.playModeUser = this.contentData.previousState.playModeUser;
       }
+      /*
+      if (this.contentData.previousState.currentDialogs !== undefined) {
+        this.playModeUser = this.contentData.previousState.currentDialogs;
+      }
+      */
       if (this.repetition) {
         if (this.contentData.previousState.noMatchCards !== undefined) {
           this.noMatchCards = this.contentData.previousState.noMatchCards;
@@ -570,7 +571,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
 
     if (this.contentData.previousState && this.filterList !== undefined) {
-      self.applyFilter(this.filterList, this.filterOperator, false);
+      ///self.applyFilter(this.filterList, this.filterOperator, false);
     }
 
     self.initCards(self.currentDialogs).appendTo(self.$inner);
@@ -1266,12 +1267,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       this.nbCardsSelected = this.nbCards;
     }
     // Reversed cards array to be used in these options.
-    // Check if switching sides is needed.
-    let mustSwitch = false;
-    const isReversed = cards[0].text !== this.firstText;
-    // concise version by ChatGPT 18:26 09/11/2025
-    mustSwitch = (this.cardsSideMode === 'backFirst') !== !!this.matchIt;
-    if ((!isReversed && mustSwitch) || (isReversed && !mustSwitch)) {
+    // Check if switching sides is needed. Simplified and fixed 15:29 09/02/2026
+    const mustSwitch = (this.cardsSideMode === 'backFirst') !== Boolean(this.matchIt);
+    if (mustSwitch) {
       this.switchSides(cards);
     }
 
@@ -1609,9 +1607,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
     const shouldHideText =
       this.noText ||
-    (this.frontTextBackImage &&      
+    (this.frontTextBackImage &&
       this.matchIt);
-
+    
     if (shouldHideText) {
       hideTextAndBuildContent();
     }
@@ -1656,6 +1654,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     let au2 = card.audioMedia.audio2;
     let ialt = card.imageAltText;
     let ialt2 = card.imageAltText2;
+
     card.text = a;
     card.answer = t;
     card.audioMedia.audio = au2;
@@ -1664,6 +1663,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     card.imageAltText2 = ialt;
 
     // Need to revert tips for the left card if frontFirst
+
     if (this.cardsSideMode === 'frontFirst') {
       let tf = card.tips.front;
       let tb = card.tips.back;
@@ -3888,6 +3888,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    */
 
   C.prototype.resetTask = function () {
+    console.log('resetTask');
     const self = this;
     this.contentData.previousState = {};
     self.answered = false;
@@ -3984,7 +3985,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    * @param {object} card Card parameters
    */
 
-  C.prototype.switchSides = function (cards) {    
+  C.prototype.switchSides = function (cards) {
     for (let i = 0; i < cards.length; i++) {
       let t = cards[i].text;
       let a = cards[i].answer;
@@ -4278,10 +4279,12 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       state.lastCorrect = !this.endOfStack;
     }
     if (this.filterByCategories) {
+      console.log('this.filterByCategories');
       state.filterByCategories = this.filterByCategories;
       state.filterList = this.filterList;
       state.filterOperator = this.filterOperator;
       state.currentFilter = this.currentFilter;
+      ///state.currentDialogs = this.currentDialogs;
     }
     if (this.noDupeFrontPicToBack) {
       state.noDupeFrontPicToBack = this.noDupeFrontPicToBack;
@@ -4304,21 +4307,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     state.taskFinished = this.taskFinished;
 
     return state;
-  };
-
-  // https://stackoverflow.com/questions/7486085/copy-array-by-value
-  // reply by tfmontague!
-  C.prototype.copy = function (aObject) {
-    if (!aObject) {
-      return aObject;
-    }
-    let v;
-    let bObject = Array.isArray(aObject) ? [] : {};
-    for (const k in aObject) {
-      v = aObject[k];
-      bObject[k] = typeof v === 'object' ? C.prototype.copy(v) : v;
-    }
-    return bObject;
   };
 
   C.prototype.applyFilter = function (
@@ -4375,7 +4363,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         'ERROR! categories filter returned an empty result. No filter will be applied.';
     }
     else {
-      self.currentDialogs = filtered;
+      self.currentDialogs = structuredClone(filtered);
       this.nbCards = self.currentDialogs.length;
       return self.currentDialogs;
     }
