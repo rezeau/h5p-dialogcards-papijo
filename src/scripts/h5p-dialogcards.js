@@ -299,9 +299,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     // Var progress stores current card index.
 
     this.contentData = contentData || {};
+    
     // Bring card set up to date when resuming.
     if (this.contentData.previousState) {
-      console.log("self.$current =", this.contentData.previousState);
 
       this.progress = this.contentData.previousState.progress;
       this.progressLeft = this.contentData.previousState.progressLeft;
@@ -1322,7 +1322,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       this.cardsLeft = this.nbCardsSelected;
     }
 
-    // Use a previous order if it exists.
+    /* /// Removed this because causes bug when using filtering... Check if really needed?
     if (this.contentData.previousState) {
       if (this.contentData.previousState.order && existsCardOrder) {
         this.cardOrder.splice(cards.length, this.cardOrder.length);
@@ -1337,7 +1337,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         cards = newCards;
       }
     }
-
+*/
     // Save data to content state for resuming later on.
     // Push the new 'cards array' into self.currentDialogs.
 
@@ -3890,7 +3890,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    */
 
   C.prototype.resetTask = function () {
-    console.log('resetTask');
     const self = this;
     this.contentData.previousState = {};
     self.answered = false;
@@ -4281,7 +4280,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       state.lastCorrect = !this.endOfStack;
     }
     if (this.filterByCategories) {
-      console.log('this.filterByCategories');
       state.filterByCategories = this.filterByCategories;
       state.filterList = this.filterList;
       state.filterOperator = this.filterOperator;
@@ -4307,7 +4305,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     state.playMode = this.playMode;
     state.playModeUser = this.playModeUser;
     state.taskFinished = this.taskFinished;
-console.log("state =", state);
 
     return state;
   };
