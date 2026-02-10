@@ -189,12 +189,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (!self.params.dialogs.length || this.report) {
       self.params.description +=
         '<hr><b>ERROR</b> You are using the "no text" option:' +
-        '<br>but your set of cards is not cosistent.' 
+        '<br>but your set of cards is not consistent.' 
         + `<br>${  this.report}`;
-        
-    }
-    if (!self.params.dialogs.length) {      
-      return;
     }
 
     // Reset all flags
@@ -400,7 +396,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         `),
     );
 
-    if (!this.params.dialogs.length) {
+    if (!this.params.dialogs.length || this.report) {
       return;
     }
 
