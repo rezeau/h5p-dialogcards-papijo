@@ -301,6 +301,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.contentData = contentData || {};
     // Bring card set up to date when resuming.
     if (this.contentData.previousState) {
+      console.log("self.$current =", this.contentData.previousState);
+
       this.progress = this.contentData.previousState.progress;
       this.progressLeft = this.contentData.previousState.progressLeft;
 
@@ -347,11 +349,11 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       if (this.contentData.previousState.playModeUser !== undefined) {
         this.playModeUser = this.contentData.previousState.playModeUser;
       }
-      /*
+      
       if (this.contentData.previousState.currentDialogs !== undefined) {
-        this.playModeUser = this.contentData.previousState.currentDialogs;
+        this.currentDialogs = this.contentData.previousState.currentDialogs;
       }
-      */
+      
       if (this.repetition) {
         if (this.contentData.previousState.noMatchCards !== undefined) {
           this.noMatchCards = this.contentData.previousState.noMatchCards;
@@ -4284,7 +4286,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       state.filterList = this.filterList;
       state.filterOperator = this.filterOperator;
       state.currentFilter = this.currentFilter;
-      ///state.currentDialogs = this.currentDialogs;
+      state.currentDialogs = this.currentDialogs;
     }
     if (this.noDupeFrontPicToBack) {
       state.noDupeFrontPicToBack = this.noDupeFrontPicToBack;
@@ -4305,6 +4307,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     state.playMode = this.playMode;
     state.playModeUser = this.playModeUser;
     state.taskFinished = this.taskFinished;
+console.log("state =", state);
 
     return state;
   };
