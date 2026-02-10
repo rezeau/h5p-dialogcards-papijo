@@ -355,6 +355,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           this.noMatchCards = this.contentData.previousState.noMatchCards;
         }
       }
+      
       this.nbCardsInCurrentRound =
         this.contentData.previousState.nbCardsInCurrentRound;
       this.cardsLeft = this.contentData.previousState.nbCardsLeft;
@@ -438,7 +439,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     else if (
       this.cardsSideChoice === 'user' &&
       this.cardsSideMode === 'user'
-    ) {
+    ) {      
       self.createcardsSideChoice().appendTo(self.$inner);
     }
     else {
@@ -541,6 +542,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       }
     }
     else {
+      
       if (this.cardsSideChoice === 'user') {
         let currentSide = self.params.cardFrontLabel;
         if (this.cardsSideMode === 'backFirst') {
@@ -700,10 +702,13 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     let self = this;
     let currentSide;
     let reverseSide;
+    
+    /** /// removed 18:12 10/02/2026 because seems useless
     if (self.cardsSideChoice === 'user') {
       self.cardsSideMode = 'frontFirst';
       currentSide = self.params.cardFrontLabel;
     }
+    */
     if (self.cardsSideMode === 'frontFirst') {
       currentSide = self.params.cardFrontLabel;
       reverseSide = self.params.cardBackLabel;
@@ -1266,6 +1271,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
     // Reversed cards array to be used in these options.
     // Check if switching sides is needed. Simplified and fixed 15:29 09/02/2026
+    
     const mustSwitch = (this.cardsSideMode === 'backFirst') !== Boolean(this.matchIt);
     if (mustSwitch) {
       this.switchSides(cards);
@@ -3970,6 +3976,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       this.cardsSideChoice === 'user' &&
       this.cardsSideMode === 'user'
     ) {
+      
       self.createcardsSideChoice().appendTo(self.$inner);
     }
     else {
@@ -4285,6 +4292,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (this.noDupeFrontPicToBack) {
       state.noDupeFrontPicToBack = this.noDupeFrontPicToBack;
     }
+    
     state.currentRound = this.currentRound;
     state.correct = this.correct;
     state.incorrect = this.incorrect;
