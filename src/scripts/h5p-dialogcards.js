@@ -703,12 +703,13 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     let currentSide;
     let reverseSide;
     
-    /** /// removed 18:12 10/02/2026 because seems useless
+    /**
+     /// removed 18:12 10/02/2026 because seems useless
     if (self.cardsSideChoice === 'user') {
       self.cardsSideMode = 'frontFirst';
       currentSide = self.params.cardFrontLabel;
     }
-    */
+     */
     if (self.cardsSideMode === 'frontFirst') {
       currentSide = self.params.cardFrontLabel;
       reverseSide = self.params.cardBackLabel;
