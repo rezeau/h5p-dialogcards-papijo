@@ -1,5 +1,4 @@
 /**
-/**
  * Dialogcards module PapiJo
  * @param $
  */
@@ -150,8 +149,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.enableCardsNumber = self.params.behaviour.enableCardsNumber;
     this.noText = self.params.behaviour.noTextOnCards;
     this.actualScore = 0;
-    this.firstText = self.params.dialogs[0].text;
-    this.firstAnswer = self.params.dialogs[0].answer;
+    this.isReversed = false;
     this.matchIt = false;
     if (
       this.playModeUser === 'matchMode' ||
@@ -208,8 +206,15 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       // All dialogs must satisfy: empty answer + no front image + back image exists
       this.frontTextBackImage = self.params.dialogs.every((dialog) =>
         dialog.answer === '' &&
-    dialog.imageMedia.image === undefined &&
-    dialog.imageMedia.image2 !== undefined,
+        dialog.imageMedia.image === undefined &&
+        dialog.imageMedia.image2 !== undefined,
+      );
+
+      // All dialogs must satisfy: empty answer + no front audio + back audio exists
+      this.frontTextBackAudio = self.params.dialogs.every((dialog) =>
+        dialog.answer === '' &&
+        dialog.audioMedia.audio === undefined &&
+        dialog.audioMedia.audio2 !== undefined,
       );
     }
 
@@ -354,6 +359,11 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         if (this.contentData.previousState.noMatchCards !== undefined) {
           this.noMatchCards = this.contentData.previousState.noMatchCards;
         }
+      }
+
+      if (this.contentData.previousState.filterByCategories !== undefined
+        && this.cardsSideMode === 'backFirst') {
+        this.isReversed = true;
       }
       
       this.nbCardsInCurrentRound =
@@ -702,14 +712,10 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     let self = this;
     let currentSide;
     let reverseSide;
-    
-    /**
-     /// removed 18:12 10/02/2026 because seems useless
-    if (self.cardsSideChoice === 'user') {
+    if (self.cardsSideMode === 'user') {
       self.cardsSideMode = 'frontFirst';
-      currentSide = self.params.cardFrontLabel;
+      self.isReversed = false;
     }
-     */
     if (self.cardsSideMode === 'frontFirst') {
       currentSide = self.params.cardFrontLabel;
       reverseSide = self.params.cardBackLabel;
@@ -747,6 +753,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       .click(function () {
         if (self.cardsSideMode === 'backFirst') {
           self.cardsSideMode = 'frontFirst';
+          self.isReversed = false;
         }
         else {
           self.cardsSideMode = 'backFirst';
@@ -922,6 +929,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
   C.prototype.createPlayMode = function () {
     const self = this;
+    this.isReversed = false;
     const $play = $('<div>', {
       class: 'h5p-dialogcards-categories h5p-dialogcards-options',
       html: self.params.selectPlayMode,
@@ -1272,17 +1280,18 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
     // Reversed cards array to be used in these options.
     // Check if switching sides is needed. Simplified and fixed 15:29 09/02/2026
-    
-    const mustSwitch = (this.cardsSideMode === 'backFirst') !== Boolean(this.matchIt);
-    if (mustSwitch) {
+    if (
+      (this.cardsSideMode === 'backFirst') !== Boolean(this.matchIt) &&
+      !this.isReversed
+    ) {
       this.switchSides(cards);
     }
 
     let self = this;
     let loaded = 0;
-    let existsCardOrder = true;
+    ///let existsCardOrder = true;
     if ($.isEmptyObject(this.cardOrder)) {
-      existsCardOrder = false;
+      this.existsCardOrder = false;
     }
     let initLoad = C.NB2;
     // If keepstate then load all cards until last card previously reached by user.
@@ -1292,7 +1301,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
     if (
       (this.cardsOrderMode === 'normal' || this.cardsOrderMode === 'random') &&
-      !existsCardOrder
+      !this.existsCardOrder
     ) {
       let cardOrdering = cards.map(function (cards, index) {
         return [cards, index];
@@ -1325,25 +1334,34 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       this.cardsLeft = this.nbCardsSelected;
     }
 
-    /* /// Removed this because causes bug when using filtering... Check if really needed?
-    if (this.contentData.previousState) {
-      if (this.contentData.previousState.order && existsCardOrder) {
+    if (this.contentData.previousState && !this.filterByCategories) {
+      if (this.contentData.previousState.order && this.existsCardOrder) {
         this.cardOrder.splice(cards.length, this.cardOrder.length);
         let previousOrder = this.contentData.previousState.order;
+        if (typeof previousOrder === 'string') {
+          previousOrder = previousOrder.split(',').map(Number);
+        }
+        if (!Array.isArray(previousOrder)) {
+          previousOrder = [previousOrder]; // fallback safety
+        }
         let cardOrdering = cards.map(function (cards, index) {
           return [cards, index];
         });
+
         let newCards = [];
+        
         for (let i = 0; i < previousOrder.length; i++) {
-          newCards[i] = cardOrdering[previousOrder[i]][0];
+          const index = previousOrder[i];
+          if (cardOrdering[index]) {
+            newCards[i] = cardOrdering[index][0];
+          }
         }
         cards = newCards;
       }
     }
-*/
+
     // Save data to content state for resuming later on.
     // Push the new 'cards array' into self.currentDialogs.
-
     self.currentDialogs = cards;
 
     self.$cardwrapperSet = $('<div>', {
@@ -1365,7 +1383,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (this.matchIt && this.sideBySide) {
       x = 0;
     }
-    // ********************************************** LOOP TO CREATE CARDS **********************************
+    // ************* LOOP TO CREATE CARDS **********************************
     for (let i = 0; i < cards.length; i++) {
       // Load cards progressively
       // If matchIt, all cards are loaded upon init, this is needed.
@@ -2580,6 +2598,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     let $c = self.$current.find('.h5p-dialogcards-card-content');
     let $ci = $card.find('.h5p-dialogcards-image');
     let $ci2 = $card.find('.h5p-dialogcards-image2');
+    let $au = $card.find('.h5p-audio-wrapper');
     let turned = $c.hasClass('h5p-dialogcards-turned');
     let $ch = $card
       .find('.h5p-dialogcards-cardholder')
@@ -2623,7 +2642,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
             $cardText.toggleClass('hide', !turned);
           }
         }
-        else if ($ci2.attr('src')) {
+        else if ($ci2.attr('src') 
+          || self.frontTextBackAudio && $au
+        ) {
           // backFirst & image2
           self.changeText(
             $c,
@@ -2631,7 +2652,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           );
           $cardText.removeClass('hide');
         }
-        else {
+        else {          
           self.changeText(
             $c,
             self.currentDialogs[$card.index()][turned ? 'text' : 'answer'],
@@ -4293,7 +4314,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (this.noDupeFrontPicToBack) {
       state.noDupeFrontPicToBack = this.noDupeFrontPicToBack;
     }
-    
     state.currentRound = this.currentRound;
     state.correct = this.correct;
     state.incorrect = this.incorrect;
