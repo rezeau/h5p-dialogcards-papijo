@@ -1997,6 +1997,16 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       if (card.imageAltText) {
         $image.attr('alt', card.imageAltText);
       }
+      
+      if (!this.matchIt && isBackFirst) {
+        let imagePath = card.imageMedia.image.path;
+        let image2Path = card.imageMedia.image2.path;
+        if (imagePath === image2Path) {
+          if (this.noDupeFrontPicToBack) {
+            $image.addClass('h5p-dialogcards-hide');
+          }
+        }
+      }
     }
 
     if (card.imageMedia.image2 !== undefined) {
@@ -2019,7 +2029,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
     
     // Needed for notext image + audio 
-
+    // this.noDupeFrontPicToBack must be enabled
     if (this.frontImageBackAudio && typeof $image !== 'undefined') {
       // Case 1: matchIt enabled
       if (this.matchIt) {
@@ -2044,6 +2054,15 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       else if (isBackFirst) {
         $image.addClass('h5p-dialogcards-hide');
       }
+    }
+    if (this.noDupeFrontPicToBack       
+      && this.matchIt
+      && !isLeft
+      && card.imageMedia.image !== undefined
+      && card.imageMedia.image2 !== undefined
+      && card.imageMedia.image.path === card.imageMedia.image2.path) {
+      $image.addClass('h5p-dialogcards-hide');
+      $image2.addClass('h5p-dialogcards-hide');
     }
     
     /*******************************************************************************/
@@ -2082,7 +2101,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         files: card.audioMedia.audio,
         audioNotSupported: self.params.audioNotSupported,
       };
-      audio = new Audio(audioDefaults, self.id);
+      audio = new Audio(audioDefaults, self.id);      
       audio.attach($audioWrapper);
       // Have to stop else audio will take up a socket pending forever in chrome.
       if (audio.audioMedia && audio.audioMedia.preload) {
