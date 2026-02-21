@@ -2960,11 +2960,13 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       self.resetAudio(index);
 
       // Replace potential "paused" button with "ready to play" button
+      // Not needed? 19:05 21/02/2026
+      /*
       let $caButton = $card.find('.h5p-audio-minimal-button');
       if ($caButton.hasClass(paused)) {
         $caButton.switchClass(paused, play);
       }
-
+      */
       $cardContent.removeClass('h5p-dialogcards-turned');
       self.addTipToCard($cardContent, 'front', index);
 
@@ -3051,10 +3053,15 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       self.resetAudio(index);
 
       // Replace potential "paused" button with "ready to play" button
+      /*
       let $caButton = $card.find('.h5p-audio-minimal-button');
       if ($caButton.hasClass(paused)) {
         $caButton.switchClass(paused, play);
       }
+      */
+      $card
+        .find('.h5p-audio-minimal-button')
+        .toggleClass('paused play');
       // In case it was hidden on the summary screen.
       $card
         .find('.h5p-dialogcards-image-wrapper')
