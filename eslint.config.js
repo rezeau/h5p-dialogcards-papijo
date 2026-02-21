@@ -7,6 +7,7 @@ export default [
     // For example:
     rules: {
       'no-console': 'warn',
+      "no-trailing-spaces": "warn",
     },
   },
 ];

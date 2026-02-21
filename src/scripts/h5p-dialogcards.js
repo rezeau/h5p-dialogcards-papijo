@@ -187,8 +187,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (!self.params.dialogs.length || this.report) {
       self.params.description +=
         '<hr><b>ERROR</b> You are using the "no text" option:' +
-        '<br>but your set of cards is not consistent.' 
-        + `<br>${  this.report}`;
+        '<br>but your set of cards is not consistent.'
+        + `<br>${ this.report}`;
     }
 
     // Reset all flags
@@ -248,7 +248,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       );
 
       const hasImageOnFront = self.params.dialogs.every((d) => d.imageMedia.image);
-      const hasImageOnBack  = self.params.dialogs.every((d) => d.imageMedia.image2);
+      const hasImageOnBack = self.params.dialogs.every((d) => d.imageMedia.image2);
       this.hasTwoImages = hasImageOnFront && hasImageOnBack;
 
     }
@@ -274,7 +274,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.matchCorrect = null;
     this.existsCardOrder = false;
     this.noDupeFrontPicToBack = self.params.behaviour.noDupeFrontPicToBack;
-    
+
     // Copy parameters for further use if save content state. Use Clone for perfect copy.
     self.currentDialogs = structuredClone(self.params.dialogs); // ✅ best modern solution
 
@@ -300,7 +300,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     // Var progress stores current card index.
 
     this.contentData = contentData || {};
-    
+
     // Bring card set up to date when resuming.
     if (this.contentData.previousState) {
 
@@ -350,11 +350,11 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       if (this.contentData.previousState.playModeUser !== undefined) {
         this.playModeUser = this.contentData.previousState.playModeUser;
       }
-      
+
       if (this.contentData.previousState.currentDialogs !== undefined) {
         this.currentDialogs = this.contentData.previousState.currentDialogs;
       }
-      
+
       if (this.repetition) {
         if (this.contentData.previousState.noMatchCards !== undefined) {
           this.noMatchCards = this.contentData.previousState.noMatchCards;
@@ -365,7 +365,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         && this.cardsSideMode === 'backFirst') {
         this.isReversed = true;
       }
-      
+
       this.nbCardsInCurrentRound =
         this.contentData.previousState.nbCardsInCurrentRound;
       this.cardsLeft = this.contentData.previousState.nbCardsLeft;
@@ -449,7 +449,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     else if (
       this.cardsSideChoice === 'user' &&
       this.cardsSideMode === 'user'
-    ) {      
+    ) {
       self.createcardsSideChoice().appendTo(self.$inner);
     }
     else {
@@ -552,7 +552,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       }
     }
     else {
-      
+
       if (this.cardsSideChoice === 'user') {
         let currentSide = self.params.cardFrontLabel;
         if (this.cardsSideMode === 'backFirst') {
@@ -1179,7 +1179,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    */
   C.prototype.addTipToCard = function ($card, side, index) {
     let self = this;
-    
+
     // Make sure we have a side
     if (side !== 'back') {
       side = 'front';
@@ -1213,9 +1213,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           else {
             const showAudioTip =
               this.has2Audio ||
-              self.matchIt 
-              && ((self.cardsSideMode === 'frontFirst' 
-                && self.currentDialogs[index].audioMedia.audio2 === undefined) 
+              self.matchIt
+              && ((self.cardsSideMode === 'frontFirst'
+                && self.currentDialogs[index].audioMedia.audio2 === undefined)
                  || (self.cardsSideMode === 'backFirst' && side === 'front') ||
                 this.has2Audio
               );
@@ -1225,7 +1225,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
                 addclass: 'joubel-tip-notext',
               }),
             );
-            
+
             if (showAudioTip) {
               $card.find('.h5p-dialogcards-audio-wrapper').before(
                 JoubelUI.createTip(tip, {
@@ -1349,7 +1349,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         });
 
         let newCards = [];
-        
+
         for (let i = 0; i < previousOrder.length; i++) {
           const index = previousOrder[i];
           if (cardOrdering[index]) {
@@ -1563,7 +1563,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (!this.audioOnly &&
       (card.imageMedia.image !== undefined ||
       (card.imageMedia.image2 !== undefined &&
-        this.cardsSideMode === 'frontFirst') 
+        this.cardsSideMode === 'frontFirst')
         || !this.matchIt)
     ) {
       this.createCardImage(card, cardNumber, setCardSizeCallback, isLeft).appendTo(
@@ -1597,7 +1597,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       this.createCardAudio2(card).appendTo($cardTextInnerContent);
     }
 
-
     let $cardText = $('<div>', {
       class: 'h5p-dialogcards-card-text',
     }).appendTo($cardTextInnerContent);
@@ -1622,7 +1621,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       if (card.audioMedia.audio2 !== undefined) {
         this.createCardAudio2(card).appendTo($cardContent);
       }
-      
+
       this.createCardFooter(card, $cardContent)
         .appendTo($cardContent)
         .addClass(this.audioOnly ? ' spacerAudioOnly' : ' spacer');
@@ -1632,7 +1631,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       this.noText ||
     (this.frontTextBackImage &&
       this.matchIt);
-    
+
     if (shouldHideText) {
       hideTextAndBuildContent();
     }
@@ -1788,7 +1787,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       let t = card.text;
       let a = card.answer;
       let au = card.audio;
-      let au2 = card.audio2;      
+      let au2 = card.audio2;
       let ialt = card.imageAltText;
       let ialt2 = card.imageAltText2;
       card.text = a;
@@ -1986,7 +1985,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
 
     const isFrontFirst = this.cardsSideMode === 'frontFirst';
-    const isBackFirst  = this.cardsSideMode === 'backFirst';
+    const isBackFirst = this.cardsSideMode === 'backFirst';
 
     if (card.imageMedia.image !== undefined) {
       $image = $(`<img class="h5p-dialogcards-image"
@@ -1997,7 +1996,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       if (card.imageAltText) {
         $image.attr('alt', card.imageAltText);
       }
-      
+
       if (!this.matchIt && isBackFirst) {
         let imagePath = card.imageMedia.image.path;
         let image2Path = card.imageMedia.image2.path;
@@ -2027,8 +2026,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       self.$images2.push($image2);
       $image2.appendTo($imageWrapper);
     }
-    
-    // Needed for notext image + audio 
+
+    // Needed for notext image + audio
     // this.noDupeFrontPicToBack must be enabled
     if (this.frontImageBackAudio && typeof $image !== 'undefined') {
       // Case 1: matchIt enabled
@@ -2055,18 +2054,20 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         $image.addClass('h5p-dialogcards-hide');
       }
     }
-    if (this.noDupeFrontPicToBack       
-      && this.matchIt
-      && !isLeft
-      && card.imageMedia.image !== undefined
-      && card.imageMedia.image2 !== undefined
-      && card.imageMedia.image.path === card.imageMedia.image2.path) {
-      $image.addClass('h5p-dialogcards-hide');
-      $image2.addClass('h5p-dialogcards-hide');
+    // Hides image on the left side is nodupe
+    const { image, image2 } = card.imageMedia;
+    const sameImage = image?.path === image2?.path;
+
+    if (this.noDupeFrontPicToBack && this.matchIt) {
+      if (!isLeft && sameImage) {
+        $image.add($image2).addClass('h5p-dialogcards-hide');
+      }
+      else if (isLeft && image) {
+        $image.addClass('h5p-dialogcards-hide');
+      }
     }
-    
     /*******************************************************************************/
-    
+
     if (typeof $image !== 'undefined') {
       self.$images.push($image);
       $image.appendTo($imageWrapper);
@@ -2101,7 +2102,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         files: card.audioMedia.audio,
         audioNotSupported: self.params.audioNotSupported,
       };
-      audio = new Audio(audioDefaults, self.id);      
+      audio = new Audio(audioDefaults, self.id);
       audio.attach($audioWrapper);
       // Have to stop else audio will take up a socket pending forever in chrome.
       if (audio.audioMedia && audio.audioMedia.preload) {
@@ -2611,7 +2612,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    * Show the opposite site of the card.
    * @param {object} [$card] Current card
    */
-  C.prototype.turnCard = function ($card) {    
+  C.prototype.turnCard = function ($card) {
     let self = this;
     let $cg;
     let $c = self.$current.find('.h5p-dialogcards-card-content');
@@ -2661,7 +2662,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
             $cardText.toggleClass('hide', !turned);
           }
         }
-        else if ($ci2.attr('src') 
+        else if ($ci2.attr('src')
           || self.frontTextBackAudio && $au
         ) {
           // backFirst & image2
@@ -2671,7 +2672,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           );
           $cardText.removeClass('hide');
         }
-        else {          
+        else {
           self.changeText(
             $c,
             self.currentDialogs[$card.index()][turned ? 'text' : 'answer'],
@@ -2837,7 +2838,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
   };
 
   /**
-   
    // hide and show audio not used in papi Jo version
    /**
     Hide audio button
@@ -2968,7 +2968,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       $cardContent.removeClass('h5p-dialogcards-turned');
       self.addTipToCard($cardContent, 'front', index);
 
-      // In case it was hidden on the summary screen.      
+      // In case it was hidden on the summary screen.
       $card
         .find('.h5p-dialogcards-image-wrapper')
         .removeClass('h5p-dialogcards-hide');
@@ -2995,7 +2995,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     self.$current
       .find('.h5p-dialogcards-answer-button-off')
       .removeClass('h5p-dialogcards-disabled');
-    
+
     self.resetButtons('restart');
   };
 
@@ -3044,7 +3044,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       let $card = $(this).removeClass(
         'h5p-dialogcards-previous h5p-dialogcards-noMatch',
       );
-      
+
       // Show all front audios (ca) and hide all back audios (ca2)
       let $ca = $card.find('.h5p-dialogcards-audio-wrapper');
       $ca.removeClass('hide');
@@ -4017,7 +4017,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       this.cardsSideChoice === 'user' &&
       this.cardsSideMode === 'user'
     ) {
-      
+
       self.createcardsSideChoice().appendTo(self.$inner);
     }
     else {
