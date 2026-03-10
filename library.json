@@ -3,24 +3,26 @@
   "description": "Makes it possible to create learning tasks for your site visitors.",
   "majorVersion": 1,
   "minorVersion": 16,
-  "patchVersion": 22,
+  "patchVersion": 23,
   "runnable": 1,
   "author": "Joubel",
   "license": "MIT",
-  "machineName": "H5P.DialogcardsPapiJo",
+  "machineName": "H5P.Dialogcardspapijo",
   "coreApi": {
     "majorVersion": 1,
-    "minorVersion": 15
+    "minorVersion": 28
   },
-  "embedTypes": ["iframe"],
+  "embedTypes": [
+    "iframe"
+  ],
   "preloadedCss": [
     {
-      "path": "dist/h5p-dialogcards.css"
+      "path": "dist/h5p-dialogcards-papijo.css"
     }
   ],
   "preloadedJs": [
     {
-      "path": "dist/h5p-dialogcards.js"
+      "path": "dist/h5p-dialogcards-papijo.js"
     }
   ],
   "preloadedDependencies": [
@@ -38,6 +40,11 @@
       "machineName": "H5P.Audio",
       "majorVersion": 1,
       "minorVersion": 5
+    },
+    {
+      "machineName": "H5P.Components",
+      "majorVersion": 1,
+      "minorVersion": 0
     }
   ],
   "editorDependencies": [
@@ -50,11 +57,6 @@
       "machineName": "H5PEditor.ShowWhen",
       "majorVersion": 1,
       "minorVersion": 0
-    },
-    {
-      "machineName": "H5PEditor.ColorSelector",
-      "majorVersion": 1,
-      "minorVersion": 3
     }
   ]
 }
