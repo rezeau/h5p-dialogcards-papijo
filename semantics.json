@@ -15,24 +15,6 @@
     ]
   },
   {
-    "name": "mode",
-    "type": "select",
-    "label": "Mode",
-    "description": "Mode of presenting the dialog cards",
-    "importance": "medium",
-    "options": [
-      {
-        "value": "normal",
-        "label": "Normal"
-      },
-      {
-        "value": "repetition",
-        "label": "Repetition"
-      }
-    ],
-    "default": "normal"
-  },
-  {
     "name": "description",
     "type": "text",
     "widget": "html",
@@ -157,30 +139,30 @@
     "optional": true,
     "fields": [
       {
+        "name": "mode",
+        "type": "select",
+        "label": "Mode",
+        "description": "Mode of presenting the dialog cards",
+        "importance": "medium",
+        "options": [
+          {
+            "value": "normal",
+            "label": "Normal"
+          },
+          {
+            "value": "repetition",
+            "label": "Repetition"
+          }
+        ],
+        "default": "normal"
+      },
+      {
         "name": "enableRetry",
         "type": "boolean",
         "label": "Enable \"Retry\" button",
         "importance": "low",
         "default": true,
         "optional": true
-      },
-      {
-        "name": "disableBackwardsNavigation",
-        "type": "boolean",
-        "label": "Disable backwards navigation",
-        "importance": "low",
-        "description": "This option will only allow you to move forward with Dialog Cards",
-        "optional": true,
-        "default": false,
-        "widget": "showWhen",
-        "showWhen": {
-          "rules": [
-            {
-              "field": "../mode",
-              "equals": "normal"
-            }
-          ]
-        }
       },
       {
         "name": "scaleTextNotCard",
@@ -201,7 +183,7 @@
         "showWhen": {
           "rules": [
             {
-              "field": "../mode",
+              "field": "mode",
               "equals": "normal"
             }
           ]
@@ -220,7 +202,7 @@
         "showWhen": {
           "rules": [
             {
-              "field": "../mode",
+              "field": "mode",
               "equals": "repetition"
             }
           ]
@@ -238,7 +220,7 @@
         "showWhen": {
           "rules": [
             {
-              "field": "../mode",
+              "field": "mode",
               "equals": "repetition"
             }
           ]

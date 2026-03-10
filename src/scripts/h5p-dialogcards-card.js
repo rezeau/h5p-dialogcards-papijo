@@ -27,7 +27,7 @@ class Card {
 
     this.$cardWrapper.addClass(`h5p-dialogcards-mode-${this.params.mode}`);
 
-    if (this.params.mode !== 'repetition') {
+    if (this.params.behaviour.mode !== 'repetition') {
       this.$cardWrapper.attr('aria-labelledby', `h5p-dialogcards-progress-${idCounter}`);
     }
 
@@ -179,7 +179,7 @@ class Card {
     let classesRepetition = 'h5p-dialogcards-button-hidden';
     let attributeTabindex = '-1';
 
-    if (this.params.mode === 'repetition') {
+    if (this.params.behaviour.mode === 'repetition') {
       classesRepetition = '';
       if (this.params.behaviour.quickProgression) {
         classesRepetition = 'h5p-dialogcards-quick-progression';
@@ -192,7 +192,7 @@ class Card {
       icon: 'flip',
     })).appendTo($cardFooter);
 
-    if (this.params.mode === 'repetition') {
+    if (this.params.behaviour.mode === 'repetition') {
       this.$buttonShowSummary = $(H5P.Components.Button({
         classes: 'h5p-dialogcards-show-summary h5p-dialogcards-button-gone h5p-theme-results',
         styleType: 'secondary',
@@ -227,7 +227,7 @@ class Card {
   }
 
   handleAnswerButton(event, result) {
-    if (this.params.mode === 'repetition') {
+    if (this.params.behaviour.mode === 'repetition') {
       const button = event.target.closest('.h5p-dialogcards-answer-button');
       if (!button.classList.contains('h5p-dialogcards-quick-progression')) {
         return;
@@ -274,7 +274,7 @@ class Card {
    * Hide summary button and show answer buttons again.
    */
   hideSummaryButton() {
-    if (this.params.mode === 'normal') {
+    if (this.params.behaviour.mode === 'normal') {
       return;
     }
 
@@ -321,7 +321,7 @@ class Card {
       }
 
       // Toggle state for knowledge confirmation buttons
-      if (this.params.mode === 'repetition' && !this.params.behaviour.quickProgression) {
+      if (this.params.behaviour.mode === 'repetition' && !this.params.behaviour.quickProgression) {
         const $answerButtons = $card.find('.h5p-dialogcards-answer-button');
 
         // Don't revoke quick progression after card was turned.
@@ -370,7 +370,7 @@ class Card {
    * @param {number} max Maximum position.
    */
   setProgressText(position, total) {
-    if (this.params.mode !== 'repetition') {
+    if (this.params.behaviour.mode !== 'repetition') {
       return;
     }
 

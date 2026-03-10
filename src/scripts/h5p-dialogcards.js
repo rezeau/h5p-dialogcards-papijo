@@ -28,7 +28,6 @@ class Dialogcardspapijo extends H5P.EventDispatcher {
     // Set default behavior.
     this.params = $.extend({
       title: '',
-      mode: 'normal',
       description: '',
       next: 'Next',
       prev: 'Previous',
@@ -71,8 +70,8 @@ class Dialogcardspapijo extends H5P.EventDispatcher {
         },
       ],
       behaviour: {
+        mode: 'normal',
         enableRetry: true,
-        disableBackwardsNavigation: false,
         scaleTextNotCard: false,
         randomCards: false,
         maxProficiency: 5,
@@ -99,7 +98,7 @@ class Dialogcardspapijo extends H5P.EventDispatcher {
 
       // Only pass what's necessary
       const managerParams = {
-        mode: this.params.mode,
+        mode: this.params.behaviour.mode,
         dialogs: this.params.dialogs,
         audioNotSupported: this.params.audioNotSupported,
         answer: this.params.answer,
@@ -109,6 +108,7 @@ class Dialogcardspapijo extends H5P.EventDispatcher {
         progressText: this.params.progressText,
         tipButtonLabel: this.params.tipButtonLabel,
         behaviour: {
+          ///mode: this.params.behaviour.mode,
           scaleTextNotCard: this.params.behaviour.scaleTextNotCard,
           maxProficiency: this.params.behaviour.maxProficiency,
           quickProgression: this.params.behaviour.quickProgression,
@@ -134,7 +134,7 @@ class Dialogcardspapijo extends H5P.EventDispatcher {
         this.gotoCard(this.previousState.currentCardId);
 
         // Show summary if previous round was completed but next round not started.
-        if (this.params.mode === 'repetition' && this.results.length === this.cardIds.length) {
+        if (this.params.behaviour.mode === 'repetition' && this.results.length === this.cardIds.length) {
           this.showSummary(true);
         }
       }
@@ -158,7 +158,7 @@ class Dialogcardspapijo extends H5P.EventDispatcher {
         const title = $(`<div>${this.params.title}</div>`).text().trim();
         this.$header = $(`<div class="h5p-dialogcards-title-container"><div class="h5p-dialogcards-title-wrapper">${title ? `<div class="h5p-dialogcards-title"><div class="h5p-dialogcards-title-inner h5p-theme-question-description">${this.params.title}</div></div>` : ''}<div class="h5p-dialogcards-description">${this.params.description}</div></div></div>`);
 
-        if (this.params.mode === 'normal') {
+        if (this.params.behaviour.mode === 'normal') {
           this.$progress = $('<div>', {
             id: `h5p-dialogcards-progress-${this.idCounter}`,
             class: 'h5p-dialogcards-progress h5p-theme-progress',
@@ -215,7 +215,7 @@ class Dialogcardspapijo extends H5P.EventDispatcher {
     this.createFooter = () => {
       let nav;
 
-      if (this.params.mode === 'normal') {
+      if (this.params.behaviour.mode === 'normal') {
         nav = H5P.Components.Navigation({
           index: this.currentCardId,
           variant: '2-split-spread',
@@ -227,11 +227,6 @@ class Dialogcardspapijo extends H5P.EventDispatcher {
             nextButton: this.params.next,
           },
         });
-
-        if (this.params.behaviour.disableBackwardsNavigation) {
-          const previousButton = nav.querySelector('.h5p-theme-nav-button.h5p-theme-previous');
-          previousButton?.classList.add('h5p-dialogcards-visibility-hidden');
-        }
 
         this.$retry = $(H5P.Components.Button({
           classes: 'h5p-dialogcards-footer-button h5p-dialogcards-disabled',
@@ -359,7 +354,7 @@ class Dialogcardspapijo extends H5P.EventDispatcher {
      * Update navigation text and show or hide buttons.
      */
     this.updateNavigation = () => {
-      if (this.params.mode === 'normal') {
+      if (this.params.behaviour.mode === 'normal') {
         // Final card
         if (this.getCurrentSelectionIndex() < this.cardIds.length - 1) {
           this.$retry.addClass('h5p-hidden');
@@ -469,7 +464,7 @@ class Dialogcardspapijo extends H5P.EventDispatcher {
 
       // On final card
       if (this.cardIds.length - this.getCurrentSelectionIndex() === 1) {
-        if (this.params.mode === 'repetition') {
+        if (this.params.behaviour.mode === 'repetition') {
           this.$progress.text(this.params.cardsLeft.replace('@number', 0));
           this.cards[this.currentCardId].showSummaryButton(this.showSummary);
         }
@@ -656,7 +651,7 @@ class Dialogcardspapijo extends H5P.EventDispatcher {
 
       // Show first card
       this.currentCardId = 0;
-      if (this.params.mode === 'normal') {
+      if (this.params.behaviour.mode === 'normal') {
         this.cards[this.currentCardId].getDOM().addClass('h5p-dialogcards-current');
       }
       this.updateNavigation();

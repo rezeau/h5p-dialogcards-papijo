@@ -27,7 +27,7 @@ class CardManager {
   createSelection() {
     let selectionIds = [];
 
-    switch (this.params.mode) {
+    switch (this.params.behaviour.mode) {
       case 'repetition':
         // Repetition mode
         selectionIds = this.createSelectionRepetition();
@@ -54,7 +54,7 @@ class CardManager {
     this.cardPiles = [];
     const pool = this.cardPool.getCardIds();
 
-    switch (this.params.mode) {
+    switch (this.params.behaviour.mode) {
       case 'repetition':
         // Repetition mode
         for (let i = 0; i < this.params.behaviour.maxProficiency + 1; i++) {
