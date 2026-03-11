@@ -39,6 +39,8 @@ class Dialogcardspapijo extends H5P.EventDispatcher {
       cardsLeft: 'Cards left: @number',
       nextRound: 'Proceed to round @round',
       startOver: 'Start over',
+      numCardsQuestion: 'How many cards do you want?',
+      allCards: 'all',
       showSummary: 'Next',
       summary: 'Summary',
       summaryCardsRight: 'Cards you got right:',
@@ -71,7 +73,9 @@ class Dialogcardspapijo extends H5P.EventDispatcher {
       ],
       behaviour: {
         mode: 'normal',
-        enableRetry: true,
+        enableRetry: true,        
+        cardsOrderChoice: 'user',
+        enableCardsNumber: false,
         scaleTextNotCard: false,
         randomCards: false,
         maxProficiency: 5,
@@ -110,6 +114,7 @@ class Dialogcardspapijo extends H5P.EventDispatcher {
         behaviour: {
           ///mode: this.params.behaviour.mode,
           scaleTextNotCard: this.params.behaviour.scaleTextNotCard,
+          behaviour: this.params.behaviour.enableCardsNumber,
           maxProficiency: this.params.behaviour.maxProficiency,
           quickProgression: this.params.behaviour.quickProgression,
         },
@@ -121,14 +126,19 @@ class Dialogcardspapijo extends H5P.EventDispatcher {
         onCardTurned: this.handleCardTurned,
         onNextCard: this.nextCard,
       }, this.idCounter);
-
-      this.createDOM(this.round === 0);
+      if (this.params.behaviour.enableCardsNumber) {
+        this.createNumberCards ().appendTo(this.$inner);
+      }
+      else {
+        this.createDOM(this.round === 0);
+      }
 
       /*
        * Goto previously viewed card. It was possible to also recover the turned
        * state, but it feels sensible to let the previously viewed card be
        * reviewed starting with the front.
        */
+      /* TODO check if needed 23:28 10/03/2026
       if (this.previousState.currentCardId !== undefined) {
         this.nav.setCurrentIndex(this.previousState.currentCardId);
         this.gotoCard(this.previousState.currentCardId);
@@ -141,6 +151,7 @@ class Dialogcardspapijo extends H5P.EventDispatcher {
 
       this.updateNavigation();
       this.trigger('resize');
+      */
     };
 
     /**
@@ -151,7 +162,7 @@ class Dialogcardspapijo extends H5P.EventDispatcher {
       this.cardIds = (firstCall && this.previousState.cardIds)
         ? this.previousState.cardIds
         : this.cardManager.createSelection();
-
+console.log('line 168 createDOM');
       this.cardPoolSize = this.cardPoolSize || this.cardManager.getSize();
 
       if (firstCall === true) {
@@ -194,7 +205,8 @@ class Dialogcardspapijo extends H5P.EventDispatcher {
           .append(this.$cardwrapperSet)
           .append(this.$cardSideAnnouncer)
           .append(this.nav)
-          .appendTo(this.$inner);
+          .appendTo(this.$inner)
+          .appendTo(this.$numberCards);
 
         this.on('reset', function () {
           this.reset();
@@ -206,6 +218,77 @@ class Dialogcardspapijo extends H5P.EventDispatcher {
         this.round = (this.previousState.round !== undefined) ? this.previousState.round : 1;
       }
     };
+/**
+   * Create numberCards option request
+   * @returns {HTMLElement} numberCards element
+   */
+  this.createNumberCards = () => {
+    let self = this;
+    let numCards = this.params.dialogs.length;
+    let $numberCards = $('<div>', {
+      class: 'h5p-dialogcards-number h5p-dialogcards-options',
+      html: this.params.numCardsQuestion,
+    });
+
+    let $optionButtons = $('<div>', {
+      class: 'h5p-dialogcards-optionsbuttons',
+    }).appendTo($numberCards);
+
+    // Allow user to select a number of cards to play with, by displaying selectable buttons in increments of 5.
+    let n = 0;
+    if (numCards <= Dialogcardspapijo.NB50) {
+      n = Dialogcardspapijo.NB5;
+    }
+    else {
+      n = Dialogcardspapijo.NB10;
+    }
+    console.log('line 250 n = ' + n);
+    let limit = Math.min(numCards, 100);
+    alert('line 252');
+    for (let i = n; i < limit; i += n) {
+      console.log('i = ' + i);
+    }
+    for (let i = n; i < limit; i += n) {
+      self.$button = JoubelUI.createButton({
+        class: 'h5p-dialogcards-number-button',
+        title: i,
+        html: i,
+        id: `dc-number-${i}`,
+      })
+        .click(function () {
+          self.nbCards = this.title;
+          this.nbCards = this.title;
+          self.nbCardsSelected = this.title;
+          this.nbCardsSelected = this.title;
+          if (self.cardsSideChoice === 'user') {
+            $('.h5p-dialogcards-number', self.$inner).remove();
+            self.createcardsSideChoice().appendTo(self.$inner);
+          }
+          else {
+            self.createDOM(this.round === 0);
+          }
+        })
+        .appendTo($optionButtons);
+    }
+
+    self.$button = JoubelUI.createButton({
+      class: 'h5p-dialogcards-number-button',
+      title: numCards,
+      html: `${self.params.allCards} (${numCards})`,
+    })
+      .click(function () {
+        self.nbCards = numCards;
+        if (self.cardsSideChoice === 'user') {
+          $('.h5p-dialogcards-number', self.$inner).remove();
+          self.createcardsSideChoice().appendTo(self.$inner);
+        }
+        else {
+          self.createDOM(this.round === 0);
+        }
+      })
+      .appendTo($optionButtons);
+    return $numberCards;
+  };
 
     /**
      * Create footer/navigation line
@@ -293,6 +376,9 @@ class Dialogcardspapijo extends H5P.EventDispatcher {
      * @returns {*|jQuery|HTMLElement} Card wrapper set
      */
     this.initCards = (cardIds) => {
+      console.log('initCards');
+      console.log("cardIds =", cardIds);
+
       const initLoad = 2;
       this.cards = [];
       this.currentCardId = 0;
@@ -901,5 +987,18 @@ Dialogcardspapijo.idCounter = 0;
 Dialogcardspapijo.SCALEINTERVAL = 0.2;
 Dialogcardspapijo.MAXSCALE = 16;
 Dialogcardspapijo.MINSCALE = 4;
+Dialogcardspapijo.SDialogcardspapijoALEINTERVAL = 0.2;
+  Dialogcardspapijo.MAXSDialogcardspapijoALE = 16;
+  Dialogcardspapijo.MINSDialogcardspapijoALE = 4;
+  Dialogcardspapijo.NB04 = 0.4;
+  Dialogcardspapijo.NB2 = 2;
+  Dialogcardspapijo.NB5 = 5;
+  Dialogcardspapijo.NB10 = 10;
+  Dialogcardspapijo.NB50 = 50;
+  Dialogcardspapijo.NB200 = 200;
+  Dialogcardspapijo.NB300 = 300;
+  Dialogcardspapijo.NB400 = 400;
+  Dialogcardspapijo.NB1000 = 1000;
+
 
 export default Dialogcardspapijo;

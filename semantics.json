@@ -190,6 +190,14 @@
         }
       },
       {
+        "name": "enableCardsNumber",
+        "type": "boolean",
+        "label": "Select number of cards displayed",
+        "importance": "low",
+        "description": "Allow user to select the number of cards drawn from the pool",
+        "default": false
+      },
+      {
         "name": "maxProficiency",
         "type": "number",
         "label": "Maximum proficiency level",
