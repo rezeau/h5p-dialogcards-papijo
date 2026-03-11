@@ -10,7 +10,7 @@
   "machineName": "H5P.DialogcardsPapiJo",
   "coreApi": {
     "majorVersion": 1,
-    "minorVersion": 15
+    "minorVersion": 28
   },
   "embedTypes": ["iframe"],
   "preloadedCss": [
@@ -38,6 +38,11 @@
       "machineName": "H5P.Audio",
       "majorVersion": 1,
       "minorVersion": 5
+    },
+    {
+      "machineName": "H5P.Components",
+      "majorVersion": 1,
+      "minorVersion": 0
     }
   ],
   "editorDependencies": [
