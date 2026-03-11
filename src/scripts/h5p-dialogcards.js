@@ -138,7 +138,7 @@ class Dialogcardspapijo extends H5P.EventDispatcher {
        * state, but it feels sensible to let the previously viewed card be
        * reviewed starting with the front.
        */
-      /* TODO check if needed 23:28 10/03/2026
+      /*
       if (this.previousState.currentCardId !== undefined) {
         this.nav.setCurrentIndex(this.previousState.currentCardId);
         this.gotoCard(this.previousState.currentCardId);
@@ -151,7 +151,7 @@ class Dialogcardspapijo extends H5P.EventDispatcher {
 
       this.updateNavigation();
       this.trigger('resize');
-      */
+*/      
     };
 
     /**
@@ -162,7 +162,13 @@ class Dialogcardspapijo extends H5P.EventDispatcher {
       this.cardIds = (firstCall && this.previousState.cardIds)
         ? this.previousState.cardIds
         : this.cardManager.createSelection();
-console.log('line 168 createDOM');
+      console.log('firstCall = ' + firstCall);
+      /*
+      $('.h5p-dialogcards-categories', this.$inner).remove();
+      $('.h5p-dialogcards-number', this.$inner).remove();
+      $('.h5p-dialogcards-side', this.$inner).remove();
+      */
+      this.$numberCards.detach();
       this.cardPoolSize = this.cardPoolSize || this.cardManager.getSize();
 
       if (firstCall === true) {
@@ -197,16 +203,28 @@ console.log('line 168 createDOM');
           class: 'h5p-dialogcards-card-side-announcer',
           'aria-live': 'polite',
         });
-
+        
+        this.$toto = $('<div>', {
+          html: '1 coucou toto</br>2 coucou toto</br>3 coucou toto</br>4 coucou toto</br>5 coucou toto</br>6 coucou toto</br>7 coucou toto</br>8 coucou toto</br>coucou toto</br>coucou toto</br>coucou toto</br>coucou toto</br>',
+          class: '',
+          'aria-live': 'polite',
+        });
+        this.$tata = $('<div>', {
+          html: 'hi tata',
+          class: '',
+          'aria-live': 'polite',
+        });
+        
         this.nav = this.createFooter();
+        console.log(JSON.stringify(this.$cardwrapperSet, null, 4));
+          console.log('this.$cardwrapperSet = ', this.$cardwrapperSet);
 
         this.$mainContent = $('<div>')
           .append(this.$header)
           .append(this.$cardwrapperSet)
           .append(this.$cardSideAnnouncer)
           .append(this.nav)
-          .appendTo(this.$inner)
-          .appendTo(this.$numberCards);
+          .appendTo(this.$inner);
 
         this.on('reset', function () {
           this.reset();
@@ -217,6 +235,8 @@ console.log('line 168 createDOM');
         // Set round to previous state if available
         this.round = (this.previousState.round !== undefined) ? this.previousState.round : 1;
       }
+    this.updateNavigation();
+    this.trigger('resize');
     };
 /**
    * Create numberCards option request
@@ -225,14 +245,14 @@ console.log('line 168 createDOM');
   this.createNumberCards = () => {
     let self = this;
     let numCards = this.params.dialogs.length;
-    let $numberCards = $('<div>', {
+    this.$numberCards = $('<div>', {
       class: 'h5p-dialogcards-number h5p-dialogcards-options',
       html: this.params.numCardsQuestion,
     });
 
     let $optionButtons = $('<div>', {
       class: 'h5p-dialogcards-optionsbuttons',
-    }).appendTo($numberCards);
+    }).appendTo(this.$numberCards);
 
     // Allow user to select a number of cards to play with, by displaying selectable buttons in increments of 5.
     let n = 0;
@@ -242,12 +262,7 @@ console.log('line 168 createDOM');
     else {
       n = Dialogcardspapijo.NB10;
     }
-    console.log('line 250 n = ' + n);
     let limit = Math.min(numCards, 100);
-    alert('line 252');
-    for (let i = n; i < limit; i += n) {
-      console.log('i = ' + i);
-    }
     for (let i = n; i < limit; i += n) {
       self.$button = JoubelUI.createButton({
         class: 'h5p-dialogcards-number-button',
@@ -265,7 +280,7 @@ console.log('line 168 createDOM');
             self.createcardsSideChoice().appendTo(self.$inner);
           }
           else {
-            self.createDOM(this.round === 0);
+            self.createDOM(true);
           }
         })
         .appendTo($optionButtons);
@@ -283,11 +298,11 @@ console.log('line 168 createDOM');
           self.createcardsSideChoice().appendTo(self.$inner);
         }
         else {
-          self.createDOM(this.round === 0);
+          self.createDOM(true);
         }
       })
       .appendTo($optionButtons);
-    return $numberCards;
+    return this.$numberCards;
   };
 
     /**
@@ -376,8 +391,15 @@ console.log('line 168 createDOM');
      * @returns {*|jQuery|HTMLElement} Card wrapper set
      */
     this.initCards = (cardIds) => {
+      if (this.nbCardsSelected !== undefined) {
+        this.nbCards = this.nbCardsSelected;
+      }
+      else {
+        this.nbCardsSelected = this.nbCards;
+      }
       console.log('initCards');
       console.log("cardIds =", cardIds);
+      console.log('this.nbCardsSelected = ' + this.nbCardsSelected);
 
       const initLoad = 2;
       this.cards = [];
@@ -440,6 +462,7 @@ console.log('line 168 createDOM');
      * Update navigation text and show or hide buttons.
      */
     this.updateNavigation = () => {
+      console.log('updateNavigation')
       if (this.params.behaviour.mode === 'normal') {
         // Final card
         if (this.getCurrentSelectionIndex() < this.cardIds.length - 1) {
