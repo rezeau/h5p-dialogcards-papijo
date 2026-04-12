@@ -1842,7 +1842,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
     if (this.enableGotIt || this.matchIt) {
       classesRepetition =
-        'h5p-dialogcards-quick-progression h5p-dialogcards-disabled';
+        ///'h5p-dialogcards-quick-progression h5p-dialogcards-disabled';
+        'h5p-dialogcards-disabled';
       attributeTabindex = '0';
     }
     else {
@@ -1850,60 +1851,39 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
 
     if (this.enableGotIt) {
-      this.$buttonIncorrect = H5P.JoubelUI.createButton({
-        class: 'h5p-dialogcards-answer-button',
-        html: this.params.incorrectAnswer,
-      })
-        .click(function () {
-          self.gotItIncorrect();
-        })
-        .addClass('incorrect')
-        .addClass(classesRepetition)
-        .attr('tabindex', attributeTabindex)
-        .appendTo($cardFooter);
-
-      // JR dummy incorrect button for front of card only
-      this.$buttonIncorrectOff = H5P.JoubelUI.createButton({
-        class: 'h5p-dialogcards-answer-button-off',
-        html: this.params.incorrectAnswer,
-      })
-        .addClass('incorrect')
-        .addClass(classesRepetitionOff)
-        .attr('tabindex', -1)
-        .appendTo($cardFooter);
+      
     }
 
-    if (!this.matchIt) {
-      let htmlText = self.hideTurnButton
-        ? self.params.check
-        : self.params.answer;
-      this.$buttonTurn = H5P.JoubelUI.createButton({
-        class: 'h5p-dialogcards-turn',
-        html: htmlText,
-      })
-        .click(function () {
-          self.turnCard($(this).parents('.h5p-dialogcards-cardwrap'));
-        })
-        .attr('tabindex', 0)
+    if (!this.matchIt) {      
+        this.$buttonTurn = $(H5P.Components.Button({
+          label: this.hideTurnButton
+            ? this.params.check
+            : this.params.answer,
+          icon: 'flip',
+          onClick: (event) => {
+            const card = event.currentTarget.closest('.h5p-dialogcards-cardwrap');
+            self.turnCard($(card));
+          },
+        }))
         .appendTo($cardFooter);
+    
     }
     else if (!this.sideBySide) {
-      this.$buttonMatch = H5P.JoubelUI.createButton({
+      this.$buttonMatch = $(H5P.Components.Button({
         class: 'h5p-dialogcards-button-match',
-        html: self.params.matchButtonLabel,
-      })
-        .click(function () {
+        label: self.params.matchButtonLabel,
+        tabindex: 1,
+        icon: 'check',
+        onClick: function () {
+          const $cardwrap = $(this).parents('.h5p-dialogcards-cardwrap');
           if (self.repetition) {
-            self.matchCardsRepetition(
-              $(this).parents('.h5p-dialogcards-cardwrap'),
-            );
+            self.matchCardsRepetition($cardwrap);
           }
           else {
-            self.matchCards($(this).parents('.h5p-dialogcards-cardwrap'));
+            self.matchCards($cardwrap);
           }
-        })
-        .attr('tabindex', 1)
-        .appendTo($cardFooter);
+        }
+      })).appendTo($cardFooter);
 
       let classesMatch =
         'h5p-dialogcards-answer-button h5p-dialogcards-quick-progression' +
@@ -1927,28 +1907,30 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         .appendTo($cardFooter);
     }
 
-    if (this.enableGotIt) {
-      this.$buttonCorrect = H5P.JoubelUI.createButton({
-        class: 'h5p-dialogcards-answer-button',
-        html: this.params.correctAnswer,
-      })
-        .click(function () {
-          self.gotItCorrect($(this).parents('.h5p-dialogcards-cardwrap'));
-        })
-        .addClass('correct')
-        .addClass(classesRepetition)
-        .attr('tabindex', 0)
-        .appendTo($cardFooter);
+    if (this.enableGotIt) {      
+      this.$buttonIncorrect = $(H5P.Components.Button({
+        ///class: ['h5p-dialogcards-answer-button', 'incorrect', classesRepetition].join(' '),
+        classes: `h5p-dialogcards-answer-button incorrect ${classesRepetition}`,
+        label: 'this.params.incorrectAnswer',
+        disabled: true,
+        tabindex: attributeTabindex,
+        styleType: 'secondary',
+        onClick: function () {
+          self.gotItIncorrect();
+        }
+      })).appendTo($cardFooter);
 
-      // JR dummy incorrect button for front of card only
-      this.$buttonCorrectOff = H5P.JoubelUI.createButton({
-        class: 'h5p-dialogcards-answer-button-off',
-        html: this.params.correctAnswer,
-      })
-        .addClass('correct')
-        .addClass(classesRepetitionOff)
-        .attr('tabindex', -1)
-        .appendTo($cardFooter);
+      this.$buttonCorrect = $(H5P.Components.Button({
+        classes: `h5p-dialogcards-answer-button correct ${classesRepetition}`,
+        label: this.params.correctAnswer,
+        disabled: true,
+        tabindex: attributeTabindex,
+        styleType: 'secondary',
+        onClick: function () {
+          const $cardwrap = $(this).parents('.h5p-dialogcards-cardwrap');
+          self.gotItCorrect($cardwrap);
+        }
+      })).appendTo($cardFooter);
     }
 
     return $cardFooter;
@@ -2613,6 +2595,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    * @param {object} [$card] Current card
    */
   C.prototype.turnCard = function ($card) {
+    console.log('C.prototype.turnCard');
     let self = this;
     let $cg;
     let $c = self.$current.find('.h5p-dialogcards-card-content');
@@ -2625,6 +2608,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       .addClass('h5p-dialogcards-collapse');
     if (this.enableGotIt) {
       $cg = $card.find('.h5p-dialogcards-answer-button');
+      const $answerButtons = $card.find('.h5p-dialogcards-answer-button');
+      $answerButtons
+            .attr('disabled', false);
     }
 
     // Removes tip, since it destroys the animation:
