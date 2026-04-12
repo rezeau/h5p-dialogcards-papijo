@@ -72,13 +72,17 @@
   box-sizing: border-box;
   visibility: hidden;
   height: inherit;
-
+  padding: var(--h5p-theme-spacing-l);
+  background-color: var(--h5p-theme-background);
+  transition: visibility 0s 0.3s, left 300ms;
+/*
   -webkit-transition:
     visibility 0s 0.3s,
     left 300ms;
   transition:
     visibility 0s 0.3s,
     left 300ms;
+    */
 }
 .h5p-dialogcards .h5p-dialogcards-cardwrap.h5p-dialogcards-current {
   visibility: visible;

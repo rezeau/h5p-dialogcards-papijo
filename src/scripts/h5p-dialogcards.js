@@ -395,6 +395,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     let self = this;
     // Your code is HTML-heavy, so the multiline template literal version is the cleanest and easiest to maintain.
     // Use backticks (`) and ${}
+    /*
     self.$inner = $container.addClass('h5p-dialogcards').append(
       $(`
         <div class="h5p-dialogcards-title">
@@ -406,6 +407,11 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         </div>
         `),
     );
+    */
+    this.$inner = $container.addClass('h5p-dialogcards h5p-theme');
+      if (this.params.behaviour.scaleTextNotCard) {
+        $container.addClass('h5p-text-scaling');
+      }
 
     if (!this.params.dialogs.length || this.report) {
       return;
@@ -1032,6 +1038,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           });
         })
         .appendTo($footer);
+
     }
 
     let classesRetry =
@@ -1500,7 +1507,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     });
 
     let $cardHolder = $('<div>', {
-      class: 'h5p-dialogcards-cardholder',
+      class: 'h5p-dialogcards-cardholder h5p-cardholder',
     }).appendTo($cardWrapper);
 
     // Progress for assistive technologies
