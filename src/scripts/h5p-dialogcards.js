@@ -414,7 +414,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
     
     // Your code is HTML-heavy, so the multiline template literal version is the cleanest and easiest to maintain.
     // Use backticks (`) and ${}
-    /*
+    
     this.$inner = $container.addClass('h5p-dialogcards').append(
       $(`
         <div class="h5p-dialogcards-title">
@@ -426,7 +426,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
         </div>
         `),
     );
-    */
+    
     this.$inner = $container.addClass('h5p-dialogcards h5p-theme');
       if (this.params.behaviour.scaleTextNotCard) {
         $container.addClass('h5p-text-scaling');
@@ -737,7 +737,6 @@ console.log('this.currentDialogs = ' + this.currentDialogs);
    * @returns {HTMLElement} Side element
    */
   this.createcardsSideChoice = () => {
-    
     let currentSide;
     let reverseSide;
     if (this.cardsSideMode === 'user') {
@@ -1032,7 +1031,7 @@ console.log('this.currentDialogs = ' + this.currentDialogs);
         }
         $btn.prop('disabled', true);
         action();
-        setTimeout(function () {
+          setTimeout(() => {
           $btn.prop('disabled', false);
         }, DialogcardsPapiJo.NB300);
       };
@@ -2428,7 +2427,7 @@ console.log('this.currentDialogs = ' + this.currentDialogs);
       let $leftCard = this.$currentLeft;
       $leftCard.removeClass('h5p-dialogcards-current-left');
       // Set Timeout to avoid blink between 2 left cards
-      setTimeout(function () {
+      setTimeout(() => {
         this.nextCardLeft();
         this.updateNavigation();
       }, DialogcardsPapiJo.NB300);
@@ -2596,7 +2595,7 @@ console.log('this.currentDialogs = ' + this.currentDialogs);
         if (!$prevCardLeft.length) {
           $prevCardLeft = $('.h5p-dialogcards-cardwrap-left').first();
         }
-        setTimeout(function () {
+        setTimeout(() => {
           this.$currentLeft = $prevCardLeft.addClass(
             'h5p-dialogcards-current-left',
           );
@@ -2650,7 +2649,8 @@ console.log('this.currentDialogs = ' + this.currentDialogs);
       if (this.cardsSideChoice === 'user') {
         $('.h5p-dialogcards-number', this.$inner).remove();
         // Just in case user clicked twice on the No button!
-        setTimeout(function () {
+        
+        setTimeout(() => {
           this.createcardsSideChoice().appendTo(this.$inner);
         }, DialogcardsPapiJo.NB300);
       }
@@ -2720,11 +2720,14 @@ console.log('this.currentDialogs = ' + this.currentDialogs);
     // Update HTML class for card
     $c.toggleClass('h5p-dialogcards-turned', !turned);
 console.log('this.currentDialogs = ' + this.currentDialogs);
-    setTimeout(function () {
+      setTimeout(() => {
       $ch.removeClass('h5p-dialogcards-collapse');
       if (!this.noText) {
         // Manage front & back texts.
         let $cardText = $card.find('.h5p-dialogcards-card-text');
+        this.cardsSideMode = 'frontFirst';
+        console.log('this.cardsSideMode = ' + this.cardsSideMode);
+        console.log('this.currentDialogs = ' + this.currentDialogs);
         if (this.cardsSideMode === 'frontFirst') {
           if (this.currentDialogs[$card.index()].answer) {
             this.changeText(
@@ -2835,7 +2838,7 @@ console.log('this.currentDialogs = ' + this.currentDialogs);
 
       // Add backside tip
       // Had to wait a little, if not Chrome will displace tip icon
-      setTimeout(function () {
+        setTimeout(() => {
         this.addTipToCard($c, turned ? 'front' : 'back');
         if (
           !this.$current.next('.h5p-dialogcards-cardwrap').length &&
@@ -3846,7 +3849,7 @@ this.determineCardSizes = () => {
       $leftCard.addClass('h5p-dialogcards-gotitdone');
       let $parentSet = this.$current.parent('.h5p-dialogcards-cardwrap-set');
 
-      setTimeout(function () {
+      setTimeout(() => {
         this.nextCardLeft();
         this.resizeOverflowingText();
         $correctButton.toggleClass('h5p-dialogcards-disabled');
@@ -3888,7 +3891,7 @@ this.determineCardSizes = () => {
 
     // No cards left in stack. End game.
     if (this.currentDialogs.length === 0) {
-      setTimeout(function () {
+      setTimeout(() => {
         this.finishedScreen();
       }, delayInMilliseconds);
     }
@@ -3932,7 +3935,7 @@ this.determineCardSizes = () => {
         $correctButton.toggleClass('h5p-dialogcards-disabled');
         this.$current.addClass('h5p-dialogcards-gotitdone');
 
-        setTimeout(function () {
+        setTimeout(() => {
           this.nextCardLeftRepetition();
           this.resizeOverflowingText();
           let $cardLeft = this.$currentLeft.find(
@@ -4003,7 +4006,7 @@ this.determineCardSizes = () => {
         $matchButton.addClass('h5p-dialogcards-disabled');
         $incorrectButton.toggleClass('h5p-dialogcards-disabled');
         this.noMatchCards[indexLeft] = 1;
-        setTimeout(function () {
+        setTimeout(() => {
           $leftCard
             .addClass('h5p-dialogcards-noMatch')
             .removeClass('h5p-dialogcards-current-left');
@@ -4030,7 +4033,7 @@ this.determineCardSizes = () => {
       if ($card.index() === -1) {
         delayInMilliseconds = 0;
       }
-      setTimeout(function () {
+      setTimeout(() => {
         this.$current
           .addClass('h5p-dialogcards-gotitdone')
           .removeClass('h5p-dialogcards-noMatch');
