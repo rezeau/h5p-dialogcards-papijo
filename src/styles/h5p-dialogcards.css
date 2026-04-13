@@ -71,7 +71,7 @@
   padding: 0 0.5em;
   box-sizing: border-box;
   visibility: hidden;
-  height: inherit;
+  ///height: inherit;
   padding: var(--h5p-theme-spacing-l);
   background-color: var(--h5p-theme-background);
   transition: visibility 0s 0.3s, left 300ms;
@@ -84,6 +84,13 @@
     left 300ms;
     */
 }
+
+
+.h5p-dialogcards .h5p-navigation .h5p-theme-retry {
+  grid-column: 3;
+  white-space: nowrap;
+}
+
 .h5p-dialogcards .h5p-dialogcards-cardwrap.h5p-dialogcards-current {
   visibility: visible;
   left: 0;
@@ -423,7 +430,7 @@
   max-width: 32em;
 }
 
-.h5p-dialogcards .h5p-joubelui-button.h5p-dialogcards-disabled {
+.h5p-dialogcards .h5p-dialogcards-disabled {
   display: none;
 }
 
