@@ -2,21 +2,8 @@
  * Dialogcards module PapiJo
  * @param $
  */
-/*
-H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
-  const XAPI_REPORTING_VERSION_EXTENSION =
-    'https://h5p.org/x-api/h5p-reporting-version';
-  /**
-   * @param {object} params Behavior settings
-   * @param {number} id Content identification
-   * @param {object} contentData Saved content
-   
-  function C(params, id, contentData) {
-    */
-    
-    ///const self = this;
-    ///H5P.EventDispatcher.call(this);
-    const $ = H5P.jQuery;
+
+const $ = H5P.jQuery;
 const { JoubelUI } = H5P;
 
 class DialogcardsPapiJo extends H5P.EventDispatcher {
@@ -398,22 +385,6 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
    * @param {HTMLElement} $container Contains the cards
    */
   this.attach = ($container) => {
-    
-    // Your code is HTML-heavy, so the multiline template literal version is the cleanest and easiest to maintain.
-    // Use backticks (`) and ${}
-    /*
-    this.$inner = $container.addClass('h5p-dialogcards').append(
-      $(`
-        <div class="h5p-dialogcards-title">
-          <div class="h5p-dialogcards-title-inner">${this.params.title}</div>
-        </div>
-        <div class="h5p-dialogcards-description">${this.params.description}</div>
-        <div class="h5p-dialogcards-audio-wrapper h5p-audio-not-supported">
-          ${this.noFilterMessage}
-        </div>
-        `),
-    );
-    */
     const title = $(`<div>${this.params.title}</div>`).text().trim();
         this.$header = $(`<div class="h5p-dialogcards-title-container"><div class="h5p-dialogcards-title-wrapper">${title ? `<div class="h5p-dialogcards-title"><div class="h5p-dialogcards-title-inner h5p-theme-question-description">${this.params.title}</div></div>` : ''}<div class="h5p-dialogcards-description">${this.params.description}</div></div></div>`);
     this.$inner = $container.addClass('h5p-dialogcards h5p-theme');
@@ -427,9 +398,6 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
           }).appendTo(this.$header);
 
       this.$header.appendTo(this.$inner);
-      this.$progress.text(this.params.progressText
-          .replace('@card', '2')
-          .replace('@total', '5'));
 
     if (!this.params.dialogs.length || this.report) {
       return;
@@ -609,7 +577,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
       ///this.applyFilter(this.filterList, this.filterOperator, false);
     }
 
-    this.initCards(this.currentDialogs).appendTo(this.$inner);
+  this.initCards(this.currentDialogs).appendTo(this.$inner);
     this.$cardSideAnnouncer = $('<div>', {
       html: this.params.cardFrontLabel,
       class: 'h5p-dialogcards-card-side-announcer',
@@ -2202,8 +2170,11 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
    */
   
   this.updateNavigation = () => {
-    
-    
+    // Moved this.$progress.text to here for correct progress updating.
+    this.$progress.text(this.params.progressText
+        .replace('@card', this.$current.index() + 1)
+        .replace('@total', this.params.dialogs.length.toString()),
+      );
     let $prevCard;
     let $matchButton;
     let $card = this.$current.find('.h5p-dialogcards-card-content');
