@@ -175,7 +175,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
       this.matchIt = true;
     }
     this.playModeNames = [
-      { value: 'normalMode', label: this.params.normalMode },
+      { value: 'normal', label: this.params.normalMode },
       { value: 'browseSideBySide', label: this.params.browseSideBySide },
       { value: 'matchMode', label: this.params.matchMode },
       { value: 'matchRepetition', label: this.params.matchRepetition },
@@ -188,7 +188,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
         (mode) => this.allowedPlayModes[mode.value],
       );
       if (this.playModeNames.length === 0) {
-        this.playMode = 'normalMode';
+        this.playMode = 'normal';
       }
       else if (this.playModeNames.length === 1) {
         this.playMode = this.playModeNames[0].value;
@@ -1474,12 +1474,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
       // otherwise set it to zero.
       // Idem for current left card index
       let $cardWrapper = this.createCard(cards[i], i, setCardSizeCallback);
-      
-      let mode;
-      if (this.playModeUser === 'normalMode') {
-        mode = 'normal';
-      }
-      $cardWrapper.addClass(`h5p-dialogcards-${this.playModeUser}`);
+      $cardWrapper.addClass(`h5p-dialogcards-mode-${this.playModeUser}`);
       if (
         ((this.progress === undefined || this.progress === -1) && i === 0) ||
         (this.progress !== undefined && i === this.progress)
@@ -2214,7 +2209,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
     let $card = this.$current.find('.h5p-dialogcards-card-content');
     let $nextCard = this.$current.nextAll('.h5p-dialogcards-cardwrap').eq(0);
     
-    if (this.playModeUser === 'normalMode') {
+    if (this.playModeUser === 'normal') {
       //this.$retry.removeClass('h5p-dialogcards-disabled');
     }
     return;
@@ -2360,7 +2355,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
 
     // In those 2 modes, consider activity answered when first card is clicked.
     if (
-      this.playModeUser === 'normalMode' ||
+      this.playModeUser === 'normal' ||
       this.playModeUser === 'browseSideBySide'
     ) {
       this.triggerAnswered();
@@ -2970,7 +2965,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
     }
     if (
       this.taskFinished &&
-      this.playModeUser !== 'normalMode' &&
+      this.playModeUser !== 'normal' &&
       this.playModeUser !== 'browseSideBySide'
     ) {
       this.finishedScreen();
@@ -3206,7 +3201,8 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
           .css('height', 'initial')
           .outerHeight();
         maxHeight = initialHeight > maxHeight ? initialHeight : maxHeight;
-        $(this).find('.h5p-dialogcards-cardholder').css('height', 'inherit');
+        // Fixed wrong css height value in old style
+        $(this).find('.h5p-dialogcards-cardholder').css('height', '');
       }
     });
 
@@ -3609,7 +3605,7 @@ this.determineCardSizes = () => {
 
     this.actualScore = actualScore;
     if (
-      this.playModeUser === 'normalMode' ||
+      this.playModeUser === 'normal' ||
       this.playModeUser === 'browseSideBySide'
     ) {
       return;
@@ -4116,7 +4112,7 @@ this.determineCardSizes = () => {
     this.getCurrentState();
 
     if (this.playModeNames.length === 0) {
-      this.playMode = 'normalMode';
+      this.playMode = 'normal';
       this.playModeUser = this.playMode;
     }
     else if (this.playModeNames.length === 1) {
@@ -4393,7 +4389,7 @@ this.determineCardSizes = () => {
   
   this.getMaxScore = () => {
     if (
-      this.playModeUser === 'normalMode' ||
+      this.playModeUser === 'normal' ||
       this.playModeUser === 'browseSideBySide'
     ) {
       return 0;
@@ -4413,7 +4409,7 @@ this.determineCardSizes = () => {
       return 0;
     }
     if (
-      this.params.behaviour.playMode === 'normalMode' ||
+      this.params.behaviour.playMode === 'normal' ||
       this.playMode === 'browseSideBySide'
     ) {
       return 0;
@@ -4625,7 +4621,7 @@ this.determineCardSizes = () => {
   this.addResponseToXAPI = (xAPIEvent) => {
     if (
       this.playModeUser === 'browseSideBySide' ||
-      this.playModeUser === 'normalMode'
+      this.playModeUser === 'normal'
     ) {
       return;
     }
