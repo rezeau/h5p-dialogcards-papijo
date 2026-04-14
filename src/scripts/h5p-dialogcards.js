@@ -137,8 +137,6 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
           cardsSideChoice: 'user',
           penalty: 0,
           passPercentage: 100,
-          backgroundColor: undefined,
-          backgroundColorBack: undefined,
           noDupeFrontPicToBack: false,
           filterByCategories: 'user',
         },
@@ -181,8 +179,9 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
       { value: 'browseSideBySide', label: this.params.browseSideBySide },
       { value: 'matchMode', label: this.params.matchMode },
       { value: 'matchRepetition', label: this.params.matchRepetition },
-      { value: 'thisCorrectionMode', label: this.params.thisCorrectionMode },
+      { value: 'selfCorrectionMode', label: this.params.selfCorrectionMode },
     ];
+
     if (this.playMode === 'user') {
       this.allowedPlayModes = this.params.behaviour.allowedPlayModes;
       this.playModeNames = this.playModeNames.filter(
@@ -302,18 +301,6 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
     this.cardsLeftInStack = this.nbCardsSelected;
     this.nbCardsInCurrentRound = this.nbCards;
     this.enableCardsNumber = this.enableCardsNumber;
-    this.backgroundColor =
-      this.params.behaviour.backgroundColor === 'rgba(0, 0, 0, 0)'
-        ? undefined
-        : this.params.behaviour.backgroundColor;
-    this.backgroundColorBack =
-      this.params.behaviour.backgroundColorBack === 'rgba(0, 0, 0, 0)'
-        ? undefined
-        : this.params.behaviour.backgroundColorBack;
-    // No backgroundColor given for back side, use front side background color
-    if (this.backgroundColorBack === undefined) {
-      this.backgroundColorBack = this.backgroundColor;
-    }
     // Var cardOrder stores order of cards to allow resuming of card set
     // AND removed cards if match or self-correction Mode.
     // Var progress stores current card index.
@@ -414,7 +401,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
     
     // Your code is HTML-heavy, so the multiline template literal version is the cleanest and easiest to maintain.
     // Use backticks (`) and ${}
-    
+    /*
     this.$inner = $container.addClass('h5p-dialogcards').append(
       $(`
         <div class="h5p-dialogcards-title">
@@ -426,11 +413,23 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
         </div>
         `),
     );
-    
+    */
+    const title = $(`<div>${this.params.title}</div>`).text().trim();
+        this.$header = $(`<div class="h5p-dialogcards-title-container"><div class="h5p-dialogcards-title-wrapper">${title ? `<div class="h5p-dialogcards-title"><div class="h5p-dialogcards-title-inner h5p-theme-question-description">${this.params.title}</div></div>` : ''}<div class="h5p-dialogcards-description">${this.params.description}</div></div></div>`);
     this.$inner = $container.addClass('h5p-dialogcards h5p-theme');
       if (this.params.behaviour.scaleTextNotCard) {
         $container.addClass('h5p-text-scaling');
       }
+      this.$progress = $('<div>', {
+            id: `h5p-dialogcards-progress-${this.idCounter}`,
+            class: 'h5p-dialogcards-progress h5p-theme-progress',
+            'aria-live': 'assertive',
+          }).appendTo(this.$header);
+
+      this.$header.appendTo(this.$inner);
+      this.$progress.text(this.params.progressText
+          .replace('@card', '2')
+          .replace('@total', '5'));
 
     if (!this.params.dialogs.length || this.report) {
       return;
@@ -609,7 +608,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
     if (this.contentData.previousState && this.filterList !== undefined) {
       ///this.applyFilter(this.filterList, this.filterOperator, false);
     }
-console.log('this.currentDialogs = ' + this.currentDialogs);
+
     this.initCards(this.currentDialogs).appendTo(this.$inner);
     this.$cardSideAnnouncer = $('<div>', {
       html: this.params.cardFrontLabel,
@@ -643,7 +642,7 @@ console.log('this.currentDialogs = ' + this.currentDialogs);
 
       this.$sideBySide.appendTo(this.$inner);
     }
-    else {console.log('else go to footer2');
+    else {
       /// This footer is currently valid for the normal mode only.
       this.nav = this.createFooter2();
       this.$inner.append(this.nav);
@@ -693,7 +692,7 @@ console.log('this.currentDialogs = ' + this.currentDialogs);
    * @returns {HTMLElement} Order element
    */
   this.createOrder = () => {
-
+    
     let randomizeQuestion = this.params.randomizeCardsQuestion;
     if (this.matchIt) {
       randomizeQuestion = this.params.randomizeRightCardsQuestion;
@@ -711,8 +710,8 @@ console.log('this.currentDialogs = ' + this.currentDialogs);
       class: 'h5p-dialogcards-order-button',
       title: this.params.no,
       html: this.params.no,
-    })
-      .click(function () {
+    })      
+      .click(() => {
         this.cardsOrderMode = 'normal';
         this.randomizeOrder('normal');
       })
@@ -723,7 +722,7 @@ console.log('this.currentDialogs = ' + this.currentDialogs);
       title: this.params.yes,
       html: this.params.yes,
     })
-      .click(function () {
+      .click(() => {
         this.cardsOrderMode = 'random';
         this.randomizeOrder('random');
       })
@@ -766,7 +765,7 @@ console.log('this.currentDialogs = ' + this.currentDialogs);
       title: this.params.no,
       html: this.params.no,
     })
-      .click(function () {
+      .click(() => {
         // Do nothing, just continue with current card side.
         this.attachContinue();
       })
@@ -777,7 +776,7 @@ console.log('this.currentDialogs = ' + this.currentDialogs);
       title: this.params.yes,
       html: this.params.yes,
     })
-      .click(function () {
+      .click(() => {
         if (this.cardsSideMode === 'backFirst') {
           this.cardsSideMode = 'frontFirst';
           this.isReversed = false;
@@ -824,7 +823,7 @@ console.log('this.currentDialogs = ' + this.currentDialogs);
         html: i,
         id: `dc-number-${i}`,
       })
-        .click(function () {
+        .click(() => {
           this.nbCards = this.title;
           this.nbCards = this.title;
           this.nbCardsSelected = this.title;
@@ -845,7 +844,7 @@ console.log('this.currentDialogs = ' + this.currentDialogs);
       title: numCards,
       html: `${this.params.allCards} (${numCards})`,
     })
-      .click(function () {
+      .click(() => {
         this.nbCards = numCards;
         if (this.cardsSideChoice === 'user') {
           $('.h5p-dialogcards-number', this.$inner).remove();
@@ -912,7 +911,7 @@ console.log('this.currentDialogs = ' + this.currentDialogs);
           filterList: filterList,
           filterOperator: filterOperator,
         })
-          .click(function () {
+          .click(() => {
             $('.h5p-dialogcards-categories', this.$inner).remove();
             if (this.id < i - 1) {
               this.filterList = this.catFilters[this.id].filterList;
@@ -955,6 +954,7 @@ console.log('this.currentDialogs = ' + this.currentDialogs);
    */
 
   this.createPlayMode = () => {
+    
     const self = this;
     this.isReversed = false;
     const $play = $('<div>', {
@@ -965,7 +965,7 @@ console.log('this.currentDialogs = ' + this.currentDialogs);
     const $optionButtons = $('<div>', {
       class: 'h5p-dialogcards-optionsbuttons',
     }).appendTo($play);
-
+    
     for (let i = 0; i < this.playModeNames.length; i++) {
       let $class = 'h5p-joubelui-button';
       this.$button = JoubelUI.createButton({
@@ -975,9 +975,9 @@ console.log('this.currentDialogs = ' + this.currentDialogs);
         id: i,
         selectedMode: this.playModeNames[i].value,
       })
-        .click(function () {
+        .click(() => {
           $('.h5p-dialogcards-categories', this.$inner).remove();
-          this.playModeUser = this.playModeNames[this.id].value;
+          this.playModeUser = this.playModeNames[i].value;
           if (
             this.filterByCategories === 'userFilter' &&
             this.currentFilter === undefined
@@ -1041,7 +1041,7 @@ console.log('this.currentDialogs = ' + this.currentDialogs);
         class: 'h5p-dialogcards-footer-button h5p-dialogcards-next truncated',
         title: this.params.next,
       })
-        .click(function () {
+        .click(() => {
           preventDoubleClick($(this), function () {
             this.nextCard();
           });
@@ -1053,7 +1053,7 @@ console.log('this.currentDialogs = ' + this.currentDialogs);
         class: 'h5p-dialogcards-footer-button h5p-dialogcards-prev truncated',
         title: this.params.prev,
       })
-        .click(function () {
+        .click(() => {
           preventDoubleClick($(this), function () {
             this.prevCard();
           });
@@ -1082,7 +1082,7 @@ console.log('this.currentDialogs = ' + this.currentDialogs);
       title: titleRetry,
       html: htmlRetry,
     })
-      .click(function () {
+      .click(() => {
         if (this.repetition) {
           this.retryRepetition();
         }
@@ -1093,10 +1093,17 @@ console.log('this.currentDialogs = ' + this.currentDialogs);
       .appendTo($footer);
 
     if (!this.enableGotIt) {
+      /*
       this.$progress = $('<div>', {
         class: 'h5p-dialogcards-progress',
         'aria-live': 'assertive',
       }).appendTo($footer);
+      */
+      this.$progress = $('<div>', {
+            id: `h5p-dialogcards-progress-${this.idCounter}`,
+            class: 'h5p-dialogcards-progress h5p-theme-progress',
+            'aria-live': 'assertive',
+          }).appendTo(this.$header);
     }
     else {
       this.$round = $('<div>', {
@@ -1124,7 +1131,7 @@ console.log('this.currentDialogs = ' + this.currentDialogs);
 
   this.createFooter2 = () => {
       let nav;
-      console.log('createFooter2');
+      
       let nbCards = this.currentDialogs.length;
       if (!this.enableGotIt) {
         nav = H5P.Components.Navigation({
@@ -1404,7 +1411,7 @@ console.log('this.currentDialogs = ' + this.currentDialogs);
         }
       }
       cards = randomCards;
-      console.log('cards = ' + cards);
+      
       this.cardsLeftInStack = this.nbCardsSelected;
       this.cardsLeft = this.nbCardsSelected;
     }
@@ -1467,6 +1474,12 @@ console.log('this.currentDialogs = ' + this.currentDialogs);
       // otherwise set it to zero.
       // Idem for current left card index
       let $cardWrapper = this.createCard(cards[i], i, setCardSizeCallback);
+      
+      let mode;
+      if (this.playModeUser === 'normalMode') {
+        mode = 'normal';
+      }
+      $cardWrapper.addClass(`h5p-dialogcards-${this.playModeUser}`);
       if (
         ((this.progress === undefined || this.progress === -1) && i === 0) ||
         (this.progress !== undefined && i === this.progress)
@@ -1627,11 +1640,7 @@ console.log('this.currentDialogs = ' + this.currentDialogs);
       class: 'h5p-dialogcards-card-content',
     });
     let isLeft = false;
-    $cardContent.css('background-color', this.backgroundColor);
-    if (this.matchIt && this.cardsSideMode === 'frontFirst') {
-      $cardContent.css('background-color', this.backgroundColorBack);
-    }
-
+    
     if (!this.audioOnly &&
       (card.imageMedia.image !== undefined ||
       (card.imageMedia.image2 !== undefined &&
@@ -1767,13 +1776,7 @@ console.log('this.currentDialogs = ' + this.currentDialogs);
     });
 
     $cardContent.addClass('h5p-dialogcards-matchLeft');
-    if (this.cardsSideMode === 'frontFirst') {
-      $cardContent.css('background-color', this.backgroundColor);
-    }
-    else {
-      $cardContent.css('background-color', this.backgroundColorBack);
-    }
-
+    
     // Upon restore content state maybe necessary to hide previously incorrectly matched cards
     // Do not create image div is not necessary
     if (
@@ -1944,7 +1947,7 @@ console.log('this.currentDialogs = ' + this.currentDialogs);
         label: this.params.matchButtonLabel,
         tabindex: 1,
         icon: 'check',
-        onClick: function () {
+        onClick: (event) => {
           const $cardwrap = $(this).parents('.h5p-dialogcards-cardwrap');
           if (this.repetition) {
             this.matchCardsRepetition($cardwrap);
@@ -1985,7 +1988,7 @@ console.log('this.currentDialogs = ' + this.currentDialogs);
         disabled: true,
         tabindex: attributeTabindex,
         styleType: 'secondary',
-        onClick: function () {
+        onClick: (event) => {
           this.gotItIncorrect();
         }
       })).appendTo($cardFooter);
@@ -1996,7 +1999,7 @@ console.log('this.currentDialogs = ' + this.currentDialogs);
         disabled: true,
         tabindex: attributeTabindex,
         styleType: 'secondary',
-        onClick: function () {
+        onClick: (event) => {
           const $cardwrap = $(this).parents('.h5p-dialogcards-cardwrap');
           this.gotItCorrect($cardwrap);
         }
@@ -2204,13 +2207,13 @@ console.log('this.currentDialogs = ' + this.currentDialogs);
    */
   
   this.updateNavigation = () => {
-    console.log('updateNavigation this.playModeUser = ' + this.playModeUser);
+    
     
     let $prevCard;
     let $matchButton;
     let $card = this.$current.find('.h5p-dialogcards-card-content');
     let $nextCard = this.$current.nextAll('.h5p-dialogcards-cardwrap').eq(0);
-    console.log('$nextCard.length = ' + $nextCard.length);
+    
     if (this.playModeUser === 'normalMode') {
       //this.$retry.removeClass('h5p-dialogcards-disabled');
     }
@@ -2686,7 +2689,7 @@ console.log('this.currentDialogs = ' + this.currentDialogs);
    */
   
   this.turnCard = ($card) => {
-    console.log('turnCard');
+    
     
     let $cg;
     let $c = this.$current.find('.h5p-dialogcards-card-content');
@@ -2711,23 +2714,17 @@ console.log('this.currentDialogs = ' + this.currentDialogs);
       turned ? this.params.cardFrontLabel : this.params.cardBackLabel,
     );
 
-    if (turned) {
-      $c.css('background-color', this.backgroundColor);
-    }
-    else {
-      $c.css('background-color', this.backgroundColorBack);
-    }
     // Update HTML class for card
     $c.toggleClass('h5p-dialogcards-turned', !turned);
-console.log('this.currentDialogs = ' + this.currentDialogs);
+
       setTimeout(() => {
       $ch.removeClass('h5p-dialogcards-collapse');
       if (!this.noText) {
         // Manage front & back texts.
         let $cardText = $card.find('.h5p-dialogcards-card-text');
         this.cardsSideMode = 'frontFirst';
-        console.log('this.cardsSideMode = ' + this.cardsSideMode);
-        console.log('this.currentDialogs = ' + this.currentDialogs);
+        
+        
         if (this.cardsSideMode === 'frontFirst') {
           if (this.currentDialogs[$card.index()].answer) {
             this.changeText(
@@ -2857,7 +2854,7 @@ console.log('this.currentDialogs = ' + this.currentDialogs);
     }, DialogcardsPapiJo.NB200);
 
     let $nextCard = this.$current.next('.h5p-dialogcards-cardwrap');
-    console.log('$nextCard.length = ' + $nextCard.length);
+    
     if (
       this.params.behaviour.enableRetry &&
       $nextCard.length === 0 &&
@@ -3759,7 +3756,7 @@ this.determineCardSizes = () => {
         title: message,
         html: message,
       })
-        .click(function () {
+        .click(() => {
           this.resetTask();
         })
         .appendTo($feedbackFooter);

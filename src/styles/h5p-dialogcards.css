@@ -38,9 +38,7 @@
   padding: 0 0 0.375em 0;
 }
 
-.h5p-dialogcards .h5p-dialogcards-title-inner {
-  font-size: 1.125em;
-}
+/*
 .h5p-dialogcards .h5p-dialogcards-description {
   margin: 0 1em 1em;
 }
@@ -48,6 +46,12 @@
 .h5p-no-frame .h5p-dialogcards .h5p-dialogcards-description,
 .h5p-transparent .h5p-dialogcards .h5p-dialogcards-description {
   margin: 0 0 1em;
+}
+*/
+
+.h5p-dialogcards .h5p-dialogcards-description > p {
+  margin: 0;
+  color: var(--h5p-theme-text-secondary);
 }
 
 .h5p-dialogcards-match-footer-left {
@@ -111,16 +115,9 @@
 }
 
 /* The background color is now done in the edit interface */
+/* remove this in new style */
 .h5p-dialogcards .h5p-dialogcards-card-content {
-  /*background: #FFF;*/
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
-  padding: 1em;
-  min-height: 12em;
-  height: 100%;
-  height: -moz-available; /* WebKit-based browsers will ignore this. */
-  height: -webkit-fill-available; /* Mozilla-based browsers will ignore this. */
-  height: fill-available;
-  position: relative;
+  padding: var(--h5p-theme-spacing-l) 0 0;
 }
 
 .h5p-dialogcards-summary-screen,
@@ -148,12 +145,14 @@
   display: block;
   */
   container-type: inline-size;
-  margin-top: var(--h5p-theme-spacing-l);
+  ///margin-top: var(--h5p-theme-spacing-l);
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+}
+.h5p-dialogcards .h5p-dialogcards-cardwrap.h5p-dialogcards-normalMode .h5p-dialogcards-card-footer {
   justify-content: center;
 }
-
 .h5p-dialogcards .h5p-dialogcards-card-footer.audio {
   position: absolute;
   left: 50%;
@@ -315,9 +314,10 @@
   height: 4.5em;
   line-height: 1.5;
   width: 100%;
-  width: -moz-available; /* WebKit-based browsers will ignore this. */
-  width: -webkit-fill-available; /* Mozilla-based browsers will ignore this. */
-  width: fill-available;
+  color: var(--h5p-theme-text-primary);
+  //width: -moz-available; /* WebKit-based browsers will ignore this. */
+  //width: -webkit-fill-available; /* Mozilla-based browsers will ignore this. */
+  //width: fill-available;
   /*needed for displaying correctly centered short text etc.*/
 }
 
@@ -350,8 +350,14 @@
 }
 
 .h5p-dialogcards .h5p-dialogcards-progress {
-  color: #999;
+  ///color: #999;
   text-align: center;
+  
+  height: var(--h5p-theme-spacing-m);
+  line-height: var(--h5p-theme-spacing-m);
+  text-align: center;
+  margin: 0;
+  margin-left: auto;
 }
 
 .h5p-dialogcards .h5p-joubelui-button.h5p-dialogcards-turn {
@@ -962,4 +968,37 @@
 }
 .h5p-dialogcards .h5p-dialogcards-answer-button:hover {
   background-color: unset;
+}
+
+
+.h5p-dialogcards .h5p-dialogcards-title-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: var(--h5p-theme-spacing-m);
+  box-shadow: 0px 8px 20px 0px rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid var(--h5p-theme-stroke-1);
+  background-color: var(--h5p-theme-ui-base);
+  z-index: 1;
+  flex-direction: row;
+  flex: 2 1;
+  column-gap: var(--h5p-theme-spacing-m);
+}
+
+.h5p-dialogcards .h5p-dialogcards-title-wrapper {
+  flex: 1;
+}
+
+.h5p-dialogcards-title-inner .h5p-theme-question-description{
+  padding-left: var(--h5p-theme-spacing-m);
+}
+@media only screen and (max-width: 600px) {
+  .h5p-dialogcards .h5p-dialogcards-title-container {
+    flex-direction: column;
+  }
+  .h5p-dialogcards .h5p-dialogcards-progress{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: var(--h5p-theme-spacing-m);
+  }
 }
