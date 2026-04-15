@@ -452,18 +452,19 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
    */
   
   this.attachContinue = () => {
-        this.$progress = $('<div>', {
-          id: `h5p-dialogcards-progress-${this.idCounter}`,
-          class: 'h5p-dialogcards-progress h5p-theme-progress',
-          'aria-live': 'assertive',
-        }).appendTo(this.$header);
-    // Init progress text when starting a new game.
-    
-    this.$progress.text(this.params.progressText
-      .replace('@card', '1')
-      .replace('@total', this.nbCards.toString()),
-    );
-    
+    if (this.playMode !== 'selfCorrectionMode') {
+      this.$progress = $('<div>', {
+            id: `h5p-dialogcards-progress-${this.idCounter}`,
+            class: 'h5p-dialogcards-progress h5p-theme-progress',
+            'aria-live': 'assertive',
+          }).appendTo(this.$header);
+      // Init progress text when starting a new game.
+      
+      this.$progress.text(this.params.progressText
+        .replace('@card', '1')
+        .replace('@total', this.nbCards.toString()),
+      );
+    }
 
     let text = '';
     if (this.playMode === 'user') {
@@ -517,8 +518,6 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
     }
     if (this.playModeUser === 'selfCorrectionMode') {
       this.enableGotIt = true;
-      this.enableGotIt = true;
-      this.hideTurnButton = this.params.behaviour.hideTurnButton;
       this.hideTurnButton = this.params.behaviour.hideTurnButton;
     }
     // Section to show the Display cards options if different from "normal".
@@ -588,6 +587,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
     }
 
   this.initCards(this.currentDialogs).appendTo(this.$inner);
+    console.log('this.playMode = ' + this.playMode);
     this.$cardSideAnnouncer = $('<div>', {
       html: this.params.cardFrontLabel,
       class: 'h5p-dialogcards-card-side-announcer',
@@ -622,11 +622,25 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
     }
     else {
       /// This footer is currently valid for the normal mode only.
-      this.nav = this.createFooter2();
+      console.log('this.playMode = ' + this.playMode);
+      if (this.playMode === 'selfCorrectionMode') {
+        //this.nav = this.createFooter();
+        this.nav = H5P.Components.Navigation();
+        this.$round = $('<div>', {
+          class: 'h5p-dialogcards-round',
+        }).appendTo(this.nav);
+        this.$progress = $('<div>', {
+          class: 'h5p-dialogcards-round',
+          'aria-live': 'assertive',
+        }).appendTo(this.nav);
+      
+      } else {
+        this.nav = this.createFooter2();
+      }
       this.$inner.append(this.nav);
     }
     //// not needed here?
-    ////this.updateNavigation();
+    this.updateNavigation();
     // Creating a Date Object used by XAPI
     this.startTime = new Date().getTime();
     this.triggerXAPI('attempted');
@@ -993,9 +1007,9 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
    * @returns {HTMLElement} Footer element
    */
   this.createFooter = () => {
-    
+    console.log('createFooter');
     let $footer = $('<nav>', {
-      class: 'h5p-dialogcards-footer',
+      class: 'h5p-navigation h5p-navigation--3-split ',
       role: 'navigation',
     });
     if (this.matchIt) {
@@ -1072,19 +1086,21 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
       .appendTo($footer);
 
     if (!this.enableGotIt) {
-      /*
+      
       this.$progress = $('<div>', {
         class: 'h5p-dialogcards-progress',
         'aria-live': 'assertive',
       }).appendTo($footer);
-      */
+      /*
       this.$progress = $('<div>', {
             id: `h5p-dialogcards-progress-${this.idCounter}`,
             class: 'h5p-dialogcards-progress h5p-theme-progress',
             'aria-live': 'assertive',
           }).appendTo(this.$header);
+          */
     }
     else {
+      console.log('***********');
       this.$round = $('<div>', {
         class: 'h5p-dialogcards-round',
       }).appendTo($footer);
@@ -1105,12 +1121,12 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
         'aria-live': 'assertive',
       }).appendTo($footer);
     }
+    console.log('before return footer');
     return $footer;
   };
 
   this.createFooter2 = () => {
       let nav;
-      console.log('this.currentCardId = ' + this.currentCardId);
       let nbCards = this.currentDialogs.length;
       if (!this.enableGotIt) {
         nav = H5P.Components.Navigation({
@@ -1138,7 +1154,6 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
           icon: 'retry',
         })).click(() => {
           this.nav.setCurrentIndex(0);
-          console.log('trigger resetTask');
           this.trigger('resetTask');
         }).appendTo(nav);
         
@@ -1340,7 +1355,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
     else {
       this.nbCardsSelected = this.nbCards;
     }
-    console.log('this.nbCardsSelected = ' + this.nbCardsSelected);
+    
     // Reversed cards array to be used in these options.
     // Check if switching sides is needed. Simplified and fixed 15:29 09/02/2026
     if (
@@ -1426,7 +1441,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
     // Save data to content state for resuming later on.
     // Push the new 'cards array' into this.currentDialogs.
     this.currentDialogs = cards;
-console.log('******* cards ************' + JSON.stringify(this.currentDialogs, null, 4));
+
     this.$cardwrapperSet = $('<div>', {
       class: 'h5p-dialogcards-cardwrap-set',
     });
@@ -1857,7 +1872,7 @@ console.log('******* cards ************' + JSON.stringify(this.currentDialogs, n
    */
   
     this.createCardFooter = (card, $cardContent) => {
-    
+    console.log('createCardFooter');
     let footerClass;
     if (!this.enableGotIt) {
       footerClass = 'h5p-dialogcards-card-footer';
@@ -1874,11 +1889,13 @@ console.log('******* cards ************' + JSON.stringify(this.currentDialogs, n
       }
     }
     else {
+      footerClass = 'h5p-dialogcards-card-footer';
       if (!this.frontTextBackImage) {
-        footerClass = 'h5p-dialogcards-card-footer-enablegotit';
+        //// todo
+        ///footerClass = 'h5p-dialogcards-card-footer-enablegotit';
       }
       else {
-        footerClass = 'h5p-dialogcards-card-footer-enablegotit front-text-back-image';
+        ///footerClass = 'h5p-dialogcards-card-footer-enablegotit front-text-back-image';
       }
     }
     let $cardFooter = $('<div>', {
@@ -1891,8 +1908,7 @@ console.log('******* cards ************' + JSON.stringify(this.currentDialogs, n
 
     if (this.enableGotIt || this.matchIt) {
       classesRepetition =
-        ///'h5p-dialogcards-quick-progression h5p-dialogcards-disabled';
-        'h5p-dialogcards-disabled';
+        'h5p-dialogcards-quick-progression h5p-dialogcards-disabled';
       attributeTabindex = '0';
     }
     else {
@@ -1935,8 +1951,8 @@ console.log('******* cards ************' + JSON.stringify(this.currentDialogs, n
       })).appendTo($cardFooter);
 
       let classesMatch =
-        'h5p-dialogcards-answer-button h5p-dialogcards-quick-progression' +
-        ' h5p-dialogcards-match h5p-dialogcards-disabled';
+        'h5p-dialogcards-answer-button h5p-dialogcards-quick-progression' 
+        + ' h5p-dialogcards-match h5p-dialogcards-disabled';
       // JR dummy button for correct match.
       this.$buttonCorrectMatch = H5P.JoubelUI.createButton({
         class: classesMatch,
@@ -1956,9 +1972,9 @@ console.log('******* cards ************' + JSON.stringify(this.currentDialogs, n
         .appendTo($cardFooter);
     }
 
-    if (this.enableGotIt) {      
+    if (this.enableGotIt) {
+      classesRepetition = ''; 
       this.$buttonIncorrect = $(H5P.Components.Button({
-        ///class: ['h5p-dialogcards-answer-button', 'incorrect', classesRepetition].join(' '),
         classes: `h5p-dialogcards-answer-button incorrect ${classesRepetition}`,
         label: 'this.params.incorrectAnswer',
         disabled: true,
@@ -2183,25 +2199,22 @@ console.log('******* cards ************' + JSON.stringify(this.currentDialogs, n
    */
   
   this.updateNavigation = () => {
+    
     // Moved this.$progress.text to here for correct progress updating.
     /*
     need to check value of this.$current.index()
     */
-    this.$progress.text(this.params.progressText
-        .replace('@card', this.$current.index() + 1)
-        .replace('@total', this.nbCardsSelected.toString()),
-      );
-      
+    if (this.playModeUser === 'normal') {
+      this.$progress.text(this.params.progressText
+          .replace('@card', this.$current.index() + 1)
+          .replace('@total', this.nbCardsSelected.toString()),
+        );
+    }
     let $prevCard;
     let $matchButton;
     let $card = this.$current.find('.h5p-dialogcards-card-content');
     let $nextCard = this.$current.nextAll('.h5p-dialogcards-cardwrap').eq(0);
     
-    if (this.playModeUser === 'normal') {
-      //this.$retry.removeClass('h5p-dialogcards-disabled');
-    }
-    return;
-    ///////////////////////////////////////
     
     if (this.sideBySide) {
       let $cardFooter = $card.find('.h5p-dialogcards-card-footer');
@@ -2283,6 +2296,7 @@ console.log('******* cards ************' + JSON.stringify(this.currentDialogs, n
           this.currentDialogs.length - selectionIndex - this.endOfStack,
         ),
       );
+      console.log('this.currentRound = ' + this.currentRound);
       this.$round.text(this.params.round.replace('@round', this.currentRound));
     }
     else if (this.matchIt && !this.sideBySide) {
@@ -2526,7 +2540,8 @@ console.log('******* cards ************' + JSON.stringify(this.currentDialogs, n
 
       this.$current
         .find('.h5p-dialogcards-answer-button')
-        .addClass('h5p-dialogcards-disabled');
+        /// todo do not disable for gotit
+        ///.addClass('h5p-dialogcards-disabled');
 
       // Add next card if not loaded yet.
       let $loadCard = this.$current.next('.h5p-dialogcards-cardwrap');
@@ -2648,11 +2663,7 @@ console.log('******* cards ************' + JSON.stringify(this.currentDialogs, n
    * When navigating forward or backward, reset card to front view if has previously been turned
    * so that user can see the Question side, not the Answer side of the card.
    */
-
-  
   this.turnCardToFront = () => {
-    //return;
-    
     let $c = this.$current.find('.h5p-dialogcards-card-content');
     let turned = $c.hasClass('h5p-dialogcards-turned');
     if (turned) {
@@ -2668,10 +2679,7 @@ console.log('******* cards ************' + JSON.stringify(this.currentDialogs, n
    * Show the opposite site of the card.
    * @param {object} [$card] Current card
    */
-  
   this.turnCard = ($card) => {
-    
-    
     let $cg;
     let $c = this.$current.find('.h5p-dialogcards-card-content');
     let $ci = $card.find('.h5p-dialogcards-image');
@@ -2804,14 +2812,10 @@ console.log('******* cards ************' + JSON.stringify(this.currentDialogs, n
           $buttonTurn.addClass('h5p-dialogcards-hide');
         }
         const $answerButtons = $card.find('.h5p-dialogcards-answer-button');
-        if (!turned) {
           $answerButtons
             .addClass('h5p-dialogcards-quick-progression')
+            .removeClass('h5p-dialogcards-disabled')
             .attr('tabindex', 0);
-        }
-        else {
-          $answerButtons.removeClass('h5p-dialogcards-quick-progression');
-        }
       }
 
       // Add backside tip
@@ -4176,9 +4180,9 @@ this.determineCardSizes = () => {
    * Used with repetition modes: gotIt & Match with repetition if task not completed.
    */
 
-  
   this.resetButtons = (type) => {
-    
+    /// why?
+    console.log('this.resetButtons type = ' + type);
     let $card = $(this);
     $card = this.$current;
     $card.removeClass('h5p-dialogcards-match-right');
@@ -4188,13 +4192,14 @@ this.determineCardSizes = () => {
     let $gotIt = this.enableGotIt;
     $card
       .find('.h5p-dialogcards-answer-button')
-      .addClass('h5p-dialogcards-disabled');
+      /// todo do not disable if gotit
+      ///.addClass('h5p-dialogcards-disabled');
     if ($gotIt) {
       $card
         .find('.h5p-dialogcards-card-text-area')
         .removeClass('h5p-dialogcards-intermediary-summary-screen');
     }
-    if (type === 'answer buttons') {
+    if (type === 'answer buttons') {return;////
       // Enable answer-buttons-off ; Unhide turn button & card text and Disable the Retry button.
       $card
         .find('.h5p-dialogcards-turn')
