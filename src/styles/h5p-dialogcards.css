@@ -482,3 +482,35 @@
   font-size: 12px;
   transform: translate(-50%, -70%);
 }
+/* papi Jo rules*/
+.h5p-dialogcards-options {
+  margin-bottom: 6px;
+  font-size: var(--h5p-theme-font-size-m);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 8px;
+  background-color: var(--h5p-theme-background);
+  transition: visibility 0s 0.3s, left 300ms;
+}
+
+.h5p-dialogcards-option {
+  padding: 4px 6px;
+  color: var(--h5p-theme-contrast-cta-white);
+  background-color: var(--h5p-theme-main-cta-base);
+  border-radius: 999px; /* pill shape */
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  white-space: nowrap; /* keep text on one line */
+}
+
+.h5p-dialogcards .h5p-joubelui-button {
+  background:green!important;
+  background-color:red!important;
+}
+
+.h5p-dialogcards .h5p-dialogcards-buttons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}

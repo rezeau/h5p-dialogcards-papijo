@@ -5,7 +5,10 @@
 
 const $ = H5P.jQuery;
 const { JoubelUI } = H5P;
-
+// Use the modern buttons from Components.
+const createButton = (options) => 
+  $(H5P.Components.Button(options));
+      
 class DialogcardsPapiJo extends H5P.EventDispatcher {
   /**
    * Initialize module.
@@ -282,6 +285,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
 
     // Copy parameters for further use if save content state. Use Clone for perfect copy.
     this.currentDialogs = structuredClone(this.params.dialogs); // ✅ best modern solution
+    
 
     this.noFilterMessage = '';
     this.nbCards = this.currentDialogs.length;
@@ -391,13 +395,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
       if (this.params.behaviour.scaleTextNotCard) {
         $container.addClass('h5p-text-scaling');
       }
-      this.$progress = $('<div>', {
-            id: `h5p-dialogcards-progress-${this.idCounter}`,
-            class: 'h5p-dialogcards-progress h5p-theme-progress',
-            'aria-live': 'assertive',
-          }).appendTo(this.$header);
-
-      this.$header.appendTo(this.$inner);
+    this.$header.appendTo(this.$inner);
 
     if (!this.params.dialogs.length || this.report) {
       return;
@@ -454,7 +452,19 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
    */
   
   this.attachContinue = () => {
+        this.$progress = $('<div>', {
+          id: `h5p-dialogcards-progress-${this.idCounter}`,
+          class: 'h5p-dialogcards-progress h5p-theme-progress',
+          'aria-live': 'assertive',
+        }).appendTo(this.$header);
+    // Init progress text when starting a new game.
     
+    this.$progress.text(this.params.progressText
+      .replace('@card', '1')
+      .replace('@total', this.nbCards.toString()),
+    );
+    
+
     let text = '';
     if (this.playMode === 'user') {
       const value = this.playModeUser;
@@ -616,7 +626,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
       this.$inner.append(this.nav);
     }
     //// not needed here?
-    this.updateNavigation();
+    ////this.updateNavigation();
     // Creating a Date Object used by XAPI
     this.startTime = new Date().getTime();
     this.triggerXAPI('attempted');
@@ -671,30 +681,30 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
     });
 
     let $optionButtons = $('<div>', {
-      class: 'h5p-dialogcards-optionsbuttons',
+      class: 'h5p-dialogcards-buttons',
     }).appendTo($order);
 
-    this.$normalOrder = JoubelUI.createButton({
+    this.$normalOrder = createButton({
       class: 'h5p-dialogcards-order-button',
+      label: this.params.no,
       title: this.params.no,
-      html: this.params.no,
-    })      
-      .click(() => {
+      icon: 'close',
+      onClick: () => {
         this.cardsOrderMode = 'normal';
         this.randomizeOrder('normal');
-      })
-      .appendTo($optionButtons);
-
-    this.$randomizeOrder = JoubelUI.createButton({
+      }
+    }).appendTo($optionButtons);
+    
+    this.$randomizeOrder = createButton({
       class: 'h5p-dialogcards-order-button',
+      label: this.params.yes,
       title: this.params.yes,
-      html: this.params.yes,
-    })
-      .click(() => {
+      icon: 'check',
+      onClick: () => {
         this.cardsOrderMode = 'random';
         this.randomizeOrder('random');
-      })
-      .appendTo($optionButtons);
+      }
+    }).appendTo($optionButtons);
 
     return $order;
   };
@@ -723,28 +733,28 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
       class: 'h5p-dialogcards-side h5p-dialogcards-options show',
       html: `${this.params.currentSideNotice}&nbsp;${currentSide}`,
     });
-    let $optionButtons = $('<div>', {
-      class: 'h5p-dialogcards-optionsbuttons',
-      html: this.params.reverseSides.replace('@side', reverseSide),
-    }).appendTo($side);
 
-    this.$No = JoubelUI.createButton({
+    let $optionButtons = $('<div>', {
+      class: 'h5p-dialogcards-buttons',
+    }).appendTo($side);
+    
+    this.$No = createButton({
       class: 'h5p-dialogcards-side-button-no',
+      label: this.params.no,
       title: this.params.no,
-      html: this.params.no,
-    })
-      .click(() => {
+      icon: 'close',
+      onClick: () => {
         // Do nothing, just continue with current card side.
         this.attachContinue();
-      })
-      .appendTo($optionButtons);
+      }
+    }).appendTo($optionButtons);
 
-    this.$Yes = JoubelUI.createButton({
+    this.$Yes = createButton({
       class: 'h5p-dialogcards-side-button-yes',
+      label: this.params.yes,
       title: this.params.yes,
-      html: this.params.yes,
-    })
-      .click(() => {
+      icon: 'check',
+      onClick: () => {
         if (this.cardsSideMode === 'backFirst') {
           this.cardsSideMode = 'frontFirst';
           this.isReversed = false;
@@ -754,8 +764,10 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
         }
         this.reverse = true;
         this.attachContinue();
-      })
-      .appendTo($optionButtons);
+      }
+    })
+    .appendTo($optionButtons);
+
     return $side;
   };
 
@@ -765,14 +777,15 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
    */
   this.createNumberCards = () => {
     
-    let numCards = this.currentDialogs.length;
+  let self = this;
+    let numCards = self.currentDialogs.length;
     let $numberCards = $('<div>', {
       class: 'h5p-dialogcards-number h5p-dialogcards-options',
-      html: this.params.numCardsQuestion,
+      html: self.params.numCardsQuestion,
     });
 
     let $optionButtons = $('<div>', {
-      class: 'h5p-dialogcards-optionsbuttons',
+      class: 'h5p-dialogcards-buttons',
     }).appendTo($numberCards);
 
     // Allow user to select a number of cards to play with, by displaying selectable buttons in increments of 5.
@@ -785,42 +798,40 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
     }
     let limit = Math.min(numCards, 100);
     for (let i = n; i < limit; i += n) {
-      this.$button = JoubelUI.createButton({
+      this.$button = createButton({
         class: 'h5p-dialogcards-number-button',
+        label: i,
         title: i,
-        html: i,
         id: `dc-number-${i}`,
-      })
-        .click(() => {
-          this.nbCards = this.title;
-          this.nbCards = this.title;
-          this.nbCardsSelected = this.title;
-          this.nbCardsSelected = this.title;
-          if (this.cardsSideChoice === 'user') {
-            $('.h5p-dialogcards-number', this.$inner).remove();
-            this.createcardsSideChoice().appendTo(this.$inner);
-          }
-          else {
-            this.attachContinue();
-          }
-        })
-        .appendTo($optionButtons);
-    }
+        icon: 'check',
+        onClick: () => {
+            this.nbCards = i;
+            this.nbCardsSelected = i;
+            if (this.cardsSideChoice === 'user') {
+              $('.h5p-dialogcards-number', this.$inner).remove();
+              this.createcardsSideChoice().appendTo(this.$inner);
+            }
+            else {
+              self.attachContinue();
+            }
+        }
+        }).appendTo($optionButtons);
+      }
 
-    this.$button = JoubelUI.createButton({
+    this.$button = createButton({
       class: 'h5p-dialogcards-number-button',
-      title: numCards,
-      html: `${this.params.allCards} (${numCards})`,
-    })
-      .click(() => {
-        this.nbCards = numCards;
-        if (this.cardsSideChoice === 'user') {
-          $('.h5p-dialogcards-number', this.$inner).remove();
-          this.createcardsSideChoice().appendTo(this.$inner);
+      label: `${self.params.allCards} (${numCards})`,
+      icon: 'check',
+      onClick: () => {
+        self.nbCards = numCards;
+        if (self.cardsSideChoice === 'user') {
+          $('.h5p-dialogcards-number', self.$inner).remove();
+          self.createcardsSideChoice().appendTo(self.$inner);
         }
         else {
-          this.attachContinue();
+          self.attachContinue();
         }
+      }
       })
       .appendTo($optionButtons);
     return $numberCards;
@@ -1099,7 +1110,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
 
   this.createFooter2 = () => {
       let nav;
-      
+      console.log('this.currentCardId = ' + this.currentCardId);
       let nbCards = this.currentDialogs.length;
       if (!this.enableGotIt) {
         nav = H5P.Components.Navigation({
@@ -1127,7 +1138,8 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
           icon: 'retry',
         })).click(() => {
           this.nav.setCurrentIndex(0);
-          this.trigger('reset');
+          console.log('trigger resetTask');
+          this.trigger('resetTask');
         }).appendTo(nav);
         
       }
@@ -1328,6 +1340,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
     else {
       this.nbCardsSelected = this.nbCards;
     }
+    console.log('this.nbCardsSelected = ' + this.nbCardsSelected);
     // Reversed cards array to be used in these options.
     // Check if switching sides is needed. Simplified and fixed 15:29 09/02/2026
     if (
@@ -1413,7 +1426,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
     // Save data to content state for resuming later on.
     // Push the new 'cards array' into this.currentDialogs.
     this.currentDialogs = cards;
-
+console.log('******* cards ************' + JSON.stringify(this.currentDialogs, null, 4));
     this.$cardwrapperSet = $('<div>', {
       class: 'h5p-dialogcards-cardwrap-set',
     });
@@ -2171,10 +2184,14 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
   
   this.updateNavigation = () => {
     // Moved this.$progress.text to here for correct progress updating.
+    /*
+    need to check value of this.$current.index()
+    */
     this.$progress.text(this.params.progressText
         .replace('@card', this.$current.index() + 1)
-        .replace('@total', this.params.dialogs.length.toString()),
+        .replace('@total', this.nbCardsSelected.toString()),
       );
+      
     let $prevCard;
     let $matchButton;
     let $card = this.$current.find('.h5p-dialogcards-card-content');
@@ -2320,10 +2337,8 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
   /**
    * Show next card. If matchIt show next card on the right.
    */
-  
   this.nextCard = () => {
-    
-
+  console.log('this.nextCard function');
     // In those 2 modes, consider activity answered when first card is clicked.
     if (
       this.playModeUser === 'normal' ||
@@ -2908,7 +2923,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
    */
   
   this.retry = () => {
-    
+    console.log('this.retry');
     let $card = $(this);
     // To hide the summary text upon retrying
     if (this.noText || this.frontTextBackImage) {
@@ -4026,6 +4041,7 @@ this.determineCardSizes = () => {
 
   
   this.resetTask = () => {
+    console.log('this.resetTask');
     const self = this;
     this.contentData.previousState = {};
     this.answered = false;
@@ -4062,7 +4078,7 @@ this.determineCardSizes = () => {
         '.h5p-dialogcards-card-side-announcer, .h5p-dialogcards-button-reset, .h5p-dialogcards-order,' +
         '.h5p-joubelui-score-bar, .h5p-dialogcards-match-footer,' +
         '.h5p-dialogcards-summary-screen, .h5p-dialogcards-summary-message, .h5p-dialogcards-feedback,' +
-        '.h5p-dialogcards-sub-title, .h5p-dialogcards-options',
+        '.h5p-dialogcards-sub-title, .h5p-dialogcards-options, .h5p-navigation, .h5p-dialogcards-progress',
       this.$inner,
     ).remove();
 
