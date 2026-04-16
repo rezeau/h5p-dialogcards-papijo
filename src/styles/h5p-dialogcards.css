@@ -512,5 +512,7 @@
 .h5p-dialogcards .h5p-dialogcards-buttons {
   display: flex;
   gap: 0.5rem;
-  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 8px;
 }

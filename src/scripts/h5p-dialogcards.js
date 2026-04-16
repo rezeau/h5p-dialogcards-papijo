@@ -857,6 +857,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
    */
 
   this.createFilterCards = () => {
+    console.log('************ this.createFilterCards');
     const self = this;
     // Init params
     const $filterCards = $('<div>', {
@@ -865,18 +866,17 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
     });
 
     const $optionButtons = $('<div>', {
-      class: 'h5p-dialogcards-optionsbuttons',
+      class: 'h5p-dialogcards-buttons',
     }).appendTo($filterCards);
-
+/*
     let $class;
     this.nofilter = false;
     let catNames = [];
-    let i;
     let filterList;
     let filterOperator;
     let numCardsInCats;
     let catName;
-    for (i = 0; i < this.catFilters.length + 1; i++) {
+    for (let i = 0; i < this.catFilters.length + 1; i++) {
       if (i < this.catFilters.length) {
         filterList = this.catFilters[i].filterList;
         filterOperator = this.catFilters[i].filterOperator;
@@ -895,20 +895,18 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
       }
       this.filterList = undefined;
       this.filterOperator = undefined;
-      if (numCardsInCats) {
-        this.$button = JoubelUI.createButton({
+      if (numCardsInCats) { 
+        this.catFilters[i];
+        this.$button = createButton({
           class: $class,
           title: catName,
-          html: `${catName} (${numCardsInCats})`,
-          id: i,
-          filterList: filterList,
-          filterOperator: filterOperator,
+          label: `${catName} (${numCardsInCats})`,
         })
           .click(() => {
             $('.h5p-dialogcards-categories', this.$inner).remove();
-            if (this.id < i - 1) {
-              this.filterList = this.catFilters[this.id].filterList;
-              this.filterOperator = this.catFilters[this.id].filterOperator;
+            if (i < this.catFilters.length) {
+              this.filterList = this.catFilters[i].filterList;
+              this.filterOperator = this.catFilters[i].filterOperator;
               this.applyFilter(this.filterList, this.filterOperator);
               this.currentFilter = this.title;
             }
@@ -939,6 +937,75 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
       }
     }
     return $filterCards;
+    */
+    this.nofilter = false;
+const catNames = [];
+
+// Shared click handler logic
+const handleClick = (filterList, filterOperator, catName, isNoFilter = false) => {
+  $('.h5p-dialogcards-categories', this.$inner).remove();
+
+  if (!isNoFilter) {
+    this.filterList = filterList;
+    this.filterOperator = filterOperator;
+    this.applyFilter(filterList, filterOperator);
+    this.currentFilter = catName;
+  } else {
+    this.filterList = undefined;
+    this.filterOperator = undefined;
+    this.applyFilter();
+    this.currentFilter = this.params.noFilter;
+  }
+
+  if (
+    this.cardsOrderChoice === 'user' &&
+    this.cardOrder === undefined
+  ) {
+    this.createOrder().appendTo(this.$inner);
+  }
+  else if (
+    this.enableCardsNumber &&
+    this.nbCardsSelected === undefined &&
+    this.nbCards > DialogcardsPapiJo.NB5
+  ) {
+    this.createNumberCards().appendTo(this.$inner);
+  }
+  else if (!this.matchIt && this.cardsSideChoice === 'user') {
+    this.createcardsSideChoice().appendTo(this.$inner);
+  }
+  else {
+    this.attachContinue();
+  }
+};
+
+// --- Real filters ---
+this.catFilters.forEach(({ filterList, filterOperator }) => {
+  const numCards = this.applyFilter(filterList, filterOperator, true);
+  const catName = this.makeCurrentFilterName(filterList, filterOperator);
+
+  if (!numCards || catNames.includes(catName)) return;
+  catNames.push(catName);
+
+  createButton({
+    title: catName,
+    label: `${catName} (${numCards})`,
+  })
+    .click(() => handleClick(filterList, filterOperator, catName))
+    .appendTo($optionButtons);
+});
+
+// --- "No filter" button ---
+const totalCards = this.params.dialogs.length;
+
+createButton({
+  class: 'h5p-dialogcards-allCategories-button',
+  title: this.params.noFilter,
+  label: `${this.params.noFilter} (${totalCards})`,
+})
+  .click(() => handleClick(null, null, this.params.noFilter, true))
+  .appendTo($optionButtons);
+
+return $filterCards;
   };
 
   /**
@@ -956,20 +1023,23 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
     });
 
     const $optionButtons = $('<div>', {
-      class: 'h5p-dialogcards-optionsbuttons',
+      class: 'h5p-dialogcards-buttons',
     }).appendTo($play);
     
     for (let i = 0; i < this.playModeNames.length; i++) {
       let $class = 'h5p-joubelui-button';
-      this.$button = JoubelUI.createButton({
+      this.$button = createButton({
         class: $class,
         title: this.playModeNames[i].value,
-        html: this.playModeNames[i].label,
+        label: this.playModeNames[i].label,
         id: i,
         selectedMode: this.playModeNames[i].value,
       })
         .click(() => {
           $('.h5p-dialogcards-categories', this.$inner).remove();
+          console.log('this.filterByCategories = ' + this.filterByCategories
+            + '\nthis.currentFilter = ' + this.currentFilter
+            );
           this.playModeUser = this.playModeNames[i].value;
           if (
             this.filterByCategories === 'userFilter' &&
@@ -2199,7 +2269,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
    */
   
   this.updateNavigation = () => {
-    
+    console.log('this.enableGotIt = ' + this.enableGotIt);
     // Moved this.$progress.text to here for correct progress updating.
     /*
     need to check value of this.$current.index()
@@ -2252,6 +2322,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
         $nextCard = $nextCard.nextAll('.h5p-dialogcards-cardwrap').eq(0);
       }
     }
+    /* todo 
     if ($nextCard.length && !this.enableGotIt) {
       this.$next.removeClass('h5p-dialogcards-disabled');
       if (this.cardsLeft === 0) {
@@ -2262,6 +2333,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
     else if (!this.enableGotIt) {
       this.$next.addClass('h5p-dialogcards-disabled');
     }
+    */
     $prevCard = this.$current.prevAll('.h5p-dialogcards-cardwrap').eq(0);
 
     if (this.repetition) {
@@ -2270,8 +2342,9 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
       }
       $prevCard = this.$current.prevAll('.h5p-dialogcards-previous').eq(0);
     }
-
+//// todo plantage sur normal mode ?
     // enableGotIt mode does not have prev or next buttons
+    /*
     if (!this.enableGotIt) {
       if ($prevCard.length) {
         this.$prev.removeClass('h5p-dialogcards-disabled');
@@ -2280,7 +2353,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
         this.$prev.addClass('h5p-dialogcards-disabled');
       }
     }
-
+*/
     if (this.enableGotIt) {
       // In case it was hidden when refreshing
       $card
@@ -4062,6 +4135,7 @@ this.determineCardSizes = () => {
     this.hideTurnButton = false;
     this.matchIt = false;
     this.sideBySide = false;
+    this.currentFilter = undefined;
     this.progress = -1;
     this.progressLeft = -1;
     // JR for interactive book we need to remove the options upon Restart
@@ -4101,7 +4175,7 @@ this.determineCardSizes = () => {
     this.filterList = undefined;
     this.filterOperator = undefined;
     this.getCurrentState();
-
+console.log('this.filterByCategories = ' + this.filterByCategories);
     if (this.playModeNames.length === 0) {
       this.playMode = 'normal';
       this.playModeUser = this.playMode;
@@ -4111,8 +4185,10 @@ this.determineCardSizes = () => {
       this.playModeUser = this.playMode;
     }
     if (this.playMode === 'user') {
+      console.log('goto createPlayMode');
       this.createPlayMode().appendTo(this.$inner);
     }
+    
     else if (this.filterByCategories === 'userFilter') {
       this.createFilterCards().appendTo(this.$inner);
     }
