@@ -452,7 +452,8 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
    */
   
   this.attachContinue = () => {
-    if (this.playMode !== 'selfCorrectionMode') {
+    console.log('this.playModeUser = ' + this.playModeUser);
+    if (this.playModeUser !== 'selfCorrectionMode') {
       this.$progress = $('<div>', {
             id: `h5p-dialogcards-progress-${this.idCounter}`,
             class: 'h5p-dialogcards-progress h5p-theme-progress',
@@ -633,7 +634,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
           class: 'h5p-dialogcards-round',
           'aria-live': 'assertive',
         }).appendTo(this.nav);
-      
+      this.nav = this.createFooter2();
       } else {
         this.nav = this.createFooter2();
       }
@@ -1076,8 +1077,8 @@ return $filterCards;
    * Create footer/navigation line
    * @returns {HTMLElement} Footer element
    */
-  this.createFooter = () => {
-    console.log('createFooter');
+  this.createFooter00 = () => {
+    console.log('1081 this.createFooter00');
     let $footer = $('<nav>', {
       class: 'h5p-navigation h5p-navigation--3-split ',
       role: 'navigation',
@@ -1140,7 +1141,7 @@ return $filterCards;
       titleRetry = this.params.retry;
       htmlRetry = this.params.retry;
     }
-    this.$retry = JoubelUI.createButton({
+    this.$retry = createButton({
       class: classesRetry,
       title: titleRetry,
       html: htmlRetry,
@@ -1196,9 +1197,12 @@ return $filterCards;
   };
 
   this.createFooter2 = () => {
+    console.log('this createFooter2');
       let nav;
       let nbCards = this.currentDialogs.length;
+      let isDisabled = false;
       if (!this.enableGotIt) {
+        
         nav = H5P.Components.Navigation({
           index: this.currentCardId,
           variant: '2-split-spread',
@@ -1216,19 +1220,22 @@ return $filterCards;
           previousButton?.classList.add('h5p-dialogcards-visibility-hidden');
         }
         // only insert Retry button if at the end of carda and isturned
-        
-        this.$retry = $(H5P.Components.Button({
+       
+        this.$retry = createButton({
           classes: 'h5p-dialogcards-footer-button h5p-dialogcards-disabled',
           styleType: 'secondary',
           label: this.params.retry,
           icon: 'retry',
-        })).click(() => {
+          onClick: () => {
           this.nav.setCurrentIndex(0);
           this.trigger('resetTask');
+          }
         }).appendTo(nav);
+       
         
       }
       else {
+        isDisabled = true;
         nav = H5P.Components.Navigation();
 
         this.$round = $('<div>', {
@@ -1239,9 +1246,20 @@ return $filterCards;
           class: 'h5p-dialogcards-round',
           'aria-live': 'assertive',
         }).appendTo(nav);
-      }
-
+      this.$retry = createButton({
+          classes: 'h5p-dialogcards-footer-button h5p-dialogcards-disabled',
+          styleType: 'secondary',
+          label: this.params.nextRound.replace('@round', this.currentRound + 1),
+          icon: 'retry',
+        onClick: () => {
+          this.retryRepetition();
+        }
+        }).appendTo(nav);
+       
+        }
+      
      return nav;
+
     };
 
   this.createFooterLeft = () => {
@@ -3147,7 +3165,7 @@ return $filterCards;
    */
   
   this.retryRepetition = () => {
-    
+    console.log('this.retryRepetition');
     let $card = $(this);
     // Now remove the current 'gotitdone' card from the cards and cardOrder arrays.
     let index = this.lastCardIndex;
@@ -3192,7 +3210,7 @@ return $filterCards;
       // Show all front audios (ca) and hide all back audios (ca2)
       let $ca = $card.find('.h5p-dialogcards-audio-wrapper');
       $ca.removeClass('hide');
-      this.resetAudio(index);
+//      this.resetAudio(index);
 
       // Replace potential "paused" button with "ready to play" button
       /*
@@ -3227,7 +3245,7 @@ return $filterCards;
       .find('.h5p-dialogcards-answer-button-off')
       .removeClass('h5p-dialogcards-disabled');
     this.$currentLeft = this.$inner.find('.h5p-dialogcards-current-left');
-    this.$progressFooterLeft.removeClass('h5p-dialogcards-hide');
+    ///this.$progressFooterLeft.removeClass('h5p-dialogcards-hide');
     this.updateNavigation();
     this.resetButtons('restart');
   };
@@ -4293,6 +4311,15 @@ console.log('this.filterByCategories = ' + this.filterByCategories);
     else if (type === 'retry button' || type === 'finished button') {
       // Disable answer buttons, turn button, Hide card text button and Enable the Retry button
       if ($gotIt || this.repetition) {
+        // hide cardfooter
+        $card
+          .find('.h5p-dialogcards-card-footer')
+          .addClass('h5p-dialogcards-disabled');
+        // unhide retry button
+        this.$retry
+          .prop('disabled', false)
+          .removeClass('h5p-dialogcards-disabled');
+                
         if (this.noText || (this.frontTextBackImage /*&& this.repetition*/)) {
           let $el = $card.find('.h5p-dialogcards-card-text-wrapper');
           let aClass = '';
