@@ -516,3 +516,93 @@
   gap: 4px;
   padding: 8px;
 }
+/* summary rules papi jo*/
+
+
+.h5p-dialogcards-summary-screen,
+.h5p-dialogcards-intermediary-summary-screen {
+  align-items: center;
+  padding: 1em;
+  background-color: #fff !important;
+}
+
+.h5p-dialogcards-intermediary-summary-screen {
+  font-size: 1em !important;
+}
+
+.h5p-dialogcards-final-summary-screen {
+  display: flex;
+  flex-direction: column;
+}
+h5p-dialogcards-summary-table {
+  width: 100%;
+}
+
+.h5p-dialogcards-summary-table td {
+  height: 1.6em;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: #d9d9d9;
+  text-align: left;
+}
+
+.h5p-dialogcards-summary-table td.h5p-dialogcards-summary-table-row-category {
+  width: 100%;
+}
+
+.h5p-dialogcards-summary-table td.h5p-dialogcards-summary-table-row-symbol {
+  padding-left: 0.5em;
+}
+
+.h5p-dialogcards-summary-table
+  td.h5p-dialogcards-summary-table-row-symbol.h5p-dialogcards-check:before {
+  /* stylelint-disable-next-line font-family-no-missing-generic-family-keyword */
+  font-family: 'H5PFontAwesome4';
+  content: '\f00c';
+  color: #1f824c;
+}
+
+.h5p-dialogcards-summary-table
+  td.h5p-dialogcards-summary-table-row-symbol.h5p-dialogcards-times:before {
+  /* stylelint-disable-next-line font-family-no-missing-generic-family-keyword */
+  font-family: 'H5PFontAwesome4';
+  content: '\f00d';
+  color: #d95354;
+}
+
+.h5p-dialogcards-summary-table td.h5p-dialogcards-summary-table-row-score {
+  padding-left: 0.5em;
+  text-align: right;
+  font-weight: bold;
+}
+
+.h5p-dialogcards-summary-table
+  td.h5p-dialogcards-summary-table-row-score-divider {
+  color: #757575;
+  font-size: 0.75em;
+}
+.h5p-dialogcards-summary-header {
+  width: 100%;
+  font-weight: bold;
+  font-size: 1.2em;
+  text-align: center;
+}
+
+.h5p-dialogcards-summary-subheader {
+  padding-top: 0.5em;
+  width: 100%;
+  text-align: center;
+}
+.h5p-dialogcards-summary-message {
+  width: 100%;
+  font-size: 1.2em;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  text-align: center;
+  font-weight: bold;
+  color: #1a73d9;
+}
+/* needed for better display of subsummary*/
+.h5p-dialogcards-auto-height {
+  height: auto !important;
+}

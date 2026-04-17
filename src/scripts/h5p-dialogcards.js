@@ -1034,6 +1034,7 @@ return $filterCards;
         title: this.playModeNames[i].value,
         label: this.playModeNames[i].label,
         id: i,
+        icon: 'check',
         selectedMode: this.playModeNames[i].value,
       })
         .click(() => {
@@ -2287,7 +2288,7 @@ return $filterCards;
    */
   
   this.updateNavigation = () => {
-    console.log('this.enableGotIt = ' + this.enableGotIt);
+    console.log('updateNavigation /// this.enableGotIt = ' + this.enableGotIt);
     // Moved this.$progress.text to here for correct progress updating.
     /*
     need to check value of this.$current.index()
@@ -3427,9 +3428,9 @@ this.determineCardSizes = () => {
       // Decrease font size
       if (containerHeight < contentHeight) {
         while (containerHeight < contentHeight) {
-          newFontSize -= C.SCALEINTERVAL;
+          newFontSize -= DialogcardsPapiJo.SCALEINTERVAL;
           // Cap at min font size
-          if (newFontSize < C.MINSCALE) {
+          if (newFontSize < DialogcardsPapiJo.MINSCALE) {
             break;
           }
           // Set relative font size to scale with full screen.
@@ -3441,9 +3442,9 @@ this.determineCardSizes = () => {
         // Increase font size
         let increaseFontSize = true;
         while (increaseFontSize) {
-          newFontSize += C.SCALEINTERVAL;
+          newFontSize += DialogcardsPapiJo.SCALEINTERVAL;
           // Cap max font size
-          if (newFontSize > C.MAXSCALE) {
+          if (newFontSize > DialogcardsPapiJo.MAXSCALE) {
             increaseFontSize = false;
             break;
           }
@@ -3453,7 +3454,7 @@ this.determineCardSizes = () => {
           contentHeight = getContentHeight();
           if (containerHeight <= contentHeight) {
             increaseFontSize = false;
-            relativeFontSize = (newFontSize - C.SCALEINTERVAL) / parentFontSize;
+            relativeFontSize = (newFontSize - DialogcardsPapiJo.SCALEINTERVAL) / parentFontSize;
             this.$inner.css('font-size', `${relativeFontSize}em`);
           }
         }
@@ -3520,8 +3521,8 @@ this.determineCardSizes = () => {
     if (currentTextHeight > currentTextContainerHeight) {
       let decreaseFontSize = true;
       while (decreaseFontSize) {
-        fontSize -= C.SCALEINTERVAL;
-        if (fontSize < C.MINSCALE) {
+        fontSize -= DialogcardsPapiJo.SCALEINTERVAL;
+        if (fontSize < DialogcardsPapiJo.MINSCALE) {
           decreaseFontSize = false;
           break;
         }
@@ -3647,8 +3648,8 @@ this.determineCardSizes = () => {
    */
 
   
-  this.finishedScreen = () => {
-    
+  this.finishedScreen = () => {    
+    $('.h5p-navigation--3-split').remove();
     this.taskFinished = true;
     this.answered = true;
     this.progress = -1;
@@ -3693,11 +3694,13 @@ this.determineCardSizes = () => {
     }
 
     // Remove all these elements.
+    
     $(
       '.h5p-dialogcards-cardwrap-set, .h5p-dialogcards-match-footer, .h5p-dialogcards-footer,' +
-        ' .h5p-dialogcards-options',
+        ' .h5p-dialogcards-options ',
       this.$inner,
     ).remove();
+
 
     // Display task finished feedback message.
 
@@ -3828,14 +3831,14 @@ this.determineCardSizes = () => {
       const retryOrReset = this.getRetryOrReset();
       let message = retryOrReset[0];
       let thisclass = retryOrReset[1];
-      this.$retryButton = JoubelUI.createButton({
+      this.$retryButton = createButton({
         class: thisclass,
-        title: message,
-        html: message,
-      })
-        .click(() => {
+        label: message,
+        icon: 'check',
+        onClick: () => {
           this.resetTask();
-        })
+        }
+       })
         .appendTo($feedbackFooter);
     }
   };
@@ -4157,7 +4160,7 @@ this.determineCardSizes = () => {
     this.progress = -1;
     this.progressLeft = -1;
     // JR for interactive book we need to remove the options upon Restart
-    $('.h5p-dialogcards-options', this.$inner).remove();
+    $('.h5p-dialogcards-options ', this.$inner).remove();    
     let $optionsText = this.$inner.find('.h5p-dialogcards-options');
     $optionsText.html('');
 
@@ -4287,7 +4290,7 @@ console.log('this.filterByCategories = ' + this.filterByCategories);
     $card
       .find('.h5p-dialogcards-answer-button')
       /// todo do not disable if gotit
-      ///.addClass('h5p-dialogcards-disabled');
+      //addClass('h5p-dialogcards-disabled');
     if ($gotIt) {
       $card
         .find('.h5p-dialogcards-card-text-area')
