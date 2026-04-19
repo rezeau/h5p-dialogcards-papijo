@@ -3114,7 +3114,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           .css('height', 'initial')
           .outerHeight();
         maxHeight = initialHeight > maxHeight ? initialHeight : maxHeight;
-        $(this).find('.h5p-dialogcards-cardholder').css('height', 'inherit');
+        /* 06:33 19/04/2026 remove this rule which causes wrong element height on last card in set */
+        ///$(this).find('.h5p-dialogcards-cardholder')
+          ///.css('height', 'inherit');
       }
     });
 
