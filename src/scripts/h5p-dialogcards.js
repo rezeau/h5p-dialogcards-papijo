@@ -127,8 +127,6 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
           cardsSideChoice: 'user',
           penalty: 0,
           passPercentage: 100,
-          backgroundColor: undefined,
-          backgroundColorBack: undefined,
           noDupeFrontPicToBack: false,
           filterByCategories: 'user',
         },
@@ -292,18 +290,6 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
     this.cardsLeftInStack = this.nbCardsSelected;
     this.nbCardsInCurrentRound = this.nbCards;
     this.enableCardsNumber = this.enableCardsNumber;
-    this.backgroundColor =
-      this.params.behaviour.backgroundColor === 'rgba(0, 0, 0, 0)'
-        ? undefined
-        : this.params.behaviour.backgroundColor;
-    this.backgroundColorBack =
-      this.params.behaviour.backgroundColorBack === 'rgba(0, 0, 0, 0)'
-        ? undefined
-        : this.params.behaviour.backgroundColorBack;
-    // No backgroundColor given for back side, use front side background color
-    if (this.backgroundColorBack === undefined) {
-      this.backgroundColorBack = this.backgroundColor;
-    }
     // Var cardOrder stores order of cards to allow resuming of card set
     // AND removed cards if match or self-correction Mode.
     // Var progress stores current card index.
@@ -1621,11 +1607,7 @@ return $filterCards;
       class: 'h5p-dialogcards-card-content',
     });
     let isLeft = false;
-    $cardContent.css('background-color', this.backgroundColor);
-    if (this.matchIt && this.cardsSideMode === 'frontFirst') {
-      $cardContent.css('background-color', this.backgroundColorBack);
-    }
-
+    
     if (!this.audioOnly &&
       (card.imageMedia.image !== undefined ||
       (card.imageMedia.image2 !== undefined &&
@@ -1761,13 +1743,7 @@ return $filterCards;
     });
 
     $cardContent.addClass('h5p-dialogcards-matchLeft');
-    if (this.cardsSideMode === 'frontFirst') {
-      $cardContent.css('background-color', this.backgroundColor);
-    }
-    else {
-      $cardContent.css('background-color', this.backgroundColorBack);
-    }
-
+    
     // Upon restore content state maybe necessary to hide previously incorrectly matched cards
     // Do not create image div is not necessary
     if (
