@@ -1932,22 +1932,7 @@ return $filterCards;
     
     }
     else if (!this.sideBySide) {
-      this.$buttonMatch = $(H5P.Components.Button({
-        class: 'h5p-dialogcards-button-match',
-        label: this.params.matchButtonLabel,
-        tabindex: 1,
-        icon: 'check',
-        onClick: () => {
-          const $cardwrap = $(this).parents('.h5p-dialogcards-cardwrap');
-          if (this.repetition) {
-            this.matchCardsRepetition($cardwrap);
-          }
-          else {
-            this.matchCards($cardwrap);
-          }
-        }
-      })).appendTo($cardFooter);
-
+      
       let classesMatch =
         'h5p-dialogcards-answer-button h5p-dialogcards-quick-progression' +
         ' h5p-dialogcards-match h5p-dialogcards-disabled';
@@ -1969,9 +1954,24 @@ return $filterCards;
         .attr('tabindex', -1)
         .appendTo($cardFooter);
     }
+      this.$buttonMatch = createButton({
+      classes: 'h5p-dialogcards-button-match',
+      label: this.params.matchButtonLabel,
+      tabindex: 1,
+      icon: 'check',
+      onClick: (event) => {
+        const $cardwrap = $(event.currentTarget).closest('.h5p-dialogcards-current');
+        if (this.repetition) {
+          this.matchCardsRepetition($cardwrap);
+        }
+        else {
+          this.matchCards($cardwrap);
+        }
+      }
+    }).appendTo($cardFooter);
 
     if (this.enableGotIt) {      
-      this.$buttonIncorrect = $(H5P.Components.Button({
+      this.$buttonIncorrect = createButton({
         ///class: ['h5p-dialogcards-answer-button', 'incorrect', classesRepetition].join(' '),
         classes: `h5p-dialogcards-answer-button incorrect ${classesRepetition}`,
         label: 'this.params.incorrectAnswer',
@@ -1981,9 +1981,9 @@ return $filterCards;
         onClick: () => {
           this.gotItIncorrect();
         }
-      })).appendTo($cardFooter);
+      }).appendTo($cardFooter);
 
-      this.$buttonCorrect = $(H5P.Components.Button({
+      this.$buttonCorrect = createButton({
         classes: `h5p-dialogcards-answer-button correct ${classesRepetition}`,
         label: this.params.correctAnswer,
         disabled: true,
@@ -1993,7 +1993,7 @@ return $filterCards;
           const $cardwrap = $(this).parents('.h5p-dialogcards-cardwrap');
           this.gotItCorrect($cardwrap);
         }
-      })).appendTo($cardFooter);
+      }).appendTo($cardFooter);
     }
 
     return $cardFooter;
@@ -3761,16 +3761,14 @@ this.determineCardSizes00 = () => {
     this.updateNavigation();
   };
 
-this.matchCards = ($card) => {
+  this.matchCards = ($card) => {
     for (let i = 0; i < this.nbCards + 1; i++) {
       this.resetAudio(i);
     }
-
     const delayInMilliseconds = 2000;
     let index = $card.index() / DialogcardsPapiJo.NB2;
     let $leftCard = this.$currentLeft;
     let indexLeft = ($leftCard.index() - 1) / DialogcardsPapiJo.NB2;
-
     // De-activate all buttons during the Timeout.
     let $correctButton = $card.find('.h5p-dialogcards-match.correct');
     let $incorrectButton = $card.find('.h5p-dialogcards-match.incorrect');
@@ -3780,8 +3778,9 @@ this.matchCards = ($card) => {
     this.$prev.toggleClass('h5p-dialogcards-inactive');
 
     if (index === indexLeft) {
+      console.log('correct match');
       this.correct++;
-      this.$buttonMatch.addClass('h5p-dialogcards-disabled');
+      $matchButton.addClass('h5p-dialogcards-disabled');
       $correctButton.toggleClass('h5p-dialogcards-disabled');
       this.$current.addClass('h5p-dialogcards-gotitdone');
       $leftCard.addClass('h5p-dialogcards-gotitdone');
@@ -3817,8 +3816,7 @@ this.matchCards = ($card) => {
     }
     else {
       this.incorrect++;
-      this.updateNavigation();
-      $matchButton.addClass('h5p-dialogcards-disabled');
+      this.updateNavigation();$matchButton.addClass('h5p-dialogcards-disabled');
       $incorrectButton.toggleClass('h5p-dialogcards-disabled');
       setTimeout(() => {
         $incorrectButton.toggleClass('h5p-dialogcards-disabled');
