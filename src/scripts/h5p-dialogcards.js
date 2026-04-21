@@ -2810,6 +2810,7 @@ this.turnCard = ($card) => {
    * @param {string}text Current card text
    */
   this.changeText = ($card, text) => {
+    console.log('this.changeText');
     let $cardText = $card.find('.h5p-dialogcards-card-text-area');
     $cardText.html(text);
     $cardText.toggleClass('hide', !text || !text.length);
@@ -2947,6 +2948,7 @@ this.turnCard = ($card) => {
   if (!this.noText) {
     const dialog = this.currentDialogs[index];
     if (dialog) {
+      console.log('changetext dialog.text = ' + dialog.text);
       this.changeText($card, dialog.text);
     }
   }
@@ -3690,6 +3692,7 @@ this.determineCardSizes00 = () => {
    */
   this.gotItCorrect = ($card) => {
     let index = $card.index();
+    console.log('this.gotItCorrect index = ' + index);
     this.endOfStack = 0;
     this.correct++;
     //const selectionIndex = this.$current.index();
