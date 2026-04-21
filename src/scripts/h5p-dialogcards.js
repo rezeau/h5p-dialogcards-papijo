@@ -1966,7 +1966,8 @@ return $filterCards;
         tabindex: attributeTabindex,
         styleType: 'secondary',
         onClick: () => {
-          const $cardwrap = $(this).parents('.h5p-dialogcards-cardwrap');
+          ///const $cardwrap = $(this).parents('.h5p-dialogcards-cardwrap');
+          const $cardwrap = $(event.currentTarget).closest('.h5p-dialogcards-current');
           this.gotItCorrect($cardwrap);
         }
       }).appendTo($cardFooter);
@@ -3691,6 +3692,8 @@ this.determineCardSizes00 = () => {
    * Remove card from DOM and from cards stack after user has checked the "gotit" button.
    */
   this.gotItCorrect = ($card) => {
+    console.log('$card = ' + JSON.stringify($card, null, 4) );
+
     let index = $card.index();
     console.log('this.gotItCorrect index = ' + index);
     this.endOfStack = 0;
