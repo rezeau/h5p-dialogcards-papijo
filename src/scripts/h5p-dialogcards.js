@@ -1881,8 +1881,8 @@ return $filterCards;
 
     if (this.enableGotIt || this.matchIt) {
       classesRepetition =
-        ///'h5p-dialogcards-quick-progression h5p-dialogcards-disabled';
-        'h5p-dialogcards-disabled';
+        'h5p-dialogcards-quick-progression h5p-dialogcards-disabled';
+        
       attributeTabindex = '0';
     }
     else {
@@ -1892,7 +1892,21 @@ return $filterCards;
     if (this.enableGotIt) {
       
     }
-
+    
+    if (this.enableGotIt) {
+        this.$buttonIncorrect = createButton({
+        ///class: ['h5p-dialogcards-answer-button', 'incorrect', classesRepetition].join(' '),
+        classes: `h5p-dialogcards-answer-button incorrect ${classesRepetition}`,
+        label: 'this.params.incorrectAnswer',
+        disabled: true,
+        tabindex: attributeTabindex,
+        styleType: 'secondary',
+        onClick: () => {
+          this.gotItIncorrect();
+        }
+      }).appendTo($cardFooter);
+    }
+    
     if (!this.matchIt) {      
         this.$buttonTurn = $(H5P.Components.Button({
           label: this.hideTurnButton
@@ -1929,7 +1943,7 @@ return $filterCards;
         .addClass('incorrect')
         .attr('tabindex', -1)
         .appendTo($cardFooter);
-    }
+    
       this.$buttonMatch = createButton({
       classes: 'h5p-dialogcards-button-match',
       label: this.params.matchButtonLabel,
@@ -1945,20 +1959,8 @@ return $filterCards;
         }
       }
     }).appendTo($cardFooter);
-
+    }
     if (this.enableGotIt) {      
-      this.$buttonIncorrect = createButton({
-        ///class: ['h5p-dialogcards-answer-button', 'incorrect', classesRepetition].join(' '),
-        classes: `h5p-dialogcards-answer-button incorrect ${classesRepetition}`,
-        label: 'this.params.incorrectAnswer',
-        disabled: true,
-        tabindex: attributeTabindex,
-        styleType: 'secondary',
-        onClick: () => {
-          this.gotItIncorrect();
-        }
-      }).appendTo($cardFooter);
-
       this.$buttonCorrect = createButton({
         classes: `h5p-dialogcards-answer-button correct ${classesRepetition}`,
         label: this.params.correctAnswer,
@@ -2757,10 +2759,10 @@ this.turnCard = ($card) => {
       }
       // Toggle state for gotIt buttons
       if (this.enableGotIt) {
-        if (!turned && this.hideTurnButton) {
-          let $buttonTurn;
-          $buttonTurn = this.$current.find('.h5p-dialogcards-turn');
+        if (!turned && this.hideTurnButton) {          
+          let $buttonTurn = this.$current.find('.h5p-theme-flip');
           $buttonTurn.addClass('h5p-dialogcards-hide');
+          console.log('$buttonTurn = ' + $buttonTurn);
         }
         const $answerButtons = $card.find('.h5p-dialogcards-answer-button');
           $answerButtons
@@ -2873,7 +2875,7 @@ this.turnCard = ($card) => {
    * Reset the task so that the user can re-start from first card.
    */
   this.retry = () => {
-    
+    console.log('this.retry');
     let $card = $(this);
     // To hide the summary text upon retrying
     if (this.noText || this.frontTextBackImage) {
@@ -2885,6 +2887,7 @@ this.turnCard = ($card) => {
       .removeClass('h5p-dialogcards-summary-screen');
     this.stopAudio(this.$current.index());
     if (!this.enableGotIt) {
+      console.log('this.retry 2890');
       this.taskFinished = true;
       let $cards = this.$inner.find('.h5p-dialogcards-cardwrap');
       $cards.each((index, element) => {
@@ -2893,6 +2896,8 @@ this.turnCard = ($card) => {
           $(element).removeClass('h5p-dialogcards-noMatch');
         }
       });
+      console.log('$cards = ' + JSON.stringify($cards, null, 4) );
+
       this.resetTask();
 
       // Needed to re-start on first card if user saved state at another card.
@@ -2942,9 +2947,9 @@ this.turnCard = ($card) => {
     let play = 'h5p-audio-minimal-play';
 
     $cards.each((index, element) => {
-      const $card = $(element).removeClass(
-    'h5p-dialogcards-previous h5p-dialogcards-turned'
-  );
+      $(element).removeClass(
+        'h5p-dialogcards-previous h5p-dialogcards-turned'
+      );
 
   if (!this.noText) {
     const dialog = this.currentDialogs[index];
@@ -3024,7 +3029,7 @@ this.turnCard = ($card) => {
    * Reset the task so that the user can re-start from first card.
    */
   this.retryRepetition = () => {
-    
+    console.log('this.retryRepetition');
     let $card = $(this);
     // Now remove the current 'gotitdone' card from the cards and cardOrder arrays.
     let index = this.lastCardIndex;
@@ -3061,10 +3066,8 @@ this.turnCard = ($card) => {
     // audio buttons
     let paused = 'h5p-audio-minimal-play-paused';
     let play = 'h5p-audio-minimal-play';
-    $cards.each(function (index) {
-      let $card = $(this).removeClass(
-        'h5p-dialogcards-previous h5p-dialogcards-noMatch',
-      );
+    $cards.each((index, element) => {
+      $(element).removeClass('h5p-dialogcards-previous h5p-dialogcards-noMatch',);
 
       // Show all front audios (ca) and hide all back audios (ca2)
       let $ca = $card.find('.h5p-dialogcards-audio-wrapper');
@@ -3090,8 +3093,8 @@ this.turnCard = ($card) => {
     // cardsLeft ****************************************************************************
     $cards = this.$inner.find('.h5p-dialogcards-cardwrap-left');
     let x = Math.floor(Math.random() * $cards.length);
-    $cards.each(function (index) {
-      let $card = $(this).removeClass('h5p-dialogcards-noMatch');
+    $cards.each((index, element) => {
+      let $card = $(element).removeClass('h5p-dialogcards-noMatch');
       $card.addClass('h5p-dialogcards-cardwrap-left-repetition');
       if (index === x) {
         $card.addClass('h5p-dialogcards-current-left');
@@ -3692,10 +3695,7 @@ this.determineCardSizes00 = () => {
    * Remove card from DOM and from cards stack after user has checked the "gotit" button.
    */
   this.gotItCorrect = ($card) => {
-    console.log('$card = ' + JSON.stringify($card, null, 4) );
-
     let index = $card.index();
-    console.log('this.gotItCorrect index = ' + index);
     this.endOfStack = 0;
     this.correct++;
     //const selectionIndex = this.$current.index();
@@ -3910,7 +3910,7 @@ this.determineCardSizes00 = () => {
         // Find the matching right card from stack of cards
         $cards = this.$inner.find('.h5p-dialogcards-cardwrap');
         let $matchingRightCard;
-        $cards.each(function (index) {
+        $cards.each((index, element) => {
           if (index === indexLeft) {
             $matchingRightCard = $(this);
             return false; // break
@@ -4112,7 +4112,7 @@ this.determineCardSizes00 = () => {
    */
 
   this.resetButtons = (type) => {
-    
+    console.log('resetButtons type = ' + type);
     let $card = $(this);
     $card = this.$current;
     $card.removeClass('h5p-dialogcards-match-right');
@@ -4131,7 +4131,7 @@ this.determineCardSizes00 = () => {
     if (type === 'answer buttons') {
       // Enable answer-buttons-off ; Unhide turn button & card text and Disable the Retry button.
       $card
-        .find('.h5p-dialogcards-turn')
+        .find('.h5p-theme-flip')
         .removeClass('h5p-dialogcards-disabled');
       $card
         .find('.h5p-dialogcards-answer-button-off')
@@ -4160,7 +4160,7 @@ this.determineCardSizes00 = () => {
           $el.width(w);
         }
         $card
-          .find('.h5p-dialogcards-turn')
+          .find('.h5p-theme-flip')
           .addClass('h5p-dialogcards-disabled');
         $card
           .find('.h5p-dialogcards-image-wrapper')
@@ -4269,7 +4269,7 @@ this.determineCardSizes00 = () => {
         .find('.h5p-dialogcards-answer-button-off')
         .removeClass('h5p-dialogcards-disabled');
       $card
-        .find('.h5p-dialogcards-turn')
+        .find('.h5p-theme-flip')
         .removeClass('h5p-dialogcards-disabled');
       $card
         .find('.h5p-dialogcards-card-text')
