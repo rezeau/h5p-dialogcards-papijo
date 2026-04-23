@@ -1895,9 +1895,8 @@ return $filterCards;
     
     if (this.enableGotIt) {
         this.$buttonIncorrect = createButton({
-        ///class: ['h5p-dialogcards-answer-button', 'incorrect', classesRepetition].join(' '),
-        classes: `h5p-dialogcards-answer-button incorrect ${classesRepetition}`,
-        label: 'this.params.incorrectAnswer',
+        classes: ('h5p-theme-button h5p-dialogcards-answer-button incorrect'),
+        label: this.params.incorrectAnswer,
         disabled: true,
         tabindex: attributeTabindex,
         styleType: 'secondary',
@@ -1962,7 +1961,7 @@ return $filterCards;
     }
     if (this.enableGotIt) {      
       this.$buttonCorrect = createButton({
-        classes: `h5p-dialogcards-answer-button correct ${classesRepetition}`,
+        classes: 'h5p-theme-button h5p-dialogcards-answer-button correct ',
         label: this.params.correctAnswer,
         disabled: true,
         tabindex: attributeTabindex,
@@ -2813,7 +2812,6 @@ this.turnCard = ($card) => {
    * @param {string}text Current card text
    */
   this.changeText = ($card, text) => {
-    console.log('this.changeText');
     let $cardText = $card.find('.h5p-dialogcards-card-text-area');
     $cardText.html(text);
     $cardText.toggleClass('hide', !text || !text.length);
@@ -2875,7 +2873,7 @@ this.turnCard = ($card) => {
    * Reset the task so that the user can re-start from first card.
    */
   this.retry = () => {
-    console.log('this.retry');
+    console.log('***********this.retry');
     let $card = $(this);
     // To hide the summary text upon retrying
     if (this.noText || this.frontTextBackImage) {
@@ -4122,11 +4120,15 @@ this.determineCardSizes00 = () => {
     let $gotIt = this.enableGotIt;
     $card
       .find('.h5p-dialogcards-answer-button')
-      .addClass('h5p-dialogcards-disabled');
+      .removeClass('h5p-dialogcards-disabled');
     if ($gotIt) {
       $card
         .find('.h5p-dialogcards-card-text-area')
         .removeClass('h5p-dialogcards-intermediary-summary-screen');
+      $card
+        .find('.h5p-dialogcards-answer-button')
+        .removeClass('h5p-dialogcards-quick-progression')
+        .attr('disabled', true);
     }
     if (type === 'answer buttons') {
       // Enable answer-buttons-off ; Unhide turn button & card text and Disable the Retry button.
@@ -4176,8 +4178,9 @@ this.determineCardSizes00 = () => {
           .find('.h5p-dialogcards-audio-wrapper2')
           .addClass('h5p-dialogcards-hide');
         $card
-          .find('.h5p-dialogcards-answer-button-off')
-          .addClass('h5p-dialogcards-hide');
+          .find('.h5p-dialogcards-answer-button')
+          .addClass('toto');
+        
         this.$progress.addClass('h5p-dialogcards-hide');
         if (this.repetition) {
           this.$progressFooterLeft.addClass('h5p-dialogcards-hide');
@@ -4197,6 +4200,9 @@ this.determineCardSizes00 = () => {
         // Set this height to auto to make sure to fit the summary text inside it.
         // does not work with this.repetition plus save content state!
         if ($gotIt) {
+          $card
+          .find('.h5p-dialogcards-answer-button')
+          .addClass('toto h5p-dialogcards-hide');
           let $cardText = $card.find('.h5p-dialogcards-card-text');
           if (this.noText) {
             $card
