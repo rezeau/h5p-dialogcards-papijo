@@ -2475,7 +2475,7 @@ return $filterCards;
    * Show next card after user clicked on the incorrectAnswer button.
    */
   this.gotItIncorrect = () => {
-    const self = this;
+    this.turnCardToFront();
     let $next = this.$current.next('.h5p-dialogcards-cardwrap');
     const $cardContent = this.$current.find('.h5p-dialogcards-card-content');
     $cardContent.removeClass('h5p-dialogcards-turned');
@@ -2503,7 +2503,7 @@ return $filterCards;
         !$loadCard.length &&
         this.$current.index() + 1 < this.currentDialogs.length
       ) {
-        let $cardWrapper = self
+        let $cardWrapper = this
           .createCard(
             this.currentDialogs[this.$current.index() + 1],
             this.$current.index() + 1,
@@ -4268,6 +4268,7 @@ this.determineCardSizes00 = () => {
       }
     }
     else if (type === 'restart') {
+      console.log(' ++++++++++++++++++++ type === restart');
       if (this.matchIt) {
         $card.addClass('h5p-dialogcards-match-right');
       }
