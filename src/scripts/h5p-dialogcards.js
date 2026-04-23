@@ -186,7 +186,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
     this.playModeUser = this.playMode;
     /* *************************************************** */
     if (this.noText) {
-      this.report = checkConsistency(self);
+      //// todo this.report = checkConsistency(this);
     }
 
     /* *************************************************** */
@@ -1429,7 +1429,7 @@ return $filterCards;
       class: 'h5p-dialogcards-cardwrap-set',
     });
 
-    let setCardSizeCallback = function () {
+    let setCardSizeCallback = () => {
       loaded++;
       if (loaded === initLoad) {
         this.resize();
@@ -1752,7 +1752,7 @@ return $filterCards;
         this.cardsSideMode === 'backFirst')
     ) {
       let isLeft = true;
-      self
+      this
         .createCardImage(card, cardNumber, setCardSizeCallback, isLeft)
         .appendTo($cardContent);
     }
@@ -3222,11 +3222,11 @@ this.determineCardSizes00 = () => {
         }
       }
     });
-  };
+  };0
   
-  this.determineCardSizes = () => {
-      const self = this;
-
+  this.determineCardSizes00 = () => {
+      console.log('this.currentDialogs = ' + JSON.stringify(this.currentDialogs, null, 4) );
+      const cards = this.currentDialogs;
       if (this.cardSizeDetermined === undefined) {
         // Keep track of which cards we've already determined size for
         this.cardSizeDetermined = [];
@@ -3234,7 +3234,7 @@ this.determineCardSizes00 = () => {
 
       // Go through each card
       this.$cardwrapperSet.children(':visible').each((i) => {
-        const cardId = this.cards[i].id;
+        const cardId = this.currentDialogs[i].id;
 
         if (this.cardSizeDetermined.indexOf(cardId) !== -1) {
           return; // Already determined, no need to determine again.
@@ -3242,13 +3242,79 @@ this.determineCardSizes00 = () => {
         this.cardSizeDetermined.push(cardId);
 
         // Change to answer
-        const currentCard = this.cards[i];
+        const currentCard = this.currentDialogs[i];
+        console.log('currentCard.getAnswer() = ' + currentCard.getAnswer());
+        
         currentCard.changeText(currentCard.getAnswer());
 
         // Change back to text
         currentCard.changeText(currentCard.getText());
       });
     };
+
+/**
+   * Resizes each card to fit its text
+   */
+  this.determineCardSizes = function () {
+    let self = this;
+
+    if (
+      self.cardSizeDetermined === undefined ||
+      (this.repetition && this.contentData.previousState)
+    ) {
+      // Keep track of which cards we've already determined size for
+      // JR empty this array if this.repetition && this.contentData.previousState otherwise hard to reset it
+      // not a nice workaround but...
+      self.cardSizeDetermined = [];
+    }
+
+    // Go through each card
+    self.$cardwrapperSet.children(':visible').each(function (i) {
+      if (self.cardSizeDetermined.indexOf(i) !== -1) {
+        return; // Already determined, no need to determine again.
+      }
+      self.cardSizeDetermined.push(i);
+
+      let $content = $('.h5p-dialogcards-card-content', this);
+      let $text = $('.h5p-dialogcards-card-text-inner-content', $content);
+
+      // Grab size with text
+      let textHeight = $text[0].getBoundingClientRect().height;
+
+      // Change to answer
+      if (!self.matchIt) {
+        if (!this.noText) {
+          self.changeText($content, self.currentDialogs[i].answer);
+        }
+      }
+
+      // Grab size with answer
+      let answerHeight = $text[0].getBoundingClientRect().height;
+
+      // Use highest
+      let useHeight = textHeight > answerHeight ? textHeight : answerHeight;
+
+      // Min. limit
+      let minHeight = parseFloat($text.parent().parent().css('minHeight'));
+      if (useHeight < minHeight) {
+        useHeight = minHeight;
+      }
+
+      // Convert to em
+      let fontSize = parseFloat($content.css('fontSize'));
+      useHeight /= fontSize;
+
+      // Set height
+      $text.parent().css('height', `${useHeight}em`);
+
+      // Change back to text
+      if (!self.matchIt) {
+        if (!this.noText) {
+          self.changeText($content, self.currentDialogs[i].text);
+        }
+      }
+    });
+  };
 
   this.scaleToFitHeight = () => {
     if (
@@ -3417,7 +3483,7 @@ this.determineCardSizes00 = () => {
    */
   this.setCardFocus = ($card) => {
     // Wait for transition, then set focus
-    $card.one('transitionend', function () {
+    $card.one('transitionend', () => {
       $card.find('.h5p-dialogcards-card-text-area').focus();
     });
   };
@@ -4611,10 +4677,9 @@ this.determineCardSizes00 = () => {
    * @param {object} self - H5P content instance containing params and dialogs
    * @returns {string} HTML report string or empty string if valid
    */
-  function checkConsistency(self) {
+  function checkConsistency() {
     const removedCards = [];
-
-    if (!this.params.dialogs || this.params.dialogs.length === 0) {
+    if (!this.params.dialogs || self.params.dialogs.length === 0) {
       return '';
     }
 
