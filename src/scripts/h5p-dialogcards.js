@@ -5,6 +5,8 @@
 H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
   const XAPI_REPORTING_VERSION_EXTENSION =
     'https://h5p.org/x-api/h5p-reporting-version';
+  const createButton = (options) => 
+    $(H5P.Components.Button(options));
   /**
    * @param {object} params Behavior settings
    * @param {number} id Content identification
@@ -12,8 +14,10 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    */
   function C(params, id, contentData) {
     const self = this;
-    H5P.EventDispatcher.call(this);
-    self.contentId = self.id = id;
+    // Use the modern buttons from Components.
+    
+      H5P.EventDispatcher.call(this);
+      self.contentId = self.id = id;
     // Set default behavior.
     self.params = $.extend(
       {
@@ -381,6 +385,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     let self = this;
     // Your code is HTML-heavy, so the multiline template literal version is the cleanest and easiest to maintain.
     // Use backticks (`) and ${}
+    /*
     self.$inner = $container.addClass('h5p-dialogcards').append(
       $(`
         <div class="h5p-dialogcards-title">
@@ -392,7 +397,14 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         </div>
         `),
     );
-
+*/
+    self.$inner = $container.addClass('h5p-dialogcards h5p-theme');
+      if (this.params.behaviour.scaleTextNotCard) {
+        $container.addClass('h5p-text-scaling');
+      }
+    const title = $(`<div>${this.params.title}</div>`).text().trim();
+        this.$header = $(`<div class="h5p-dialogcards-title-container"><div class="h5p-dialogcards-title-wrapper">${title ? `<div class="h5p-dialogcards-title"><div class="h5p-dialogcards-title-inner h5p-theme-question-description">${this.params.title}</div></div>` : ''}<div class="h5p-dialogcards-description">${this.params.description}</div></div></div>`);
+    
     if (!this.params.dialogs.length || this.report) {
       return;
     }
@@ -402,7 +414,14 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       self.resetTask();
       return;
     }
-
+    
+    this.$mainContent = $('<div>')
+          .append(this.$header)
+          .append(this.$cardwrapperSet)
+          .append(this.$cardSideAnnouncer)
+          .append(this.nav)
+          .appendTo(this.$inner);
+    
     if (!$.isEmptyObject(this.cardOrder)) {
       this.existsCardOrder = true;
     }
@@ -974,6 +993,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    */
   C.prototype.createFooter = function () {
     let self = this;
+    
+      
+    
     let $footer = $('<nav>', {
       class: 'h5p-dialogcards-footer',
       role: 'navigation',
@@ -996,28 +1018,28 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       };
 
       // NEXT
-      self.$next = JoubelUI.createButton({
-        class: 'h5p-dialogcards-footer-button h5p-dialogcards-next truncated',
-        title: self.params.next,
+      self.$next = createButton({
+        class: 'h5p-theme-button h5p-theme-nav-button h5p-theme-next',
+        label: self.params.next,
       })
-        .click(function () {
-          preventDoubleClick($(this), function () {
-            self.nextCard();
-          });
-        })
-        .appendTo($footer);
+      .click((event) => {
+        preventDoubleClick($(event.currentTarget), () => {
+          self.nextCard();
+        });
+      })
+      .appendTo($footer);
 
       // PREV
-      self.$prev = JoubelUI.createButton({
-        class: 'h5p-dialogcards-footer-button h5p-dialogcards-prev truncated',
-        title: self.params.prev,
+      self.$prev = createButton({
+        class: 'h5p-theme-button h5p-theme-nav-button h5p-theme-prev',
+        label: self.params.prev,
       })
-        .click(function () {
-          preventDoubleClick($(this), function () {
-            self.prevCard();
-          });
-        })
-        .appendTo($footer);
+        .click((event) => {
+        preventDoubleClick($(event.currentTarget), () => {
+          self.prevCard();
+        });
+      })
+      .appendTo($footer);
     }
 
     let classesRetry =
