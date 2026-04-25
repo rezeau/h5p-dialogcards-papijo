@@ -118,8 +118,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           cardsSideChoice: 'user',
           penalty: 0,
           passPercentage: 100,
-          backgroundColor: undefined,
-          backgroundColorBack: undefined,
           noDupeFrontPicToBack: false,
           filterByCategories: 'user',
         },
@@ -283,18 +281,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.cardsLeftInStack = this.nbCardsSelected;
     this.nbCardsInCurrentRound = self.nbCards;
     self.enableCardsNumber = this.enableCardsNumber;
-    this.backgroundColor =
-      self.params.behaviour.backgroundColor === 'rgba(0, 0, 0, 0)'
-        ? undefined
-        : self.params.behaviour.backgroundColor;
-    this.backgroundColorBack =
-      self.params.behaviour.backgroundColorBack === 'rgba(0, 0, 0, 0)'
-        ? undefined
-        : self.params.behaviour.backgroundColorBack;
-    // No backgroundColor given for back side, use front side background color
-    if (this.backgroundColorBack === undefined) {
-      this.backgroundColorBack = this.backgroundColor;
-    }
     // Var cardOrder stores order of cards to allow resuming of card set
     // AND removed cards if match or self-correction Mode.
     // Var progress stores current card index.
@@ -1555,11 +1541,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       class: 'h5p-dialogcards-card-content',
     });
     let isLeft = false;
-    $cardContent.css('background-color', this.backgroundColor);
-    if (this.matchIt && this.cardsSideMode === 'frontFirst') {
-      $cardContent.css('background-color', this.backgroundColorBack);
-    }
-
+    
     if (!this.audioOnly &&
       (card.imageMedia.image !== undefined ||
       (card.imageMedia.image2 !== undefined &&
@@ -1698,13 +1680,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     });
 
     $cardContent.addClass('h5p-dialogcards-matchLeft');
-    if (this.cardsSideMode === 'frontFirst') {
-      $cardContent.css('background-color', this.backgroundColor);
-    }
-    else {
-      $cardContent.css('background-color', this.backgroundColorBack);
-    }
-
+    
     // Upon restore content state maybe necessary to hide previously incorrectly matched cards
     // Do not create image div is not necessary
     if (
@@ -2635,12 +2611,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       turned ? self.params.cardFrontLabel : self.params.cardBackLabel,
     );
 
-    if (turned) {
-      $c.css('background-color', this.backgroundColor);
-    }
-    else {
-      $c.css('background-color', this.backgroundColorBack);
-    }
     // Update HTML class for card
     $c.toggleClass('h5p-dialogcards-turned', !turned);
 
