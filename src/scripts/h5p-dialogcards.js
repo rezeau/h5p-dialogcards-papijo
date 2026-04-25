@@ -664,7 +664,9 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
       }
       else {
         this.incorrect--;
+        console.log('COME BACK FROM gotItIncorrect line 668');
         this.gotItIncorrect();
+        
       }
     }
     this.resize();
@@ -1044,14 +1046,14 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
     }
 
     let classesRetry =
-      'h5p-dialogcards-footer-button h5p-dialogcards-button-retry h5p-dialogcards-disabled';
+      'h5p-dialogcards-footer-button h5p-dialogcards-button-retry h5p-dialogcards-disabled1047';
     let titleRetry = '';
     let htmlRetry = '';
     if (this.enableGotIt || this.repetition) {
       titleRetry = this.params.nextRound;
       htmlRetry = this.params.nextRound;
       classesRetry =
-        'h5p-dialogcards-footer-button h5p-dialogcards-retry h5p-dialogcards-disabled';
+        'h5p-dialogcards-footer-button h5p-dialogcards-retry tata h5p-dialogcards-disabled';
     }
     else {
       classesRetry += ' h5p-dialogcards-button-reset';
@@ -1806,8 +1808,10 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
    * @param {HTMLElement} $cardContent Card content container
    * @returns {HTMLElement} Card footer element
    */
+   
   this.createCardFooter = (card, $cardContent) => {
-        let footerClass;
+    
+    let footerClass;
     if (!this.enableGotIt) {
       footerClass = 'h5p-dialogcards-card-footer';
       if (this.sideBySide) {
@@ -1840,7 +1844,8 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
 
     if (this.enableGotIt || this.matchIt) {
       classesRepetition =
-        'h5p-dialogcards-quick-progression h5p-dialogcards-disabled';
+        'h5p-dialogcards-quick-progression h5p-dialogcards-disabled1845 titi';
+        
       attributeTabindex = '0';
     }
     else {
@@ -1848,62 +1853,40 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
     }
 
     if (this.enableGotIt) {
-      this.$buttonIncorrect = H5P.JoubelUI.createButton({
-        class: 'h5p-dialogcards-answer-button',
-        html: this.params.incorrectAnswer,
-      })
-        .click(() => {
-          this.gotItIncorrect();
-        })
-        .addClass('incorrect')
-        .addClass(classesRepetition)
-        .attr('tabindex', attributeTabindex)
-        .appendTo($cardFooter);
-
-      // JR dummy incorrect button for front of card only
-      this.$buttonIncorrectOff = H5P.JoubelUI.createButton({
-        class: 'h5p-dialogcards-answer-button-off',
-        html: this.params.incorrectAnswer,
-      })
-        .addClass('incorrect')
-        .addClass(classesRepetitionOff)
-        .attr('tabindex', -1)
-        .appendTo($cardFooter);
+      
     }
-
-    if (!this.matchIt) {
-      let htmlText = this.hideTurnButton
-        ? this.params.check
-        : this.params.answer;
-      this.$buttonTurn = H5P.JoubelUI.createButton({
-        class: 'h5p-dialogcards-turn',
-        html: htmlText,
-      })
-        .click(() => {
-          ///this.turnCard($(this).parents('.h5p-dialogcards-cardwrap'));
-          const card = event.currentTarget.closest('.h5p-dialogcards-cardwrap');
+    
+    if (this.enableGotIt) {
+        this.$buttonIncorrect = createButton({
+        ///class: ['h5p-dialogcards-answer-button', 'incorrect', classesRepetition].join(' '),
+        ///classes: `h5p-dialogcards-answer-button incorrect ${classesRepetition}`,
+        classes: 'h5p-dialogcards-answer-button incorrect',
+        label: 'this.params.incorrectAnswer',
+        disabled: true,
+        tabindex: attributeTabindex,
+        styleType: 'secondary',
+        onClick: () => {
+          this.gotItIncorrect();
+        }
+      }).appendTo($cardFooter);
+    }
+    
+    if (!this.matchIt) {      
+        this.$buttonTurn = $(H5P.Components.Button({
+          label: this.hideTurnButton
+            ? this.params.check
+            : this.params.answer,
+          icon: 'flip',
+          onClick: (event) => {
+            const card = event.currentTarget.closest('.h5p-dialogcards-cardwrap');
             this.turnCard($(card));
-        })
-        .attr('tabindex', 0)
+          },
+        }))
         .appendTo($cardFooter);
+    
     }
     else if (!this.sideBySide) {
-      this.$buttonMatch = H5P.JoubelUI.createButton({
-        class: 'h5p-dialogcards-button-match',
-        html: this.params.matchButtonLabel,
-      })
-        .click((event) => {
-          const $cardwrap = $(event.currentTarget).closest('.h5p-dialogcards-current');
-        if (this.repetition) {
-          this.matchCardsRepetition($cardwrap);
-        }
-        else {
-          this.matchCards($cardwrap);
-        }
-        })
-        .attr('tabindex', 1)
-        .appendTo($cardFooter);
-
+      
       let classesMatch =
         'h5p-dialogcards-answer-button h5p-dialogcards-quick-progression' +
         ' h5p-dialogcards-match h5p-dialogcards-disabled';
@@ -1924,32 +1907,35 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
         .addClass('incorrect')
         .attr('tabindex', -1)
         .appendTo($cardFooter);
+    
+      this.$buttonMatch = createButton({
+      classes: 'h5p-dialogcards-button-match',
+      label: this.params.matchButtonLabel,
+      tabindex: 1,
+      icon: 'check',
+      onClick: (event) => {
+        const $cardwrap = $(event.currentTarget).closest('.h5p-dialogcards-current');
+        if (this.repetition) {
+          this.matchCardsRepetition($cardwrap);
+        }
+        else {
+          this.matchCards($cardwrap);
+        }
+      }
+    }).appendTo($cardFooter);
     }
-
-    if (this.enableGotIt) {
-      this.$buttonCorrect = H5P.JoubelUI.createButton({
-        class: 'h5p-dialogcards-answer-button',
-        html: this.params.correctAnswer,
-      })
-        .click(() => {
-          ///this.gotItCorrect($(this).parents('.h5p-dialogcards-cardwrap'));
+    if (this.enableGotIt) {     
+      this.$buttonCorrect = createButton({
+        classes: 'h5p-dialogcards-answer-button correct',
+        label: this.params.correctAnswer,
+        disabled: true,
+        tabindex: attributeTabindex,
+        styleType: 'secondary',
+        onClick: () => {
           const $cardwrap = $(event.currentTarget).closest('.h5p-dialogcards-current');
           this.gotItCorrect($cardwrap);
-        })
-        .addClass('correct')
-        .addClass(classesRepetition)
-        .attr('tabindex', 0)
-        .appendTo($cardFooter);
-
-      // JR dummy incorrect button for front of card only
-      this.$buttonCorrectOff = H5P.JoubelUI.createButton({
-        class: 'h5p-dialogcards-answer-button-off',
-        html: this.params.correctAnswer,
-      })
-        .addClass('correct')
-        .addClass(classesRepetitionOff)
-        .attr('tabindex', -1)
-        .appendTo($cardFooter);
+        }
+      }).appendTo($cardFooter);
     }
 
     return $cardFooter;
@@ -2149,7 +2135,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
    * Update navigation text and show or hide buttons.
    */
   this.updateNavigation = () => {
-    
+    console.log('this.updateNavigation');
     let $nextCard;
     let $prevCard;
     let $matchButton;
@@ -2179,7 +2165,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
         $matchButton.removeClass('h5p-dialogcards-disabled');
       }
       else {
-        $matchButton.addClass('h5p-dialogcards-disabled');
+        $matchButton.addClass('h5p-dialogcards-disabled2166');
       }
     }
 
@@ -2193,12 +2179,12 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
     if ($nextCard.length && !this.enableGotIt) {
       this.$next.removeClass('h5p-dialogcards-disabled');
       if (this.cardsLeft === 0) {
-        this.$next.addClass('h5p-dialogcards-disabled');
+        this.$next.addClass('h5p-dialogcards-disabled2180');
       }
-      this.$retry.addClass('h5p-dialogcards-disabled');
+      this.$retry.addClass('h5p-dialogcards-disabled2182');
     }
     else if (!this.enableGotIt) {
-      this.$next.addClass('h5p-dialogcards-disabled');
+      this.$next.addClass('h5p-dialogcards-disabled2185');
     }
     $prevCard = this.$current.prevAll('.h5p-dialogcards-cardwrap').eq(0);
 
@@ -2212,18 +2198,19 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
     // enableGotIt mode does not have prev or next buttons
     if (!this.enableGotIt) {
       if ($prevCard.length) {
-        this.$prev.removeClass('h5p-dialogcards-disabled');
+        this.$prev.removeClass('h5p-dialogcards-disabled2199');
       }
       else {
-        this.$prev.addClass('h5p-dialogcards-disabled');
+        this.$prev.addClass('h5p-dialogcards-disabled2202');
       }
     }
 
     if (this.enableGotIt) {
       // In case it was hidden when refreshing
       $card
-        .find('.h5p-dialogcards-answer-button-off')
-        .removeClass('h5p-dialogcards-hide');
+        .find('.h5p-dialogcards-answer-button')
+        .removeClass('h5p-dialogcards-disabled')
+        .addClass('coucou2211');
       if (this.hideTurnButton) {
         $card.find('.h5p-dialogcards-turn').removeClass('h5p-dialogcards-hide');
       }
@@ -2289,8 +2276,6 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
    * Show next card. If matchIt show next card on the right.
    */
   this.nextCard = () => {
-    
-
     // In those 2 modes, consider activity answered when first card is clicked.
     if (
       this.playModeUser === 'normalMode' ||
@@ -2455,6 +2440,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
    * Show next card after user clicked on the incorrectAnswer button.
    */
   this.gotItIncorrect = () => {
+    console.log('this.gotItIncorrect');
     this.turnCardToFront();
     let $next = this.$current.next('.h5p-dialogcards-cardwrap');
     const $cardContent = this.$current.find('.h5p-dialogcards-card-content');
@@ -2464,6 +2450,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
       this.currentDialogs.length - selectionIndex - this.endOfStack;
     this.incorrect++;
     if ($next.length) {
+      console.log('$next.length = ' + $next.length);
       let audioIndex = this.nbCards - this.currentDialogs.length;
       this.stopAudio(audioIndex);
       this.$current
@@ -2475,7 +2462,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
 
       this.$current
         .find('.h5p-dialogcards-answer-button')
-        .addClass('h5p-dialogcards-disabled');
+        .addClass('h5p-dialogcards-disabled2461a');
 
       // Add next card if not loaded yet.
       let $loadCard = this.$current.next('.h5p-dialogcards-cardwrap');
@@ -2504,11 +2491,22 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
 
       // Next card not loaded or end of cards.
     }
-    else if (cardsLeftInStack) {
-      this.endOfStack = 1;
-      this.updateNavigation();
+    else {
+      if (cardsLeftInStack) {
+        console.log('cardsLeftInStack = ' + cardsLeftInStack);
+        this.endOfStack = 1;
+        this.updateNavigation();
+        
+        this.resetButtons('retry button');
+      }
+      console.log('??????????');
+      alert('??????????');
       this.resetButtons('retry button');
+      
     }
+    
+  console.log('END ENE END this.gotItIncorrect');
+  
   };
 
   /**
@@ -2726,11 +2724,12 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
         $ch.find('.h5p-dialogcards-audio-wrapper2').toggleClass('hide');
         this.stopAudio(audioIndex);
       }
-
+/*
       if (this.enableGotIt) {
         $cg.toggleClass('h5p-dialogcards-disabled');
         $off.toggleClass('h5p-dialogcards-disabled');
       }
+      */
       if (this.frontTextBackImage) {
         $card
           .find('.h5p-dialogcards-image-wrapper')
@@ -2743,18 +2742,23 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
       if (this.enableGotIt) {
         if (!turned && this.hideTurnButton) {
           let $buttonTurn;
-          $buttonTurn = this.$current.find('.h5p-dialogcards-turn');
-          $buttonTurn.addClass('h5p-dialogcards-hide');
+          $buttonTurn = this.$current.find('.h5p-theme-flip');
+          $buttonTurn.addClass('h5p-dialogcards-disabled2731');
         }
         const $answerButtons = $card.find('.h5p-dialogcards-answer-button');
-        if (!turned) {
+        //if (!turned) {
           $answerButtons
             .addClass('h5p-dialogcards-quick-progression')
+            .removeClass('h5p-dialogcards-disabled')
+            .removeAttr('disabled')
             .attr('tabindex', 0);
+        /*
         }
         else {
-          $answerButtons.removeClass('h5p-dialogcards-quick-progression');
+          $answerButtons
+            .removeClass('h5p-dialogcards-quick-progression')
         }
+        */
       }
 
       // Add backside tip
@@ -2857,7 +2861,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
    * Reset the task so that the user can re-start from first card.
    */
   this.retry = () => {
-    
+    console.log('this.retry');
     let $card = $(this);
     // To hide the summary text upon retrying
     if (this.noText || this.frontTextBackImage) {
@@ -2997,7 +3001,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
     this.resizeOverflowingText();
     this.setCardFocus(this.$current);
     this.$current
-      .find('.h5p-dialogcards-answer-button-off')
+      .find('.h5p-dialogcards-answer-button')
       .removeClass('h5p-dialogcards-disabled');
 
     this.resetButtons('restart');
@@ -3649,7 +3653,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
    */
 
   this.gotItCorrect = ($card) => {
-    
+    console.log('this.gotItCorrect');
     let index = $card.index();
     this.endOfStack = 0;
     this.correct++;
@@ -4070,7 +4074,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
    */
 
   this.resetButtons = (type) => {
-    
+    console.log('this.resetButtons type = ' + type);
     let $card = $(this);
     $card = this.$current;
     $card.removeClass('h5p-dialogcards-match-right');
@@ -4080,7 +4084,7 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
     let $gotIt = this.enableGotIt;
     $card
       .find('.h5p-dialogcards-answer-button')
-      .addClass('h5p-dialogcards-disabled');
+      .addClass('h5p-dialogcards-disabled4072');
     if ($gotIt) {
       $card
         .find('.h5p-dialogcards-card-text-area')
@@ -4191,8 +4195,11 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
 
         $cardTextArea.html(text);
         $card.find('.h5p-dialogcards-card-text').removeClass('hide');
+        $card
+        .find('.h5p-dialogcards-card-footer-enablegotit')
+        .addClass('h5p-dialogcards-visibility-hidden');
 
-        if (type === 'retry button') {
+        if (type === 'retry button') {          
           this.cardsLeft = 0;
           this.$retry.html(
             this.params.nextRound.replace('@round', this.currentRound + 1),
@@ -4243,6 +4250,9 @@ class DialogcardsPapiJo extends H5P.EventDispatcher {
           .find('.h5p-dialogcards-card-text-inner')
           .addClass('h5p-dialogcards-hide');
       }
+      $card
+        .find('.h5p-dialogcards-card-footer-enablegotit')
+        .removeClass('h5p-dialogcards-visibility-hidden');
     }
     // A resize is needed to make sure the content of cards is displayed on further rounds.
     if (this.playModeUser === 'matchRepetition') {
