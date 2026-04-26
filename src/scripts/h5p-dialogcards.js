@@ -414,7 +414,18 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       self.resetTask();
       return;
     }
+    this.$progressTop = $('<div>', {
+            id: `h5p-dialogcards-progress-${this.idCounter}`,
+            class: 'h5p-dialogcards-progress h5p-theme-progress',
+            'aria-live': 'assertive',
+          }).appendTo(this.$header);
     
+    this.$progressTop.text(this.params.progressText
+      .replace('@card', 1)
+      .replace('@total', self.currentDialogs.length)
+      );
+
+      
     this.$mainContent = $('<div>')
           .append(this.$header)
           .append(this.$cardwrapperSet)
@@ -994,10 +1005,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
   C.prototype.createFooter = function () {
     let self = this;
     
-      
-    
     let $footer = $('<nav>', {
-      class: 'h5p-dialogcards-footer',
+      class: 'h5p-navigation h5p-navigation--2-split-spread ',
       role: 'navigation',
     });
     if (this.matchIt) {
@@ -1006,7 +1015,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
     // 19/12/2025 added a timeout to the Prev and Next buttons to prevent double clicks
     if (!this.enableGotIt) {
-      const preventDoubleClick = function ($btn, action) {
+      this.preventDoubleClick = function ($btn, action) {
         if ($btn.prop('disabled')) {
           return;
         }
@@ -1017,30 +1026,32 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         }, C.NB300);
       };
 
-      // NEXT
-      self.$next = createButton({
-        class: 'h5p-theme-button h5p-theme-nav-button h5p-theme-next',
-        label: self.params.next,
-      })
-      .click((event) => {
-        preventDoubleClick($(event.currentTarget), () => {
-          self.nextCard();
-        });
-      })
-      .appendTo($footer);
-
       // PREV
       self.$prev = createButton({
-        class: 'h5p-theme-button h5p-theme-nav-button h5p-theme-prev',
+        classes: 'h5p-theme-button h5p-theme-nav-button h5p-theme-prev',
         label: self.params.prev,
+        icon: 'previous',
       })
         .click((event) => {
-        preventDoubleClick($(event.currentTarget), () => {
+        this.preventDoubleClick($(event.currentTarget), () => {
           self.prevCard();
         });
       })
       .appendTo($footer);
     }
+
+      // NEXT
+      self.$next = createButton({
+        classes: 'h5p-theme-button h5p-theme-nav-button h5p-theme-next',
+        label: self.params.next,
+        icon: 'next',
+      })
+      .click((event) => {
+        this.preventDoubleClick($(event.currentTarget), () => {
+          self.nextCard();
+        });
+      })
+      .appendTo($footer);
 
     let classesRetry =
       'h5p-dialogcards-footer-button h5p-dialogcards-button-retry h5p-dialogcards-disabled';
@@ -1875,14 +1886,15 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       let htmlText = self.hideTurnButton
         ? self.params.check
         : self.params.answer;
-      this.$buttonTurn = H5P.JoubelUI.createButton({
+      this.$buttonTurn = createButton({
         class: 'h5p-dialogcards-turn',
-        html: htmlText,
-      })
-        .click(function () {
-          self.turnCard($(this).parents('.h5p-dialogcards-cardwrap'));
+        label: htmlText,
+        icon: 'flip',
+        onClick: (event) => {
+            const card = event.currentTarget.closest('.h5p-dialogcards-cardwrap');
+            this.turnCard($(card));
+          },
         })
-        .attr('tabindex', 0)
         .appendTo($cardFooter);
     }
     else if (!this.sideBySide) {
@@ -2241,7 +2253,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       );
       this.matchCorrect = null;
       if (!this.repetition) {
-        self.$progress.text(
+        self.$progressTop.text(
           self.params.progressText
             .replace('@card', self.$current.index() / C.NB2 + 1)
             .replace('@total', self.currentDialogs.length),
@@ -2257,7 +2269,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       }
     }
     else if (this.sideBySide) {
-      self.$progress.text(
+      self.$progressTop.text(
         self.params.progressText
           .replace('@card', self.$current.index() / C.NB2 + 1)
           .replace('@total', self.currentDialogs.length),
@@ -2274,11 +2286,11 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       }
     }
     else {
-      self.$progress.text(
+      self.$progressTop.text(
         self.params.progressText
           .replace('@card', self.$current.index() + 1)
           .replace('@total', self.currentDialogs.length),
-      );
+      )
     }
   };
 
@@ -3113,7 +3125,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           .css('height', 'initial')
           .outerHeight();
         maxHeight = initialHeight > maxHeight ? initialHeight : maxHeight;
-        $(this).find('.h5p-dialogcards-cardholder').css('height', 'inherit');
+        /// remove this line which causes the LAST card heignt too hihg in normal mode.
+        ///$(this).find('.h5p-dialogcards-cardholder').css('height', 'inherit');
       }
     });
 
@@ -3968,7 +3981,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         '.h5p-dialogcards-card-side-announcer, .h5p-dialogcards-button-reset, .h5p-dialogcards-order,' +
         '.h5p-joubelui-score-bar, .h5p-dialogcards-match-footer,' +
         '.h5p-dialogcards-summary-screen, .h5p-dialogcards-summary-message, .h5p-dialogcards-feedback,' +
-        '.h5p-dialogcards-sub-title, .h5p-dialogcards-options',
+        '.h5p-dialogcards-sub-title, .h5p-dialogcards-options, .h5p-navigation ',
       self.$inner,
     ).remove();
 
@@ -3987,7 +4000,11 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.filterList = undefined;
     this.filterOperator = undefined;
     self.getCurrentState();
-
+    // Reset the progressTop counter.
+    this.$progressTop.text(this.params.progressText
+      .replace('@card', 1)
+      .replace('@total', self.currentDialogs.length)
+      );
     if (this.playModeNames.length === 0) {
       this.playMode = 'normalMode';
       this.playModeUser = this.playMode;
