@@ -82,9 +82,6 @@
   max-width: 40em;
 }
 
-.h5p-dialogcards .h5p-dialogcards-card-content {
-  padding: var(--h5p-theme-spacing-l) 0 0;
-}
 
 .h5p-dialogcards .h5p-dialogcards-card-footer {
   container-type: inline-size;
@@ -1379,6 +1376,7 @@ background-color: var(--h5p-theme-ui-base);
   grid-column: 1 / -1;
 }
 
-.h5p-dialogcards .h5p-dialogcard {
-  height: auto !important;
+.h5p-dialogcards .h5p-dialogcards-card-content,
+.h5p-dialogcards .h5p-dialogcards-cardwrap-left {
+  padding: var(--h5p-theme-spacing-l) 0 0;
 }

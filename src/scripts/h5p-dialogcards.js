@@ -181,7 +181,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.playModeUser = this.playMode;
     /* *************************************************** */
     if (this.noText) {
-      this.report = checkConsistency(self);
+      //// todo this.report = checkConsistency(self);
     }
 
     /* *************************************************** */
@@ -1068,19 +1068,20 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       titleRetry = self.params.retry;
       htmlRetry = self.params.retry;
     }
-    self.$retry = JoubelUI.createButton({
+    self.$retry = createButton({
       class: classesRetry,
-      title: titleRetry,
-      html: htmlRetry,
+      label: titleRetry,
+      styleType: 'secondary',
+      icon: 'retry',
     })
-      .click(function () {
+      .click((event) => {
         if (self.repetition) {
           self.retryRepetition();
         }
         else {
           self.retry();
         }
-      })
+        })
       .appendTo($footer);
 
     if (!this.enableGotIt) {
@@ -3115,7 +3116,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     //Find max required height for all cards
     self.$cardwrapperSet.children().each(function () {
       let wrapperHeight = $(this).css('height', 'initial').outerHeight();
-      $(this).css('height', 'inherit');
+      // todo check if use iniaial OR inherit?
+      $(this).css('height', 'initial');
       maxHeight = wrapperHeight > maxHeight ? wrapperHeight : maxHeight;
 
       // Check height
@@ -3126,6 +3128,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           .outerHeight();
         maxHeight = initialHeight > maxHeight ? initialHeight : maxHeight;
         /// remove this line which causes the LAST card heignt too hihg in normal mode.
+        //// todo : restore it if we have pictures not everywhere
         ///$(this).find('.h5p-dialogcards-cardholder').css('height', 'inherit');
       }
     });
