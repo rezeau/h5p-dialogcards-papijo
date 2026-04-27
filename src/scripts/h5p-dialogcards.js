@@ -44,7 +44,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         summaryCardsSelected: 'Number of cards you selected from the pool:',
         summaryCompletedRounds: 'Completed rounds:',
         summaryAllDone: 'Well done! You got all @cards cards correct!',
-        cardsLeft: 'Cards left: @number',
         matchButtonLabel: 'Match',
         correctMatch: 'That\'s a match!',
         incorrectMatch: 'That\'s NOT a match!',
@@ -401,7 +400,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
     this.$progressTop = $('<div>', {
             id: `h5p-dialogcards-progress-${this.idCounter}`,
-            class: 'h5p-dialogcards-progress h5p-theme-progress',
+            class: 'h5p-dialogcards-progress h5p-theme-progress h5p-dialogcards-disabled',
             'aria-live': 'assertive',
           }).appendTo(this.$header);
     
@@ -409,7 +408,12 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       .replace('@card', 1)
       .replace('@total', self.currentDialogs.length)
       );
-
+    console.log('this.playModeUser = ' + this.playModeUser);
+    if (this.playModeUser === 'matchRepetition' || this.playModeUser === 'selfCorrectionMode') {
+    this.$round = $('<div>', {
+        class: 'h5p-dialogcards-progress h5p-theme-progress h5p-dialogcards-round h5p-dialogcards-disabled',
+      }).appendTo(this.$header);
+    }
       
     this.$mainContent = $('<div>')
           .append(this.$header)
@@ -462,8 +466,15 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    * Attach the rest of the h5p inside the given container.
    */
   C.prototype.attachContinue = function () {
+    
     let self = this;
     let text = '';
+    /* Only display the progressTop object when all options selected ready */
+    this.$progressTop.removeClass('h5p-dialogcards-disabled');
+    console.log('this.playModeUser = ' + this.playModeUser);
+    if (this.playModeUser === 'matchRepetition' || this.playModeUser === 'selfCorrectionMode') {
+      this.$round.removeClass('h5p-dialogcards-disabled');
+    }
     if (this.playMode === 'user') {
       const value = this.playModeUser;
       // Use .find() to get the object with matching value
@@ -1075,10 +1086,11 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       }).appendTo($footer);
     }
     else {
+      /*
       self.$round = $('<div>', {
         class: 'h5p-dialogcards-round',
       }).appendTo($footer);
-
+*/
       self.$progress = $('<div>', {
         class: 'h5p-dialogcards-cards-left',
         'aria-live': 'assertive',
@@ -1087,10 +1099,11 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     // Mode match with repetition. Under LEFT  card display footer similar to the GotIt mode.
     
     if (this.repetition) {
+      /*
       self.$round = $('<div>', {
         class: 'h5p-dialogcards-round repetition',
       }).appendTo($footer);
-
+*/
       self.$progress = $('<div>', {
         class: 'h5p-dialogcards-cards-left repetition',
         'aria-live': 'assertive',
@@ -2160,6 +2173,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     let $nextCard;
     let $prevCard;
     let $matchButton;
+    //this.$progressTop.removeClass('h5p-dialogcards-disabled');
+
     let $card = self.$current.find('.h5p-dialogcards-card-content');
     if (this.sideBySide) {
       let $cardFooter = $card.find('.h5p-dialogcards-card-footer');
@@ -2235,13 +2250,12 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         $card.find('.h5p-dialogcards-turn').removeClass('h5p-dialogcards-hide');
       }
       const selectionIndex = self.$current.index();
-      self.$progress.text(
-        this.params.cardsLeft.replace(
-          '@number',
-          self.currentDialogs.length - selectionIndex - this.endOfStack,
-        ),
-      );
       self.$round.text(this.params.round.replace('@round', this.currentRound));
+      self.$progressTop.text(
+        self.params.progressText
+          .replace('@card', 1)
+          .replace('@total', self.currentDialogs.length - selectionIndex - this.endOfStack),
+      );
     }
     else if (this.matchIt && !this.sideBySide) {
       self.$progressFooterLeft.text(
@@ -2256,10 +2270,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
             .replace('@total', self.currentDialogs.length),
         );
       if (this.repetition) {
-        self.$progress.text(
-          this.params.cardsLeft.replace('@number', this.cardsLeft),
-        );
-        self.$round.text(
+        this.$round.text(
           this.params.round.replace('@round', this.currentRound),
         );
       }
@@ -3965,6 +3976,10 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.sideBySide = false;
     self.progress = -1;
     self.progressLeft = -1;
+    this.$progressTop.addClass('h5p-dialogcards-disabled');
+    if (this.playModeUser === 'matchRepetition' || this.playModeUser === 'selfCorrectionMode') {
+      this.$round.addClass('h5p-dialogcards-disabled')
+    }
     // JR for interactive book we need to remove the options upon Restart
     $('.h5p-dialogcards-options', self.$inner).remove();
     let $optionsText = self.$inner.find('.h5p-dialogcards-options');

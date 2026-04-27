@@ -15,7 +15,8 @@
   margin: inherit;
 }
 
-.h5p-dialogcards .h5p-dialogcards-progress {
+.h5p-dialogcards .h5p-dialogcards-progress,
+.h5p-dialogcards .h5p-dialogcards-round {
   height: var(--h5p-theme-spacing-m);
   line-height: var(--h5p-theme-spacing-m);
   text-align: center;
@@ -238,7 +239,7 @@
 
 .h5p-dialogcards .h5p-dialogcards-round {
   color: var(--h5p-theme-text-secondary);
-  font-weight: 400;
+  font-weight: bold;
   text-decoration: none solid rgb(153, 153, 153);
   white-space: nowrap;
 }
@@ -1070,14 +1071,14 @@ background-color: var(--h5p-theme-ui-base);
 
 .h5p-dialogcards .h5p-dialogcards-round {
   float: left;
-  margin-left: 1.5em;
-  color: #999999;
-  font-weight: 400;
-  text-decoration: none solid rgb(153, 153, 153);
+  font-weight: 800;
+  background-color: var(--h5p-theme-contrast-cta-light);
+  border-radius: var(--h5p-theme-border-radius-medium);
+  color: var(--h5p-theme-contrast-cta-white);
 }
 
 .h5p-dialogcards .h5p-dialogcards-round.repetition {
-  margin-left: 3em;
+  ///margin-left: 3em;
 }
 
 .h5p-dialogcards .h5p-dialogcards-cards-left {
