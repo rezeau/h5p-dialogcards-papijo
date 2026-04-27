@@ -383,21 +383,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    */
   C.prototype.attach = function ($container) {
     let self = this;
-    // Your code is HTML-heavy, so the multiline template literal version is the cleanest and easiest to maintain.
-    // Use backticks (`) and ${}
-    /*
-    self.$inner = $container.addClass('h5p-dialogcards').append(
-      $(`
-        <div class="h5p-dialogcards-title">
-          <div class="h5p-dialogcards-title-inner">${self.params.title}</div>
-        </div>
-        <div class="h5p-dialogcards-description">${self.params.description}</div>
-        <div class="h5p-dialogcards-audio-wrapper h5p-audio-not-supported">
-          ${this.noFilterMessage}
-        </div>
-        `),
-    );
-*/
     self.$inner = $container.addClass('h5p-dialogcards h5p-theme');
       if (this.params.behaviour.scaleTextNotCard) {
         $container.addClass('h5p-text-scaling');
@@ -687,7 +672,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       randomizeQuestion = self.params.randomizeRightCardsQuestion;
     }
     let $order = $('<div>', {
-      class: 'h5p-dialogcards-order h5p-dialogcards-options',
+      classes: 'h5p-dialogcards-order h5p-dialogcards-options',
       html: randomizeQuestion,
     });
 
@@ -742,7 +727,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
     // Do not use the h5p-dialogcards-options flex display here.
     let $side = $('<div>', {
-      class: 'h5p-dialogcards-side h5p-dialogcards-options show',
+      classes: 'h5p-dialogcards-side h5p-dialogcards-options show',
       html: `${self.params.currentSideNotice}&nbsp;${currentSide}`,
     });
     let $optionButtons = $('<div>', {
@@ -1038,8 +1023,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         });
       })
       .appendTo($footer);
-    }
-
       // NEXT
       self.$next = createButton({
         classes: 'h5p-theme-button h5p-theme-nav-button h5p-theme-next',
@@ -1052,6 +1035,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         });
       })
       .appendTo($footer);
+    }
 
     let classesRetry =
       'h5p-dialogcards-footer-button h5p-dialogcards-button-retry h5p-dialogcards-disabled';
@@ -1069,7 +1053,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       htmlRetry = self.params.retry;
     }
     self.$retry = createButton({
-      class: classesRetry,
+      classes: classesRetry,
       label: titleRetry,
       styleType: 'secondary',
       icon: 'retry',
@@ -1100,7 +1084,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         'aria-live': 'assertive',
       }).appendTo($footer);
     }
-    // Mode match with repetition. Under right card display footer similar to the GotIt mode.
+    // Mode match with repetition. Under LEFT  card display footer similar to the GotIt mode.
+    
     if (this.repetition) {
       self.$round = $('<div>', {
         class: 'h5p-dialogcards-round repetition',
@@ -1111,6 +1096,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         'aria-live': 'assertive',
       }).appendTo($footer);
     }
+    
     return $footer;
   };
 
@@ -1119,9 +1105,20 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       class: 'h5p-dialogcards-match-footer-left',
     });
     this.$progressFooterLeft = $('<div>', {
-      class: 'h5p-dialogcards-cards-matched',
+      class: 'h5p-dialogcards-cards-matched h5p-theme-progress',
       'aria-live': 'assertive',
     }).appendTo($footerLeft);
+    // Mode match with repetition. Under LEFT  card display footer similar to the GotIt mode.
+    if (this.repetition) {
+      self.$roundR = $('<div>', {
+        class: 'h5p-dialogcards-round repetition',
+      }).appendTo($footerLeft);
+
+      self.$progressR = $('<div>', {
+        class: 'h5p-dialogcards-cards-left repetition',
+        'aria-live': 'assertive',
+      }).appendTo($footerLeft);
+    }
     return $footerLeft;
   };
 
@@ -1818,6 +1815,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    * @returns {HTMLElement} Card footer element
    */
   C.prototype.createCardFooter = function (card, $cardContent) {
+    
     let self = this;
     let footerClass;
     if (!this.enableGotIt) {
@@ -1888,7 +1886,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         ? self.params.check
         : self.params.answer;
       this.$buttonTurn = createButton({
-        class: 'h5p-dialogcards-turn',
+        classes: 'h5p-dialogcards-turn',
         label: htmlText,
         icon: 'flip',
         onClick: (event) => {
@@ -1899,19 +1897,19 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         .appendTo($cardFooter);
     }
     else if (!this.sideBySide) {
-      this.$buttonMatch = H5P.JoubelUI.createButton({
-        class: 'h5p-dialogcards-button-match',
-        html: self.params.matchButtonLabel,
-      })
-        .click(function () {
+      this.$buttonMatch = createButton({
+        classes: 'h5p-dialogcards-button-match',
+        label: self.params.matchButtonLabel,
+        icon: 'flip',
+        onClick: (event) => {
+          const card = event.currentTarget.closest('.h5p-dialogcards-cardwrap');
           if (self.repetition) {
-            self.matchCardsRepetition(
-              $(this).parents('.h5p-dialogcards-cardwrap'),
-            );
+            this.matchCardsRepetition($(card));
           }
           else {
-            self.matchCards($(this).parents('.h5p-dialogcards-cardwrap'));
+            this.matchCards($(card));
           }
+        },
         })
         .attr('tabindex', 1)
         .appendTo($cardFooter);
@@ -1961,7 +1959,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         .attr('tabindex', -1)
         .appendTo($cardFooter);
     }
-
     return $cardFooter;
   };
 
@@ -2253,14 +2250,12 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           .replace('@incorrect', this.incorrect),
       );
       this.matchCorrect = null;
-      if (!this.repetition) {
-        self.$progressTop.text(
+      self.$progressTop.text(
           self.params.progressText
             .replace('@card', self.$current.index() / C.NB2 + 1)
             .replace('@total', self.currentDialogs.length),
         );
-      }
-      else {
+      if (this.repetition) {
         self.$progress.text(
           this.params.cardsLeft.replace('@number', this.cardsLeft),
         );
@@ -3725,7 +3720,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     let $correctButton = $card.find('.h5p-dialogcards-match.correct');
     let $incorrectButton = $card.find('.h5p-dialogcards-match.incorrect');
     let $matchButton = $card.find('.h5p-dialogcards-button-match');
-    $matchButton.toggleClass('h5p-dialogcards-disabled');
+    $matchButton
+      .addClass('h5p-dialogcards-disabled');
     self.$next.toggleClass('h5p-dialogcards-inactive');
     self.$prev.toggleClass('h5p-dialogcards-inactive');
 
@@ -3741,6 +3737,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         self.nextCardLeft();
         self.resizeOverflowingText();
         $correctButton.toggleClass('h5p-dialogcards-disabled');
+        let $matchButton = $card.find('h5p-theme-flip');
+        $matchButton.addClass('h5p-dialogcards-disabled');
         self.$next.toggleClass('h5p-dialogcards-inactive');
         self.$prev.toggleClass('h5p-dialogcards-inactive');
         self.$current
@@ -3799,7 +3797,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     let $correctButton = $card.find('.h5p-dialogcards-match.correct');
     let $incorrectButton = $card.find('.h5p-dialogcards-match.incorrect');
     let $matchButton = $card.find('.h5p-dialogcards-button-match');
-    $matchButton.toggleClass('h5p-dialogcards-disabled');
+    $matchButton
+      .addClass('h5p-dialogcards-disabled');
     self.$next.toggleClass('h5p-dialogcards-inactive');
     self.$prev.toggleClass('h5p-dialogcards-inactive');
     this.cardsLeft--;
