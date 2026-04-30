@@ -468,11 +468,12 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     
     let self = this;
     let text = '';
+    console.log('attachContinue');
+    console.log('this.currentFilter = ' + this.currentFilter
+      + '\nself.currentFilter = ' + self.currentFilter
+      );
     /* Only display the progressTop object when all options selected ready */
     this.$progressTop.removeClass('h5p-dialogcards-disabled');
-    console.log('??????????? this.playModeUser === ' + this.playModeUser 
-      + '\nthis.playModeUser = ' + this.playModeUser
-      );
     if (this.playModeUser === 'matchRepetition' || this.playModeUser === 'selfCorrectionMode') {
       this.$round.removeClass('h5p-dialogcards-disabled');
     }
@@ -849,7 +850,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    * Create filterCards option request
    * @returns {HTMLElement} self.currentDialogs array
    */
-
   C.prototype.createFilterCards = function () {
     const self = this;
     // Init params
@@ -857,7 +857,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       class: 'h5p-dialogcards-categories',
       html: self.params.selectFilter,
     });
-
+console.log('this.catFilters.length = ' + this.catFilters.length);
     const $optionButtons = $('<div>', {
       class: 'h5p-dialogcards-optionsbuttons',
     }).appendTo($filterCards);
@@ -865,7 +865,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     let $class;
     self.nofilter = false;
     let catNames = [];
-    //let i;
     let filterList;
     let filterOperator;
     let numCardsInCats;
@@ -887,25 +886,28 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         $class = 'h5p-dialogcards-allCategories-button';
         numCardsInCats = self.params.dialogs.length;
       }
+
       this.filterList = undefined;
       this.filterOperator = undefined;
+      
       if (numCardsInCats) {
-        self.$button = JoubelUI.createButton({
+        //self.$button = JoubelUI.createButton({
+        self.$button = createButton({
           class: $class,
-          title: catName,
-          html: `${catName} (${numCardsInCats})`,
-          //id: i,
+          label: `${catName} (${numCardsInCats})`,
+          styleType: 'secondary',
         })
-          .click(function () {
-            this.id = i;
-            console.log('i = ' + i
-              + '\nthis.id = ' + this.id
-              )
-            $('.h5p-dialogcards-options, .h5p-dialogcards-categories', self.$inner).remove();
-            self.filterList = self.catFilters[this.id].filterList;
-            self.filterOperator = self.catFilters[this.id].filterOperator;
-            self.applyFilter(self.filterList, self.filterOperator);
-            self.currentFilter = this.title;
+          .click((event) => {
+            $('.h5p-dialogcards-categories', self.$inner).remove();
+            if (i < this.catFilters.length) {
+              self.filterList = self.catFilters[i].filterList;
+              self.filterOperator = self.catFilters[i].filterOperator;
+              self.applyFilter(self.filterList, self.filterOperator);
+              self.currentFilter = self.makeCurrentFilterName(self.filterList, self.filterOperator);
+            }
+            else {
+              self.currentFilter = self.params.noFilter;
+            }
             if (
               self.cardsOrderChoice === 'user' &&
               self.cardOrder === undefined
@@ -959,6 +961,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         .click(() => {
           $('.h5p-dialogcards-options, .h5p-dialogcards-categories', self.$inner).remove();
           self.playModeUser = self.playModeNames[i].value;
+          console.log('this.currentFilter = ' + this.currentFilter);
           if (
             self.filterByCategories === 'userFilter' &&
             this.currentFilter === undefined
@@ -3998,6 +4001,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.sideBySide = false;
     self.progress = -1;
     self.progressLeft = -1;
+    this.currentFilter = undefined;
     this.$progressTop.addClass('h5p-dialogcards-disabled');
     if (this.playModeUser === 'matchRepetition' || this.playModeUser === 'selfCorrectionMode') {
       this.$round.addClass('h5p-dialogcards-hide')
