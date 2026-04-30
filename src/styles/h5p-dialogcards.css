@@ -1197,7 +1197,7 @@ background-color: var(--h5p-theme-ui-base);
   font-weight: bold;
   color: #1a73d9;
 }
-
+/*
 .h5p-dialogcards-options {
   background-color: #f0f8ff;
   margin-bottom: 6px;
@@ -1207,14 +1207,15 @@ background-color: var(--h5p-theme-ui-base);
   padding: 8px;
   font-size: 0.8em;
 }
+
 .h5p-dialogcards-option {
   padding: 4px 6px;
-  border-radius: 999px; /* pill shape */
+  border-radius: 999px;
   background: #f3f4f6;
   border: 1px solid #d1d5db;
-  white-space: nowrap; /* keep text on one line */
+  white-space: nowrap;
 }
-
+*/
 .h5p-dialogcards-auto-height {
   height: auto !important;
 }
@@ -1359,8 +1360,7 @@ background-color: var(--h5p-theme-ui-base);
 }
 
 .h5p-dialogcards .h5p-dialogcards-categories {
-  display: flex;
-  font-size: 0.8em;
+  color: var(--h5p-theme-text-secondary);
 }
 
 /* If frontTextBackImage reduce image height to fit footer. */
@@ -1395,4 +1395,43 @@ background-color: var(--h5p-theme-ui-base);
 .h5p-dialogcards .h5p-dialogcards-answer-button.h5p-dialogcards-match-incorrect {
  border: 3px solid var(--h5p-theme-feedback-incorrect-main);
   color: var(--h5p-theme-feedback-incorrect-main);
+}
+.h5p-dialogcards .h5p-dialogcards-optionsbuttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  padding: var(--h5p-theme-spacing-l);
+  background-color: var(--h5p-theme-background);
+}
+.h5p-dialogcards .h5p-dialogcards-options {
+  box-sizing: border-box;
+  padding: var(--h5p-theme-spacing-l);
+  background-color: var(--h5p-theme-background);
+  margin-bottom: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 8px;
+  color: var(--h5p-theme-contrast-cta-white);
+  background-color: var(--h5p-theme-contrast-cta-light);
+}
+.h5p-dialogcards .h5p-dialogcards-current-options {
+ display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-top: 6px;
+  padding-bottom: 4px;
+  margin: 10px;
+  font-size: var(--h5p-theme-font-size-m);
+  
+}
+.h5p-dialogcards .h5p-current-options-label,
+.h5p-dialogcards .h5p-current-options-content {
+  color: var(--h5p-theme-contrast-cta-white);
+  background-color: var(--h5p-theme-contrast-cta-light);
+}
+
+.h5p-dialogcards .h5p-current-options-label {
+  font-weight: bold;
 }
