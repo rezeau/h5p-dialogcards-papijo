@@ -180,15 +180,16 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.playModeUser = this.playMode;
     /* *************************************************** */
     if (this.noText) {
-      //// todo this.report = checkConsistency(self);
+      this.report = checkConsistency(self);
     }
 
     /* *************************************************** */
     // TODO Translate this error message
-    if (!self.params.dialogs.length || this.report) {
+    if (this.report) {
       self.params.description +=
-        '<hr><b>ERROR</b> You are using the "no text" option:' +
-        '<br>but your set of cards is not consistent.'
+        "<div class='h5p-error-message'"
+        + '<hr><b>ERROR</b> You are using the "no text" option:'
+        + '<br>but your set of cards is not consistent.'
         + `<br>${ this.report}`;
     }
 
@@ -388,10 +389,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       }
     const title = $(`<div>${this.params.title}</div>`).text().trim();
         this.$header = $(`<div class="h5p-dialogcards-title-container"><div class="h5p-dialogcards-title-wrapper">${title ? `<div class="h5p-dialogcards-title"><div class="h5p-dialogcards-title-inner h5p-theme-question-description">${this.params.title}</div></div>` : ''}<div class="h5p-dialogcards-description">${this.params.description}</div></div></div>`);
-    
-    if (!this.params.dialogs.length || this.report) {
-      return;
-    }
 
     // If we are resuming task from a previously finished task, Reset the task.
     if (this.taskFinished) {
@@ -420,7 +417,11 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           .append(this.$cardSideAnnouncer)
           .append(this.nav)
           .appendTo(this.$inner);
-    
+    /* option notext was selected BUT dialogcards so not satisfy this option */
+    if (this.report !== '') {
+      return;
+    }
+
     if (!$.isEmptyObject(this.cardOrder)) {
       this.existsCardOrder = true;
     }
@@ -468,10 +469,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     
     let self = this;
     let text = '';
-    console.log('attachContinue');
-    console.log('this.currentFilter = ' + this.currentFilter
-      + '\nself.currentFilter = ' + self.currentFilter
-      );
+    
     /* Only display the progressTop object when all options selected ready */
     this.$progressTop.removeClass('h5p-dialogcards-disabled');
     if (this.playModeUser === 'matchRepetition' || this.playModeUser === 'selfCorrectionMode') {
@@ -3126,7 +3124,7 @@ console.log('this.catFilters.length = ' + this.catFilters.length);
     //Find max required height for all cards
     self.$cardwrapperSet.children().each(function () {
       let wrapperHeight = $(this).css('height', 'initial').outerHeight();
-      // todo check if use iniaial OR inherit?
+      // todo check if use initial OR inherit?
       $(this).css('height', 'initial');
       maxHeight = wrapperHeight > maxHeight ? wrapperHeight : maxHeight;
 
@@ -3139,12 +3137,16 @@ console.log('this.catFilters.length = ' + this.catFilters.length);
         maxHeight = initialHeight > maxHeight ? initialHeight : maxHeight;
         /// remove this line which causes the LAST card heignt too hihg in normal mode.
         //// todo : restore it if we have pictures not everywhere
-        ///$(this).find('.h5p-dialogcards-cardholder').css('height', 'inherit');
+        $(this).find('.h5p-dialogcards-cardholder').css('height', 'initial');
       }
     });
 
     let relativeMaxHeight =
       maxHeight / parseFloat(self.$cardwrapperSet.css('font-size'));
+      relativeMaxHeight = relativeMaxHeight + 2;
+      /// +2 to keep display similar to default
+      console.log('relativeMaxHeight = ' + relativeMaxHeight);
+      
     self.$cardwrapperSet.css('height', `${relativeMaxHeight}em`);
 
     self.scaleToFitHeight();
@@ -4623,7 +4625,7 @@ console.log('this.catFilters.length = ' + this.catFilters.length);
    * @param {object} self - H5P content instance containing params and dialogs
    * @returns {string} HTML report string or empty string if valid
    */
-  function checkConsistency(self) {
+  function checkConsistency(self) {    
     const removedCards = [];
 
     if (!self.params.dialogs || self.params.dialogs.length === 0) {
@@ -4694,7 +4696,7 @@ console.log('this.catFilters.length = ' + this.catFilters.length);
       </div>
     `;
       report += '</div>';
-
+console.log('report = ' + report);
       return report;
     }
 
@@ -4751,7 +4753,7 @@ console.log('this.catFilters.length = ' + this.catFilters.length);
 
       removedCards.forEach((card) => {
         report += `
-        <div style="margin-bottom:12px;color:black;">
+        <div style="margin-bottom:12px;">
           <strong>Card #${card.index + 1} — Rejection reason:</strong> ${card.reason}<br>
           <strong>Text:</strong> "${card.text}"
         </div>

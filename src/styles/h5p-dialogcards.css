@@ -52,10 +52,21 @@
   width: 100%;
   height: inherit;
   box-sizing: border-box;
-  padding: var(--h5p-theme-spacing-l);
+  padding: var(--h5p-theme-spacing-s);
   background-color: var(--h5p-theme-background);
   transition: visibility 0s 0.3s, left 300ms;
 }
+/*
+.h5p-dialogcards .h5p-dialogcards-cardwrap {
+  padding-right: var(--h5p-theme-spacing-l);
+  padding-top: var(--h5p-theme-spacing-l);
+  padding-left: var(--h5p-theme-spacing-l);
+}
+.h5p-dialogcards .h5p-dialogcards-cardwrap-left {
+  padding-left: var(--h5p-theme-spacing-l);
+  padding-top: var(--h5p-theme-spacing-l);
+}
+*/
 .h5p-dialogcards .h5p-dialogcards-cardwrap.h5p-dialogcards-current {
   visibility: visible;
   left: 0;
@@ -1095,7 +1106,8 @@ background-color: var(--h5p-theme-ui-base);
 }
 
 .h5p-dialogcards-hide {
-  visibility: hidden !important;
+  ///visibility: hidden !important;
+  display: none;
 }
 .h5p-dialogcards .h5p-joubelui-button.h5p-dialogcards-button-hidden {
   visibility: hidden;
@@ -1236,8 +1248,8 @@ background-color: var(--h5p-theme-ui-base);
     visibility 0s 0.3s,
     left 300ms;
     */
-  padding-left: 2em;
-  padding-bottom: 2em;
+  ///padding-left: 2em;
+  ///padding-bottom: 2em;
 }
 .h5p-dialogcards .h5p-dialogcards-cardwrap-left.h5p-dialogcards-current-left {
   visibility: visible;
@@ -1386,7 +1398,7 @@ background-color: var(--h5p-theme-ui-base);
 
 .h5p-dialogcards .h5p-dialogcards-card-content,
 .h5p-dialogcards .h5p-dialogcards-cardwrap-left {
-  padding: var(--h5p-theme-spacing-l) 0 0;
+  padding: var(--h5p-theme-spacing-s) 0 0;
 }
 .h5p-dialogcards .h5p-dialogcards-answer-button.h5p-dialogcards-match-correct {
   border: 2px solid var(--h5p-theme-feedback-correct-main);
@@ -1414,7 +1426,7 @@ background-color: var(--h5p-theme-ui-base);
   gap: 4px;
   padding: 8px;
   color: var(--h5p-theme-contrast-cta-white);
-  background-color: var(--h5p-theme-contrast-cta-light);
+  background-color: var(--h5p-theme-contrast-cta-light);  
 }
 .h5p-dialogcards .h5p-dialogcards-current-options {
  display: flex;
@@ -1434,4 +1446,9 @@ background-color: var(--h5p-theme-ui-base);
 
 .h5p-dialogcards .h5p-current-options-label {
   font-weight: bold;
+}
+
+.h5p-dialogcards .h5p-error-message {
+  color: var(--h5p-theme-contrast-cta-white);
+  background-color: var(--h5p-theme-contrast-cta-light);  
 }
