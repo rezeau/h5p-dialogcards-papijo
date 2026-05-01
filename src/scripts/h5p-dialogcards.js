@@ -179,6 +179,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
     this.playModeUser = this.playMode;
     /* *************************************************** */
+    this.report = '';
     if (this.noText) {
       this.report = checkConsistency(self);
     }
