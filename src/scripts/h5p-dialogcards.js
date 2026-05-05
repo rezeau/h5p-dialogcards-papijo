@@ -857,7 +857,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       class: 'h5p-dialogcards-categories',
       html: self.params.selectFilter,
     });
-console.log('this.catFilters.length = ' + this.catFilters.length);
+
     const $optionButtons = $('<div>', {
       class: 'h5p-dialogcards-optionsbuttons',
     }).appendTo($filterCards);
@@ -961,7 +961,6 @@ console.log('this.catFilters.length = ' + this.catFilters.length);
         .click(() => {
           $('.h5p-dialogcards-options, .h5p-dialogcards-categories', self.$inner).remove();
           self.playModeUser = self.playModeNames[i].value;
-          console.log('this.currentFilter = ' + this.currentFilter);
           if (
             self.filterByCategories === 'userFilter' &&
             this.currentFilter === undefined
@@ -1922,20 +1921,22 @@ console.log('this.catFilters.length = ' + this.catFilters.length);
         'h5p-dialogcards-answer-button ' +
         'h5p-dialogcards-match h5p-dialogcards-disabled';
       // JR dummy button for correct match.
-      this.$buttonCorrectMatch = H5P.JoubelUI.createButton({
-        class: 'h5p-dialogcards-answer-button h5p-dialogcards-quick-progression h5p-dialogcards-match-correct h5p-dialogcards-disabled',
-        html: self.params.correctMatch,
+      this.$buttonCorrectMatch = createButton({
+        classes: 'h5p-dialogcards-answer-button h5p-dialogcards-match-correct h5p-dialogcards-quick-progression  h5p-dialogcards-disabled',
+        label: self.params.correctMatch,
+        disabled: true,
+        styleType: 'secondary',
       })
         .attr('tabindex', -1)
         .appendTo($cardFooter);
 
-      // JR dummy button for incorrect match.
-      this.$buttonIncorrectMatch = H5P.JoubelUI.createButton({
-        class: 'h5p-dialogcards-answer-button h5p-dialogcards-quick-progression h5p-dialogcards-match-incorrect h5p-dialogcards-disabled',
-        html: self.params.incorrectMatch,
-      })
-        .attr('tabindex', -1)
-        .appendTo($cardFooter);
+      // JR dummy button for incorrect match.  
+        this.$buttonIncorrectMatch = createButton({
+        classes: 'h5p-dialogcards-answer-button h5p-dialogcards-match-incorrect h5p-dialogcards-quick-progression  h5p-dialogcards-disabled',
+        label: self.params.incorrectMatch,
+        disabled: true,
+        styleType: 'secondary',
+      }).appendTo($cardFooter);
     }
 
     if (this.enableGotIt) {
@@ -2148,7 +2149,6 @@ console.log('this.catFilters.length = ' + this.catFilters.length);
    * Update navigation text and show or hide buttons.
    */
   C.prototype.updateNavigation = function () {
-    console.log('updateNavigation');
     let self = this;
     let $nextCard;
     let $prevCard;
@@ -2616,7 +2616,6 @@ console.log('this.catFilters.length = ' + this.catFilters.length);
    * @param {object} [$card] Current card
    */
   C.prototype.turnCard = function ($card) {
-    console.log('turnCard');
     let self = this;
     let $cg;
     let $c = self.$current.find('.h5p-dialogcards-card-content');
@@ -3149,7 +3148,6 @@ console.log('this.catFilters.length = ' + this.catFilters.length);
       maxHeight / parseFloat(self.$cardwrapperSet.css('font-size'));
       relativeMaxHeight = relativeMaxHeight + 2;
       /// +2 to keep display similar to default
-      console.log('relativeMaxHeight = ' + relativeMaxHeight);
       
     self.$cardwrapperSet.css('height', `${relativeMaxHeight}em`);
 
@@ -3848,7 +3846,6 @@ console.log('this.catFilters.length = ' + this.catFilters.length);
         $incorrectButton
           .addClass('h5p-dialogcards-disabled')
         let correctClasses = $correctButton.attr('class');
-        console.log('We have a match----ON-----\n' + correctClasses);
         self.$current.addClass('h5p-dialogcards-gotitdone');
 
         setTimeout(function () {
@@ -3867,7 +3864,6 @@ console.log('this.catFilters.length = ' + this.catFilters.length);
           }
           $correctButton.addClass('h5p-dialogcards-disabled');
           let correctClasses = $correctButton.attr('class');
-          console.log('We have a match setTimeout ----OFF-----\n' + correctClasses);
           self.$next.toggleClass('h5p-dialogcards-inactive');
           self.$prev.toggleClass('h5p-dialogcards-inactive');
           self.$current.removeClass(
@@ -3949,11 +3945,9 @@ console.log('this.catFilters.length = ' + this.catFilters.length);
       this.$buttonMatch.addClass('h5p-dialogcards-disabled');
       self.$prev.addClass('h5p-dialogcards-inactive');
       let correctClasses = $correctButton.attr('class');
-        console.log('No cards left in stack----????-----\n' + correctClasses);
       $correctButton
         .removeClass('h5p-dialogcards-disabled')      
       correctClasses = $correctButton.attr('class');
-        console.log('No cards left in stack----ON-----\n' + correctClasses);
       // WARNING! do not use 'this' inside a setTimeout function; use 'self' !
       if ($card.index() === -1) {
         delayInMilliseconds = 0;
@@ -3961,7 +3955,6 @@ console.log('this.catFilters.length = ' + this.catFilters.length);
       setTimeout(function () {
         $correctButton.addClass('h5p-dialogcards-disabled');
           let correctClasses = $correctButton.attr('class');
-          console.log('end of cards setTimeout ----OFF-----\n' + correctClasses);
         self.$current
           .addClass('h5p-dialogcards-gotitdone')
           .removeClass('h5p-dialogcards-noMatch');

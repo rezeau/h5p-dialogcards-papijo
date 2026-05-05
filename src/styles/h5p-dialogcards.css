@@ -1407,10 +1407,33 @@ background-color: var(--h5p-theme-ui-base);
   border: 2px solid var(--h5p-theme-feedback-correct-main);
   color: var(--h5p-theme-feedback-correct-main);
 }
+
+.h5p-dialogcards .h5p-dialogcards-answer-button.h5p-dialogcards-match-correct:before {
+  font-family: 'h5p-theme';
+  content: "\e903";
+  font-weight: normal;
+}
+
+.h5p-dialogcards .h5p-dialogcards-answer-button.h5p-dialogcards-match-correct:hover,
+.h5p-dialogcards .h5p-dialogcards-answer-button.h5p-dialogcards-match-incorrect:hover {
+  cursor: default;
+}
+  
 .h5p-dialogcards .h5p-dialogcards-answer-button.h5p-dialogcards-match-incorrect {
  border: 3px solid var(--h5p-theme-feedback-incorrect-main);
-  color: var(--h5p-theme-feedback-incorrect-main);
+ color: var(--h5p-theme-feedback-incorrect-main);
 }
+
+.h5p-dialogcards .h5p-dialogcards-answer-button.h5p-dialogcards-match-incorrect:before {
+  font-family: 'h5p-theme';
+  content: "\e902";
+  font-weight: normal;
+}
+
+.h5p-dialogcards .h5p-dialogcards-answer-button.h5p-dialogcards-match-incorrect:active {
+  background-color: unset; 
+}
+
 .h5p-dialogcards .h5p-dialogcards-optionsbuttons {
   display: flex;
   gap: 10px;
