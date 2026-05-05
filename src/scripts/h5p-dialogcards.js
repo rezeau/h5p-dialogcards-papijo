@@ -1790,13 +1790,15 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       let $cardFooterLeft = $('<div>', {
         class: 'h5p-dialogcards-card-footer',
       });
-      this.$buttonDummyMatch = createButton({
-        classes: 'h5p-dialogcards-answer-button h5p-dialogcards-match-correct h5p-dialogcards-button-hidden dummy',
-        label: 'dummy',
-        disabled: true,
-        styleType: 'secondary',
-      })
-        .appendTo($cardFooterLeft);
+      if (this.playModeUser !== 'browseSideBySide') {
+        this.$buttonDummyMatch = createButton({
+          classes: 'h5p-dialogcards-answer-button h5p-dialogcards-match-correct h5p-dialogcards-button-hidden dummy',
+          label: 'dummy',
+          disabled: true,
+          styleType: 'secondary',
+        })
+          .appendTo($cardFooterLeft);
+      }
       $cardFooterLeft.appendTo($cardContent);
     }
 
