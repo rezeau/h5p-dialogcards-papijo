@@ -1268,6 +1268,9 @@ background-color: var(--h5p-theme-ui-base);
 
 .h5p-dialogcards-footer-match-right {
   min-width: 45% !important;
+  border-top: 0!important;
+  box-shadow: 0!important;
+  padding-left: var(--h5p-theme-spacing-xxl)!important;
 }
 
 .h5p-dialogcards-match {
@@ -1449,6 +1452,5 @@ background-color: var(--h5p-theme-ui-base);
 }
 
 .h5p-dialogcards .h5p-error-message {
-  color: var(--h5p-theme-contrast-cta-white);
-  background-color: var(--h5p-theme-contrast-cta-light);  
+  color: var(--h5p-theme-text-secondary);
 }

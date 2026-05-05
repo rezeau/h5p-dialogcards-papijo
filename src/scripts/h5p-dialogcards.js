@@ -1,4 +1,5 @@
 /**
+/**
  * Dialogcards module PapiJo
  * @param $
  */
@@ -1022,7 +1023,8 @@ console.log('this.catFilters.length = ' + this.catFilters.length);
 
       // PREV
       self.$prev = createButton({
-        classes: 'h5p-theme-button h5p-theme-nav-button h5p-theme-prev',
+        classes: 'h5p-theme-button h5p-theme-nav-button h5p-theme-previous',
+        styleType: 'nav',
         label: self.params.prev,
         icon: 'previous',
       })
@@ -1034,8 +1036,9 @@ console.log('this.catFilters.length = ' + this.catFilters.length);
       .appendTo($footer);
       // NEXT
       self.$next = createButton({
-        classes: 'h5p-theme-button h5p-theme-nav-button h5p-theme-next',
+        classes: 'h5p-theme-button h5p-theme-nav-button',
         label: self.params.next,
+        styleType: 'nav',
         icon: 'next',
       })
       .click((event) => {
@@ -3136,7 +3139,7 @@ console.log('this.catFilters.length = ' + this.catFilters.length);
           .css('height', 'initial')
           .outerHeight();
         maxHeight = initialHeight > maxHeight ? initialHeight : maxHeight;
-        /// remove this line which causes the LAST card heignt too hihg in normal mode.
+        /// remove this line which causes the LAST card heignt too high in normal mode.
         //// todo : restore it if we have pictures not everywhere
         $(this).find('.h5p-dialogcards-cardholder').css('height', 'initial');
       }
@@ -4690,7 +4693,7 @@ console.log('this.catFilters.length = ' + this.catFilters.length);
       report += `<p><strong>Current layout:</strong> ${describeLayout(reference)}</p>`;
       report += '<hr>';
       report += `
-      <div style="margin-bottom:12px;color:black;">
+      <div style="margin-bottom:12px;">
         <strong>Card #1</strong><br>
         <strong>Text:</strong> "${text}"<br>
         <strong>Answer:</strong> "${answer}"
