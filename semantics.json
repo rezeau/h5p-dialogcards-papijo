@@ -51,15 +51,6 @@
     "optional": true
   },
   {
-    "name": "enableCardSubTitle",
-    "type": "boolean",
-    "label": "Enable Subtitles in Cards?",
-    "description": "Add a 'Subtitle' field in the Cards?",
-    "importance": "medium",
-    "default": false,
-    "optional": true
-  },
-  {
     "name": "dialogs",
     "type": "list",
     "importance": "high",
@@ -206,24 +197,6 @@
             "rules": [
               {
                 "field": "../../enableCategories",
-                "equals": true
-              }
-            ]
-          }
-        },
-        {
-          "name": "cardSubtitle",
-          "type": "text",
-          "label": "Subtitle for this card",
-          "description": "Subtitle for this card when the 'Free browsing with cards side by side' mode is enabled. Max characters = 80.",
-          "importance": "low",
-          "optional": true,
-          "maxLength": 80,
-          "widget": "showWhen",
-          "showWhen": {
-            "rules": [
-              {
-                "field": "../../enableCardSubTitle",
                 "equals": true
               }
             ]

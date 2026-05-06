@@ -626,8 +626,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         class: 'h5p-dialogcards-side-by-side',
       });
 
-      self.createSubTitleFooter().appendTo(self.$sideBySide);
-
       self.createFooter().appendTo(self.$sideBySide);
 
       self.$sideBySide.appendTo(self.$inner);
@@ -1133,16 +1131,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       }).appendTo($footerLeft);
     }
     return $footerLeft;
-  };
-
-  C.prototype.createSubTitleFooter = function () {
-    this.$subTitle = $('<div>', {
-      class: 'h5p-dialogcards-sub-title',
-    });
-
-    this.$displaySubTitleFooter = $('<div>', {}).appendTo(this.$subTitle);
-
-    return this.$subTitle;
   };
 
   /**
@@ -1772,7 +1760,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     // Dummy cardfooter to get a "correct" left card height if too much text...
     // Create it if needed by this.sideBySide
     if (this.noText) {
-      
       $cardTextWrapper.addClass('hide');
       /*
       if (card.audioMedia.audio !== undefined) {
@@ -1842,9 +1829,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     let footerClass;
     if (!this.enableGotIt) {
       footerClass = 'h5p-dialogcards-card-footer';
-      if (this.sideBySide) {
-        footerClass += ' subtitle';
-      }
       if (this.frontTextBackImage && !this.matchIt) {
         footerClass += ' reduced-image';
       }
@@ -2165,24 +2149,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.$progressTop.removeClass('h5p-dialogcards-disabled');
 
     let $card = self.$current.find('.h5p-dialogcards-card-content');
-    if (this.sideBySide) {
-      let $cardFooter = $card.find('.h5p-dialogcards-card-footer');
-      $cardFooter.html(this.rightSubTitle);
-      const i = self.$current.index() / C.NB2;
-      // Clear subTitle text in case self.currentDialogs[i].cardSubtitle is undefined
-      let cardSubTitle = self.currentDialogs[i].cardSubtitle;
-      if (cardSubTitle === undefined) {
-        cardSubTitle = '&nbsp;';
-        this.$subTitle.addClass('h5p-dialogcards-hide');
-      }
-      else {
-        this.$subTitle.removeClass('h5p-dialogcards-hide');
-      }
-      self.$displaySubTitleFooter.html('');
-      if (this.params.enableCardSubTitle) {
-        self.$displaySubTitleFooter.html(cardSubTitle);
-      }
-    }
+    
     if (this.matchIt && !this.sideBySide) {
       // Needed if $matchButton was just de-activated upon an incorrect match.
       let $matchButton = $card.find('.h5p-dialogcards-button-match');
