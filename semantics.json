@@ -455,7 +455,16 @@
         "label": "Do not duplicate front images to back of cards",
         "importance": "low",
         "description": "Check this option if you do not want front card images duplicated automatically to the back of cards.",
-        "default": false
+        "default": false,
+          "widget": "showWhen",
+          "showWhen": {
+            "rules": [
+              {
+                "field": "noTextOnCards",
+                "equals": false
+              }
+            ]
+          }
       },
       {
         "name": "cardsOrderChoice",
