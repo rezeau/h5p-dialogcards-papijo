@@ -660,10 +660,12 @@ background-color: var(--h5p-theme-ui-base);
 .h5p-dialogcards .h5p-dialogcards-card-footer-enablegotit,
 .h5p-dialogcards .h5p-dialogcards-card-footer-enablegotit.audio,
 .h5p-dialogcards .reduced-image {
-  height: 2.25em;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+  padding: var(--h5p-theme-spacing-xs);
 }
 .h5p-dialogcards .h5p-dialogcards-card-footer-enablegotit.audio {
   margin-top: 10em;
@@ -1477,3 +1479,4 @@ background-color: var(--h5p-theme-ui-base);
 .h5p-dialogcards .h5p-error-message {
   color: var(--h5p-theme-text-secondary);
 }
+/* rules for summary display */

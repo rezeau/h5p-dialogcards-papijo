@@ -1537,10 +1537,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     let progressText = this.params.progressText
       .replace('@card', (cardNumber + 1).toString())
       .replace('@total', this.params.dialogs.length.toString());
-    $('<div>', {
-      class: 'h5p-dialogcards-at-progress',
-      text: progressText,
-    }).appendTo($cardHolder);
 
     this.createCardContent(card, cardNumber, setCardSizeCallback).appendTo(
       $cardHolder,
@@ -1776,7 +1772,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     // Dummy cardfooter to get a "correct" left card height if too much text...
     // Create it if needed by this.sideBySide
     if (this.noText) {
-      console.log('this.noText');
       
       $cardTextWrapper.addClass('hide');
       /*
@@ -3743,13 +3738,12 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
   };
 
   C.prototype.matchCards = function ($card) {
-    console.log('matchCards');
     let self = this;
     for (let i = 0; i < self.nbCards + 1; i++) {
       self.resetAudio(i);
     }
 
-    const delayInMilliseconds = 2000;
+    let delayInMilliseconds = 2000;
     let index = $card.index() / C.NB2;
     let $leftCard = self.$currentLeft;
     let indexLeft = ($leftCard.index() - 1) / C.NB2;
@@ -3827,7 +3821,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     for (let i = 0; i < self.nbCards + 1; i++) {
       self.resetAudio(i);
     }
-    const delayInMilliseconds = 2000; // Make it a parameters setting?
+    let delayInMilliseconds = 2000; // Make it a parameters setting?
     let index = $card.index() / C.NB2;
     let $leftCard = self.$currentLeft;
     let indexLeft = ($leftCard.index() - 1) / C.NB2;
@@ -4138,7 +4132,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    */
 
   C.prototype.resetButtons = function (type) {
-    console.log('resetButtons = type = ' + type);
     let self = this;
     let $card = $(this);
     $card = self.$current;
@@ -4158,7 +4151,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         .removeClass('h5p-dialogcards-intermediary-summary-screen');
     }
     if (type === 'answer buttons') {
-      console.log('Enable answer-buttons-off');
       // Enable answer-buttons-off ; Unhide turn button & card text and Disable the Retry button.
       $card
         .find('.h5p-dialogcards-turn')
@@ -4206,9 +4198,14 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           .find('.h5p-dialogcards-audio-wrapper2')
           .addClass('h5p-dialogcards-hide');
         $card
+          .find('.h5p-dialogcards-progress')
+          .addClass('h5p-dialogcards-hide');
+        $card
           .find('.h5p-dialogcards-answer-button')
           .addClass('h5p-dialogcards-disabled');
-        this.$progress.addClass('h5p-dialogcards-hide');
+        this.$progressTop.addClass('h5p-dialogcards-hide');
+        this.$round.addClass('h5p-dialogcards-hide');
+        
         if (this.repetition) {
           this.$progressFooterLeft.addClass('h5p-dialogcards-hide');
         }
@@ -4261,7 +4258,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           }&nbsp;<span class="h5p-dialogcards-summary-table-row-score-divider">/</span>&nbsp;${
             totalCards
           }</td></tr></table>`;
-
         $cardTextArea.html(text);
         $card.find('.h5p-dialogcards-card-text').removeClass('hide');
 
@@ -4308,6 +4304,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       if (this.matchIt) {
         self.$prev.removeClass('h5p-dialogcards-hide');
       }
+      this.$progressTop.removeClass('h5p-dialogcards-hide');
+      this.$round.removeClass('h5p-dialogcards-hide');
       let $cardContent = $card.find('.h5p-dialogcards-card-content');
       $cardContent.removeClass('h5p-dialogcards-summary-screen');
       this.$retry.addClass('h5p-dialogcards-disabled');
@@ -4710,7 +4708,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       </div>
     `;
       report += '</div>';
-console.log('report = ' + report);
       return report;
     }
 
