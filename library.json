@@ -10,7 +10,7 @@
   "machineName": "H5P.DialogcardsPapiJo",
   "coreApi": {
     "majorVersion": 1,
-    "minorVersion": 15
+    "minorVersion": 28
   },
   "embedTypes": ["iframe"],
   "preloadedCss": [
