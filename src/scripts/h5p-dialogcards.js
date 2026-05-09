@@ -3118,10 +3118,11 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       if (!$(this).next('.h5p-dialogcards-cardwrap').length) {
         let initialHeight = $(this)
           .find('.h5p-dialogcards-cardholder')
-          .css('height', 'initial')
+          ///.css('height', '100d')
           .outerHeight();
         maxHeight = initialHeight > maxHeight ? initialHeight : maxHeight;
-        $(this).find('.h5p-dialogcards-cardholder').css('height', 'inherit');
+        /// todo thjis seems to fix it
+        ///$(this).find('.h5p-dialogcards-cardholder').css('height', 'inherit');
       }
     });
 

@@ -1,3 +1,5 @@
+/* papi jo 484 */
+
 .h5p-dialogcards .h5p-dialogcards-title p:first-child,
 .h5p-dialogcards .h5p-dialogcards-card-text-area p:first-child {
   margin-top: 0;
@@ -480,7 +482,10 @@
   font-size: 12px;
   transform: translate(-50%, -70%);
 }
+
+/* -------------------------------------------------------- */
 /* papijo */
+
 .h5p-dialogcards .h5p-dialogcards-title p,
 .h5p-dialogcards .h5p-dialogcards-card-text-area p {
   font-size: inherit;
@@ -511,6 +516,7 @@
 .h5p-dialogcards {
   overflow: hidden;
   position: relative;
+  background-color: var(--h5p-theme-ui-base);
 }
 .h5p-dialogcards .h5p-dialogcards-title {
   padding: 1em 1em 0.375em;
@@ -550,24 +556,17 @@
 .h5p-dialogcards .h5p-dialogcards-cardwrap {
   position: absolute;
   left: 100%;
-  width: 100%;
-  padding: 0 0.5em;
-  box-sizing: border-box;
   visibility: hidden;
+  width: 100%;
   height: inherit;
-
-  -webkit-transition:
-    visibility 0s 0.3s,
-    left 300ms;
-  transition:
-    visibility 0s 0.3s,
-    left 300ms;
+  box-sizing: border-box;
+  padding: var(--h5p-theme-spacing-m);
+  background-color: var(--h5p-theme-background);
+  transition: visibility 0s 0.3s, left 300ms;
 }
 .h5p-dialogcards .h5p-dialogcards-cardwrap.h5p-dialogcards-current {
   visibility: visible;
   left: 0;
-
-  -webkit-transition: left 300ms;
   transition: left 300ms;
 }
 .h5p-dialogcards .h5p-dialogcards-cardwrap.h5p-dialogcards-previous {
@@ -577,22 +576,17 @@
 .h5p-dialogcards .h5p-dialogcards-cardholder {
   margin: auto;
   max-width: 32em;
-  height: 100%;
-  -webkit-transition: -webkit-transform 0.2s ease-in-out;
   transition: transform 0.2s ease-in-out;
 }
 
-/* The background color is now done in the edit interface */
-.h5p-dialogcards .h5p-dialogcards-card-content {
-  /*background: #FFF;*/
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+.h5p-dialogcards .h5p-dialogcards-card-content {  
+   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
   padding: 1em;
-  min-height: 12em;
-  height: 100%;
-  height: -moz-available; /* WebKit-based browsers will ignore this. */
-  height: -webkit-fill-available; /* Mozilla-based browsers will ignore this. */
+  min-height: 12em;  
   height: fill-available;
   position: relative;
+  background-color: var(--h5p-theme-ui-base);
+  padding: var(--h5p-theme-spacing-l) 0 0;
 }
 
 .h5p-dialogcards-summary-screen,
@@ -692,7 +686,8 @@
 .h5p-dialogcards .h5p-dialogcards-card-text-wrapper {
   position: relative;
   overflow: hidden;
-  min-height: 12em;
+  ///min-height: 12em;
+  padding: 0 var(--h5p-theme-spacing-l) var(--h5p-theme-spacing-l);
 }
 
 .h5p-dialogcards.h5p-text-scaling .h5p-dialogcards-card-text-wrapper {
@@ -1202,17 +1197,18 @@
 }
 
 /* matchIt rules version 1.9 */
+
 .h5p-dialogcards .h5p-dialogcards-cardwrap-left {
   position: absolute;
   left: 0;
+  ///visibility: hidden;
   width: 50%;
-  padding: 0 0.5em;
+  height: inherit;
   box-sizing: border-box;
   visibility: hidden;
+padding: var(--h5p-theme-spacing-m);
+background-color: var(--h5p-theme-background);
   height: inherit;
-  -webkit-transition:
-    visibility 0s 0.3s,
-    left 300ms;
   transition:
     visibility 0s 0.3s,
     left 300ms;
