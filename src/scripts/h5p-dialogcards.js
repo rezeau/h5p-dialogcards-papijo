@@ -217,7 +217,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         dialog.audioMedia.audio2 !== undefined,
       );
     }
-
+    this.hasOneImageOnFront = self.params.dialogs.some((d) => d.imageMedia.image);
     // -------------------------
     // Flags that depend on no text
     // -------------------------
@@ -247,9 +247,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       dialog.audioMedia.audio2 !== undefined,
       );
 
-      const hasImageOnFront = self.params.dialogs.every((d) => d.imageMedia.image);
-      const hasImageOnBack = self.params.dialogs.every((d) => d.imageMedia.image2);
-      this.hasTwoImages = hasImageOnFront && hasImageOnBack;
+      this.hasImageOnFront = self.params.dialogs.every((d) => d.imageMedia.image);
+      this.hasImageOnBack = self.params.dialogs.every((d) => d.imageMedia.image2);
+      this.hasTwoImages = this.hasImageOnFront && this.hasImageOnBack;
 
     }
     // IF categories filters enabled!!!
@@ -1646,6 +1646,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (this.frontTextBackImage) {
       $cardTextWrapper.css('min-height', '15em');
       let $c = $cardContent.find('.h5p-dialogcards-image-wrapper');
+      $c.css('min-height', '15em');
       if (this.cardsSideMode === 'frontFirst' && !this.matchIt) {
         $c.addClass('hide');
       }
@@ -1970,6 +1971,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     let $imageWrapper = $('<div>', {
       class: 'h5p-dialogcards-image-wrapper',
     });
+    
+    
     // Case where only some cards have 2 images.
     let cardHasTwoImages;
     if (card.imageMedia.image !== undefined && card.imageMedia.image2 !== undefined) {
@@ -2006,6 +2009,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           }
         }
       }
+      
     }
 
     if (card.imageMedia.image2 !== undefined) {
@@ -2078,7 +2082,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       card.image = i;
       card.image2 = i2;
     }
-
+    if (this.hasOneImageOnFront) {
+      $imageWrapper.css('min-height', '15em');
+    }
     return $imageWrapper;
   };
 
@@ -3709,7 +3715,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       self.resetAudio(i);
     }
 
-    const delayInMilliseconds = 2000;
+    let delayInMilliseconds = 2000;
     let index = $card.index() / C.NB2;
     let $leftCard = self.$currentLeft;
     let indexLeft = ($leftCard.index() - 1) / C.NB2;
@@ -3783,7 +3789,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     for (let i = 0; i < self.nbCards + 1; i++) {
       self.resetAudio(i);
     }
-    const delayInMilliseconds = 2000; // Make it a parameters setting?
+    let delayInMilliseconds = 2000; // Make it a parameters setting?
     let index = $card.index() / C.NB2;
     let $leftCard = self.$currentLeft;
     let indexLeft = ($leftCard.index() - 1) / C.NB2;
@@ -4141,6 +4147,15 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         $card
           .find('.h5p-dialogcards-answer-button-off')
           .addClass('h5p-dialogcards-hide');
+        /* needed for front & back images or audio (no text) */
+        if (this.noText) {
+          $card
+            .find('.h5p-dialogcards-card-text')
+            .css('width', '75%');
+        }
+        $card
+          .find('.h5p-dialogcards-card-text-inner')
+          .css('height', '12em');
         this.$progress.addClass('h5p-dialogcards-hide');
         if (this.repetition) {
           this.$progressFooterLeft.addClass('h5p-dialogcards-hide');
