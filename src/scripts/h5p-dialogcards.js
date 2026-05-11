@@ -182,12 +182,19 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
     /* *************************************************** */
     // TODO Translate this error message
-    if (!self.params.dialogs.length || this.report) {
-      self.params.description +=
-        '<hr><b>ERROR</b> You are using the "no text" option:' +
-        '<br>but your set of cards is not consistent.'
+    /* Note special treatment of self.params.title to get a correct display with theme 'black' */
+    if (this.report) {
+      let title = self.params.title;
+      self.params.title = '';
+      self.params.description =
+        "<div class='h5p-error-message'"
+        + title
+        + self.params.description
+        + '<hr><b>ERROR</b> You are using the "no text" option:'
+        + '<br>but your set of cards is not consistent.'
         + `<br>${ this.report}`;
     }
+
 
     // Reset all flags
     this.frontTextBackImage = false;
@@ -1560,6 +1567,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       hidetext = ' hide';
     }
 
+  );
     let $cardTextWrapper = $('<div>', {
       class: `h5p-dialogcards-card-text-wrapper ${hidetext}`.trim(),
     }).appendTo($cardContent);
@@ -4608,7 +4616,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       report += `<p><strong>Current layout:</strong> ${describeLayout(reference)}</p>`;
       report += '<hr>';
       report += `
-      <div style="margin-bottom:12px;color:black;">
+      <div style="margin-bottom:12px;">
         <strong>Card #1</strong><br>
         <strong>Text:</strong> "${text}"<br>
         <strong>Answer:</strong> "${answer}"
@@ -4672,7 +4680,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
       removedCards.forEach((card) => {
         report += `
-        <div style="margin-bottom:12px;color:black;">
+        <div style="margin-bottom:12px;">
           <strong>Card #${card.index + 1} — Rejection reason:</strong> ${card.reason}<br>
           <strong>Text:</strong> "${card.text}"
         </div>

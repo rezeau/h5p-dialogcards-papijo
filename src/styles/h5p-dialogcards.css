@@ -543,6 +543,7 @@
 .h5p-dialogcards-final-summary-screen {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 /* Base block footer styles */
@@ -1304,7 +1305,7 @@ background-color: var(--h5p-theme-background);
   height: -webkit-fill-available;
   height: fill-available;
   position: relative;
-  background-color: var(--h5p-theme-ui-base);
+  ///background-color: var(--h5p-theme-ui-base);
   padding: var(--h5p-theme-spacing-l);
 }
 
@@ -1313,4 +1314,7 @@ background-color: var(--h5p-theme-background);
   left: 50%;
   bottom: -0.8em;
   transform: translate(-50%, -50%);
+}
+.h5p-dialogcards .h5p-error-message {
+  color: var(--h5p-theme-text-secondary);
 }
