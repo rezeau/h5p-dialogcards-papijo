@@ -564,8 +564,8 @@
   transform: translate(-50%, -50%);
 }
 
-/* Flex-style footers */
-/*
+/* Flex-style card-footers */
+
 .h5p-dialogcards .h5p-dialogcards-card-footer-enablegotit,
 .h5p-dialogcards .h5p-dialogcards-card-footer-enablegotit.audio,
 .h5p-dialogcards .reduced-image {
@@ -577,7 +577,7 @@
   flex-direction: row;
   padding: var(--h5p-theme-spacing-xs);
 }
-*/
+
 .h5p-dialogcards .h5p-dialogcards-card-footer-enablegotit.audio {
   margin-top: 10em;
 }
