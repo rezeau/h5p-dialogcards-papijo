@@ -68,7 +68,7 @@
 .h5p-dialogcards .h5p-dialogcards-cardholder {
   height: 100%;
   margin: auto;
-  max-width: 32em;
+  max-width: 40em;
   transition: transform 0.2s ease-in-out;
 }
 /*
@@ -1399,4 +1399,11 @@ background-color: var(--h5p-theme-background);
   color: var(--h5p-theme-text-secondary);
 }
 /* rules for summary display */
-
+.h5p-dialogcards .h5p-options-title {
+  display: block;
+  font-weight: 800;
+  background-color: var(--h5p-theme-contrast-cta-light);
+  border-radius: var(--h5p-theme-border-radius-medium);
+  color: var(--h5p-theme-contrast-cta-white);
+  padding: var(--h5p-theme-spacing-s);
+}
