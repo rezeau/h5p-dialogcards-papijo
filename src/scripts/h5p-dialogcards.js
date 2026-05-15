@@ -595,7 +595,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     $('h5p-dialogcards-side, h5p-dialogcards-options', self.$inner).remove();
     $('.h5p-dialogcards-options', self.$inner).remove();
     $('.h5p-options-title', self.$inner).remove();
-
+    $('.h5p-filter-wrapper', self.$inner).remove();
+    
     if (self.params.behaviour.scaleTextNotCard) {
       self.$inner.addClass('h5p-text-scaling');
     }
