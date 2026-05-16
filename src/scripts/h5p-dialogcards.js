@@ -702,7 +702,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
     let $optionButtons = $('<div>', {
       class: 'h5p-dialogcards-optionsbuttons',
-    }).appendTo($optionsTitle);
+    }).appendTo($order);
     
     let $classes = 'h5p-dialogcards-order-button';
     self.$normalOrder = createButton({
@@ -963,16 +963,14 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.isReversed = false;
     let $optionsTitle = $('<div>', {
       class: 'h5p-options-title',
-      ///html: self.params.selectFilter,
       html: self.params.selectPlayMode,
     });
     const $play = $('<div>', {
       class: 'h5p-dialogcards-categories',
-      ///html: self.params.selectPlayMode,
     }).appendTo($optionsTitle);
 
     const $optionButtons = $('<div>', {
-      class: 'h5p-dialogcards-options h5p-dialogcards-optionsbuttons',
+      class: 'h5p-dialogcards-optionsbuttons h5p-dialogcards-optionsbuttons',
     }).appendTo($play);
 
     for (let i = 0; i < self.playModeNames.length; i++) {
@@ -3679,18 +3677,19 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     self.triggerAnswered();
 
     // Display reset button to enable user to do the task again IF Retry option enabled.
-this.$progressTop
-          .addClass('h5p-dialogcards-hide');
+    this.$progressTop
+      .addClass('h5p-dialogcards-hide');
     if (self.params.behaviour.enableRetry) {
       const retryOrReset = self.getRetryOrReset();
       let message = retryOrReset[0];
       let thisclass = retryOrReset[1];
-      self.$retryButton = JoubelUI.createButton({
+      self.$retryButton = createButton({
         class: thisclass,
-        title: message,
-        html: message,
+        label: message,
+        styleType: 'secondary',
+        icon: 'retry',
       })
-        .click(function () {
+        .click(() => {
           self.resetTask();
         })
         .appendTo($feedbackFooter);

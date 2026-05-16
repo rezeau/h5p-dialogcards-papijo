@@ -385,7 +385,7 @@
 
 .h5p-dialogcards .h5p-dialogcards-cardwrap-set {
   margin: auto;
-  max-width: 32em;
+  max-width: 40em;
 }
 
 .h5p-dialogcards .h5p-dialogcards-disabled {
@@ -405,13 +405,6 @@
   overflow: hidden;
 }
 
-.h5p-dialogcards .h5p-theme-results-list-container {
-  width: calc(100% - 2 * var(--h5p-theme-spacing-xl));
-
-  @media only screen and (max-width: 576px) {
-    width: initial;
-  }
-}
 
 .h5p-dialogcards-visibility-hidden {
   visibility: hidden;
@@ -493,7 +486,7 @@
   overflow: hidden;
   line-height: 2em;
   padding: 1em;
-  max-width: 32em;
+  max-width: 40em;
   position: relative;
 }
 
@@ -519,7 +512,7 @@
 
 .h5p-dialogcards .h5p-dialogcards-cardholder {
   margin: auto;
-  max-width: 32em;
+  max-width: 40em;
   background-color: var(--h5p-theme-ui-base);
   border: .2em solid transparent;
     border-top-color: transparent;
@@ -725,6 +718,7 @@
 
 .h5p-dialogcards .h5p-dialogcards-card-text {
   display: inline-block;
+  color: var(--h5p-theme-text-primary);
   margin: 0.5em 0;
   height: 4.5em;
   line-height: 1.5;
@@ -1193,7 +1187,8 @@ background-color: var(--h5p-theme-background);
   float: left;
   margin-right: 1.5em;
   color: #999999;
-  font-weight: 400;
+  font-weight: 700;
+  color: var(--h5p-theme-contrast-cta-white);
   text-decoration: none solid rgb(153, 153, 153);
 }
 .h5p-dialogcards-matchLeft {
