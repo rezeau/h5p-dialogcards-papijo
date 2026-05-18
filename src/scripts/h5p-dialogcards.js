@@ -400,15 +400,18 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       return;
     }
     // Always create this.$round block even if selected mode does not use it: it will remain hidden.
+    const $wrapper = $('<div>', {
+        class: 'h5p-dialogcards-progress-wrapper'
+      }).appendTo(this.$header);
     this.$round = $('<div>', {
         class: 'h5p-dialogcards-progress h5p-theme-progress h5p-dialogcards-round h5p-dialogcards-disabled',
-      }).appendTo(this.$header);
+      }).appendTo($wrapper);
     
     this.$progressTop = $('<div>', {
             id: `h5p-dialogcards-progress-${this.idCounter}`,
             class: 'h5p-dialogcards-progress h5p-theme-progress h5p-dialogcards-disabled',
             'aria-live': 'assertive',
-          }).appendTo(this.$header);
+          }).appendTo($wrapper);
 
     this.$progressTop.text(this.params.progressText
       .replace('@card', 1)
@@ -3958,7 +3961,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     self.progress = -1;
     self.progressLeft = -1;
     this.currentFilter = undefined;
-    this.$progressTop.addClass('h5p-dialogcards-disabled');
+    if (this.$progressTop) {
+      this.$progressTop.addClass('h5p-dialogcards-disabled');
+    }
     if (this.playModeUser === 'matchRepetition' || this.playModeUser === 'selfCorrectionMode') {
       this.$round.addClass('h5p-dialogcards-disabled')
     }

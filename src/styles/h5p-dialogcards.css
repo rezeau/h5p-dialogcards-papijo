@@ -11,6 +11,7 @@
   content: "\e903";
   font-weight: normal;
 }
+
 .h5p-dialogcards .h5p-theme-flip,
 .h5p-dialogcards .h5p-theme-results {
   white-space: nowrap;
@@ -47,12 +48,9 @@
   background-color: var(--h5p-theme-feedback-incorrect-main);
 }
 
-
-
 .h5p-dialogcards-title-inner .h5p-theme-question-description{
   padding-left: var(--h5p-theme-spacing-m);
 }
-
 
 .h5p-column-content.h5p-dialogcards .h5p-dialogcards-title-container {
   margin: calc(-1*var(--h5p-theme-spacing-s)) calc(-1*var(--h5p-theme-spacing-s)) 0 calc(-1*var(--h5p-theme-spacing-s));
@@ -61,34 +59,15 @@
   margin: 0 calc(-1*var(--h5p-theme-spacing-s)) calc(-1*var(--h5p-theme-spacing-s)) calc(-1*var(--h5p-theme-spacing-s));
 }
 
-.h5p-dialogcards .h5p-dialogcards-footer-button {
-  ///display: flex;
-}
-
-
 .h5p-dialogcards .h5p-dialogcards-cardwrap-set {
   margin: auto;
   max-width: 40em;
-}
-
-.h5p-dialogcards .h5p-dialogcards-disabled {
-  display: none;
 }
 
 .h5p-course-presentation .h5p-element .h5p-dialogcards-outer-element .h5p-element-inner.h5p-dialogcards.h5p-text-scaling {
   overflow-y: hidden;
 }
 
-/* Accessibility announcers, hidden from view */
-.h5p-dialogcards-card-side-announcer,
-.h5p-dialogcards-at-progress {
-  position: absolute;
-  height: 0;
-  width: 0;
-  overflow: hidden;
-}
-
-/* -------------- PAPI JO ------------------------------------------ */
 .h5p-dialogcards-visibility-hidden {
   visibility: hidden;
 }
@@ -102,8 +81,6 @@
   font-size: 12px;
   transform: translate(-50%, -70%);
 }
-
-
 
 .h5p-dialogcards .h5p-dialogcards-card-footer,
 .h5p-dialogcards .h5p-dialogcards-card-footer-match {
@@ -166,13 +143,14 @@
   padding: 0 0 0.375em 0;
 }
 
-.h5p-dialogcards .h5p-dialogcards-title-inner {
-  font-size: 1.125em;
+.h5p-dialogcards-title-inner .h5p-theme-question-description {
+  color: var(--h5p-theme-text-primary);
+  font-size: var(--h5p-theme-font-size-xl);
+  font-weight: 600;
 }
-.h5p-dialogcards .h5p-dialogcards-description {
-  margin: 0 1em 1em;
+.h5p-dialogcards-title-inner .h5p-theme-question-description{
+  padding-left: var(--h5p-theme-spacing-m);
 }
-
 .h5p-no-frame .h5p-dialogcards .h5p-dialogcards-description,
 .h5p-transparent .h5p-dialogcards .h5p-dialogcards-description {
   margin: 0 0 1em;
@@ -233,7 +211,6 @@
 .h5p-dialogcards-intermediary-summary-screen {
   align-items: center;
   width: fit-content;
-  ///background-color: #fff !important;
 }
 
 .h5p-dialogcards-intermediary-summary-screen {
@@ -266,7 +243,6 @@
 .h5p-dialogcards .h5p-dialogcards-card-footer-enablegotit,
 .h5p-dialogcards .h5p-dialogcards-card-footer-enablegotit.audio,
 .h5p-dialogcards .reduced-image {
-  //width: 100%;
   height: 2.25em;
   display: flex;
   justify-content: space-between;
@@ -347,7 +323,6 @@
   height: calc(var(--h5p-theme-spacing-xl)*1.5)
 }
 .h5p-dialogcards.h5p-text-scaling .h5p-dialogcards-card-text-wrapper {
-  //height: calc(var(--h5p-theme-spacing-xl)*1.5);
   height: 12em;;
 }
 
@@ -518,10 +493,6 @@
   position: unset;
 }
 
-.h5p-dialogcards .h5p-dialogcards-cardwrap-set {
-  margin: auto;
-  max-width: 32em;
-}
 
 .h5p-dialogcards .h5p-dialogcards-disabled {
   display: none;
@@ -567,17 +538,7 @@
   margin-left: 10px;
 }
 
-.h5p-dialogcards
-  .h5p-dialogcards-answer-button.correct:before,
-.h5p-dialogcards
-  .h5p-dialogcards-answer-button-off.correct:before {
-  font-family: 'H5PFontAwesome4';
-  content: '\f00c';
-  font-weight: normal;
-}
-
-.h5p-dialogcards
-  .h5p-dialogcards-answer-button.correct.h5p-dialogcards-quick-progression {
+.h5p-dialogcards .h5p-dialogcards-answer-button.correct.h5p-dialogcards-quick-progression {
   border: 2px solid #1f824c;
   color: #1f824c;
   text-decoration: none solid rgb(31, 130, 76);
@@ -588,17 +549,11 @@
   color: #fff;
   background-color: #1f824c;
 }
-
+/*
 .h5p-dialogcards .h5p-dialogcards-answer-button.incorrect {
   order: 0;
 }
-
-.h5p-dialogcards .h5p-dialogcards-answer-button.incorrect:before {
-  font-family: 'H5PFontAwesome4';
-  content: '\f00d';
-  font-weight: normal;
-}
-
+*/
 .h5p-dialogcards .h5p-dialogcards-answer-button.incorrect.h5p-dialogcards-quick-progression {
   border: 2px solid #d95354;
   color: #d95354;
@@ -1019,30 +974,6 @@ background-color: var(--h5p-theme-background);
   padding: var(--h5p-theme-spacing-s);
 }
 
-@media screen and (max-width: 800px) {
-  .h5p-dialogcards .h5p-dialogcards-card-footer {
-    gap: var(--h5p-theme-spacing-xs);
-    flex-direction: column;
-    width: 100%;
-    margin: var(--h5p-theme-spacing-m);
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .h5p-dialogcards .h5p-dialogcards-card-footer > button {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .h5p-dialogcards .h5p-dialogcards-card-footer > .h5p-theme-primary-cta::before {
-    text-indent: calc(-0.5 * var(--h5p-theme-spacing-xs));
-  }
-
-  .h5p-dialogcards .h5p-dialogcards-card-footer > .h5p-theme-primary-cta:hover::before {
-    text-indent: calc(-0.5 * var(--h5p-theme-spacing-xs));
-  }
-}
-
 .h5p-dialogcards .h5p-dialogcards-audio-wrapper {
   display: block;
   margin: 0 auto;
@@ -1096,6 +1027,9 @@ background-color: var(--h5p-theme-background);
 .h5p-dialogcards .h5p-dialogcards-title-wrapper {
   flex: 1;
 }
+.h5p-dialogcards .h5p-dialogcards-progress-wrapper {
+  display: flex;
+}
 @media only screen and (max-width: 600px) {
   .h5p-dialogcards .h5p-dialogcards-title-container {
     flex-direction: column;
@@ -1115,5 +1049,29 @@ background-color: var(--h5p-theme-background);
     margin-left: auto;
     margin-right: auto;
     margin-top: var(--h5p-theme-spacing-m);
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .h5p-dialogcards .h5p-dialogcards-card-footer {
+    gap: var(--h5p-theme-spacing-xs);
+    flex-direction: column;
+    width: 100%;
+    margin: var(--h5p-theme-spacing-m);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .h5p-dialogcards .h5p-dialogcards-card-footer > button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .h5p-dialogcards .h5p-dialogcards-card-footer > .h5p-theme-primary-cta::before {
+    text-indent: calc(-0.5 * var(--h5p-theme-spacing-xs));
+  }
+
+  .h5p-dialogcards .h5p-dialogcards-card-footer > .h5p-theme-primary-cta:hover::before {
+    text-indent: calc(-0.5 * var(--h5p-theme-spacing-xs));
   }
 }
