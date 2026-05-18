@@ -632,8 +632,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         class: 'h5p-dialogcards-side-by-side',
       });
 
-      self.createSubTitleFooter().appendTo(self.$sideBySide);
-
       self.createFooter().appendTo(self.$sideBySide);
 
       self.$sideBySide.appendTo(self.$inner);
@@ -1071,26 +1069,18 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         .appendTo($footer);
     }
 
-    let classesRetry =
-      'h5p-dialogcards-footer-button h5p-dialogcards-button-retry h5p-dialogcards-disabled';
-    let titleRetry = '';
-    let htmlRetry = '';
+    let curClassses = 'h5p-dialogcards-disabled';
+    let curHtml = '';
     if (this.enableGotIt || this.repetition) {
-      titleRetry = self.params.nextRound;
-      htmlRetry = self.params.nextRound;
-      classesRetry =
-        'h5p-dialogcards-footer-button h5p-dialogcards-retry h5p-dialogcards-disabled';
+      curHtml = this.params.nextRound.replace('@round', this.currentRound + 1);
+      curClassses: 'h5p-theme-continueh 5p-dialogcards-button-next-round h5p-dialogcards-disabled';
     }
-    else {
-      classesRetry += ' h5p-dialogcards-button-reset';
-      titleRetry = self.params.retry;
-      htmlRetry = self.params.retry;
-    }
-    self.$retry = createButton({
-      classes: classesRetry,
-      label: titleRetry,
-      styleType: 'secondary',
-      icon: 'retry',
+
+    this.$retry = createButton({
+      classes: curClassses,
+      html: curHtml,
+      styleType: 'primary',
+      icon: 'continue',
     })
       .click((event) => {
         if (self.repetition) {
@@ -1109,11 +1099,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       }).appendTo($footer);
     }
     else {
-      /*
-      self.$round = $('<div>', {
-        class: 'h5p-dialogcards-round',
-      }).appendTo($footer);
-*/
       self.$progress = $('<div>', {
         class: 'h5p-dialogcards-cards-left',
         'aria-live': 'assertive',
@@ -1122,11 +1107,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     // Mode match with repetition. Under LEFT  card display footer similar to the GotIt mode.
     
     if (this.repetition) {
-      /*
-      self.$round = $('<div>', {
-        class: 'h5p-dialogcards-round repetition',
-      }).appendTo($footer);
-*/
       self.$progress = $('<div>', {
         class: 'h5p-dialogcards-cards-left repetition',
         'aria-live': 'assertive',
@@ -1158,16 +1138,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     return $footerLeft;
   };
 
-  C.prototype.createSubTitleFooter = function () {
-    this.$subTitle = $('<div>', {
-      class: 'h5p-dialogcards-sub-title',
-    });
-
-    this.$displaySubTitleFooter = $('<div>', {}).appendTo(this.$subTitle);
-
-    return this.$subTitle;
-  };
-
+ 
   /**
    * Called when all cards have been loaded.
    */
@@ -1865,9 +1836,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     let footerClass;
     if (!this.enableGotIt) {
       footerClass = 'h5p-dialogcards-card-footer';
-      if (this.sideBySide) {
-        footerClass += ' subtitle';
-      }
       if (this.frontTextBackImage && !this.matchIt) {
         footerClass += ' reduced-image';
       }
@@ -1885,21 +1853,20 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         footerClass = 'h5p-dialogcards-card-footer-enablegotit front-text-back-image';
       }
     }
+    if (this.matchIt) {
+      footerClass = 'h5p-dialogcards-card-footer-match';
+    }
     let $cardFooter = $('<div>', {
       class: footerClass,
     });
 
     let classesRepetition = 'h5p-dialogcards-button-hidden';
-    /// noff let classesRepetitionOff = '';
     let attributeTabindex = '-1';
 
     if (this.enableGotIt || this.matchIt) {
       classesRepetition =
         'h5p-dialogcards-quick-progression h5p-dialogcards-disabled';
       attributeTabindex = '0';
-    }
-    else {
-      /// noff classesRepetitionOff = 'h5p-dialogcards-button-hidden';
     }
 
     if (this.enableGotIt) {
@@ -2189,12 +2156,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.$progressTop.removeClass('h5p-dialogcards-disabled');
 
     let $card = self.$current.find('.h5p-dialogcards-card-content');
-    if (this.sideBySide) {
-      let $cardFooter = $card.find('.h5p-dialogcards-card-footer');
-      $cardFooter.html(this.rightSubTitle);
-      const i = self.$current.index() / C.NB2;
-      self.$displaySubTitleFooter.html('');
-    }
+    
     if (this.matchIt && !this.sideBySide) {
       // Needed if $matchButton was just de-activated upon an incorrect match.
       let $matchButton = $card.find('.h5p-dialogcards-button-match');
@@ -2245,12 +2207,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
 
     if (this.enableGotIt) {
-      // In case it was hidden when refreshing
-      /* noff
-      $card
-        .find('.h5p-dialogcards-answer-button-off')
-        .removeClass('h5p-dialogcards-hide');
-        */
       if (this.hideTurnButton) {
         $card.find('.h5p-dialogcards-turn').removeClass('h5p-dialogcards-hide');
       }
@@ -2702,7 +2658,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           );
         }
       }
-      /// noff = let $off = self.$current.find('.h5p-dialogcards-answer-button-off');
 
       // Manage front & back images.
       // If exists image2
@@ -3035,7 +2990,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     self.$current
       .find('.h5p-dialogcards-answer-button')
       .removeClass('h5p-dialogcards-disabled')
-      .addClass('coucou')
 
     self.resetButtons('restart');
 
@@ -3120,12 +3074,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     });
 
     self.resizeOverflowingText();
-    self.setCardFocus(self.$current);
-    /// noff
-    self.$current
-      .find('.h5p-dialogcards-answer-button-off')
-      .removeClass('h5p-dialogcards-disabled');
-  
+    self.setCardFocus(self.$current);  
     self.$currentLeft = self.$inner.find('.h5p-dialogcards-current-left');
     this.$progressFooterLeft.removeClass('h5p-dialogcards-hide');
     self.updateNavigation();
@@ -3462,37 +3411,19 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     let $answerButtonCorrect = self.$inner.find(
       '.h5p-dialogcards-answer-button.correct',
     );
-    /* noff
-    let $answerButtonCorrectOff = self.$inner.find(
-      '.h5p-dialogcards-answer-button-off.h5p-joubelui-button.correct',
-    );
-    */
+
     $answerButtonCorrect.html(this.params.correctAnswer);
-    /// noff $answerButtonCorrectOff.html(this.params.correctAnswer);
 
     let $answerButtonInCorrect = self.$inner.find(
       '.h5p-dialogcards-answer-button.incorrect',
     );
-    let $answerButtonInCorrectOff = self.$inner.find(
-      '.h5p-dialogcards-answer-button-off.h5p-joubelui-button.incorrect',
-    );
     $answerButtonInCorrect.html(this.params.incorrectAnswer);
-    $answerButtonInCorrectOff.html(this.params.incorrectAnswer);
-
     // Truncate button
-
-    // TODO revise this truncation system
-    /*
-    let $footerWidth = $answerButtonCorrect.parent()[0].getBoundingClientRect().width;
-    let $card = self.$current.find('.h5p-dialogcards-card-content');
-    */
     // Supposed to be a smartphone
     let w = $(window).width();
     if (w < C.NB400) {
       $answerButtonCorrect.html('');
-      // noff $answerButtonCorrectOff.html('');
       $answerButtonInCorrect.html('');
-      $answerButtonInCorrectOff.html('');
     }
   };
 
@@ -3701,6 +3632,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    */
 
   C.prototype.gotItCorrect = function ($card) {
+    console.log('gotItCorrect');
     let self = this;
     let index = $card.index();
     this.endOfStack = 0;
@@ -3761,16 +3693,16 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     let $leftCard = self.$currentLeft;
     let indexLeft = ($leftCard.index() - 1) / C.NB2;
 
-    // De-activate all buttons during the Timeout.
     let $correctButton = $card.find('.h5p-dialogcards-match-correct');
     let $incorrectButton = $card.find('.h5p-dialogcards-match-incorrect');
     let $matchButton = $card.find('.h5p-dialogcards-button-match');
-    $matchButton
-      .addClass('h5p-dialogcards-disabled');
-    self.$next.toggleClass('h5p-dialogcards-inactive');
-    self.$prev.toggleClass('h5p-dialogcards-inactive');
-
+    
     if (index === indexLeft) {
+    // De-activate all buttons during the Timeout if match-correct
+      $matchButton
+      .addClass('h5p-dialogcards-disabled');
+      self.$next.toggleClass('h5p-dialogcards-inactive');
+      self.$prev.toggleClass('h5p-dialogcards-inactive');
       this.correct++;
       $matchButton.addClass('h5p-dialogcards-disabled');
       $correctButton.toggleClass('h5p-dialogcards-disabled');
@@ -4006,6 +3938,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    */
 
   C.prototype.resetTask = function () {
+    console.log('resetTask');
     const self = this;
     this.contentData.previousState = {};
     self.answered = false;
@@ -4048,7 +3981,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         '.h5p-dialogcards-card-side-announcer, .h5p-dialogcards-button-reset, ' +
         '.h5p-joubelui-score-bar, .h5p-dialogcards-match-footer,' +
         '.h5p-dialogcards-summary-screen, .h5p-dialogcards-summary-message, .h5p-dialogcards-feedback, .h5p-dialogcards-categories, ' +
-        '.h5p-dialogcards-sub-title, .h5p-dialogcards-options, .h5p-navigation ',
+        '.h5p-dialogcards-sub-title, .h5p-dialogcards-options, .h5p-navigation, .h5p-theme-continue',
       self.$inner,
     ).remove();
 
@@ -4146,6 +4079,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    */
 
   C.prototype.resetButtons = function (type) {
+    console.log('resetButtons type = ' + type);
     let self = this;
     let $card = $(this);
     $card = self.$current;
@@ -4169,12 +4103,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       .removeClass('h5p-dialogcards-disabled');
     }
     if (type === 'answer buttons') {
-      // Enable answer-buttons-off ; Unhide turn button & card text and Disable the Retry button.
+      // Unhide turn button & card text and Disable the Retry button.
       $card
         .find('.h5p-dialogcards-turn')
-        .removeClass('h5p-dialogcards-disabled');
-      $card
-        .find('.h5p-dialogcards-answer-button-off')
         .removeClass('h5p-dialogcards-disabled');
       if (this.noText) {
         $card
@@ -4292,8 +4223,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
         if (type === 'retry button') {
           this.cardsLeft = 0;
+          let label = this.params.nextRound.replace('@round', this.currentRound + 1)          
           this.$retry.html(
-            this.params.nextRound.replace('@round', this.currentRound + 1),
+            label,
           );
         }
         else {
@@ -4323,9 +4255,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         $card.addClass('h5p-dialogcards-match-right');
       }
       $card
-        .find('.h5p-dialogcards-answer-button-off')
-        .removeClass('h5p-dialogcards-disabled');
-      $card
         .find('.h5p-dialogcards-turn')
         .removeClass('h5p-dialogcards-disabled');
       $card
@@ -4334,12 +4263,10 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       if (this.matchIt) {
         self.$prev.removeClass('h5p-dialogcards-hide h5p-visibility-hidden');
       }
-      //this.$progressTop.removeClass('h5p-dialogcards-hide');
-      this.$round.addClass('h5p-dialogcards-hide');
+      this.$round.removeClass('h5p-dialogcards-hide');
       let $cardContent = $card.find('.h5p-dialogcards-card-content');
       $cardContent.removeClass('h5p-dialogcards-summary-screen');
       this.$retry.addClass('h5p-dialogcards-disabled');
-      //this.$progressTop.addClass('h5p-dialogcards-hide');
       if (this.noText && !this.matchIt) {
         $card
           .find('.h5p-dialogcards-card-text-inner')
@@ -4648,6 +4575,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
   };
 
   C.prototype.getRetryOrReset = function () {
+    console.log('getRetryOrReset');
     let message = this.params.retry;
     let thisclass = 'h5p-dialogcards-button-retry';
     if (
