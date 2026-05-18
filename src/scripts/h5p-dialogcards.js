@@ -4143,9 +4143,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         }
         $card.find('.joubel-tip-container').addClass('h5p-dialogcards-hide');
         $card.find('.h5p-dialogcards-audio-wrapper').addClass('hide');
-        $card
-          .find('.h5p-dialogcards-audio-wrapper2')
-          .addClass('h5p-dialogcards-hide');
+        $card.find('.h5p-dialogcards-audio-wrapper2').addClass('hide');
         $card
           .find('.h5p-dialogcards-progress')
           .addClass('h5p-dialogcards-hide');
