@@ -15,10 +15,6 @@
       "description": "Diyaloglar/kartlar için 'Kategoriler' alanı eklensin mi?"
     },
     {
-      "label": "Kartlarda alt başlıklar etkinleştirilsin mi?",
-      "description": "Kartlara 'alt başlık' alanı eklensin mi?"
-    },
-    {
       "widgets": [
         {
           "label": "Varsayılan"
@@ -85,10 +81,6 @@
           {
             "label": "Kart Kategorisi/leri",
             "description": "İsteğe bağlı. Bu kartın ait olduğu kategori(ler). Öğe ad(lar)ını virgülle ve boşluk bırakmadan girin."
-          },
-          {
-            "label": "Bu kart için alt başlık",
-            "description": "'Yan yana serbest gezinme' modu etkinleştirildiğinde bu kart için alt başlık. Maksimum karakter = 80."
           }
         ]
       }
@@ -200,14 +192,6 @@
         {
           "label": "Metni kart boyutuna uyacak şekilde ölçeklendir",
           "description": "Bu seçenek işaretlenmezse, kart boyutu içine yerleştirilen metne göre ayarlanacaktır"
-        },
-        {
-          "label": "Kartların arka plan rengi (Ön Yüz)",
-          "description": "Kartların ön yüzü için arka plan rengi. Varsayılan olarak bu arka plan şeffaftır rgba(0, 0, 0, 0)."
-        },
-        {
-          "label": "Kartların arka plan rengi (Arka Yüz)",
-          "description": "Kartların arka yüzü için arka plan rengi. Varsayılan olarak bu arka plan şeffaftır rgba(0, 0, 0, 0). Varsayılan olarak, ön yüz rengi her iki yüz için de kullanılacaktır."
         },
         {
           "label": "Ön yüz görsellerini kartların arka yüzüne kopyalama.",

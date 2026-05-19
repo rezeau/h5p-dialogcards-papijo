@@ -15,10 +15,6 @@
       "description": "Add a 'Categories' field in the Cards?"
     },
     {
-      "label": "Enable Subtitles in Cards?",
-      "description": "Add a 'Subtitle' field in the Cards?"
-    },
-    {
       "widgets": [
         {
           "label": "Default"
@@ -85,10 +81,6 @@
           {
             "label": "Card Category/ies",
             "description": "Optional. Category item(s) that this card belongs to. Enter the item name(s) separated by a comma and no space."
-          },
-          {
-            "label": "Subtitle for this card",
-            "description": "Subtitle for this card when the 'Free browsing with cards side by side' mode is enabled. Max characters = 80."
           }
         ]
       }
@@ -200,14 +192,6 @@
         {
           "label": "Scale the text to fit inside the card",
           "description": "Unchecking this option will make the card adapt its size to the size of the text"
-        },
-        {
-          "label": "Cards Background color (Front Side)",
-          "description": "The color of the front side of the cards background. Default is transparent rgba(0, 0, 0, 0)."
-        },
-        {
-          "label": "Cards Background color (Back Side)",
-          "description": "The color of the back side of the cards background. Default is transparent rgba(0, 0, 0, 0). If Default then the Front side colour will be used for both sides."
         },
         {
           "label": "Do not duplicate front images to back of cards",

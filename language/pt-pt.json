@@ -15,10 +15,6 @@
       "description": "Adicionar um campo 'Categorias' nos Cartões de Diálogo ?"
     },
     {
-      "label": "Ativar as legendas nos Cartões?",
-      "description": "Adicionar um campo de 'legendas' nos cartões ?"
-    },
-    {
       "widgets": [
         {
           "label": "Valor por defeito"
@@ -85,10 +81,6 @@
           {
             "label": "Categoria(s) do Cartão",
             "description": "Opcional: categoria(s) à qual pertence este Cartão. Digitar a(s) categoria(s) separada(s) por vírgula, sem espaços."
-          },
-          {
-            "label": "Legenda para este Cartão",
-            "description": "Legenda para este Cartão quando foi selecionado o modo \"Normal\" e a opção 'Visualizar os Cartões lado a lado' está ativada. Máximo de carateres = 80."
           }
         ]
       }
@@ -200,14 +192,6 @@
         {
           "label": "Ajustar o texto à dimensão do Cartão.",
           "description": "Se esta opção não for selecionada, então o Cartão ajustará a sua dimensão ao texto introduzido"
-        },
-        {
-          "label": "Cor de fundo dos Cartões (Lado frontal)",
-          "description": "Definição da cor de fundo do lado frontal dos Cartões. Por defeito será transparente rgba(0, 0, 0, 0)."
-        },
-        {
-          "label": "Cor de fundo dos Cartões (Verso)",
-          "description": "Definição da cor de fundo do verso dos Cartões. Por defeito será transparente rgba(0, 0, 0, 0). Em caso de utilização do valor por defeito, a cor do lado frontal será utilizada nas duas faces."
         },
         {
           "label": "Não duplicar as imagens do lado frontal para o verso dos Cartões.",

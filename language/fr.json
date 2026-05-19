@@ -15,10 +15,6 @@
       "description": "Ajouter un champ 'Catégories' dans les fiches des dialogues/cartes ?"
     },
     {
-      "label": "Activer les sous-titres dans les cartes ?",
-      "description": "Ajouter un champ 'sous-titre' dans les cartes ?"
-    },
-    {
       "widgets": [
         {
           "label": "Default"
@@ -85,10 +81,6 @@
           {
             "label": "Catégorie(s) de carte(s)",
             "description": "Optionnel. Catégorie(s) à laquelle appartient cette carte. Entrez le(s) nom(s) de la/des catégorie(s) séparé(s) par une virgule et sans espace."
-          },
-          {
-            "label": "Sous-titre pour cette carte",
-            "description": "Sous-titre de cette carte lorsque le mode « Navigation libre avec cartes côte à côte » est activé. Nombre maximal de caractères = 80."
           }
         ]
       }
@@ -179,7 +171,7 @@
               "label": "Appariement"
             },
             {
-              "label": "Mode choisi par l'utilisateur"
+              "label": "Appariement avec Répétition"
             },
             {
               "label": "Autocorrection"
@@ -200,14 +192,6 @@
         {
           "label": "Mettre à l'échelle le texte afin de l'adapter à la taille de la carte",
           "description": "Si cette option est décochée, la taille de la carte sera adaptée au texte placé à l'intérieur"
-        },
-        {
-          "label": "Couleur d'arrière-plan des cartes (Recto)",
-          "description": "Couleur d'arrière-plan du recto des cartes. Par défaut cet arrière-plan est transparent rgba(0, 0, 0, 0)."
-        },
-        {
-          "label": "Couleur d'arrière-plan des cartes (Verso)",
-          "description": "Couleur d'arrière-plan du verso des cartes. Par défaut cet arrière-plan est transparent rgba(0, 0, 0, 0). En cas de défaut, la couleur de la face avant sera utilisée pour les deux faces."
         },
         {
           "label": "Ne pas dupliquer les images du recto vers le verso des cartes.",
