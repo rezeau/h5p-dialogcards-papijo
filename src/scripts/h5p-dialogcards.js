@@ -1031,7 +1031,12 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       role: 'navigation',
     });
     if (this.matchIt) {
-      $footer.addClass('h5p-dialogcards-footer-match-right');
+      if (this.repetition) {
+        $footer.addClass('h5p-dialogcards-footer-match-right repetition');
+      }
+      else {
+        $footer.addClass('h5p-dialogcards-footer-match-right');
+      }
     }
 
     // 19/12/2025 added a timeout to the Prev and Next buttons to prevent double clicks
@@ -1533,6 +1538,11 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     let $cardHolder = $('<div>', {
       class: 'h5p-dialogcards-cardholder',
     }).appendTo($cardWrapper);
+
+    // Increase cardHolder max-width to 40em to account for the 3 buttons at the bottom; 
+    if (this.playModeUser === 'selfCorrectionMode') {
+      $cardHolder.addClass(' selfCorrectionMode')
+    }
 
     // Progress for assistive technologies
     let progressText = this.params.progressText
