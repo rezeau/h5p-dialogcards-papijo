@@ -1070,5 +1070,13 @@
     "default": "Current Play Mode = ",
     "importance": "low",
     "common": true
+  },
+  {
+    "name": "noTextErrorNotice",
+    "type": "text",
+    "label": "Label used to tell the user about an error in cards when using the noText option.",
+    "default": "ERROR You are using the NO TEXT option but your set of cards is not consistent.",
+    "importance": "low",
+    "common": true
   }
 ]

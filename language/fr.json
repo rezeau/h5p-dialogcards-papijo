@@ -522,6 +522,10 @@
     {
       "label": "Etiquette pour indiquer le mode de jeu actuel",
       "default": "Mode de jeu actuel = "
+    },
+    {
+      "label": "Étiquette utilisée pour signaler à l'utilisateur une erreur dans la création des cartes lorsqu'il utilise l'option 'Cacher les textes'.",
+      "default": "ERREUR : Vous utilisez l'option 'Cacher les textes', mais votre jeu de cartes n'est pas cohérent."
     }
   ]
 }

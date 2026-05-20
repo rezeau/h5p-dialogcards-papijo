@@ -88,6 +88,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         matchMode: 'Match',
         matchRepetition: 'Match with Repetition',
         selfCorrectionMode: 'Self Correction',
+        noTextErrorNotice: 'ERROR You are using the NO TEXT option but your set of cards is not consistent.',
         categories: [
           {
             catName: 'Animal',
@@ -192,9 +193,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         `<div class='h5p-error-message'${
           title
         }${self.params.description
-        }<hr><b>ERROR</b> You are using the "no text" option:`
-        + '<br>but your set of cards is not consistent.'
-        + `<br>${ this.report}`;
+        }<hr><h3>${this.params.noTextErrorNotice}</h3>`
+        + `${ this.report}`;
     }
 
     // Reset all flags
@@ -256,7 +256,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       this.hasImageOnFront = self.params.dialogs.every((d) => d.imageMedia.image);
       this.hasImageOnBack = self.params.dialogs.every((d) => d.imageMedia.image2);
       this.hasTwoImages = this.hasImageOnFront && this.hasImageOnBack;
-
     }
     // IF categories filters enabled!!!
     if (self.params.enableCategories && self.params.behaviour.catFilters) {
@@ -1063,6 +1062,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           this.preventDoubleClick($(event.currentTarget), () => {
             self.prevCard();
           });
+          // In case the buttons was set to blinking in match mode.
+          self.$next.removeClass('blinking-button');
+          self.$prev.removeClass('blinking-button');
         })
         .appendTo($footer);
 
@@ -1077,6 +1079,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           this.preventDoubleClick($(event.currentTarget), () => {
             self.nextCard();
           });
+          // In case the buttons was set to blinking in match mode.
+          self.$next.removeClass('blinking-button');
+          self.$prev.removeClass('blinking-button');
         })
         .appendTo($footer);
     }
@@ -1758,10 +1763,10 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
     if (this.matchIt) {
       if (card.audioMedia.audio !== undefined) {
-        self.createCardAudio(card).appendTo($cardTextInnerContent);
+        self.createCardAudio(card).appendTo($cardContent);
       }
       if (card.audioMedia.audio2 !== undefined) {
-        self.createCardAudio2(card).appendTo($cardTextInnerContent);
+        self.createCardAudio2(card).appendTo($cardContent);
       }
     }
 
@@ -2066,15 +2071,10 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     // Hides image on the left side is nodupe
     const { image, image2 } = card.imageMedia;
     const sameImage = image?.path === image2?.path;
-
-    if (this.noDupeFrontPicToBack && this.matchIt) {
-      if (!isLeft && sameImage) {
-        $image.add($image2).addClass('h5p-dialogcards-hide');
-      }
-      else if (isLeft && image) {
-        $image.addClass('h5p-dialogcards-hide');
-      }
-    }
+    if (this.noDupeFrontPicToBack && this.matchIt && sameImage) {
+    (isLeft ? $image : $image.add($image2))
+      .addClass('h5p-dialogcards-hide');
+  }
     /*******************************************************************************/
 
     if (typeof $image !== 'undefined') {
@@ -3715,6 +3715,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       this.incorrect++;
       $matchButton.addClass('h5p-dialogcards-disabled');
       $incorrectButton.toggleClass('h5p-dialogcards-disabled');
+      // Set the next & prev buttons to blinking to attract student's attention.
+      self.$next.addClass('blinking-button');
+      self.$prev.addClass('blinking-button');
     }
 
     // No cards left in stack. End game.
@@ -3900,6 +3903,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    */
 
   C.prototype.resetTask = function () {
+    if (this.report !== '') {
+      return;
+    }
     const self = this;
     this.contentData.previousState = {};
     self.answered = false;
@@ -4659,8 +4665,15 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         if (extra.length) {
           reason += (reason ? ' AND ' : '') + extra.join(' and ');
         }
-
-        const text = card.text.replace(/<[^>]*>/g, '').trim();
+        let text;
+        if (!card.text) {
+          card.text = 'Missing text!';
+          text = card.text.replace(/<[^>]*>/g, '').trim();
+          text = '<span style="color:var(--h5p-theme-feedback-incorrect-main);">⚠️ Missing text!</span>';
+        }
+        else {
+          text = card.text.replace(/<[^>]*>/g, '').trim();
+        }
         const answer = card.answer.replace(/<[^>]*>/g, '').trim();
 
         removedCards.push({
@@ -4677,14 +4690,14 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       self.params.dialogs = [];
 
       let report = '<div style="font-family:Arial,sans-serif;">';
-      report += '<h2 style="color:#d9534f;">⚠️ Deck Rejected</h2>';
+      report += '<h2 style="color:var(--h5p-theme-feedback-incorrect-main);">⚠️ Deck Rejected</h2>';
       report += `<p><strong>Card #1 defines the required media layout:</strong> ${describeLayout(reference)}</p>`;
       report += '<hr>';
 
       removedCards.forEach((card) => {
         report += `
         <div style="margin-bottom:12px;">
-          <strong>Card #${card.index + 1} — Rejection reason:</strong> ${card.reason}<br>
+          <strong>Card #${card.index + 1} — Rejection reason:</strong>⚠️  ${card.reason}<br>
           <strong>Text:</strong> "${card.text}"
         </div>
         <hr style="border:1px dashed #ccc;">

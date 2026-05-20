@@ -522,6 +522,10 @@
     {
       "label": "Label used to tell the user which play mode is currently used.",
       "default": "Bu oyunun mevcut oynatma modu = "
+    },
+    {
+      "label": "Label used to tell the user about an error in cards when using the noText option.",
+      "default": "ERROR You are using the NO TEXT option but your set of cards is not consistent."
     }
   ]
 }
