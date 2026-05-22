@@ -236,8 +236,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
       // All dialogs must have front image and back audio
       this.frontImageBackAudio = self.params.dialogs.every((dialog) =>
-        dialog.imageMedia.image !== undefined &&
-      dialog.audioMedia.audio2 !== undefined,
+        dialog.imageMedia.image !== undefined
+        && dialog.audioMedia.audio2 !== undefined,
       );
 
       // All dialogs must have both front and back audio
@@ -1243,9 +1243,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           if (!this.noText) {
             $card
               .find(
-                '.h5p-dialogcards-card-text-wrapper .h5p-dialogcards-card-text-inner',
+                '.h5p-dialogcards-card-text-wrapper',
               )
-              .after(
+              .before(
                 JoubelUI.createTip(tip, {
                   tipLabel: self.params.tipButtonLabel,
                 }),
@@ -1260,7 +1260,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
                  || (self.cardsSideMode === 'backFirst' && side === 'front') ||
                 this.has2Audio
               );
-            $card.find('.h5p-dialogcards-image-wrapper').append(
+            $card.find('.h5p-dialogcards-image-wrapper').before(
               JoubelUI.createTip(tip, {
                 tipLabel: self.params.tipButtonLabel,
                 addclass: 'joubel-tip-notext',
@@ -1285,18 +1285,14 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           }
           switch (side) {
             case 'front':
-              $card
-                .find(
-                  '.h5p-dialogcards-card-text-wrapper .h5p-dialogcards-card-text-inner',
-                )
-                .after(
+              $card.find('.h5p-dialogcards-card-text-wrapper ',).before(
                   JoubelUI.createTip(tip, {
                     tipLabel: self.params.tipButtonLabel,
                   }),
                 );
               break;
             case 'back':
-              $card.find('.h5p-dialogcards-image-wrapper').after(
+              $card.find('.h5p-dialogcards-image-wrapper').before(
                 JoubelUI.createTip(tip, {
                   tipLabel: self.params.tipButtonLabel,
                 }),
@@ -2020,6 +2016,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           }
         }
       }
+
     }
 
     if (card.imageMedia.image2 !== undefined) {
@@ -2039,6 +2036,14 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       }
       self.$images2.push($image2);
       $image2.appendTo($imageWrapper);
+    }
+
+    if (card.imageMedia.image !== undefined
+      && this.noDupeFrontPicToBack
+      && card.imageMedia.image2 === undefined
+      && isBackFirst 
+      && isLeft) {
+      $image.addClass('h5p-dialogcards-hide');
     }
 
     // Needed for notext image + audio
