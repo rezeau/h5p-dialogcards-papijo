@@ -1285,11 +1285,11 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           }
           switch (side) {
             case 'front':
-              $card.find('.h5p-dialogcards-card-text-wrapper ',).before(
-                  JoubelUI.createTip(tip, {
-                    tipLabel: self.params.tipButtonLabel,
-                  }),
-                );
+              $card.find('.h5p-dialogcards-card-text-wrapper ').before(
+                JoubelUI.createTip(tip, {
+                  tipLabel: self.params.tipButtonLabel,
+                }),
+              );
               break;
             case 'back':
               $card.find('.h5p-dialogcards-image-wrapper').before(
@@ -1540,9 +1540,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       class: 'h5p-dialogcards-cardholder',
     }).appendTo($cardWrapper);
 
-    // Increase cardHolder max-width to 40em to account for the 3 buttons at the bottom; 
+    // Increase cardHolder max-width to 40em to account for the 3 buttons at the bottom;
     if (this.playModeUser === 'selfCorrectionMode') {
-      $cardHolder.addClass(' selfCorrectionMode')
+      $cardHolder.addClass(' selfCorrectionMode');
     }
 
     // Progress for assistive technologies
@@ -2041,7 +2041,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (card.imageMedia.image !== undefined
       && this.noDupeFrontPicToBack
       && card.imageMedia.image2 === undefined
-      && isBackFirst 
+      && isBackFirst
       && isLeft) {
       $image.addClass('h5p-dialogcards-hide');
     }
@@ -2077,9 +2077,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     const { image, image2 } = card.imageMedia;
     const sameImage = image?.path === image2?.path;
     if (this.noDupeFrontPicToBack && this.matchIt && sameImage) {
-    (isLeft ? $image : $image.add($image2))
-      .addClass('h5p-dialogcards-hide');
-  }
+      (isLeft ? $image : $image.add($image2))
+        .addClass('h5p-dialogcards-hide');
+    }
     /*******************************************************************************/
 
     if (typeof $image !== 'undefined') {
