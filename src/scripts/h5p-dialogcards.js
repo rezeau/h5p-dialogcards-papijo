@@ -3120,7 +3120,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
   C.prototype.resize = function () {
     let self = this;
     let maxHeight = 0;
-    
+
     // To prevent error inside Interactive Book PapiJo.
     // also to prevent infinite vertical scrolling upon resize in MS-Edge and Chrome navigators.
     if (this.taskFinished || this.issetHeight) {
@@ -3130,7 +3130,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (!self.params.behaviour.scaleTextNotCard) {
       self.determineCardSizes();
     }
-    
+
     // Reset card-wrapper-set height
     self.$cardwrapperSet.css('height', 'auto');
 
@@ -3167,7 +3167,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     self.resizeOverflowingText();
     this.issetHeight = true;
   };
-  
+
 
   /**
    * Resizes each card to fit its text
