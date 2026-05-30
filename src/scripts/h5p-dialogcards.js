@@ -2108,6 +2108,16 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       (isLeft ? $image : $image.add($image2))
         .addClass('h5p-dialogcards-hide');
     }
+    // Just in case ... display front card is isFrontFirst.
+    if (card.imageMedia.image !== undefined
+      && this.noDupeFrontPicToBack
+      && isFrontFirst
+      && isLeft) {
+      $image
+        .removeClass('h5p-dialogcards-hide');
+    }
+
+
     /*******************************************************************************/
 
     if (typeof $image !== 'undefined') {
