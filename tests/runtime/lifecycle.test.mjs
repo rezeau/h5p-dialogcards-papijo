@@ -46,3 +46,20 @@ test('attaches and repeatedly resets a minimal runnable without duplicate UI', (
   assert.doesNotThrow(() => instance.resetTask());
   assertSingleAttachedUI($container, $);
 });
+
+test('reset does not duplicate H5P EventDispatcher listeners', {
+  todo: 'Current resetTask re-registers retry, resetTask, and resize listeners.',
+}, () => {
+  runtime = createH5PRuntime();
+  const { $, H5P, window } = runtime;
+  const instance = H5P.newRunnable(createMinimalLibrary(), 52);
+  const registeredTypes = [];
+  instance.on('newListener', (event) => registeredTypes.push(event.data.type));
+  const $container = $('<div></div>').appendTo(window.document.body);
+
+  instance.attach($container);
+  const registrationsAfterAttach = registeredTypes.slice();
+  instance.resetTask();
+
+  assert.deepEqual(registeredTypes, registrationsAfterAttach);
+});
