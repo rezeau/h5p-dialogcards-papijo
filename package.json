@@ -7,7 +7,11 @@
   "scripts": {
     "build": "cross-env NODE_ENV='production' webpack",
     "watch": "webpack --watch",
-    "lint": "stylelint './src/styles/*.css' && eslint './src/**/*.js'"
+    "lint": "npm run stylelint && npm run lint:js",
+    "lint:js": "eslint src/**/*.js scripts/**/*.mjs",
+    "stylelint": "stylelint src/styles/*.css",
+    "verify": "npm run build && npm run verify:dist",
+    "verify:dist": "node scripts/verify-built-artifacts.mjs"
   },
   "repository": {
     "type": "git",
