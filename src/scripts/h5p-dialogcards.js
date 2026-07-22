@@ -7,10 +7,69 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     'https://h5p.org/x-api/h5p-reporting-version';
   const createButton = (options) =>
     $(H5P.Components.Button(options));
+
   /**
-   * @param {object} params Behavior settings
-   * @param {number} id Content identification
-   * @param {object} contentData Saved content
+   * @typedef {'user'|'normalMode'|'browseSideBySide'} DialogcardsBrowsingPlayMode
+   */
+
+  /**
+   * @typedef {'matchMode'|'matchRepetition'|'selfCorrectionMode'} DialogcardsScoredPlayMode
+   */
+
+  /**
+   * @typedef {DialogcardsBrowsingPlayMode|DialogcardsScoredPlayMode} DialogcardsPlayMode
+   */
+
+  /**
+   * @typedef {'AND'|'OR'|'NOT'} DialogcardsFilterOperator
+   */
+
+  /**
+   * @typedef {object} DialogcardsFilter
+   * @property {string} filterList Comma-separated category names.
+   * @property {DialogcardsFilterOperator} filterOperator Category matching rule.
+   */
+
+  /**
+   * @typedef {object} DialogCard
+   * @property {string} [text] Front text.
+   * @property {string} [answer] Back text.
+   * @property {object} imageMedia Front and back image configuration.
+   * @property {object} audioMedia Front and back audio configuration.
+   * @property {string} [itemCategories] Comma-separated category names.
+   */
+
+  /**
+   * @typedef {object} DialogcardsSavedState
+   * @property {number} [progress] Current right-card DOM index.
+   * @property {number} [progressLeft] Current left-card DOM index.
+   * @property {number} [currentRound] Current repetition round.
+   * @property {number} [correct] Number of correct responses.
+   * @property {number} [incorrect] Number of incorrect responses.
+   * @property {number} [nbCardsSelected] Number of cards selected for play.
+   * @property {number} [nbCardsLeft] Number of cards left in the current round.
+   * @property {number[]} [order] Persisted card order.
+   * @property {DialogCard[]} [currentDialogs] Persisted working deck.
+   * @property {DialogcardsPlayMode} [playMode] Configured play mode.
+   * @property {DialogcardsPlayMode} [playModeUser] Effective play mode.
+   * @property {boolean} [taskFinished] Whether the task reached its final screen.
+   */
+
+  /**
+   * @typedef {object} DialogcardsContentData
+   * @property {DialogcardsSavedState} [previousState] State restored by H5P.
+   */
+
+  /**
+   * @typedef {object} DialogcardsParameters
+   * @property {DialogCard[]} dialogs Authored cards.
+   * @property {object} behaviour Runtime behavior settings.
+   */
+
+  /**
+   * @param {DialogcardsParameters} params Authored content and behavior settings.
+   * @param {number} id H5P content identifier.
+   * @param {DialogcardsContentData} [contentData] Saved H5P content state.
    */
   function DialogcardsPapiJo(params, id, contentData) {
     const self = this;
@@ -261,6 +320,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
     // IF categories filters enabled!!!
     if (self.params.enableCategories && self.params.behaviour.catFilters) {
+      /** @type {DialogcardsFilter[]} */
       this.catFilters = self.params.behaviour.catFilters;
       // Remove potential filters with empty filterList
       for (let i = 0; i < this.catFilters.length; i++) {
@@ -383,8 +443,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
   DialogcardsPapiJo.prototype.constructor = DialogcardsPapiJo;
   /**
-   * Attach the first part of the h5p inside the given container (title and description).
-   * @param {HTMLElement} $container Contains the cards
+   * Attach the content to the supplied H5P container.
+   * @param {object} $container H5P jQuery container for the content.
+   * @returns {void}
    */
   DialogcardsPapiJo.prototype.attach = function ($container) {
     let self = this;
@@ -666,10 +727,11 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
 
     self.updateNavigation();
-    // Creating a Date Object used by XAPI
+    // Record the attempt start time used for the xAPI duration.
     this.startTime = new Date().getTime();
     this.triggerXAPI('attempted');
 
+    // EventDispatcher owns callback invocation; use the stable content alias.
     self.on('retry', function () {
       self.retry();
     });
@@ -678,6 +740,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       self.resetTask();
     });
 
+    // EventDispatcher invokes this method reference with the content as `this`.
     self.on('resize', self.resize);
     self.trigger('resize');
     self.getCurrentState();
@@ -1053,7 +1116,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       }
     }
 
-    // 19/12/2025 added a timeout to the Prev and Next buttons to prevent double clicks
+    // Temporarily disable navigation buttons to prevent double clicks.
     if (!this.enableGotIt) {
       this.preventDoubleClick = function ($btn, action) {
         if ($btn.prop('disabled')) {
@@ -1061,6 +1124,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         }
         $btn.prop('disabled', true);
         action();
+        // Timer callbacks do not provide the content instance as `this`.
         setTimeout(function () {
           $btn.prop('disabled', false);
         }, DialogcardsPapiJo.NB300);
@@ -1073,6 +1137,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         label: self.params.prev,
         icon: 'previous',
       })
+        // The arrow preserves the content instance for preventDoubleClick().
         .click((event) => {
           this.preventDoubleClick($(event.currentTarget), () => {
             self.prevCard();
@@ -1090,6 +1155,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         styleType: 'nav',
         icon: 'next',
       })
+        // The arrow preserves the content instance for preventDoubleClick().
         .click((event) => {
           this.preventDoubleClick($(event.currentTarget), () => {
             self.nextCard();
@@ -1320,7 +1386,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
   /**
    * Creates all cards and appends them to card wrapper.
-   * @param {Array} cards Card parameters
+   * @param {DialogCard[]} cards Card parameters
    * @returns {HTMLElement} Card wrapper set
    */
   DialogcardsPapiJo.prototype.initCards = function (cards) {
@@ -1541,7 +1607,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
   /**
    * Create a single card card
-   * @param {object} card Card parameters
+   * @param {DialogCard} card Card parameters
    * @param {number} cardNumber Card number in order of appearance
    * @param {function} [setCardSizeCallback] Set card size callback
    * @returns {HTMLElement} Card wrapper
@@ -1602,7 +1668,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
   /**
    * Create content for a card
-   * @param {object} card Card parameters
+   * @param {DialogCard} card Card parameters
    * @param {number} cardNumber Card number in order of appearance
    * @param {function} [setCardSizeCallback] Set card size callback
    * @returns {HTMLElement} Card content wrapper
@@ -1989,8 +2055,10 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
   /**
    * Create card image
-   * @param {object} card Card parameters
-   * @param {function} [loadCallback] Function to call when loading image
+   * @param {DialogCard} card Card parameters
+   * @param {number} cardNumber Card index in the working deck.
+   * @param {function} [loadCallback] Image load callback; jQuery supplies the image element as `this`.
+   * @param {boolean} [isLeft=false] Whether the image belongs to the left card stack.
    * @returns {HTMLElement} Card image wrapper
    */
 
@@ -2138,7 +2206,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
   /**
    * Create card audio
-   * @param {object} card Card parameters
+   * @param {DialogCard} card Card parameters
    * @returns {HTMLElement} Card audio element
    */
   DialogcardsPapiJo.prototype.createCardAudio = function (card) {
@@ -2169,7 +2237,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
   /**
    * Create card audio for the back of the card
-   * @param {object} card Card parameters
+   * @param {DialogCard} card Card parameters
    * @returns {HTMLElement} Card audio element
    */
   DialogcardsPapiJo.prototype.createCardAudio2 = function (card) {
@@ -3196,6 +3264,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
 
     // Go through each card
+    // Traditional callback required: jQuery supplies each card element as `this`.
     self.$cardwrapperSet.children(':visible').each(function (i) {
       if (self.cardSizeDetermined.indexOf(i) !== -1) {
         return; // Already determined, no need to determine again.
@@ -3264,6 +3333,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         .getBoundingClientRect().height;
       let getContentHeight = function () {
         let contentHeight = 0;
+        // Traditional callback required: jQuery supplies each child as `this`.
         self.$inner.children().each(function () {
           contentHeight +=
             $(this).get(0).getBoundingClientRect().height +
@@ -3905,6 +3975,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         // Find the matching right card from stack of cards
         $cards = self.$inner.find('.h5p-dialogcards-cardwrap');
         let $matchingRightCard;
+        // Traditional callback required: jQuery supplies each right card as `this`.
         $cards.each(function (index) {
           if (index === indexLeft) {
             $matchingRightCard = $(this);
@@ -3946,7 +4017,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       $correctButton
         .removeClass('h5p-dialogcards-disabled');
       correctClasses = $correctButton.attr('class');
-      // WARNING! do not use 'this' inside a setTimeout function; use 'self' !
+      // Timer callbacks do not provide the content instance; use `self` below.
       setTimeout(function () {
         $correctButton.addClass('h5p-dialogcards-disabled');
         let correctClasses = $correctButton.attr('class');
@@ -4323,9 +4394,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
   };
 
   /**
-   * Necessary for the Interactive Book content.
-   * Used in contracts.
+   * Satisfy the H5P question contract used by container content types.
    * @public
+   * @returns {void}
    */
 
   DialogcardsPapiJo.prototype.showSolutions = function () {
@@ -4334,7 +4405,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
   /**
    * Get maximum score.
-   * @returns {number} Max points. Used in Interactive Book content.
+   * @returns {number} Maximum score exposed to H5P container content types.
    */
   DialogcardsPapiJo.prototype.getMaxScore = function () {
     if (
@@ -4350,7 +4421,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
   };
 
   /**
-   * @returns {number} Points. Used in Interactive Book content.
+   * Get the current score.
+   * @returns {number} Current score exposed to H5P container content types.
    */
   DialogcardsPapiJo.prototype.getScore = function () {
     if (!this.nbCardsSelected) {
@@ -4365,14 +4437,17 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     return this.actualScore;
   };
 
-  // Used when a dialog cards activity is included in an Interactive Book content.
+  /**
+   * Report whether the learner has completed an answerable mode.
+   * @returns {boolean} Whether an answer has been submitted.
+   */
   DialogcardsPapiJo.prototype.getAnswerGiven = function () {
     return this.answered;
   };
 
   /**
-   * Returns an object containing content of each cloze
-   * @returns {object} object containing content for each cloze
+   * Serialize the resumable Dialog Cards state for H5P.
+   * @returns {DialogcardsSavedState} Current resumable state.
    */
   DialogcardsPapiJo.prototype.getCurrentState = function () {
     let state = {};
@@ -4428,6 +4503,13 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     return state;
   };
 
+  /**
+   * Filter the working deck by authored categories.
+   * @param {string} filterList Comma-separated category names.
+   * @param {DialogcardsFilterOperator} filterOperator Category matching rule.
+   * @param {boolean} [dryRun] Count matches without changing the deck; defaults to false.
+   * @returns {number|DialogCard[]|undefined} Match count or filtered working deck.
+   */
   DialogcardsPapiJo.prototype.applyFilter = function (
     filterList,
     filterOperator,
@@ -4487,6 +4569,12 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     }
   };
 
+  /**
+   * Build the localized label for a category filter.
+   * @param {string} catList Comma-separated category names.
+   * @param {DialogcardsFilterOperator} catOperator Category matching rule.
+   * @returns {string|undefined} Localized filter label.
+   */
   DialogcardsPapiJo.prototype.makeCurrentFilterName = function (catList, catOperator) {
     let self = this;
     let filterName;
@@ -4503,7 +4591,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
   };
 
   /**
-   * Trigger xAPI answered event
+   * Trigger the xAPI answered event.
+   * @returns {void}
    */
   DialogcardsPapiJo.prototype.triggerAnswered = function () {
     this.answered = true;
@@ -4514,7 +4603,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
   };
 
   /**
-   @returns {object} xAPI object definition
+   * Build the xAPI activity definition.
+   * @returns {object} xAPI activity definition.
    */
   DialogcardsPapiJo.prototype.getxAPIDefinition = function () {
     const definition = {};
@@ -4558,9 +4648,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
   };
   /**
    * Add the response part to an xAPI event
-   * @param {H5P.XAPIEvent} xAPIEvent
-   *  The xAPI event we will add a response to
-   * change last param to this.isPassed() TODO!
+   * @param {H5P.XAPIEvent} xAPIEvent Event that receives the scored response.
+   * @returns {void}
    */
   DialogcardsPapiJo.prototype.addResponseToXAPI = function (xAPIEvent) {
     if (
@@ -4579,7 +4668,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       true,
       success,
     );
-    // Note to self: put result.duration *before* result.response!
+    // Preserve the established duration-before-response assignment order.
     let duration = `PT${Math.round((this.endTime - this.startTime) / DialogcardsPapiJo.NB1000)}S`;
     xAPIEvent.data.statement.result.duration = duration;
     xAPIEvent.data.statement.result.response = this.getxAPIResponse();
@@ -4587,7 +4676,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
   /**
    * Generate xAPI user response, used in xAPI statements.
-   * @returns {string} User answers separated by the "[,]" pattern
+   * @returns {string} Human-readable score and completion summary.
    */
   DialogcardsPapiJo.prototype.getxAPIResponse = function () {
     let summary = '';
