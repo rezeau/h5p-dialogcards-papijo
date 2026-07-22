@@ -5,6 +5,14 @@
 H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
   const XAPI_REPORTING_VERSION_EXTENSION =
     'https://h5p.org/x-api/h5p-reporting-version';
+  const FONT_SIZE_STEP_PX = 0.2;
+  const MAX_FONT_SIZE_PX = 16;
+  const MIN_FONT_SIZE_PX = 4;
+  const FONT_SIZE_EM_OFFSET = 0.4;
+  const SMALL_DECK_CARD_COUNT_LIMIT = 50;
+  const CARD_TURN_TRANSITION_DELAY_MS = 200;
+  const COMPACT_BUTTON_BREAKPOINT_PX = 400;
+  const MILLISECONDS_PER_SECOND = 1000;
   const createButton = (options) =>
     $(H5P.Components.Button(options));
 
@@ -896,7 +904,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
     // Allow user to select a number of cards to play with, by displaying selectable buttons in increments of 5.
     let n = 0;
-    if (numCards <= DialogcardsPapiJo.NB50) {
+    if (numCards <= SMALL_DECK_CARD_COUNT_LIMIT) {
       n = DialogcardsPapiJo.NB5;
     }
     else {
@@ -2885,13 +2893,13 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
             self.resizeOverflowingText();
           }
         }
-      }, DialogcardsPapiJo.NB200);
+      }, CARD_TURN_TRANSITION_DELAY_MS);
 
       self.resizeOverflowingText();
 
       // Focus text
       $card.find('.h5p-dialogcards-card-text-area').focus();
-    }, DialogcardsPapiJo.NB200);
+    }, CARD_TURN_TRANSITION_DELAY_MS);
 
     let $nextCard = self.$current.next('.h5p-dialogcards-cardwrap');
     if (
@@ -3349,9 +3357,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       // Decrease font size
       if (containerHeight < contentHeight) {
         while (containerHeight < contentHeight) {
-          newFontSize -= DialogcardsPapiJo.SCALEINTERVAL;
+          newFontSize -= FONT_SIZE_STEP_PX;
           // Cap at min font size
-          if (newFontSize < DialogcardsPapiJo.MINSCALE) {
+          if (newFontSize < MIN_FONT_SIZE_PX) {
             break;
           }
           // Set relative font size to scale with full screen.
@@ -3363,9 +3371,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         // Increase font size
         let increaseFontSize = true;
         while (increaseFontSize) {
-          newFontSize += DialogcardsPapiJo.SCALEINTERVAL;
+          newFontSize += FONT_SIZE_STEP_PX;
           // Cap max font size
-          if (newFontSize > DialogcardsPapiJo.MAXSCALE) {
+          if (newFontSize > MAX_FONT_SIZE_PX) {
             increaseFontSize = false;
             break;
           }
@@ -3375,7 +3383,9 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           contentHeight = getContentHeight();
           if (containerHeight <= contentHeight) {
             increaseFontSize = false;
-            relativeFontSize = (newFontSize - DialogcardsPapiJo.SCALEINTERVAL) / parentFontSize;
+            relativeFontSize =
+              (newFontSize - FONT_SIZE_STEP_PX) /
+              parentFontSize;
             self.$inner.css('font-size', `${relativeFontSize}em`);
           }
         }
@@ -3440,13 +3450,16 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (currentTextHeight > currentTextContainerHeight) {
       let decreaseFontSize = true;
       while (decreaseFontSize) {
-        fontSize -= DialogcardsPapiJo.SCALEINTERVAL;
-        if (fontSize < DialogcardsPapiJo.MINSCALE) {
+        fontSize -= FONT_SIZE_STEP_PX;
+        if (fontSize < MIN_FONT_SIZE_PX) {
           decreaseFontSize = false;
           break;
         }
-        // JR added 0.4 em to make reduced font size not so reduced.
-        $text.css('font-size', `${fontSize / parentFontSize + DialogcardsPapiJo.NB04}em`);
+        // Keep scaled text slightly larger than the direct pixel-to-em ratio.
+        $text.css(
+          'font-size',
+          `${fontSize / parentFontSize + FONT_SIZE_EM_OFFSET}em`,
+        );
         currentTextHeight = $text.get(0).getBoundingClientRect().height;
         if (currentTextHeight <= currentTextContainerHeight) {
           decreaseFontSize = false;
@@ -3457,7 +3470,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       // Increase font size
       let increaseFontSize = true;
       while (increaseFontSize) {
-        fontSize += DialogcardsPapiJo.SCALEINTERVAL;
+        fontSize += FONT_SIZE_STEP_PX;
 
         // Cap at  16px
         if (fontSize > mainFontSize) {
@@ -3470,7 +3483,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         currentTextHeight = $text.get(0).getBoundingClientRect().height;
         if (currentTextHeight >= currentTextContainerHeight) {
           increaseFontSize = false;
-          fontSize = fontSize - DialogcardsPapiJo.SCALEINTERVAL;
+          fontSize = fontSize - FONT_SIZE_STEP_PX;
           $text.css('font-size', `${fontSize / parentFontSize}em`);
         }
       }
@@ -3538,7 +3551,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     // Truncate button
     // Supposed to be a smartphone
     let w = $(window).width();
-    if (w < DialogcardsPapiJo.NB400) {
+    if (w < COMPACT_BUTTON_BREAKPOINT_PX) {
       $answerButtonCorrect.html('');
       $answerButtonInCorrect.html('');
     }
@@ -3803,7 +3816,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       self.resetAudio(i);
     }
 
-    const delayInMilliseconds = 2000;
+    const matchFeedbackDelayMs = 2000;
     let index = $card.index() / DialogcardsPapiJo.NB2;
     let $leftCard = self.$currentLeft;
     let indexLeft = ($leftCard.index() - 1) / DialogcardsPapiJo.NB2;
@@ -3844,7 +3857,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           'h5p-dialogcards-current h5p-dialogcards-match-right',
         );
         self.updateNavigation();
-      }, delayInMilliseconds);
+      }, matchFeedbackDelayMs);
 
       // Now remove the current 'gotitdone' card from the cards and cardOrder arrays.
       self.currentDialogs.splice(index, 1);
@@ -3868,7 +3881,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (self.currentDialogs.length === 0) {
       setTimeout(function () {
         self.finishedScreen();
-      }, delayInMilliseconds);
+      }, matchFeedbackDelayMs);
     }
   };
 
@@ -3878,7 +3891,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     for (let i = 0; i < self.nbCards + 1; i++) {
       self.resetAudio(i);
     }
-    const delayInMilliseconds = 2000; // Make it a parameters setting?
+    const matchFeedbackDelayMs = 2000;
     let index = $card.index() / DialogcardsPapiJo.NB2;
     let $leftCard = self.$currentLeft;
     let indexLeft = ($leftCard.index() - 1) / DialogcardsPapiJo.NB2;
@@ -3956,7 +3969,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
             self.nextCard();
           }
           self.updateNavigation();
-        }, delayInMilliseconds);
+        }, matchFeedbackDelayMs);
 
         // Now remove the current 'gotitdone' card from the cards and cardOrder arrays.
         self.currentDialogs.splice(index, 1);
@@ -4004,7 +4017,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           $matchButton.removeClass('h5p-dialogcards-disabled');
           self.nextCardLeftRepetition(); // ???
           self.updateNavigation(); // line 1228
-        }, delayInMilliseconds);
+        }, matchFeedbackDelayMs);
       }
     }
 
@@ -4038,7 +4051,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           self.resetButtons('retry button');
           $matchButton.addClass('h5p-dialogcards-disabled');
         }
-      }, delayInMilliseconds);
+      }, matchFeedbackDelayMs);
     }
   };
 
@@ -4669,7 +4682,10 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       success,
     );
     // Preserve the established duration-before-response assignment order.
-    let duration = `PT${Math.round((this.endTime - this.startTime) / DialogcardsPapiJo.NB1000)}S`;
+    let duration = `PT${Math.round(
+      (this.endTime - this.startTime) /
+      MILLISECONDS_PER_SECOND,
+    )}S`;
     xAPIEvent.data.statement.result.duration = duration;
     xAPIEvent.data.statement.result.response = this.getxAPIResponse();
   };
@@ -4879,18 +4895,18 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     return '';
   }
 
-  DialogcardsPapiJo.SCALEINTERVAL = 0.2;
-  DialogcardsPapiJo.MAXSCALE = 16;
-  DialogcardsPapiJo.MINSCALE = 4;
-  DialogcardsPapiJo.NB04 = 0.4;
+  DialogcardsPapiJo.SCALEINTERVAL = FONT_SIZE_STEP_PX;
+  DialogcardsPapiJo.MAXSCALE = MAX_FONT_SIZE_PX;
+  DialogcardsPapiJo.MINSCALE = MIN_FONT_SIZE_PX;
+  DialogcardsPapiJo.NB04 = FONT_SIZE_EM_OFFSET;
   DialogcardsPapiJo.NB2 = 2;
   DialogcardsPapiJo.NB5 = 5;
   DialogcardsPapiJo.NB10 = 10;
-  DialogcardsPapiJo.NB50 = 50;
-  DialogcardsPapiJo.NB200 = 200;
+  DialogcardsPapiJo.NB50 = SMALL_DECK_CARD_COUNT_LIMIT;
+  DialogcardsPapiJo.NB200 = CARD_TURN_TRANSITION_DELAY_MS;
   DialogcardsPapiJo.NB300 = 300;
-  DialogcardsPapiJo.NB400 = 400;
-  DialogcardsPapiJo.NB1000 = 1000;
+  DialogcardsPapiJo.NB400 = COMPACT_BUTTON_BREAKPOINT_PX;
+  DialogcardsPapiJo.NB1000 = MILLISECONDS_PER_SECOND;
 
   return DialogcardsPapiJo;
 })(H5P.jQuery, H5P.Audio, H5P.JoubelUI, H5P.Question);
