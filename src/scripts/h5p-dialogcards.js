@@ -256,7 +256,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     /* Note special treatment of self.params.title to get a correct display with theme 'black' */
 
     if (this.report) {
-      let title = self.params.title;
+      const title = self.params.title;
       self.params.title = '';
       self.params.description =
         `<div class='h5p-error-message'${
@@ -4463,7 +4463,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    * @returns {DialogcardsSavedState} Current resumable state.
    */
   DialogcardsPapiJo.prototype.getCurrentState = function () {
-    let state = {};
+    const state = {};
     if (this.$current !== undefined) {
       state.progress = this.$current.index();
     }
@@ -4528,15 +4528,15 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     filterOperator,
     dryRun = false,
   ) {
-    let self = this;
-    let filterListLength = filterList.split(',').length;
-    let catDialogs = [];
+    const self = this;
+    const filterListLength = filterList.split(',').length;
+    const catDialogs = [];
     let isSelected = 0;
     let notSelected = 0;
     let numCardsInCats = 0;
     for (let i = 0; i < self.currentDialogs.length; i++) {
       if (self.currentDialogs[i].itemCategories !== undefined) {
-        let itemCats = self.currentDialogs[i].itemCategories.split(',');
+        const itemCats = self.currentDialogs[i].itemCategories.split(',');
         isSelected = 0;
         notSelected = 0;
         for (let j = 0; j < itemCats.length; j++) {
@@ -4568,7 +4568,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (dryRun) {
       return numCardsInCats;
     }
-    let filtered = catDialogs.filter(function (el) {
+    const filtered = catDialogs.filter(function (el) {
       return el != null;
     });
     if (!filtered.length) {
@@ -4589,7 +4589,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    * @returns {string|undefined} Localized filter label.
    */
   DialogcardsPapiJo.prototype.makeCurrentFilterName = function (catList, catOperator) {
-    let self = this;
+    const self = this;
     let filterName;
     if (catOperator === 'AND') {
       filterName = catList.replace(/,/g, ` ${self.params.boolean_AND} `);
@@ -4671,7 +4671,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     ) {
       return;
     }
-    let success =
+    const success =
       (100 * this.actualScore) / this.maxScore >=
       this.params.behaviour.passPercentage;
     xAPIEvent.setScoredResult(
@@ -4682,7 +4682,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       success,
     );
     // Preserve the established duration-before-response assignment order.
-    let duration = `PT${Math.round(
+    const duration = `PT${Math.round(
       (this.endTime - this.startTime) /
       MILLISECONDS_PER_SECOND,
     )}S`;
@@ -4696,7 +4696,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    */
   DialogcardsPapiJo.prototype.getxAPIResponse = function () {
     let summary = '';
-    let selectedCards = this.nbCardsSelected;
+    const selectedCards = this.nbCardsSelected;
     let totalCards = this.params.dialogs.length;
     let text1 = '';
     if (selectedCards !== totalCards) {
@@ -4716,7 +4716,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         this.params.summaryMatchesNotFound
       } ${this.incorrect}`;
     }
-    let text3 = `${this.params.summaryOverallScore} : ${this.actualScore}/${this.maxScore}`;
+    const text3 = `${this.params.summaryOverallScore} : ${this.actualScore}/${this.maxScore}`;
     summary += `${text1 + text2}\n${text3}\n${this.helpText}`;
     return summary;
   };
