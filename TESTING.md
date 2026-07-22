@@ -69,11 +69,9 @@ operations, ContentType/xAPI helper availability, and a minimal attach/reset
 lifecycle. The lifecycle test resets twice and verifies that the current root
 UI and its current navigation click handler are not duplicated.
 
-There is one explicit expected-failure test for an existing listener issue:
-`resetTask()` currently registers new `retry`, `resetTask`, and `resize`
-EventDispatcher listeners on every reset. Phase 2A records this risk but does
-not change production behavior. It should be resolved and promoted to a normal
-passing assertion in Phase 2B.
+The lifecycle contract verifies that `retry`, `resetTask`, and `resize`
+EventDispatcher listeners are registered exactly once per instance and remain
+single-dispatch after repeated resets.
 
 H5P Core 1.28 composes prototypes with `jQuery.extend({}, ...)`. Because a
 function prototype's built-in `constructor` property is non-enumerable, Core's

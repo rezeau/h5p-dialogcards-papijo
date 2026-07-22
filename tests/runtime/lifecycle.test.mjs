@@ -47,9 +47,7 @@ test('attaches and repeatedly resets a minimal runnable without duplicate UI', (
   assertSingleAttachedUI($container, $);
 });
 
-test('reset does not duplicate H5P EventDispatcher listeners', {
-  todo: 'Current resetTask re-registers retry, resetTask, and resize listeners.',
-}, () => {
+test('reset registers each H5P lifecycle listener exactly once', () => {
   runtime = createH5PRuntime();
   const { $, H5P, window } = runtime;
   const instance = H5P.newRunnable(createMinimalLibrary(), 52);
@@ -58,8 +56,40 @@ test('reset does not duplicate H5P EventDispatcher listeners', {
   const $container = $('<div></div>').appendTo(window.document.body);
 
   instance.attach($container);
-  const registrationsAfterAttach = registeredTypes.slice();
+  assert.deepEqual(registeredTypes, ['retry', 'resetTask', 'resize']);
+  instance.resetTask();
   instance.resetTask();
 
-  assert.deepEqual(registeredTypes, registrationsAfterAttach);
+  assert.deepEqual(registeredTypes, ['retry', 'resetTask', 'resize']);
+});
+
+test('retry, resetTask and resize dispatch once after repeated resets', () => {
+  runtime = createH5PRuntime();
+  const { $, H5P, window } = runtime;
+  const instance = H5P.newRunnable(createMinimalLibrary(), 53);
+  const originalResize = instance.resize;
+  let resizeCalls = 0;
+  instance.resize = function (...args) {
+    resizeCalls++;
+    return originalResize.apply(this, args);
+  };
+  const $container = $('<div></div>').appendTo(window.document.body);
+
+  instance.attach($container);
+  instance.resetTask();
+  instance.resetTask();
+
+  let retryCalls = 0;
+  instance.retry = () => retryCalls++;
+  instance.trigger('retry');
+  assert.equal(retryCalls, 1);
+
+  let resetCalls = 0;
+  instance.resetTask = () => resetCalls++;
+  instance.trigger('resetTask');
+  assert.equal(resetCalls, 1);
+
+  const resizeCallsBeforeTrigger = resizeCalls;
+  instance.trigger('resize');
+  assert.equal(resizeCalls, resizeCallsBeforeTrigger + 1);
 });

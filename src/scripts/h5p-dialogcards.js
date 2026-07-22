@@ -739,17 +739,20 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.startTime = new Date().getTime();
     this.triggerXAPI('attempted');
 
-    // EventDispatcher owns callback invocation; use the stable content alias.
-    self.on('retry', function () {
-      self.retry();
-    });
+    if (!self.lifecycleListenersRegistered) {
+      // EventDispatcher owns callback invocation; use the stable content alias.
+      self.on('retry', function () {
+        self.retry();
+      });
 
-    self.on('resetTask', function () {
-      self.resetTask();
-    });
+      self.on('resetTask', function () {
+        self.resetTask();
+      });
 
-    // EventDispatcher invokes this method reference with the content as `this`.
-    self.on('resize', self.resize);
+      // EventDispatcher invokes this method reference with the content as `this`.
+      self.on('resize', self.resize);
+      self.lifecycleListenersRegistered = true;
+    }
     self.trigger('resize');
     self.getCurrentState();
 
