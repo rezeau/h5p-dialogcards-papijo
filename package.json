@@ -10,6 +10,8 @@
     "lint": "npm run stylelint && npm run lint:js",
     "lint:js": "eslint src/**/*.js scripts/**/*.mjs",
     "stylelint": "stylelint src/styles/*.css",
+    "test": "npm run test:runtime",
+    "test:runtime": "npm run build && node --test tests/runtime/*.test.mjs",
     "verify": "npm run build && npm run verify:dist",
     "verify:dist": "node scripts/verify-built-artifacts.mjs"
   },
@@ -31,6 +33,8 @@
     "cross-env": "^7.0.3",
     "css-loader": "^6.7.1",
     "eslint-config-snordian-h5p": "github:otacke/eslint-config-snordian-h5p",
+    "jquery": "^3.7.1",
+    "jsdom": "^26.1.0",
     "mini-css-extract-plugin": "^2.6.1",
     "resolve-url-loader": "^5.0.0",
     "stylelint": "^16.26.0",
