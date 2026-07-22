@@ -50,6 +50,18 @@ npm run lint
 The individual checks are available as `npm run lint:js` and
 `npm run stylelint`.
 
+### H5P runtime contract tests
+
+Build the production bundle and run the Phase 2A runtime tests with:
+
+```sh
+npm test
+```
+
+`npm run test:runtime` is the equivalent narrower command. See
+[`TESTING.md`](TESTING.md) for the H5P Core boundary represented by the test
+harness, its test-only stubs, and its current limitations.
+
 ### Built-artifact verification
 
 Build and verify the production artifacts with:
