@@ -21,3 +21,6 @@ package.json
 worknotes
 package-lock.json
 LICENSE
+MODERNIZATION.md
+TEST_PLAN.md
+TESTING.md
