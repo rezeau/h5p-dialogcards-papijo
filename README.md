@@ -3,6 +3,16 @@
 This is a fork of the official version of the H5P Dialogue Cards content by "papi Jo"
 Tutorial, examples and more details on the papi Jo Drupal test site at http://www.rezeau.org/drupal/
 
+## Compatibility
+
+Dialog Cards Papi Jo 1.17.1 requires H5P Core API 1.28. This release has been
+tested successfully on current WordPress and Moodle installations that support
+H5P Core API 1.28.
+
+Current Lumi releases are not supported because they do not yet provide H5P
+Core API 1.28. This is a host-platform compatibility limitation and is not
+considered a defect in this release.
+
 ## Development
 
 The editable implementation lives under `src/`:

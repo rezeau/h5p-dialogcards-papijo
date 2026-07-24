@@ -84,3 +84,16 @@ This phase intentionally does not cover saved-state restoration, scoring,
 answered/completed xAPI statements, matching modes, audio navigation, layout
 measurements, browser accessibility behavior, or timer-sensitive interaction.
 Those remain priorities for Phase 2B in [`TEST_PLAN.md`](TEST_PLAN.md).
+
+## Known Stylelint baseline
+
+For the v1.17.1 release, `npm run stylelint` reports 58 existing errors in
+`src/styles/h5p-dialogcards.css`. They include duplicate declarations and
+selectors, selector ordering, missing generic font families, and selector
+parse errors.
+
+This release records that pre-existing CSS lint debt without changing CSS,
+disabling rules, or hiding the result. Production build verification,
+JavaScript linting, and the runtime contract tests must still pass. The CSS
+baseline is deferred to a future modernization phase because resolving it
+safely requires focused visual and behavioral regression testing.

@@ -16,6 +16,7 @@ karma.conf.js
 webpack.config.cjs
 webpack.dev.config.js
 README.md
+CHANGELOG.md
 CONTRIBUTING.md
 package.json
 worknotes
