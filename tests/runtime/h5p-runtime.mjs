@@ -161,12 +161,29 @@ export function createH5PRuntime() {
       this.data.statement.context = {};
     };
     this.getVerifiedStatementValue = function (pathParts) {
-      return pathParts.reduce(
-        (value, key) => value === undefined ? undefined : value[key],
-        this.data.statement,
-      );
+      return pathParts.reduce((value, key) => {
+        value[key] ??= {};
+        return value[key];
+      }, this.data.statement);
     };
-    this.setScoredResult = function () {};
+    this.setScoredResult = function (
+      score,
+      maxScore,
+      contentType,
+      completion,
+      success,
+    ) {
+      this.data.statement.result = {
+        score: {
+          min: 0,
+          max: maxScore,
+          raw: score,
+          scaled: maxScore === 0 ? 0 : score / maxScore,
+        },
+        completion,
+        success,
+      };
+    };
   };
   H5P.XAPIEvent.prototype = new H5P.Event('xAPI');
 
@@ -226,8 +243,13 @@ export function createH5PRuntime() {
     createTip(tip) {
       return $('<span class="joubel-tip-container"></span>').attr('data-tip', tip);
     },
-    createScoreBar() {
-      return $('<div class="h5p-joubelui-score-bar"></div>');
+    createScoreBar(maxScore) {
+      const $scoreBar = $('<div class="h5p-joubelui-score-bar"></div>')
+        .attr('data-max-score', maxScore);
+      $scoreBar.setScore = function (score) {
+        return this.attr('data-score', score);
+      };
+      return $scoreBar;
     },
   };
   H5P.Question = function Question() {};

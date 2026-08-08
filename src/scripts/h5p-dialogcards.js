@@ -218,6 +218,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.enableCardsNumber = self.params.behaviour.enableCardsNumber;
     this.noText = self.params.behaviour.noTextOnCards;
     this.actualScore = 0;
+    this.answered = false;
     this.isReversed = false;
     this.matchIt = false;
     if (

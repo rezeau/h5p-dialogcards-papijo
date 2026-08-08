@@ -1,4 +1,4 @@
-export function createMinimalLibrary() {
+export function createMinimalLibrary({ playMode = 'normalMode' } = {}) {
   const card = (text, answer) => ({
     text,
     answer,
@@ -21,7 +21,7 @@ export function createMinimalLibrary() {
         noTextOnCards: false,
         hideTurnButton: false,
         scaleTextNotCard: false,
-        playMode: 'normalMode',
+        playMode,
         cardsOrderChoice: 'normal',
         enableCardsNumber: false,
         cardsSideChoice: 'frontFirst',
