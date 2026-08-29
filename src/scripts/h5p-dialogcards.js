@@ -1,3 +1,5 @@
+import { makeCurrentFilterName } from './filtering-ordering.js';
+
 /**
  * Dialogcards module PapiJo
  * @param $
@@ -4634,18 +4636,13 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    * @returns {string|undefined} Localized filter label.
    */
   DialogcardsPapiJo.prototype.makeCurrentFilterName = function (catList, catOperator) {
-    const self = this;
-    let filterName;
-    if (catOperator === 'AND') {
-      filterName = catList.replace(/,/g, ` ${self.params.boolean_AND} `);
-    }
-    else if (catOperator === 'OR') {
-      filterName = catList.replace(/,/g, ` ${self.params.boolean_OR} `);
-    }
-    else if (catOperator === 'NOT') {
-      filterName = `${self.params.boolean_NOT} ${catList.replace(/,/g, ` ${self.params.boolean_NOT} `)}`;
-    }
-    return filterName;
+    return makeCurrentFilterName(
+      catList,
+      catOperator,
+      this.params.boolean_AND,
+      this.params.boolean_OR,
+      this.params.boolean_NOT,
+    );
   };
 
   /**
