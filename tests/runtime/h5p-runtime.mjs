@@ -20,7 +20,7 @@ const BUNDLE_PATH = path.join(PROJECT_ROOT, 'dist', 'h5p-dialogcards.js');
  *
  * @returns {object} Test runtime and DOM handles.
  */
-export function createH5PRuntime() {
+export function createH5PRuntime({ fakeTimers = false } = {}) {
   const dom = new JSDOM('<!doctype html><html><body></body></html>', {
     runScripts: 'outside-only',
     url: 'https://example.test/',
@@ -301,7 +301,71 @@ export function createH5PRuntime() {
   const bundle = fs.readFileSync(BUNDLE_PATH, 'utf8');
   window.eval(bundle);
 
+  let timers;
+  if (fakeTimers) {
+    const originalSetTimeout = window.setTimeout;
+    const originalClearTimeout = window.clearTimeout;
+    const scheduled = new Map();
+    let currentTime = 0;
+    let nextId = 1;
+    let nextOrder = 0;
+
+    window.setTimeout = function (callback, delay = 0, ...args) {
+      const id = nextId++;
+      const numericDelay = Number(delay);
+      scheduled.set(id, {
+        callback,
+        dueTime: currentTime + Math.max(
+          0,
+          Number.isFinite(numericDelay) ? numericDelay : 0,
+        ),
+        id,
+        order: nextOrder++,
+        args,
+      });
+      return id;
+    };
+
+    window.clearTimeout = function (id) {
+      scheduled.delete(id);
+    };
+
+    timers = {
+      advanceBy(milliseconds) {
+        const targetTime = currentTime + milliseconds;
+        while (true) {
+          const nextTimer = [...scheduled.values()]
+            .filter(({ dueTime }) => dueTime <= targetTime)
+            .sort((a, b) => a.dueTime - b.dueTime || a.order - b.order)[0];
+          if (!nextTimer) {
+            break;
+          }
+          scheduled.delete(nextTimer.id);
+          currentTime = nextTimer.dueTime;
+          nextTimer.callback.apply(window, nextTimer.args);
+        }
+        currentTime = targetTime;
+      },
+      pendingCount() {
+        return scheduled.size;
+      },
+      restore() {
+        scheduled.clear();
+        window.setTimeout = originalSetTimeout;
+        window.clearTimeout = originalClearTimeout;
+      },
+    };
+  }
+
   return {
-    $, H5P, close: () => dom.window.close(), dom, window,
+    $,
+    H5P,
+    close: () => {
+      timers?.restore();
+      dom.window.close();
+    },
+    dom,
+    timers,
+    window,
   };
 }

@@ -16,6 +16,22 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
   const createButton = (options) =>
     $(H5P.Components.Button(options));
 
+  const scheduleMatchingTimeout = function (instance, callback, delay) {
+    let timeoutId;
+    timeoutId = setTimeout(function (...args) {
+      instance._matchingTimeouts.delete(timeoutId);
+      callback.apply(this, args);
+    }, delay);
+    instance._matchingTimeouts.add(timeoutId);
+  };
+
+  const clearMatchingTimeouts = function (instance) {
+    instance._matchingTimeouts.forEach((timeoutId) => {
+      clearTimeout(timeoutId);
+    });
+    instance._matchingTimeouts.clear();
+  };
+
   /**
    * @typedef {'user'|'normalMode'|'browseSideBySide'} DialogcardsBrowsingPlayMode
    */
@@ -219,6 +235,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.noText = self.params.behaviour.noTextOnCards;
     this.actualScore = 0;
     this.answered = false;
+    this._matchingTimeouts = new Set();
     this.isReversed = false;
     this.matchIt = false;
     if (
@@ -3842,7 +3859,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       $leftCard.addClass('h5p-dialogcards-gotitdone');
       let $parentSet = self.$current.parent('.h5p-dialogcards-cardwrap-set');
 
-      setTimeout(function () {
+      scheduleMatchingTimeout(self, function () {
         self.nextCardLeft();
         self.resizeOverflowingText();
         $correctButton.toggleClass('h5p-dialogcards-disabled');
@@ -3883,7 +3900,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
     // No cards left in stack. End game.
     if (self.currentDialogs.length === 0) {
-      setTimeout(function () {
+      scheduleMatchingTimeout(self, function () {
         self.finishedScreen();
       }, matchFeedbackDelayMs);
     }
@@ -3933,7 +3950,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         let correctClasses = $correctButton.attr('class');
         self.$current.addClass('h5p-dialogcards-gotitdone');
 
-        setTimeout(function () {
+        scheduleMatchingTimeout(self, function () {
           self.nextCardLeftRepetition();
           self.resizeOverflowingText();
           let $cardLeft = self.$currentLeft.find(
@@ -3943,7 +3960,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           $leftCard.removeClass(
             'h5p-dialogcards-cardwrap-left-repetition h5p-dialogcards-current-left',
           );
-          if (this.cardsSideMode === 'frontFirst') {
+          if (self.cardsSideMode === 'frontFirst') {
             let $ci2 = $cardLeft.find('.h5p-dialogcards-image2');
             $ci2.addClass('h5p-dialogcards-hide');
           }
@@ -4008,7 +4025,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         $correctButton
           .addClass('h5p-dialogcards-disabled');
         this.noMatchCards[indexLeft] = 1;
-        setTimeout(function () {
+        scheduleMatchingTimeout(self, function () {
           $leftCard
             .addClass('h5p-dialogcards-noMatch')
             .removeClass('h5p-dialogcards-current-left');
@@ -4035,7 +4052,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
         .removeClass('h5p-dialogcards-disabled');
       correctClasses = $correctButton.attr('class');
       // Timer callbacks do not provide the content instance; use `self` below.
-      setTimeout(function () {
+      scheduleMatchingTimeout(self, function () {
         $correctButton.addClass('h5p-dialogcards-disabled');
         let correctClasses = $correctButton.attr('class');
         self.$current
@@ -4065,6 +4082,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    */
 
   DialogcardsPapiJo.prototype.resetTask = function () {
+    clearMatchingTimeouts(this);
     if (this.report !== '') {
       return;
     }
