@@ -230,6 +230,9 @@ export function createH5PRuntime() {
       button.type = 'button';
       button.className = options.classes || options.class || '';
       button.innerHTML = options.html || options.label || '';
+      if (typeof options.onClick === 'function') {
+        button.addEventListener('click', options.onClick);
+      }
       return button;
     },
   };
