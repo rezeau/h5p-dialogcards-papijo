@@ -1,7 +1,10 @@
 import assert from 'node:assert/strict';
 import { afterEach, test } from 'node:test';
 
-import { makeCurrentFilterName } from '../../src/scripts/filtering-ordering.js';
+import {
+  applyFilter,
+  makeCurrentFilterName,
+} from '../../src/scripts/filtering-ordering.js';
 import { createMinimalLibrary } from './fixture.mjs';
 import { createH5PRuntime } from './h5p-runtime.mjs';
 
@@ -26,11 +29,63 @@ function createLocalizedInstance({
   return runtime.H5P.newRunnable(library, 111);
 }
 
+function createFilterCard(text, itemCategories) {
+  const card = {
+    text,
+    answer: `${text} answer`,
+    imageMedia: {},
+    audioMedia: {},
+    tips: { front: '', back: '' },
+  };
+  if (itemCategories !== undefined) {
+    card.itemCategories = itemCategories;
+  }
+  return card;
+}
+
+function createFilteringInstance(dialogs) {
+  runtime = createH5PRuntime();
+  const library = createMinimalLibrary();
+  library.params.dialogs = dialogs;
+  return runtime.H5P.newRunnable(library, 112);
+}
+
 test('helper receives localized operator labels explicitly', () => {
   assert.equal(
     makeCurrentFilterName('alpha,beta', 'AND', 'DIRECT-AND', 'OR', 'NOT'),
     'alpha DIRECT-AND beta',
   );
+});
+
+test('filter helper reports mutations with explicit decks and clone dependency', () => {
+  const authoredDialogs = [
+    createFilterCard('Authored Alpha', 'alpha'),
+    createFilterCard('Authored Beta', 'beta'),
+  ];
+  const currentDialogs = [authoredDialogs[1]];
+  let clonedInput;
+  const clone = (dialogs) => {
+    clonedInput = dialogs;
+    return dialogs.map((dialog) => ({ ...dialog }));
+  };
+
+  const result = applyFilter({
+    currentDialogs,
+    authoredDialogs,
+    filterList: 'beta',
+    filterOperator: 'OR',
+    dryRun: false,
+    clone,
+  });
+
+  assert.equal(result.emptyResult, false);
+  assert.equal(result.replacementNbCards, 1);
+  assert.equal(clonedInput[0], authoredDialogs[0]);
+  assert.deepEqual(
+    result.replacementDialogs.map((dialog) => dialog.text),
+    ['Authored Alpha'],
+  );
+  assert.notEqual(result.replacementDialogs[0], authoredDialogs[0]);
 });
 
 test('formats multiple categories with the instance localized operators', () => {
@@ -97,4 +152,159 @@ test('remains an enumerable writable prototype method with two parameters', () =
     instance.makeCurrentFilterName('left,right', 'NOT'),
     'CUSTOM-NOT left CUSTOM-NOT right',
   );
+});
+
+test('AND uses the current token-count and substring semantics', () => {
+  const instance = createFilteringInstance([
+    createFilterCard('Alpha Beta', 'alpha,beta'),
+    createFilterCard('Alpha Gamma', 'alpha,gamma'),
+    createFilterCard('Alpha Beta Gamma', 'alpha,beta,gamma'),
+    createFilterCard('Duplicate Alpha', 'alpha,alpha'),
+    createFilterCard('Beta Alpha', 'beta,alpha'),
+    createFilterCard('Alpha', 'alpha'),
+  ]);
+
+  assert.equal(instance.applyFilter('alpha,beta', 'AND', true), 4);
+});
+
+test('applyFilter remains an enumerable writable prototype method with two parameters', () => {
+  const instance = createFilteringInstance([
+    createFilterCard('Alpha', 'alpha'),
+  ]);
+  const Constructor = runtime.H5P.DialogcardsPapiJo;
+  const descriptor = Object.getOwnPropertyDescriptor(
+    Constructor.prototype,
+    'applyFilter',
+  );
+
+  assert.equal(Object.hasOwn(instance, 'applyFilter'), false);
+  assert.equal(instance.applyFilter, descriptor.value);
+  assert.equal(descriptor.value.length, 2);
+  assert.equal(descriptor.enumerable, true);
+  assert.equal(descriptor.writable, true);
+  assert.equal(descriptor.configurable, true);
+  assert.equal(instance.applyFilter('alpha', 'OR', true), 1);
+});
+
+test('OR and NOT preserve current multi-term and uncategorized behavior', () => {
+  const instance = createFilteringInstance([
+    createFilterCard('Alpha Beta', 'alpha,beta'),
+    createFilterCard('Beta Gamma', 'beta,gamma'),
+    createFilterCard('Delta', 'delta'),
+    createFilterCard('Alphabet', 'alphabet'),
+    createFilterCard('Missing'),
+    createFilterCard('Empty', ''),
+  ]);
+
+  assert.equal(instance.applyFilter('alpha,gamma,omega', 'OR', true), 3);
+  assert.equal(instance.applyFilter('alpha,gamma', 'NOT', true), 2);
+  assert.equal(instance.applyFilter('alpha', 'AND', true), 2);
+  assert.equal(instance.applyFilter('alpha', 'OR', true), 2);
+  assert.equal(instance.applyFilter('alpha', 'NOT', true), 3);
+});
+
+test('substring matching checks whether the filter list contains each card token', () => {
+  const instance = createFilteringInstance([
+    createFilterCard('Alpha', 'alpha'),
+    createFilterCard('Alphabet', 'alphabet'),
+    createFilterCard('Middle', 'pha'),
+  ]);
+
+  assert.equal(instance.applyFilter('alphabet', 'OR', true), 3);
+  assert.equal(instance.applyFilter('alpha', 'OR', true), 2);
+});
+
+test('dry runs return counts without mutating deck or filter state', () => {
+  const instance = createFilteringInstance([
+    createFilterCard('Alpha', 'alpha'),
+    createFilterCard('Beta', 'beta'),
+    createFilterCard('Alpha Beta', 'alpha,beta'),
+  ]);
+  const originalDialogs = instance.currentDialogs;
+  const originalSnapshot = structuredClone(instance.currentDialogs);
+  instance.currentFilter = 'existing filter';
+  instance.filterList = 'existing list';
+  instance.filterOperator = 'existing operator';
+  instance.noFilterMessage = 'existing message';
+
+  assert.equal(instance.applyFilter('alpha,gamma,omega', 'OR', true), 2);
+  assert.equal(instance.currentDialogs, originalDialogs);
+  assert.deepEqual(instance.currentDialogs, originalSnapshot);
+  assert.equal(instance.nbCards, 3);
+  assert.equal(instance.currentFilter, 'existing filter');
+  assert.equal(instance.filterList, 'existing list');
+  assert.equal(instance.filterOperator, 'existing operator');
+  assert.equal(instance.noFilterMessage, 'existing message');
+});
+
+test('successful filtering clones authored cards and only updates deck size', () => {
+  const instance = createFilteringInstance([
+    createFilterCard('Alpha', 'alpha'),
+    createFilterCard('Beta', 'beta'),
+    createFilterCard('Alpha Beta', 'alpha,beta'),
+  ]);
+  const authoredDialogs = instance.params.dialogs;
+  const authoredSnapshot = structuredClone(authoredDialogs);
+  instance.nbCardsSelected = 7;
+  instance.cardsLeft = 11;
+  instance.cardOrder = [2, 1, 0];
+  instance.currentFilter = 'existing filter';
+  instance.filterList = 'existing list';
+  instance.filterOperator = 'existing operator';
+
+  const filtered = instance.applyFilter('alpha', 'OR');
+
+  assert.equal(filtered, instance.currentDialogs);
+  assert.deepEqual(filtered.map((card) => card.text), ['Alpha', 'Alpha Beta']);
+  assert.notEqual(filtered[0], authoredDialogs[0]);
+  assert.notEqual(filtered[1], authoredDialogs[2]);
+  assert.equal(instance.nbCards, 2);
+  assert.equal(instance.nbCardsSelected, 7);
+  assert.equal(instance.cardsLeft, 11);
+  assert.deepEqual(Array.from(instance.cardOrder), [2, 1, 0]);
+  assert.equal(instance.currentFilter, 'existing filter');
+  assert.equal(instance.filterList, 'existing list');
+  assert.equal(instance.filterOperator, 'existing operator');
+  assert.equal(instance.params.dialogs, authoredDialogs);
+  assert.deepEqual(instance.params.dialogs, authoredSnapshot);
+});
+
+test('empty results preserve the deck and set only the filter error message', () => {
+  const instance = createFilteringInstance([
+    createFilterCard('Alpha', 'alpha'),
+    createFilterCard('Beta', 'beta'),
+  ]);
+  const originalDialogs = instance.currentDialogs;
+  instance.currentFilter = 'existing filter';
+  instance.filterList = 'existing list';
+  instance.filterOperator = 'existing operator';
+
+  assert.equal(instance.applyFilter('omega', 'AND', true), 0);
+  assert.equal(instance.noFilterMessage, '');
+  assert.equal(instance.applyFilter('omega', 'AND'), undefined);
+  assert.equal(instance.currentDialogs, originalDialogs);
+  assert.equal(instance.nbCards, 2);
+  assert.equal(
+    instance.noFilterMessage,
+    'ERROR! categories filter returned an empty result. No filter will be applied.',
+  );
+  assert.equal(instance.currentFilter, 'existing filter');
+  assert.equal(instance.filterList, 'existing list');
+  assert.equal(instance.filterOperator, 'existing operator');
+});
+
+test('successive filters evaluate the working deck but project authored indexes', () => {
+  const instance = createFilteringInstance([
+    createFilterCard('Authored Alpha', 'alpha'),
+    createFilterCard('Authored Beta', 'beta'),
+    createFilterCard('Authored Gamma', 'gamma'),
+  ]);
+
+  const first = instance.applyFilter('beta', 'OR');
+  assert.deepEqual(first.map((card) => card.text), ['Authored Beta']);
+
+  const second = instance.applyFilter('beta', 'OR');
+  assert.deepEqual(second.map((card) => card.text), ['Authored Alpha']);
+  assert.equal(second[0].itemCategories, 'alpha');
+  assert.equal(instance.nbCards, 1);
 });

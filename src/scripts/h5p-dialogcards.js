@@ -1,4 +1,7 @@
-import { makeCurrentFilterName } from './filtering-ordering.js';
+import {
+  applyFilter as applyFilterDialogs,
+  makeCurrentFilterName,
+} from './filtering-ordering.js';
 
 /**
  * Dialogcards module PapiJo
@@ -4575,57 +4578,25 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     filterOperator,
     dryRun = false,
   ) {
-    const self = this;
-    const filterListLength = filterList.split(',').length;
-    const catDialogs = [];
-    let isSelected = 0;
-    let notSelected = 0;
-    let numCardsInCats = 0;
-    for (let i = 0; i < self.currentDialogs.length; i++) {
-      if (self.currentDialogs[i].itemCategories !== undefined) {
-        const itemCats = self.currentDialogs[i].itemCategories.split(',');
-        isSelected = 0;
-        notSelected = 0;
-        for (let j = 0; j < itemCats.length; j++) {
-          if (filterOperator === 'AND' || filterOperator === 'OR') {
-            if (filterList.includes(itemCats[j])) {
-              isSelected++;
-            }
-          }
-          else {
-            if (filterList.includes(itemCats[j])) {
-              notSelected++;
-            }
-          }
-        }
-        if (
-          isSelected === filterListLength ||
-          (filterOperator === 'OR' && isSelected !== 0) ||
-          (filterOperator === 'NOT' && notSelected === 0)
-        ) {
-          if (dryRun) {
-            numCardsInCats++;
-          }
-          else {
-            catDialogs[i] = self.params.dialogs[i];
-          }
-        }
-      }
-    }
-    if (dryRun) {
-      return numCardsInCats;
-    }
-    const filtered = catDialogs.filter(function (el) {
-      return el != null;
+    const result = applyFilterDialogs({
+      currentDialogs: this.currentDialogs,
+      authoredDialogs: this.params.dialogs,
+      filterList,
+      filterOperator,
+      dryRun,
+      clone: structuredClone,
     });
-    if (!filtered.length) {
+    if (dryRun) {
+      return result.matchCount;
+    }
+    if (result.emptyResult) {
       this.noFilterMessage =
         'ERROR! categories filter returned an empty result. No filter will be applied.';
     }
     else {
-      self.currentDialogs = structuredClone(filtered);
-      this.nbCards = self.currentDialogs.length;
-      return self.currentDialogs;
+      this.currentDialogs = result.replacementDialogs;
+      this.nbCards = result.replacementNbCards;
+      return this.currentDialogs;
     }
   };
 
