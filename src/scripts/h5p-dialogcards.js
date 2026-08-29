@@ -2,6 +2,13 @@ import {
   applyFilter as applyFilterDialogs,
   makeCurrentFilterName,
 } from './filtering-ordering.js';
+import {
+  compareMediaMaps,
+  describeMediaLayout,
+  getMediaMap,
+  isValidNoTextMediaMap,
+  switchSides as switchCardSides,
+} from './media.js';
 
 /**
  * Dialogcards module PapiJo
@@ -4224,35 +4231,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    */
 
   DialogcardsPapiJo.prototype.switchSides = function (cards) {
-    for (let i = 0; i < cards.length; i++) {
-      let t = cards[i].text;
-      let a = cards[i].answer;
-      cards[i].text = a;
-      cards[i].answer = t;
-      let tf = cards[i].tips.front;
-      let tb = cards[i].tips.back;
-      cards[i].tips.front = tb;
-      cards[i].tips.back = tf;
-      let au = cards[i].audioMedia.audio;
-      let au2 = cards[i].audioMedia.audio2;
-      cards[i].audioMedia.audio = au2;
-      cards[i].audioMedia.audio2 = au;
-      let i0 = cards[i].imageMedia.image;
-      let i2 = cards[i].imageMedia.image2;
-      if (!cards[i].imageMedia.image2 && cards[i].imageMedia.image) {
-        i2 = i0;
-      }
-      if (!cards[i].imageMedia.image && cards[i].imageMedia.image2) {
-        i2 = i0;
-        i0 = cards[i].imageMedia.image2;
-      }
-      cards[i].imageMedia.image = i2;
-      cards[i].imageMedia.image2 = i0;
-      let ialt = cards[i].imageMedia.imageAltText;
-      let ialt2 = cards[i].imageMedia.imageAltText2;
-      cards[i].imageMedia.imageAltText = ialt2;
-      cards[i].imageMedia.imageAltText2 = ialt;
-    }
+    switchCardSides(cards);
   };
 
   /**
@@ -4762,61 +4741,17 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       return '';
     }
 
-    /**
-     * Builds a front/back media availability map for a card.
-     * @param {object} card - Dialog card configuration object
-     * @returns {object} Media map for front and back sides
-     */
-    function getMediaMap(card) {
-      return {
-        front: {
-          image: !!card.imageMedia?.image,
-          audio: !!card.audioMedia?.audio,
-        },
-        back: {
-          image: !!card.imageMedia?.image2,
-          audio: !!card.audioMedia?.audio2,
-        },
-      };
-    }
-
-    /**
-     * Produces a human-readable media layout description.
-     * @param {object} media - Media map with front/back image/audio flags
-     * @returns {string} Layout description
-     */
-    function describeLayout(media) {
-      const parts = [];
-
-      ['front', 'back'].forEach((side) => {
-        ['image', 'audio'].forEach((type) => {
-          if (media[side][type]) {
-            parts.push(`${type.charAt(0).toUpperCase() + type.slice(1)} ${side}`);
-          }
-        });
-      });
-
-      return parts.join(' AND ');
-    }
-
     const reference = getMediaMap(self.params.dialogs[0]);
 
     // --- VALIDATE FIRST CARD ---
-    const frontCount =
-      (reference.front.image ? 1 : 0) +
-    (reference.front.audio ? 1 : 0);
-    const backCount =
-      (reference.back.image ? 1 : 0) +
-    (reference.back.audio ? 1 : 0);
-
-    if (frontCount !== 1 || backCount !== 1) {
+    if (!isValidNoTextMediaMap(reference)) {
       const text = self.params.dialogs[0].text.replace(/<[^>]*>/g, '').trim();
       const answer = self.params.dialogs[0].answer.replace(/<[^>]*>/g, '').trim();
 
       let report = '<div style="font-family:Arial,sans-serif;">';
       report += '<h2 style="color:#d9534f;">⚠️ Reference Card Invalid</h2>';
       report += '<p>The first card must contain exactly one media per side (front & back).</p>';
-      report += `<p><strong>Current layout:</strong> ${describeLayout(reference)}</p>`;
+      report += `<p><strong>Current layout:</strong> ${describeMediaLayout(reference)}</p>`;
       report += '<hr>';
       report += `
       <div style="margin-bottom:12px;">
@@ -4837,19 +4772,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       }
 
       const current = getMediaMap(card);
-      const missing = [];
-      const extra = [];
-
-      ['front', 'back'].forEach((side) => {
-        ['image', 'audio'].forEach((type) => {
-          if (reference[side][type] && !current[side][type]) {
-            missing.push(`missing ${type} ${side}`);
-          }
-          if (!reference[side][type] && current[side][type]) {
-            extra.push(`extra ${type} media ${side}`);
-          }
-        });
-      });
+      const { missing, extra } = compareMediaMaps(reference, current);
 
       if (missing.length || extra.length) {
         let reason = '';
@@ -4885,7 +4808,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
       let report = '<div style="font-family:Arial,sans-serif;">';
       report += '<h2 style="color:var(--h5p-theme-feedback-incorrect-main);">⚠️ Deck Rejected</h2>';
-      report += `<p><strong>Card #1 defines the required media layout:</strong> ${describeLayout(reference)}</p>`;
+      report += `<p><strong>Card #1 defines the required media layout:</strong> ${describeMediaLayout(reference)}</p>`;
       report += '<hr>';
 
       removedCards.forEach((card) => {
