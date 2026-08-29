@@ -28,6 +28,7 @@ export function createH5PRuntime({ fakeTimers = false } = {}) {
   const { window } = dom;
   const $ = jqueryFactory(window);
   const H5P = window.H5P = {};
+  const audioPlayers = [];
 
   window.structuredClone = globalThis.structuredClone.bind(globalThis);
   H5P.jQuery = $;
@@ -236,11 +237,43 @@ export function createH5PRuntime({ fakeTimers = false } = {}) {
       return button;
     },
   };
-  H5P.Audio = function Audio() {
+  H5P.Audio = function Audio(options, contentId) {
+    this.options = options;
+    this.contentId = contentId;
+    this.playing = false;
+    this.currentTime = 0;
+    this.playCalls = 0;
+    this.pauseCalls = 0;
+    this.stopCalls = 0;
+    this.seekToCalls = [];
     this.$audio = $('<div class="h5p-audio-inner"></div>');
-    this.attach = ($container) => this.$audio.appendTo($container);
-    this.pause = function () {};
-    this.stop = function () {};
+    this.audio = { preload: 'auto' };
+    Object.defineProperty(this, 'domConnected', {
+      get: () => this.$audio[0].isConnected,
+    });
+    this.attach = ($container) => {
+      this.$container = $container;
+      $('<button class="h5p-audio-minimal-button h5p-audio-minimal-play"></button>')
+        .appendTo(this.$audio);
+      this.$audio.appendTo($container);
+    };
+    this.play = function () {
+      this.playCalls++;
+      this.playing = true;
+    };
+    this.pause = function () {
+      this.pauseCalls++;
+      this.playing = false;
+    };
+    this.stop = function () {
+      this.stopCalls++;
+      this.playing = false;
+    };
+    this.seekTo = function (time) {
+      this.seekToCalls.push(time);
+      this.currentTime = time;
+    };
+    audioPlayers.push(this);
   };
   H5P.JoubelUI = {
     createTip(tip) {
@@ -360,6 +393,7 @@ export function createH5PRuntime({ fakeTimers = false } = {}) {
   return {
     $,
     H5P,
+    audioPlayers,
     close: () => {
       timers?.restore();
       dom.window.close();

@@ -1742,10 +1742,10 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       class: 'h5p-dialogcards-card-text-inner-content',
     }).appendTo($cardTextInner);
 
-    if (card.audioMedia.audio !== undefined) {
+    if (!this.noText && card.audioMedia.audio !== undefined) {
       this.createCardAudio(card).appendTo($cardTextInnerContent);
     }
-    if (card.audioMedia.audio2 !== undefined) {
+    if (!this.noText && card.audioMedia.audio2 !== undefined) {
       this.createCardAudio2(card).appendTo($cardTextInnerContent);
     }
 
@@ -2256,7 +2256,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       audio = new Audio(audioDefaults, self.id);
       audio.attach($audioWrapper);
       // Have to stop else audio will take up a socket pending forever in chrome.
-      if (audio.audioMedia && audio.audioMedia.preload) {
+      if (audio.audio && audio.audio.preload) {
         audio.audio.preload = 'none';
       }
     }
@@ -2981,6 +2981,28 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
   };
 
   /**
+   * Reset all audio players currently owned by the activity.
+   */
+  DialogcardsPapiJo.prototype.resetAllAudio = function () {
+    const numberOfAudioPlayers = Math.max(this.audios.length, this.audios2.length);
+    for (let index = 0; index < numberOfAudioPlayers; index++) {
+      this.resetAudio(index);
+    }
+  };
+
+  /**
+   * Reset and remove the audio players for a matched right/left card pair.
+   * @param {number} cardIndex Index of the matched card
+   */
+  DialogcardsPapiJo.prototype.removeMatchedAudio = function (cardIndex) {
+    const audioIndex = cardIndex * DialogcardsPapiJo.NB2;
+    this.resetAudio(audioIndex);
+    this.resetAudio(audioIndex + 1);
+    this.audios.splice(audioIndex, DialogcardsPapiJo.NB2);
+    this.audios2.splice(audioIndex, DialogcardsPapiJo.NB2);
+  };
+
+  /**
    // hide and show audio not used in papi Jo version
    /**
     Hide audio button
@@ -3628,6 +3650,8 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
       return;
     }
 
+    self.resetAllAudio();
+
     // Remove all these elements.
     $(
       '.h5p-dialogcards-cardwrap-set, .h5p-dialogcards-match-footer, .h5p-dialogcards-footer,' +
@@ -3833,9 +3857,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
   DialogcardsPapiJo.prototype.matchCards = function ($card) {
     let self = this;
-    for (let i = 0; i < self.nbCards + 1; i++) {
-      self.resetAudio(i);
-    }
+    self.resetAllAudio();
 
     const matchFeedbackDelayMs = 2000;
     let index = $card.index() / DialogcardsPapiJo.NB2;
@@ -3871,6 +3893,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           .removeClass('h5p-dialogcards-current h5p-dialogcards-match-right')
           .addClass('h5p-dialogcards-previous');
         // Remove the 'gotitdone' card from DOM
+        self.removeMatchedAudio(index);
         $('.h5p-dialogcards-gotitdone', self.$inner).remove();
         // SEP 2021
         self.$current = $parentSet.find('.h5p-dialogcards-cardwrap').first();
@@ -3909,9 +3932,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
   DialogcardsPapiJo.prototype.matchCardsRepetition = function ($card) {
     let self = this;
-    for (let i = 0; i < self.nbCards + 1; i++) {
-      self.resetAudio(i);
-    }
+    self.resetAllAudio();
     const matchFeedbackDelayMs = 2000;
     let index = $card.index() / DialogcardsPapiJo.NB2;
     let $leftCard = self.$currentLeft;
@@ -3973,6 +3994,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
           );
 
           // Remove the 'gotitdone' card from DOM
+          self.removeMatchedAudio(index);
           $('.h5p-dialogcards-gotitdone', self.$inner).remove();
 
           // SEP. 2021
@@ -4083,6 +4105,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
 
   DialogcardsPapiJo.prototype.resetTask = function () {
     clearMatchingTimeouts(this);
+    this.resetAllAudio();
     if (this.report !== '') {
       return;
     }
