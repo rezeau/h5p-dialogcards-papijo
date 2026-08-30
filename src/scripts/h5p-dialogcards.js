@@ -9,7 +9,10 @@ import {
   isValidNoTextMediaMap,
   switchSides as switchCardSides,
 } from './media.js';
-import { buildXAPIDefinition } from './scoring-xapi.js';
+import {
+  buildXAPIDefinition,
+  buildXAPIResponse,
+} from './scoring-xapi.js';
 
 /**
  * Dialogcards module PapiJo
@@ -4674,30 +4677,27 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    * @returns {string} Human-readable score and completion summary.
    */
   DialogcardsPapiJo.prototype.getxAPIResponse = function () {
-    let summary = '';
-    const selectedCards = this.nbCardsSelected;
-    let totalCards = this.params.dialogs.length;
-    let text1 = '';
-    if (selectedCards !== totalCards) {
-      text1 += `${this.params.summaryCardsSelected} ${
-        selectedCards
-      }/${totalCards}\n`;
-      totalCards = selectedCards;
-    }
-    let text2;
-    if (this.enableGotIt || this.repetition) {
-      text2 = `${this.params.summaryCardsCompleted} ${totalCards}/${totalCards}\n${
-        this.params.summaryCompletedRounds
-      } ${this.currentRound}`;
-    }
-    else if (this.matchIt && !this.repetition) {
-      text2 = `${this.params.summaryMatchesFound} ${this.correct}\n${
-        this.params.summaryMatchesNotFound
-      } ${this.incorrect}`;
-    }
-    const text3 = `${this.params.summaryOverallScore} : ${this.actualScore}/${this.maxScore}`;
-    summary += `${text1 + text2}\n${text3}\n${this.helpText}`;
-    return summary;
+    return buildXAPIResponse({
+      selectedCards: this.nbCardsSelected,
+      totalCards: this.params.dialogs.length,
+      enableGotIt: this.enableGotIt,
+      repetition: this.repetition,
+      matchIt: this.matchIt,
+      currentRound: this.currentRound,
+      correct: this.correct,
+      incorrect: this.incorrect,
+      actualScore: this.actualScore,
+      maxScore: this.maxScore,
+      helpText: this.helpText,
+      labels: {
+        cardsSelected: this.params.summaryCardsSelected,
+        cardsCompleted: this.params.summaryCardsCompleted,
+        completedRounds: this.params.summaryCompletedRounds,
+        matchesFound: this.params.summaryMatchesFound,
+        matchesNotFound: this.params.summaryMatchesNotFound,
+        overallScore: this.params.summaryOverallScore,
+      },
+    });
   };
 
   DialogcardsPapiJo.prototype.getRetryOrReset = function () {
