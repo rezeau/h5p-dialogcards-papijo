@@ -13,6 +13,7 @@ import {
   buildXAPIDefinition,
   buildXAPIResponse,
 } from './scoring-xapi.js';
+import { buildCurrentState } from './state-persistence.js';
 
 /**
  * Dialogcards module PapiJo
@@ -4496,57 +4497,39 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    * @returns {DialogcardsSavedState} Current resumable state.
    */
   DialogcardsPapiJo.prototype.getCurrentState = function () {
-    const state = {};
-    if (this.$current !== undefined) {
-      state.progress = this.$current.index();
-    }
-
-    if (this.repetition) {
-      if (this.$currentLeft !== undefined) {
-        state.progressLeft = this.$currentLeft.index();
-      }
-      if (state.progressLeft === -1) {
-        state.progressLeft = state.progress + 1;
-      }
-    }
-
-    if (this.sideBySide) {
-      if (this.$currentLeft !== undefined) {
-        state.progressLeft = this.$currentLeft.index();
-      }
-    }
-
-    if (this.playModeUser === 'selfCorrectionMode') {
-      state.lastCorrect = !this.endOfStack;
-    }
-    if (this.filterByCategories) {
-      state.filterByCategories = this.filterByCategories;
-      state.filterList = this.filterList;
-      state.filterOperator = this.filterOperator;
-      state.currentFilter = this.currentFilter;
-      state.currentDialogs = this.currentDialogs;
-    }
-    if (this.noDupeFrontPicToBack) {
-      state.noDupeFrontPicToBack = this.noDupeFrontPicToBack;
-    }
-    state.currentRound = this.currentRound;
-    state.correct = this.correct;
-    state.incorrect = this.incorrect;
-    state.nbCardsInCurrentRound = this.nbCardsInCurrentRound;
-    state.nbCardsSelected = this.nbCardsSelected;
-    state.nbCardsLeft = this.cardsLeft;
-    state.order = this.cardOrder;
-    state.noMatchCards = this.noMatchCards;
-    state.cardsOrderChoice = this.cardsOrderChoice;
-    state.cardsOrderMode = this.cardsOrderMode;
-    state.enableCardsNumber = this.enableCardsNumber;
-    state.cardsSideChoice = this.cardsSideChoice;
-    state.cardsSideMode = this.cardsSideMode;
-    state.playMode = this.playMode;
-    state.playModeUser = this.playModeUser;
-    state.taskFinished = this.taskFinished;
-
-    return state;
+    const hasCurrent = this.$current !== undefined;
+    const hasCurrentLeft = this.$currentLeft !== undefined;
+    return buildCurrentState({
+      hasCurrent,
+      progress: hasCurrent ? this.$current.index() : undefined,
+      repetition: this.repetition,
+      sideBySide: this.sideBySide,
+      hasCurrentLeft,
+      progressLeft: hasCurrentLeft ? this.$currentLeft.index() : undefined,
+      playModeUser: this.playModeUser,
+      endOfStack: this.endOfStack,
+      filterByCategories: this.filterByCategories,
+      filterList: this.filterList,
+      filterOperator: this.filterOperator,
+      currentFilter: this.currentFilter,
+      currentDialogs: this.currentDialogs,
+      noDupeFrontPicToBack: this.noDupeFrontPicToBack,
+      currentRound: this.currentRound,
+      correct: this.correct,
+      incorrect: this.incorrect,
+      nbCardsInCurrentRound: this.nbCardsInCurrentRound,
+      nbCardsSelected: this.nbCardsSelected,
+      cardsLeft: this.cardsLeft,
+      cardOrder: this.cardOrder,
+      noMatchCards: this.noMatchCards,
+      cardsOrderChoice: this.cardsOrderChoice,
+      cardsOrderMode: this.cardsOrderMode,
+      enableCardsNumber: this.enableCardsNumber,
+      cardsSideChoice: this.cardsSideChoice,
+      cardsSideMode: this.cardsSideMode,
+      playMode: this.playMode,
+      taskFinished: this.taskFinished,
+    });
   };
 
   /**
