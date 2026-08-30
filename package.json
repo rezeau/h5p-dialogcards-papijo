@@ -1,6 +1,6 @@
 {
   "name": "h5p-dialogcards",
-  "version": "1.17.1",
+  "version": "1.17.2",
   "description": "H5P Dialogue Cards ==========",
   "type": "module",
   "main": "index.js",

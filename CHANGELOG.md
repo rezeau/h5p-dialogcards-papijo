@@ -1,5 +1,34 @@
 # Changelog
 
+## 1.17.2 - 2026-08-30
+
+### Fixed
+
+- Hardened matching timer lifecycle and callback context so delayed matching
+  work cannot survive a task reset.
+- Stopped and reset owned audio players before reset and completion, removed
+  duplicate audio-only players, and corrected matching audio cleanup.
+
+### Added
+
+- Expanded runtime regression coverage for state serialization, scoring,
+  answered xAPI events, matching interactions, timers, audio, filtering,
+  media consistency, play-mode configuration, and card-shell construction.
+
+### Changed
+
+- Extracted deterministic filtering, media, scoring/xAPI, state serialization,
+  and play-mode configuration helpers behind the existing H5P-compatible
+  prototype methods.
+- Preserved the public function-constructor and prototype contracts while
+  establishing a stable modernization checkpoint.
+
+### Compatibility
+
+- Requires H5P Core API 1.28.
+- Embedding compatibility with Column Papi Jo and Interactive Book Papi Jo is
+  scheduled for a subsequent work phase and is not certified by this release.
+
 ## 1.17.1 - 2026-07-24
 
 ### Fixed

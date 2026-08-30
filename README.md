@@ -5,7 +5,7 @@ Tutorial, examples and more details on the papi Jo Drupal test site at http://ww
 
 ## Compatibility
 
-Dialog Cards Papi Jo 1.17.1 requires H5P Core API 1.28. This release has been
+Dialog Cards Papi Jo 1.17.2 requires H5P Core API 1.28. This release has been
 tested successfully on current WordPress and Moodle installations that support
 H5P Core API 1.28.
 
