@@ -9,6 +9,7 @@ import {
   isValidNoTextMediaMap,
   switchSides as switchCardSides,
 } from './media.js';
+import { buildXAPIDefinition } from './scoring-xapi.js';
 
 /**
  * Dialogcards module PapiJo
@@ -4612,25 +4613,11 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
    * @returns {object} xAPI activity definition.
    */
   DialogcardsPapiJo.prototype.getxAPIDefinition = function () {
-    const definition = {};
-
-    let description = '';
-    if (this.params.title !== '') {
-      description = this.params.title;
-    }
-    else if (this.params.description !== '') {
-      description = this.params.description;
-    }
-    else {
-      description = this.params.showSummary;
-    }
-
-    definition.description = {
-      'en-US': description,
-    };
-    definition.type = 'http://adlnet.gov/expapi/activities/cmi.interaction';
-    definition.interactionType = 'long-fill-in';
-    return definition;
+    return buildXAPIDefinition({
+      title: this.params.title,
+      description: this.params.description,
+      showSummary: this.params.showSummary,
+    });
   };
 
   /**
