@@ -1,3 +1,4 @@
+import { derivePlayModeOptions } from './configuration.js';
 import {
   applyFilter as applyFilterDialogs,
   makeCurrentFilterName,
@@ -261,25 +262,23 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     ) {
       this.matchIt = true;
     }
-    this.playModeNames = [
-      { value: 'normalMode', label: self.params.normalMode },
-      { value: 'browseSideBySide', label: self.params.browseSideBySide },
-      { value: 'matchMode', label: self.params.matchMode },
-      { value: 'matchRepetition', label: self.params.matchRepetition },
-      { value: 'selfCorrectionMode', label: self.params.selfCorrectionMode },
-    ];
+    const playModeLabels = {
+      normalMode: self.params.normalMode,
+      browseSideBySide: self.params.browseSideBySide,
+      matchMode: self.params.matchMode,
+      matchRepetition: self.params.matchRepetition,
+      selfCorrectionMode: self.params.selfCorrectionMode,
+    };
     if (this.playMode === 'user') {
       this.allowedPlayModes = self.params.behaviour.allowedPlayModes;
-      this.playModeNames = this.playModeNames.filter(
-        (mode) => this.allowedPlayModes[mode.value],
-      );
-      if (this.playModeNames.length === 0) {
-        this.playMode = 'normalMode';
-      }
-      else if (this.playModeNames.length === 1) {
-        this.playMode = this.playModeNames[0].value;
-      }
     }
+    const playModeOptions = derivePlayModeOptions({
+      playMode: this.playMode,
+      allowedPlayModes: this.allowedPlayModes,
+      labels: playModeLabels,
+    });
+    this.playMode = playModeOptions.playMode;
+    this.playModeNames = playModeOptions.playModeNames;
     this.playModeUser = this.playMode;
     /* *************************************************** */
     this.report = '';
