@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.17.3 - 2026-09-01
+
+### Fixed
+
+- Stabilized nested Dialog Cards resizing and fixed clipping when Dialog Cards
+  Papi Jo is embedded in containers such as Column Papi Jo and Interactive Book
+  Papi Jo.
+- Eliminated cumulative cardholder height growth caused by decorative borders
+  extending outside `height: 100%` content-box sizing.
+
+### Changed
+
+- Replaced lifetime resize suppression with transient synchronous reentrancy
+  protection, allowing legitimate later resize calculations to run.
+
+### Compatibility
+
+- Requires H5P Core API 1.28.
+
 ## 1.17.2 - 2026-08-30
 
 ### Fixed
