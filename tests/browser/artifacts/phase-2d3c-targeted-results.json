@@ -1,0 +1,969 @@
+{
+  "phase": "2D3C-targeted-regressions",
+  "samples": {
+    "nested": [
+      {
+        "label": "nested-baseline",
+        "visible": true,
+        "cardSetHeight": 198,
+        "cardSetInlineHeight": "198px",
+        "rootHeight": 287.171875,
+        "rootScrollHeight": 287,
+        "columnHeight": 287.171875,
+        "bookHeight": 287.171875,
+        "requiredBeyondRoot": 0,
+        "clipped": false,
+        "holders": [
+          {
+            "width": 350,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 190.34375,
+            "contentBottom": 382.34375,
+            "containsContent": true,
+            "containsFooter": true
+          },
+          {
+            "width": 350,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 190.34375,
+            "contentBottom": 382.34375,
+            "containsContent": true,
+            "containsFooter": true
+          }
+        ]
+      }
+    ],
+    "hidden": [
+      {
+        "label": "hidden-after-attach",
+        "visible": false,
+        "cardSetHeight": 0,
+        "cardSetInlineHeight": "0px",
+        "rootHeight": 0,
+        "rootScrollHeight": 0,
+        "columnHeight": 0,
+        "bookHeight": 0,
+        "requiredBeyondRoot": 0,
+        "clipped": false,
+        "holders": [
+          {
+            "width": 0,
+            "height": 0,
+            "contentHeight": 0,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 0,
+            "contentBottom": 0,
+            "containsContent": true,
+            "containsFooter": true
+          },
+          {
+            "width": 0,
+            "height": 0,
+            "contentHeight": 0,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 0,
+            "contentBottom": 0,
+            "containsContent": true,
+            "containsFooter": true
+          }
+        ]
+      },
+      {
+        "label": "hidden-reveal-before-parent-resize",
+        "visible": true,
+        "cardSetHeight": 0,
+        "cardSetInlineHeight": "0px",
+        "rootHeight": 89.171875,
+        "rootScrollHeight": 262,
+        "columnHeight": 89.171875,
+        "bookHeight": 89.171875,
+        "requiredBeyondRoot": 172.609375,
+        "clipped": true,
+        "holders": [
+          {
+            "width": 240,
+            "height": 6,
+            "contentHeight": 0,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 190.34375,
+            "contentBottom": 382.34375,
+            "containsContent": false,
+            "containsFooter": true
+          },
+          {
+            "width": 240,
+            "height": 6,
+            "contentHeight": 0,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 190.34375,
+            "contentBottom": 382.34375,
+            "containsContent": false,
+            "containsFooter": true
+          }
+        ]
+      },
+      {
+        "label": "hidden-reveal-after-parent-resize",
+        "visible": true,
+        "cardSetHeight": 198,
+        "cardSetInlineHeight": "198px",
+        "rootHeight": 287.171875,
+        "rootScrollHeight": 287,
+        "columnHeight": 287.171875,
+        "bookHeight": 287.171875,
+        "requiredBeyondRoot": 0,
+        "clipped": false,
+        "holders": [
+          {
+            "width": 240,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 190.34375,
+            "contentBottom": 382.34375,
+            "containsContent": true,
+            "containsFooter": true
+          },
+          {
+            "width": 240,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 190.34375,
+            "contentBottom": 382.34375,
+            "containsContent": true,
+            "containsFooter": true
+          }
+        ]
+      },
+      {
+        "label": "hidden-reveal-repeat-resize",
+        "visible": true,
+        "cardSetHeight": 198,
+        "cardSetInlineHeight": "198px",
+        "rootHeight": 287.171875,
+        "rootScrollHeight": 287,
+        "columnHeight": 287.171875,
+        "bookHeight": 287.171875,
+        "requiredBeyondRoot": 0,
+        "clipped": false,
+        "holders": [
+          {
+            "width": 240,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 190.34375,
+            "contentBottom": 382.34375,
+            "containsContent": true,
+            "containsFooter": true
+          },
+          {
+            "width": 240,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 190.34375,
+            "contentBottom": 382.34375,
+            "containsContent": true,
+            "containsFooter": true
+          }
+        ]
+      }
+    ],
+    "navigation": [
+      {
+        "label": "side-by-side-next-0ms",
+        "visible": true,
+        "cardSetHeight": 198,
+        "cardSetInlineHeight": "198px",
+        "rootHeight": 287.171875,
+        "rootScrollHeight": 287,
+        "columnHeight": 287.171875,
+        "bookHeight": 287.171875,
+        "requiredBeyondRoot": 0,
+        "clipped": false,
+        "holders": [
+          {
+            "width": 512,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 190.34375,
+            "contentBottom": 382.34375,
+            "containsContent": true,
+            "containsFooter": true
+          },
+          {
+            "width": 350,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 190.34375,
+            "contentBottom": 382.34375,
+            "containsContent": true,
+            "containsFooter": true
+          },
+          {
+            "width": 350,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 190.34375,
+            "contentBottom": 382.34375,
+            "containsContent": true,
+            "containsFooter": true
+          }
+        ]
+      },
+      {
+        "label": "side-by-side-next-320ms",
+        "visible": true,
+        "cardSetHeight": 198,
+        "cardSetInlineHeight": "198px",
+        "rootHeight": 287.171875,
+        "rootScrollHeight": 287,
+        "columnHeight": 287.171875,
+        "bookHeight": 287.171875,
+        "requiredBeyondRoot": 0,
+        "clipped": false,
+        "holders": [
+          {
+            "width": 350,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 190.34375,
+            "contentBottom": 382.34375,
+            "containsContent": true,
+            "containsFooter": true
+          },
+          {
+            "width": 350,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 190.34375,
+            "contentBottom": 382.34375,
+            "containsContent": true,
+            "containsFooter": true
+          }
+        ]
+      },
+      {
+        "label": "side-by-side-previous-0ms",
+        "visible": true,
+        "cardSetHeight": 198,
+        "cardSetInlineHeight": "198px",
+        "rootHeight": 287.171875,
+        "rootScrollHeight": 287,
+        "columnHeight": 287.171875,
+        "bookHeight": 287.171875,
+        "requiredBeyondRoot": 0,
+        "clipped": false,
+        "holders": [
+          {
+            "width": 350,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 190.34375,
+            "contentBottom": 382.34375,
+            "containsContent": true,
+            "containsFooter": true
+          },
+          {
+            "width": 350,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 190.34375,
+            "contentBottom": 382.34375,
+            "containsContent": true,
+            "containsFooter": true
+          },
+          {
+            "width": 350,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 190.34375,
+            "contentBottom": 382.34375,
+            "containsContent": true,
+            "containsFooter": true
+          }
+        ]
+      },
+      {
+        "label": "side-by-side-previous-320ms",
+        "visible": true,
+        "cardSetHeight": 198,
+        "cardSetInlineHeight": "198px",
+        "rootHeight": 287.171875,
+        "rootScrollHeight": 287,
+        "columnHeight": 287.171875,
+        "bookHeight": 287.171875,
+        "requiredBeyondRoot": 0,
+        "clipped": false,
+        "holders": [
+          {
+            "width": 350,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 190.34375,
+            "contentBottom": 382.34375,
+            "containsContent": true,
+            "containsFooter": true
+          },
+          {
+            "width": 350,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 190.34375,
+            "contentBottom": 382.34375,
+            "containsContent": true,
+            "containsFooter": true
+          }
+        ]
+      }
+    ],
+    "width": [
+      {
+        "label": "width-390",
+        "visible": true,
+        "cardSetHeight": 198,
+        "cardSetInlineHeight": "198px",
+        "rootHeight": 309.5625,
+        "rootScrollHeight": 310,
+        "columnHeight": 309.5625,
+        "bookHeight": 309.5625,
+        "requiredBeyondRoot": 0,
+        "clipped": false,
+        "holders": [
+          {
+            "width": 195,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 212.734375,
+            "contentBottom": 404.734375,
+            "containsContent": true,
+            "containsFooter": true
+          },
+          {
+            "width": 195,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 212.734375,
+            "contentBottom": 404.734375,
+            "containsContent": true,
+            "containsFooter": true
+          }
+        ]
+      },
+      {
+        "label": "width-390-repeat",
+        "visible": true,
+        "cardSetHeight": 198,
+        "cardSetInlineHeight": "198px",
+        "rootHeight": 309.5625,
+        "rootScrollHeight": 310,
+        "columnHeight": 309.5625,
+        "bookHeight": 309.5625,
+        "requiredBeyondRoot": 0,
+        "clipped": false,
+        "holders": [
+          {
+            "width": 195,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 212.734375,
+            "contentBottom": 404.734375,
+            "containsContent": true,
+            "containsFooter": true
+          },
+          {
+            "width": 195,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 212.734375,
+            "contentBottom": 404.734375,
+            "containsContent": true,
+            "containsFooter": true
+          }
+        ]
+      },
+      {
+        "label": "width-760",
+        "visible": true,
+        "cardSetHeight": 198,
+        "cardSetInlineHeight": "198px",
+        "rootHeight": 287.171875,
+        "rootScrollHeight": 287,
+        "columnHeight": 287.171875,
+        "bookHeight": 287.171875,
+        "requiredBeyondRoot": 0,
+        "clipped": false,
+        "holders": [
+          {
+            "width": 380,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 190.34375,
+            "contentBottom": 382.34375,
+            "containsContent": true,
+            "containsFooter": true
+          },
+          {
+            "width": 380,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 190.34375,
+            "contentBottom": 382.34375,
+            "containsContent": true,
+            "containsFooter": true
+          }
+        ]
+      },
+      {
+        "label": "width-760-repeat",
+        "visible": true,
+        "cardSetHeight": 198,
+        "cardSetInlineHeight": "198px",
+        "rootHeight": 287.171875,
+        "rootScrollHeight": 287,
+        "columnHeight": 287.171875,
+        "bookHeight": 287.171875,
+        "requiredBeyondRoot": 0,
+        "clipped": false,
+        "holders": [
+          {
+            "width": 380,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 190.34375,
+            "contentBottom": 382.34375,
+            "containsContent": true,
+            "containsFooter": true
+          },
+          {
+            "width": 380,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 190.34375,
+            "contentBottom": 382.34375,
+            "containsContent": true,
+            "containsFooter": true
+          }
+        ]
+      },
+      {
+        "label": "width-390",
+        "visible": true,
+        "cardSetHeight": 198,
+        "cardSetInlineHeight": "198px",
+        "rootHeight": 309.5625,
+        "rootScrollHeight": 310,
+        "columnHeight": 309.5625,
+        "bookHeight": 309.5625,
+        "requiredBeyondRoot": 0,
+        "clipped": false,
+        "holders": [
+          {
+            "width": 195,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 212.734375,
+            "contentBottom": 404.734375,
+            "containsContent": true,
+            "containsFooter": true
+          },
+          {
+            "width": 195,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 212.734375,
+            "contentBottom": 404.734375,
+            "containsContent": true,
+            "containsFooter": true
+          }
+        ]
+      },
+      {
+        "label": "width-390-repeat",
+        "visible": true,
+        "cardSetHeight": 198,
+        "cardSetInlineHeight": "198px",
+        "rootHeight": 309.5625,
+        "rootScrollHeight": 310,
+        "columnHeight": 309.5625,
+        "bookHeight": 309.5625,
+        "requiredBeyondRoot": 0,
+        "clipped": false,
+        "holders": [
+          {
+            "width": 195,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 212.734375,
+            "contentBottom": 404.734375,
+            "containsContent": true,
+            "containsFooter": true
+          },
+          {
+            "width": 195,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 212.734375,
+            "contentBottom": 404.734375,
+            "containsContent": true,
+            "containsFooter": true
+          }
+        ]
+      }
+    ],
+    "leaveReturn": [
+      {
+        "label": "leave-hidden",
+        "visible": false,
+        "cardSetHeight": 0,
+        "cardSetInlineHeight": "198px",
+        "rootHeight": 0,
+        "rootScrollHeight": 0,
+        "columnHeight": 0,
+        "bookHeight": 0,
+        "requiredBeyondRoot": 0,
+        "clipped": false,
+        "holders": [
+          {
+            "width": 0,
+            "height": 0,
+            "contentHeight": 0,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 0,
+            "contentBottom": 0,
+            "containsContent": true,
+            "containsFooter": true
+          },
+          {
+            "width": 0,
+            "height": 0,
+            "contentHeight": 0,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 0,
+            "contentBottom": 0,
+            "containsContent": true,
+            "containsFooter": true
+          }
+        ]
+      },
+      {
+        "label": "return-before-parent-resize",
+        "visible": true,
+        "cardSetHeight": 198,
+        "cardSetInlineHeight": "198px",
+        "rootHeight": 309.5625,
+        "rootScrollHeight": 310,
+        "columnHeight": 309.5625,
+        "bookHeight": 309.5625,
+        "requiredBeyondRoot": 0,
+        "clipped": false,
+        "holders": [
+          {
+            "width": 195,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 212.734375,
+            "contentBottom": 404.734375,
+            "containsContent": true,
+            "containsFooter": true
+          },
+          {
+            "width": 195,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 212.734375,
+            "contentBottom": 404.734375,
+            "containsContent": true,
+            "containsFooter": true
+          }
+        ]
+      },
+      {
+        "label": "return-after-parent-resize",
+        "visible": true,
+        "cardSetHeight": 198,
+        "cardSetInlineHeight": "198px",
+        "rootHeight": 309.5625,
+        "rootScrollHeight": 310,
+        "columnHeight": 309.5625,
+        "bookHeight": 309.5625,
+        "requiredBeyondRoot": 0,
+        "clipped": false,
+        "holders": [
+          {
+            "width": 195,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 212.734375,
+            "contentBottom": 404.734375,
+            "containsContent": true,
+            "containsFooter": true
+          },
+          {
+            "width": 195,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 212.734375,
+            "contentBottom": 404.734375,
+            "containsContent": true,
+            "containsFooter": true
+          }
+        ]
+      },
+      {
+        "label": "return-repeat-resize",
+        "visible": true,
+        "cardSetHeight": 198,
+        "cardSetInlineHeight": "198px",
+        "rootHeight": 309.5625,
+        "rootScrollHeight": 310,
+        "columnHeight": 309.5625,
+        "bookHeight": 309.5625,
+        "requiredBeyondRoot": 0,
+        "clipped": false,
+        "holders": [
+          {
+            "width": 195,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 212.734375,
+            "contentBottom": 404.734375,
+            "containsContent": true,
+            "containsFooter": true
+          },
+          {
+            "width": 195,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 212.734375,
+            "contentBottom": 404.734375,
+            "containsContent": true,
+            "containsFooter": true
+          }
+        ]
+      }
+    ],
+    "official": [
+      {
+        "pass": 1,
+        "label": "official-pass-1",
+        "visible": true,
+        "cardSetHeight": 198,
+        "cardSetInlineHeight": "12.375em",
+        "rootHeight": 264.78125,
+        "rootScrollHeight": 265,
+        "bookHeight": 264.78125,
+        "requiredBeyondRoot": 0,
+        "clipped": false,
+        "holders": [
+          {
+            "width": 512,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 167.953125,
+            "contentBottom": 359.953125,
+            "footerTop": 255.953125,
+            "footerBottom": 291.953125,
+            "containsContent": true,
+            "containsFooter": true
+          }
+        ]
+      },
+      {
+        "pass": 2,
+        "label": "official-pass-2",
+        "visible": true,
+        "cardSetHeight": 198,
+        "cardSetInlineHeight": "12.375em",
+        "rootHeight": 264.78125,
+        "rootScrollHeight": 265,
+        "bookHeight": 264.78125,
+        "requiredBeyondRoot": 0,
+        "clipped": false,
+        "holders": [
+          {
+            "width": 512,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 167.953125,
+            "contentBottom": 359.953125,
+            "footerTop": 255.953125,
+            "footerBottom": 291.953125,
+            "containsContent": true,
+            "containsFooter": true
+          }
+        ]
+      },
+      {
+        "pass": 3,
+        "label": "official-pass-3",
+        "visible": true,
+        "cardSetHeight": 198,
+        "cardSetInlineHeight": "12.375em",
+        "rootHeight": 264.78125,
+        "rootScrollHeight": 265,
+        "bookHeight": 264.78125,
+        "requiredBeyondRoot": 0,
+        "clipped": false,
+        "holders": [
+          {
+            "width": 512,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 167.953125,
+            "contentBottom": 359.953125,
+            "footerTop": 255.953125,
+            "footerBottom": 291.953125,
+            "containsContent": true,
+            "containsFooter": true
+          }
+        ]
+      },
+      {
+        "pass": 4,
+        "label": "official-pass-4",
+        "visible": true,
+        "cardSetHeight": 198,
+        "cardSetInlineHeight": "12.375em",
+        "rootHeight": 264.78125,
+        "rootScrollHeight": 265,
+        "bookHeight": 264.78125,
+        "requiredBeyondRoot": 0,
+        "clipped": false,
+        "holders": [
+          {
+            "width": 512,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 167.953125,
+            "contentBottom": 359.953125,
+            "footerTop": 255.953125,
+            "footerBottom": 291.953125,
+            "containsContent": true,
+            "containsFooter": true
+          }
+        ]
+      },
+      {
+        "pass": 5,
+        "label": "official-pass-5",
+        "visible": true,
+        "cardSetHeight": 198,
+        "cardSetInlineHeight": "12.375em",
+        "rootHeight": 264.78125,
+        "rootScrollHeight": 265,
+        "bookHeight": 264.78125,
+        "requiredBeyondRoot": 0,
+        "clipped": false,
+        "holders": [
+          {
+            "width": 512,
+            "height": 198,
+            "contentHeight": 192,
+            "boxSizing": "border-box",
+            "borderTop": 3,
+            "borderBottom": 3,
+            "borderRadius": "0px",
+            "contentTop": 167.953125,
+            "contentBottom": 359.953125,
+            "footerTop": 255.953125,
+            "footerBottom": 291.953125,
+            "containsContent": true,
+            "containsFooter": true
+          }
+        ]
+      }
+    ]
+  },
+  "telemetry": {
+    "entries": 19,
+    "calculations": 19,
+    "reentryExits": 0,
+    "maxDepth": 1,
+    "errors": []
+  },
+  "officialCssContamination": {
+    "holderBoxSizing": "border-box",
+    "borderTop": 3,
+    "borderBottom": 3,
+    "officialStable": true
+  },
+  "verdict": {
+    "noClipping": true,
+    "stablePairs": true,
+    "widthReturned": true,
+    "visualContainment": true,
+    "noAutonomousChange": true,
+    "passed": true
+  }
+}

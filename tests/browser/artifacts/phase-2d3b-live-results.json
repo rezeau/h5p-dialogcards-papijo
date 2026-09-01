@@ -1,0 +1,27 @@
+{
+  "phase": "2D3B",
+  "fixture": "http://localhost:8080/view/h5p-interactive-book-papi-jo/ib-pj-001",
+  "viewportCycle": "1280x720 -> 1279x720 -> 1280x720",
+  "official": [
+    { "sample": 0, "cardSet": 328, "inlineHeight": "20.5em", "root": 498.796875, "holderRect": 286, "holderBorder": 6 },
+    { "sample": 1, "cardSet": 340, "inlineHeight": "21.25em", "root": 510.796875, "holderRect": 298, "holderBorder": 6 },
+    { "sample": 2, "cardSet": 352, "inlineHeight": "22em", "root": 522.796875, "holderRect": 310, "holderBorder": 6 },
+    { "sample": 3, "cardSet": 364, "inlineHeight": "22.75em", "root": 534.796875, "holderRect": 322, "holderBorder": 6 },
+    { "sample": 4, "cardSet": 376, "inlineHeight": "23.5em", "root": 546.796875, "holderRect": 334, "holderBorder": 6 },
+    { "sample": 5, "cardSet": 388, "inlineHeight": "24.25em", "root": 558.796875, "holderRect": 346, "holderBorder": 6 }
+  ],
+  "experimentalPapiJo": [
+    { "sample": 0, "cardSet": 384, "inlineHeight": "384px", "root": 696.375, "holderRect": 342, "holderBorder": 6 },
+    { "sample": 1, "cardSet": 390, "inlineHeight": "390px", "root": 702.375, "holderRect": 348, "holderBorder": 6 },
+    { "sample": 2, "cardSet": 396, "inlineHeight": "396px", "root": 708.375, "holderRect": 354, "holderBorder": 6 },
+    { "sample": 3, "cardSet": 396, "inlineHeight": "396px", "root": 708.375, "holderRect": 354, "holderBorder": 6 },
+    { "sample": 4, "cardSet": 402, "inlineHeight": "402px", "root": 714.375, "holderRect": 360, "holderBorder": 6 },
+    { "sample": 5, "cardSet": 408, "inlineHeight": "408px", "root": 720.375, "holderRect": 366, "holderBorder": 6 }
+  ],
+  "notes": [
+    "Each sample after zero was taken after one width-out/width-back cycle, which emits up to two resize events.",
+    "Official processed both transitions and gained 12 px per cycle, i.e. 6 px per resize calculation.",
+    "Experimental PapiJo grew in 6 px quanta, but not every viewport transition resulted in a completed calculation.",
+    "The live PapiJo bundle SHA-256 matched the repository dist bundle and contained the Phase 2D3A isResizing experiment."
+  ]
+}

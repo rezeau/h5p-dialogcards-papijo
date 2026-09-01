@@ -1,0 +1,62 @@
+{
+  "phase": "2D-final-live-verification",
+  "fixture": "http://localhost:8080/view/h5p-interactive-book-papi-jo/ib-pj-001",
+  "nesting": "InteractiveBookPapiJo -> ColumnPapiJo -> DialogCardsPapiJo",
+  "papiJoScript": "http://localhost:8080/libraries/H5P.DialogcardsPapiJo-1.17/dist/h5p-dialogcards.js",
+  "initialNarrow": {
+    "viewport": "900x720",
+    "cardSet": 342,
+    "holderBorderBox": 294,
+    "holderContent": 288,
+    "root": 726.375,
+    "scrollHeight": 726,
+    "clipped": false
+  },
+  "hidden": {
+    "cardSet": 0,
+    "retainedInlineHeight": "342px",
+    "root": 0,
+    "scrollHeight": 0
+  },
+  "return": {
+    "cardSet": 342,
+    "holderBorderBox": 294,
+    "root": 726.375,
+    "scrollHeight": 726,
+    "clipped": false
+  },
+  "parentResizeAfterReturn": {
+    "viewport": "900x719",
+    "cardSet": 342,
+    "holderBorderBox": 294,
+    "root": 726.375,
+    "scrollHeight": 726,
+    "clipped": false
+  },
+  "widthRoundTrip": [
+    { "viewport": "900x720", "cardSet": 342, "root": 726.375, "scrollHeight": 726, "clipped": false },
+    { "viewport": "1280x720", "cardSet": 342, "root": 654.375, "scrollHeight": 654, "clipped": false },
+    { "viewport": "900x720", "cardSet": 342, "root": 726.375, "scrollHeight": 726, "clipped": false }
+  ],
+  "repeatedResizeCycles": [
+    { "cycle": 1, "viewport": "901->900", "cardSet": 342, "holderBorderBox": 294, "root": 726.375, "scrollHeight": 726, "clipped": false },
+    { "cycle": 2, "viewport": "901->900", "cardSet": 342, "holderBorderBox": 294, "root": 726.375, "scrollHeight": 726, "clipped": false },
+    { "cycle": 3, "viewport": "901->900", "cardSet": 342, "holderBorderBox": 294, "root": 726.375, "scrollHeight": 726, "clipped": false },
+    { "cycle": 4, "viewport": "901->900", "cardSet": 342, "holderBorderBox": 294, "root": 726.375, "scrollHeight": 726, "clipped": false },
+    { "cycle": 5, "viewport": "901->900", "cardSet": 342, "holderBorderBox": 294, "root": 726.375, "scrollHeight": 726, "clipped": false }
+  ],
+  "quiescence": {
+    "milliseconds": 700,
+    "before": { "cardSet": 342, "root": 726.375, "scrollHeight": 726 },
+    "after": { "cardSet": 342, "root": 726.375, "scrollHeight": 726 },
+    "autonomousChange": false
+  },
+  "verdict": {
+    "noClipping": true,
+    "noMonotonicGrowth": true,
+    "noOscillation": true,
+    "noRecursiveStormObserved": true,
+    "finalNarrowMatchesInitial": true,
+    "passed": true
+  }
+}

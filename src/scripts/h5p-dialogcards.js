@@ -242,7 +242,7 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     this.correct = 0;
     this.incorrect = 0;
     this.lastCard = null;
-    this.issetHeight = false;
+    this.isResizing = false;
     this.cardsOrderChoice = self.params.behaviour.cardsOrderChoice;
     this.cardsOrderMode = this.cardsOrderChoice;
     this.cardsSideChoice = self.params.behaviour.cardsSideChoice;
@@ -3267,50 +3267,54 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     let maxHeight = 0;
 
     // To prevent error inside Interactive Book PapiJo.
-    // also to prevent infinite vertical scrolling upon resize in MS-Edge and Chrome navigators.
-    if (this.taskFinished || this.issetHeight) {
+    if (this.taskFinished || this.isResizing) {
       return;
     }
-    self.updateImageSize();
-    if (!self.params.behaviour.scaleTextNotCard) {
-      self.determineCardSizes();
-    }
-
-    // Reset card-wrapper-set height
-    self.$cardwrapperSet.css('height', 'auto');
-
-    //Find max required height for all cards
-    self.$cardwrapperSet.children().each(function () {
-      let wrapperHeight = $(this).css('height', 'initial').outerHeight();
-      $(this).css('height', 'inherit');
-      maxHeight = wrapperHeight > maxHeight ? wrapperHeight : maxHeight;
-
-      // Check height
-      if (!$(this).next('.h5p-dialogcards-cardwrap').length) {
-        let initialHeight = $(this)
-          .find('.h5p-dialogcards-cardholder')
-          .outerHeight();
-        maxHeight = initialHeight > maxHeight ? initialHeight : maxHeight;
+    this.isResizing = true;
+    try {
+      self.updateImageSize();
+      if (!self.params.behaviour.scaleTextNotCard) {
+        self.determineCardSizes();
       }
-    });
 
-    let relativeMaxHeight =
-      maxHeight / parseFloat(self.$cardwrapperSet.css('font-size'));
-    self.$cardwrapperSet.css('height', `${relativeMaxHeight}em`);
+      // Reset card-wrapper-set height
+      self.$cardwrapperSet.css('height', 'auto');
 
-    // Set fixed pixel height
-    self.$cardwrapperSet.css('height', `${Math.ceil(maxHeight)}px`);
+      //Find max required height for all cards
+      self.$cardwrapperSet.children().each(function () {
+        let wrapperHeight = $(this).css('height', 'initial').outerHeight();
+        $(this).css('height', 'inherit');
+        maxHeight = wrapperHeight > maxHeight ? wrapperHeight : maxHeight;
 
-    self.scaleToFitHeight();
-    if (!this.$retry) {
-      self.truncateRetryButton();
+        // Check height
+        if (!$(this).next('.h5p-dialogcards-cardwrap').length) {
+          let initialHeight = $(this)
+            .find('.h5p-dialogcards-cardholder')
+            .outerHeight();
+          maxHeight = initialHeight > maxHeight ? initialHeight : maxHeight;
+        }
+      });
+
+      let relativeMaxHeight =
+        maxHeight / parseFloat(self.$cardwrapperSet.css('font-size'));
+      self.$cardwrapperSet.css('height', `${relativeMaxHeight}em`);
+
+      // Set fixed pixel height
+      self.$cardwrapperSet.css('height', `${Math.ceil(maxHeight)}px`);
+
+      self.scaleToFitHeight();
+      if (!this.$retry) {
+        self.truncateRetryButton();
+      }
+      if (this.playModeUser === 'selfCorrectionMode') {
+        self.truncateAnswerButtons();
+      }
+
+      self.resizeOverflowingText();
     }
-    if (this.playModeUser === 'selfCorrectionMode') {
-      self.truncateAnswerButtons();
+    finally {
+      this.isResizing = false;
     }
-
-    self.resizeOverflowingText();
-    this.issetHeight = true;
   };
 
 
@@ -4125,7 +4129,6 @@ H5P.DialogcardsPapiJo = (function ($, Audio, JoubelUI) {
     if (this.report !== '') {
       return;
     }
-    this.issetHeight = false;
     const self = this;
     this.contentData.previousState = {};
     self.answered = false;

@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Phase 2D3C focused stability gate</title>
+    <link rel="stylesheet" href="/papi.css">
+    <link rel="stylesheet" href="/column.css">
+    <style>
+      body { margin: 0; padding: 1rem; font: 16px/1.4 Arial, sans-serif; background: #f4f6f8; }
+      #status { padding: .65rem; background: #fff; border: 1px solid #ccd4dc; }
+      #fixture { width: 700px; max-width: calc(100vw - 4rem); margin-top: 1rem; padding: .75rem; overflow: hidden; background: #fff; border: 1px solid #ccd4dc; }
+      .probe-book, .probe-page { min-width: 0; overflow: hidden; }
+      #results { max-height: 30rem; overflow: auto; white-space: pre-wrap; background: #101820; color: #d9f2e6; padding: .75rem; }
+    </style>
+    <script src="/jquery.js"></script>
+    <script src="/phase-2d2-runtime.js"></script>
+    <script src="/papi.js"></script>
+    <script src="/column.js"></script>
+    <script src="/phase-2d3c-focus.js" defer></script>
+  </head>
+  <body>
+    <div id="status" role="status">Phase 2D3C focused stability gate starting…</div>
+    <section id="fixture">
+      <h1>Nested PapiJo stability fixture</h1>
+      <div class="probe-book"><div class="probe-page"></div></div>
+    </section>
+    <h2>Diagnostic result</h2>
+    <pre id="results"></pre>
+  </body>
+</html>
